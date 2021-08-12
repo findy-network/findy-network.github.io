@@ -3,31 +3,26 @@ title: "Overview"
 linkTitle: "Overview"
 weight: 1
 description: >
-  Findy Agency Architecture Overview
+  Findy Agency Overview
 ---
 
 
-The Overview is where your users find out about your project. Depending on the size of your docset, you can have a separate overview page (like this one) or put your overview contents in the Documentation landing page (like in the Docsy User Guide). 
+Findy Agency provides a Hyperledger Aries compatible identity agent service. It includes a web wallet for individuals and an API for organizations to utilize functionality related to verified data exchange: issuing, holding, verifying, and proving credentials. The agents hosted by the agency operate using DIDComm messaging and Hyperledger Aries protocols. Thus it is interoperable with other Hyperledger Aries compatible agents. The supported verified credential format is currently Hyperledger Indy “Anoncreds” that work with Hyperledger Indy distributed ledger.
 
-Try answering these questions for your user in this page:
+**You should check out Findy Agency if**
+* you are looking for a fully open-sourced, performant Aries compatible identity agency that you can easily run in your local computer
+* you are a web service developer planning to use verified data in your application
+* you would like to build or use a web wallet for individuals instead of mobile application in your use case
+* you want to do experiments quickly without the need to setup or join actual Indy ledger
+* you have experimental attitude and are interested how things can be done differently
 
-## What is it?
+**However...**
+There are other great solutions you should definitely check out if
+* you expect to find ready-made product with full support and complete documentation
+* you are not interested in running your own agency
+* you are busy to get to production and would rather buy services than craft it yourself.
 
-Introduce your project, including what it does or lets you do, why you would use it, and its primary goal (and how it achieves it). This should be similar to your README description, though you can go into a little more detail here if you want.
 
-## Why do I want it?
-
-Help your user know if your project will help them. Useful information can include: 
-
-* **What is it good for?**: What types of problems does your project solve? What are the benefits of using it?
-
-* **What is it not good for?**: For example, point out situations that might intuitively seem suited for your project, but aren't for some reason. Also mention known limitations, scaling issues, or anything else that might let your users know if the project is not for them.
-
-* **What is it *not yet* good for?**: Highlight any useful features that are coming soon.
-
-## Where should I go next?
-
-Give your users next steps from the Overview. For example:
-
-* [Getting Started](/docs/getting-started/): Get started with $project
+### Getting started
+[Start by setting up agency to your local computer](/docs/getting-started/)
 

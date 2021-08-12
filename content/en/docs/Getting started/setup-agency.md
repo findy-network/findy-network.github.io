@@ -7,7 +7,4 @@ description: >
   Instructions how to setup agency to local computer with Docker.
 ---
 
-{{% pageinfo %}}
-TODO: should we store documentation here or just link to repo
-{{% /pageinfo %}}
-
+Coming soon

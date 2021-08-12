@@ -7,6 +7,4 @@ description: >
   Instructions how to get started with service agents.
 ---
 
-{{% pageinfo %}}
-TODO: should we store documentation here or just link to repo
-{{% /pageinfo %}}
+Coming soon

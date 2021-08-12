@@ -7,6 +7,4 @@ description: >
   Instructions how to implement changes to agency services.
 ---
 
-{{% pageinfo %}}
-TODO: should we store documentation here or just link to repo
-{{% /pageinfo %}}
+Coming soon

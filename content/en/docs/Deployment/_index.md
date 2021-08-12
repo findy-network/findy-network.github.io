@@ -7,6 +7,4 @@ description: >
   Instructions how to deploy Agency.
 ---
 
-{{% pageinfo %}}
-TODO: should we store documentation here or just link to repo
-{{% /pageinfo %}}
+Coming soon
