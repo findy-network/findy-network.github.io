@@ -4,6 +4,8 @@
   "description": "Findy Agency documentation",
   "main": "none.js",
   "scripts": {
+    "licenses:report": "node ./tools/check-licenses.js report ./dist/licenses.txt",
+    "licenses:check": "node ./tools/check-licenses.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +21,7 @@
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^9.8.6",
+    "js-green-licenses": "^3.0.1",
     "postcss": "^8.3.6",
     "postcss-cli": "^7.1.2"
   }
