@@ -22,7 +22,8 @@ There are other great solutions you should definitely check out if
 * you are not interested in running your own agency
 * you are busy to get to production and would rather buy services than craft it yourself.
 
+### Next
 
-### Getting started
-[Start by setting up agency to your local computer](/docs/getting-started/)
+* **Check out** [the architecture overview](/docs/overview/architecture/)
+* **Start development** [by setting up agency to your local computer](/docs/getting-started/)
 
