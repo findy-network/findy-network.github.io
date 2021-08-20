@@ -20,11 +20,11 @@ The backend server of Findy Agency consists of three services:
 * vault/[findy-agent-vault](https://github.com/findy-network/findy-agent-vault) that maintains a database of agents' data. Currently vault has only GraphQL-interface for data queries, that is intended mainly for browser web wallet use.
 * auth/[findy-agent-auth](https://github.com/findy-network/findy-agent-auth) that registers and authenticates all agency users.
 
+[Reference web wallet](https://github.com/findy-network/findy-wallet-pwa) implementation is a React app that utilizes standard WebAuthn protocol and browser capabilities to authenticate to backend. Web wallet uses GraphQL to fetch and update agency data.
+
 {{< imgproc wallet Fit "675x675" >}}
 <em>Wallet login screen.</em>
 {{< /imgproc >}}
-
-[Reference web wallet](https://github.com/findy-network/findy-wallet-pwa) implementation is a React app that utilizes standard WebAuthn protocol and browser capabilities to authenticate to backend. Web wallet uses GraphQL to fetch and update agency data.
 
 Service agents are applications that handle verified data on behalf of organizations. Service agents utilize Findy Agency through headless authentication and [gRPC API](https://github.com/findy-network/findy-agent-api). Samples and reference implementations can be found in agency gRPC helper libraries for [golang](https://github.com/findy-network/findy-common-go) or [Typescript](https://github.com/findy-network/findy-common-ts).
 
