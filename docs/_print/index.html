@@ -68,11 +68,12 @@ This the multi-page printable view of this section.
 <ul>
 <li>1: <a href=#pg-6e17e09fffc1050f46600282def85180>Overview</a></li>
 <ul>
+<li>1.1: <a href=#pg-4b5205db67d5dd5c604c46b9fa27234a>Findy Agency Architecture</a></li>
 </ul>
 <li>2: <a href=#pg-93aadc1aba179e6928539400a09b9e4e>Getting Started</a></li>
 <ul>
-<li>2.1: <a href=#pg-74d550b45ef27cc8354ad50de3d9fad1>Setup Agency</a></li>
-<li>2.2: <a href=#pg-000b4354091d035c28677b69e619138f>Service Agents</a></li>
+<li>2.1: <a href=#pg-74d550b45ef27cc8354ad50de3d9fad1>First Steps with Findy Agency</a></li>
+<li>2.2: <a href=#pg-ff91144a7f65000b545408199df2a0ab>Service Agents</a></li>
 </ul>
 <li>3: <a href=#pg-02afad1bc3d317843b424a70a159971a>Agency Deployment</a></li>
 <ul>
@@ -109,22 +110,150 @@ There are other great solutions you should definitely check out if</p>
 <li>you are not interested in running your own agency</li>
 <li>you are busy to get to production and would rather buy services than craft it yourself.</li>
 </ul>
-<h3 id=getting-started>Getting started</h3>
-<p><a href=/docs/getting-started/>Start by setting up agency to your local computer</a></p>
+<h3 id=next>Next</h3>
+<ul>
+<li><strong>Check out</strong> <a href=/docs/overview/architecture/>the architecture overview</a></li>
+<li><strong>Start development</strong> <a href=/docs/getting-started/>by setting up agency to your local computer</a></li>
+</ul>
+</div>
+<div class=td-content style=page-break-before:always>
+<h1 id=pg-4b5205db67d5dd5c604c46b9fa27234a>1.1 - Findy Agency Architecture</h1>
+<div class=lead>Brief description of Findy Agency architecture</div>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:685px>
+<img class=card-img-top src=/docs/overview/architecture/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_675x675_fit_catmullrom_3.png width=675 height=589>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Overview of Findy Agency. See more detailed description in <a href=https://github.com/findy-network/findy-agent#agency-architecture>findy-agent documentation</a>.</em>
+</p>
+</div>
+</div>
+<p>The backend server of Findy Agency consists of three services:</p>
+<ul>
+<li>core/<a href=https://github.com/findy-network/findy-agent>findy-agent</a> that handles all agent functionality including credential handling and Aries protocols</li>
+<li>vault/<a href=https://github.com/findy-network/findy-agent-vault>findy-agent-vault</a> that maintains a database of agents' data. Currently vault has only GraphQL-interface for data queries, that is intended mainly for browser web wallet use.</li>
+<li>auth/<a href=https://github.com/findy-network/findy-agent-auth>findy-agent-auth</a> that registers and authenticates all agency users.</li>
+</ul>
+<p><a href=https://github.com/findy-network/findy-wallet-pwa>Reference web wallet</a> implementation is a React app that utilizes standard WebAuthn protocol and browser capabilities to authenticate to backend. Web wallet uses GraphQL to fetch and update agency data.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:391px>
+<img class=card-img-top src=/docs/overview/architecture/wallet-screenshot_hu6176385a109af25480dcf9343df0e1eb_63896_675x675_fit_catmullrom_3.png width=381 height=675>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Wallet login screen.</em>
+</p>
+</div>
+</div>
+<p>Service agents are applications that handle verified data on behalf of organizations. Service agents utilize Findy Agency through headless authentication and <a href=https://github.com/findy-network/findy-agent-api>gRPC API</a>. Samples and reference implementations can be found in agency gRPC helper libraries for <a href=https://github.com/findy-network/findy-common-go>golang</a> or <a href=https://github.com/findy-network/findy-common-ts>Typescript</a>.</p>
+<p>Agents can be also operated through a CLI, <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a>, that provides most of the functionality needed for agent and agency manipulation.</p>
 </div>
 <div class=td-content style=page-break-before:always>
 <h1 id=pg-93aadc1aba179e6928539400a09b9e4e>2 - Getting Started</h1>
 <div class=lead>Getting started with Findy Agency</div>
 </div>
 <div class=td-content>
-<h1 id=pg-74d550b45ef27cc8354ad50de3d9fad1>2.1 - Setup Agency</h1>
-<div class=lead>Instructions how to setup agency to local computer with Docker.</div>
-<p>Coming soon</p>
+<h1 id=pg-74d550b45ef27cc8354ad50de3d9fad1>2.1 - First Steps with Findy Agency</h1>
+<div class=lead>Instructions how get started with Findy Agency.</div>
+<h2 id=full-agency-setup>Full Agency Setup</h2>
+<p>Agency services can be setup easily locally using Docker. Check further instructions <a href=https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development>here</a>. The instructions describe how to launch all the needed backend services in Docker containers together with a test ledger. There is also a native development setup instructions for web wallet application which will be needed in order to run web wallet application together with other agents.</p>
+<p>Once you have the services running on your computer, you can start experimentation using CLI tool <a href=#cli>findy-agent-cli</a>, UI tool <a href=#ui-tool>findy-issuer-tool</a> or <a href=/docs/getting-started/service-agent/>build a service agent of your own</a>.</p>
+<h2 id=cli>CLI</h2>
+<p><a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a> is a command-line tool that can be used to</p>
+<ul>
+<li>register new agents</li>
+<li>authenticate agents</li>
+<li>operate agents
+<ul>
+<li>make connections</li>
+<li>issue and accept credentials</li>
+<li>verify and prove credentials</li>
+</ul>
+</li>
+<li>operate bots (simple service agents)</li>
+<li>operate ledger
+<ul>
+<li>create schemas</li>
+<li>create credential definitions</li>
+</ul>
+</li>
+<li>operate agency</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>Findy agent cli tool
+
+Usage:
+  findy-agent-cli <span style=color:#ce5c00;font-weight:700>[</span>command<span style=color:#ce5c00;font-weight:700>]</span>
+
+Available Commands:
+  agency      Manage Agency
+  agent       Work with the Cloud Agent
+  authn       WebAuthn commands
+  bot         Manage Bot
+  completion  Generate shell completion scripts
+  connection  Manage connections
+  <span style=color:#204a87>help</span>        Help about any <span style=color:#204a87>command</span>
+  new-key     Create a new key <span style=color:#204a87;font-weight:700>for</span> the authenticator
+  tree        Prints the findy-agent-cli <span style=color:#204a87>command</span> structure
+
+Flags:
+      --config string     configuration file, FCLI_CONFIG
+  -n, --dry-run           perform a trial run with no changes made, FCLI_DRY_RUN
+  -h, --help              <span style=color:#204a87>help</span> <span style=color:#204a87;font-weight:700>for</span> findy-agent-cli
+      --logging string    logging startup arguments, FCLI_LOGGING <span style=color:#ce5c00;font-weight:700>(</span>default <span style=color:#4e9a06>&#34;-logtostderr=true -v=0&#34;</span><span style=color:#ce5c00;font-weight:700>)</span>
+      --server string     gRPC server addr:port, FCLI_SERVER <span style=color:#ce5c00;font-weight:700>(</span>default <span style=color:#4e9a06>&#34;localhost:50051&#34;</span><span style=color:#ce5c00;font-weight:700>)</span>
+      --tls-path string   TLS cert path, FCLI_TLS_PATH
+  -v, --version           version <span style=color:#204a87;font-weight:700>for</span> findy-agent-cli
+
+Use <span style=color:#4e9a06>&#34;findy-agent-cli [command] --help&#34;</span> <span style=color:#204a87;font-weight:700>for</span> more information about a command.
+</code></pre></div><p>Check out <a href=https://github.com/findy-network/findy-agent-cli/tree/master/scripts/fullstack#steps>the dedicated guide</a> for CLI commands to get familiar with the usage.</p>
+<p><em>Note:</em></p>
+<ul>
+<li>before CLI usage, you need to have a working Findy Agency installation</li>
+<li>findy-agent-cli is also a reference on how to use the Agency gRPC API with golang. Check the sources for more details.</li>
+</ul>
+<h2 id=ui-tool>UI Tool</h2>
+<p><a href=https://github.com/findy-network/findy-issuer-tool>findy-issuer-tool</a> is a UI tool for</p>
+<ul>
+<li>making pairwise connections</li>
+<li>issuing credentials</li>
+<li>verifying credentials</li>
+<li>creating schemas and credential definitions.</li>
+</ul>
+<figure>
+<img src=https://github.com/findy-network/findy-issuer-tool/raw/master/docs/usage-03.gif width=925>
+</figure>
+<p>See <a href=https://github.com/findy-network/findy-issuer-tool#setup-environment>setup instructions</a> and <a href=https://github.com/findy-network/findy-issuer-tool#usage>usage instructions</a> in project repository.</p>
+<p><em>Note:</em></p>
+<ul>
+<li>before UI-tool usage, you need to have a working Findy Agency installation</li>
+<li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.</li>
+</ul>
 </div>
 <div class=td-content style=page-break-before:always>
-<h1 id=pg-000b4354091d035c28677b69e619138f>2.2 - Service Agents</h1>
+<h1 id=pg-ff91144a7f65000b545408199df2a0ab>2.2 - Service Agents</h1>
 <div class=lead>Instructions how to get started with service agents.</div>
-<p>Coming soon</p>
+<p>Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, <em>acator</em>, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, <a href=https://github.com/findy-network/findy-agent-api>findy-agent-api</a>.</p>
+<p>You can use our helper libraries for <a href=https://github.com/findy-network/findy-common-go>golang</a> or <a href=https://github.com/findy-network/findy-common-ts>Typescript</a> or use directly <a href=https://github.com/findy-network/findy-agent-api>the GRPC interface</a> with the language of your choice.</p>
+<p>You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:</p>
+<ul>
+<li>golang: <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a></li>
+<li>JavaScript: <a href=https://github.com/findy-network/findy-issuer-tool>findy-issuer-tool</a>, specifically <a href=https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js>api/src/agent/index.js</a></li>
+</ul>
+<h2 id=sample-flow-connecting-to-another-agent>Sample flow: connecting to another agent</h2>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:591px>
+<img class=card-img-top src=/docs/getting-started/service-agent/service-agent_hua21be9aae7ff35f4d15c00a03487f315_97837_675x675_fit_catmullrom_3.png width=581 height=675>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Service Agent onboarding and connecting to another agent by creating a connection invitation.</em>
+</p>
+</div>
+</div>
+<ol>
+<li>Service Agent (SA) registers with acator tool/library to agency. SA should use a unique user name and the selected authenticator key should be kept secret. <em>Note: the registration needs to be done only once. After the first registration, authentication is done using the same user name and authenticator key.</em></li>
+<li>SA does login with acator tool/library. After successful login, a JWT token is returned to SA.</li>
+<li>SA starts listening to agent status events with gRPC API.</li>
+<li>SA creates connection invitation using gRPC API.</li>
+<li>SA displays/sends/etc. invitation json to another Aries compatible agent (invitee).</li>
+<li>Invitee sends connection request to the core agency, that handles the connection protocol on behalf of SA.</li>
+<li>Core agency notifies SA when the connection is established. SA can query core agency for the needed connection details and continue with e.g. issuing or verifying data with the new connection.</li>
+</ol>
 </div>
 <div class=td-content style=page-break-before:always>
 <h1 id=pg-02afad1bc3d317843b424a70a159971a>3 - Agency Deployment</h1>

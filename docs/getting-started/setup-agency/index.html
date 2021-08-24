@@ -13,22 +13,22 @@
 <link rel=icon type=image/png href=/favicons/android-96x96.png sizes=96x96>
 <link rel=icon type=image/png href=/favicons/android-144x144.png sizes=144x144>
 <link rel=icon type=image/png href=/favicons/android-192x192.png sizes=192x192>
-<title>Setup Agency | Findy Agency</title>
-<meta name=description content="Findy Agency documentation"><meta property="og:title" content="Setup Agency">
-<meta property="og:description" content="Instructions how to setup agency to local computer with Docker.
+<title>First Steps with Findy Agency | Findy Agency</title>
+<meta name=description content="Findy Agency documentation"><meta property="og:title" content="First Steps with Findy Agency">
+<meta property="og:description" content="Instructions how get started with Findy Agency.
 ">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/docs/getting-started/setup-agency/"><meta property="article:section" content="docs">
 <meta property="article:published_time" content="2021-08-10T00:00:00+00:00">
 <meta property="article:modified_time" content="2021-08-10T00:00:00+00:00"><meta property="og:site_name" content="Findy Agency">
-<meta itemprop=name content="Setup Agency">
-<meta itemprop=description content="Instructions how to setup agency to local computer with Docker.
+<meta itemprop=name content="First Steps with Findy Agency">
+<meta itemprop=description content="Instructions how get started with Findy Agency.
 "><meta itemprop=datePublished content="2021-08-10T00:00:00+00:00">
 <meta itemprop=dateModified content="2021-08-10T00:00:00+00:00">
-<meta itemprop=wordCount content="2">
+<meta itemprop=wordCount content="349">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
-<meta name=twitter:title content="Setup Agency">
-<meta name=twitter:description content="Instructions how to setup agency to local computer with Docker.
+<meta name=twitter:title content="First Steps with Findy Agency">
+<meta name=twitter:description content="Instructions how get started with Findy Agency.
 ">
 <link rel=preload href=/scss/main.min.c7864c5e11ce29b0d7fb95d2fbbc92f0cd7d92caacfebfa74a46b09df7d22072.css as=style>
 <link href=/scss/main.min.c7864c5e11ce29b0d7fb95d2fbbc92f0cd7d92caacfebfa74a46b09df7d22072.css rel=stylesheet integrity>
@@ -68,13 +68,18 @@
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-docs-li>
 <a href=/docs/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-docs><span>Documentation</span></a>
 <ul class=ul-1>
-<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsoverview-li>
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-docsoverview-li>
 <a href=/docs/overview/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsoverview><span>Overview</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsoverviewarchitecture-li>
+<a href=/docs/overview/architecture/ title="Findy Agency Architecture" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsoverviewarchitecture><span>Architecture</span></a>
+</li>
+</ul>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-docsgetting-started-li>
 <a href=/docs/getting-started/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsgetting-started><span>Getting Started</span></a>
 <ul class="ul-2 foldable">
 <li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id=m-docsgetting-startedsetup-agency-li>
-<a href=/docs/getting-started/setup-agency/ class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id=m-docsgetting-startedsetup-agency><span class=td-sidebar-nav-active-item>Setup Agency</span></a>
+<a href=/docs/getting-started/setup-agency/ title="First Steps with Findy Agency" class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id=m-docsgetting-startedsetup-agency><span class=td-sidebar-nav-active-item>Setup Agency</span></a>
 </li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsgetting-startedservice-agent-li>
 <a href=/docs/getting-started/service-agent/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsgetting-startedservice-agent><span>Service Agents</span></a>
 </li>
@@ -110,11 +115,83 @@
 </ol>
 </nav>
 <div class=td-content>
-<h1>Setup Agency</h1>
-<div class=lead>Instructions how to setup agency to local computer with Docker.</div>
+<h1>First Steps with Findy Agency</h1>
+<div class=lead>Instructions how get started with Findy Agency.</div>
 <header class=article-meta>
 </header>
-<p>Coming soon</p>
+<h2 id=full-agency-setup>Full Agency Setup</h2>
+<p>Agency services can be setup easily locally using Docker. Check further instructions <a href=https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development>here</a>. The instructions describe how to launch all the needed backend services in Docker containers together with a test ledger. There is also a native development setup instructions for web wallet application which will be needed in order to run web wallet application together with other agents.</p>
+<p>Once you have the services running on your computer, you can start experimentation using CLI tool <a href=#cli>findy-agent-cli</a>, UI tool <a href=#ui-tool>findy-issuer-tool</a> or <a href=/docs/getting-started/service-agent/>build a service agent of your own</a>.</p>
+<h2 id=cli>CLI</h2>
+<p><a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a> is a command-line tool that can be used to</p>
+<ul>
+<li>register new agents</li>
+<li>authenticate agents</li>
+<li>operate agents
+<ul>
+<li>make connections</li>
+<li>issue and accept credentials</li>
+<li>verify and prove credentials</li>
+</ul>
+</li>
+<li>operate bots (simple service agents)</li>
+<li>operate ledger
+<ul>
+<li>create schemas</li>
+<li>create credential definitions</li>
+</ul>
+</li>
+<li>operate agency</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>Findy agent cli tool
+
+Usage:
+  findy-agent-cli <span style=color:#ce5c00;font-weight:700>[</span>command<span style=color:#ce5c00;font-weight:700>]</span>
+
+Available Commands:
+  agency      Manage Agency
+  agent       Work with the Cloud Agent
+  authn       WebAuthn commands
+  bot         Manage Bot
+  completion  Generate shell completion scripts
+  connection  Manage connections
+  <span style=color:#204a87>help</span>        Help about any <span style=color:#204a87>command</span>
+  new-key     Create a new key <span style=color:#204a87;font-weight:700>for</span> the authenticator
+  tree        Prints the findy-agent-cli <span style=color:#204a87>command</span> structure
+
+Flags:
+      --config string     configuration file, FCLI_CONFIG
+  -n, --dry-run           perform a trial run with no changes made, FCLI_DRY_RUN
+  -h, --help              <span style=color:#204a87>help</span> <span style=color:#204a87;font-weight:700>for</span> findy-agent-cli
+      --logging string    logging startup arguments, FCLI_LOGGING <span style=color:#ce5c00;font-weight:700>(</span>default <span style=color:#4e9a06>&#34;-logtostderr=true -v=0&#34;</span><span style=color:#ce5c00;font-weight:700>)</span>
+      --server string     gRPC server addr:port, FCLI_SERVER <span style=color:#ce5c00;font-weight:700>(</span>default <span style=color:#4e9a06>&#34;localhost:50051&#34;</span><span style=color:#ce5c00;font-weight:700>)</span>
+      --tls-path string   TLS cert path, FCLI_TLS_PATH
+  -v, --version           version <span style=color:#204a87;font-weight:700>for</span> findy-agent-cli
+
+Use <span style=color:#4e9a06>&#34;findy-agent-cli [command] --help&#34;</span> <span style=color:#204a87;font-weight:700>for</span> more information about a command.
+</code></pre></div><p>Check out <a href=https://github.com/findy-network/findy-agent-cli/tree/master/scripts/fullstack#steps>the dedicated guide</a> for CLI commands to get familiar with the usage.</p>
+<p><em>Note:</em></p>
+<ul>
+<li>before CLI usage, you need to have a working Findy Agency installation</li>
+<li>findy-agent-cli is also a reference on how to use the Agency gRPC API with golang. Check the sources for more details.</li>
+</ul>
+<h2 id=ui-tool>UI Tool</h2>
+<p><a href=https://github.com/findy-network/findy-issuer-tool>findy-issuer-tool</a> is a UI tool for</p>
+<ul>
+<li>making pairwise connections</li>
+<li>issuing credentials</li>
+<li>verifying credentials</li>
+<li>creating schemas and credential definitions.</li>
+</ul>
+<figure>
+<img src=https://github.com/findy-network/findy-issuer-tool/raw/master/docs/usage-03.gif width=925>
+</figure>
+<p>See <a href=https://github.com/findy-network/findy-issuer-tool#setup-environment>setup instructions</a> and <a href=https://github.com/findy-network/findy-issuer-tool#usage>usage instructions</a> in project repository.</p>
+<p><em>Note:</em></p>
+<ul>
+<li>before UI-tool usage, you need to have a working Findy Agency installation</li>
+<li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.</li>
+</ul>
 <div class="text-muted mt-5 pt-3 border-top">
 </div>
 </div>

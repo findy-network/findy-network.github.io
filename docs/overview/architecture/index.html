@@ -2,8 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.87.0"><link rel=canonical type=text/html href=/docs/overview/>
-<meta name=ROBOTS content="NOINDEX, NOFOLLOW">
+<meta name=generator content="Hugo 0.87.0"><meta name=ROBOTS content="NOINDEX, NOFOLLOW">
 <link rel="shortcut icon" href=/favicons/favicon.ico>
 <link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
 <link rel=icon type=image/png href=/favicons/favicon-16x16.png sizes=16x16>
@@ -14,23 +13,28 @@
 <link rel=icon type=image/png href=/favicons/android-96x96.png sizes=96x96>
 <link rel=icon type=image/png href=/favicons/android-144x144.png sizes=144x144>
 <link rel=icon type=image/png href=/favicons/android-192x192.png sizes=192x192>
-<title>Overview | Findy Agency</title>
-<meta name=description content="Findy Agency documentation"><meta property="og:title" content="Overview">
-<meta property="og:description" content="Findy Agency Overview
+<title>Findy Agency Architecture | Findy Agency</title>
+<meta name=description content="Findy Agency documentation"><meta property="og:title" content="Findy Agency Architecture">
+<meta property="og:description" content="Brief description of Findy Agency architecture
 ">
-<meta property="og:type" content="website">
-<meta property="og:url" content="/docs/overview/"><meta property="og:site_name" content="Findy Agency">
-<meta itemprop=name content="Overview">
-<meta itemprop=description content="Findy Agency Overview
-"><meta name=twitter:card content="summary">
-<meta name=twitter:title content="Overview">
-<meta name=twitter:description content="Findy Agency Overview
+<meta property="og:type" content="article">
+<meta property="og:url" content="/docs/overview/architecture/"><meta property="article:section" content="docs">
+<meta property="article:published_time" content="2021-08-20T00:00:00+00:00">
+<meta property="article:modified_time" content="2021-08-20T00:00:00+00:00"><meta property="og:site_name" content="Findy Agency">
+<meta itemprop=name content="Findy Agency Architecture">
+<meta itemprop=description content="Brief description of Findy Agency architecture
+"><meta itemprop=datePublished content="2021-08-20T00:00:00+00:00">
+<meta itemprop=dateModified content="2021-08-20T00:00:00+00:00">
+<meta itemprop=wordCount content="159">
+<meta itemprop=keywords content><meta name=twitter:card content="summary">
+<meta name=twitter:title content="Findy Agency Architecture">
+<meta name=twitter:description content="Brief description of Findy Agency architecture
 ">
 <link rel=preload href=/scss/main.min.c7864c5e11ce29b0d7fb95d2fbbc92f0cd7d92caacfebfa74a46b09df7d22072.css as=style>
 <link href=/scss/main.min.c7864c5e11ce29b0d7fb95d2fbbc92f0cd7d92caacfebfa74a46b09df7d22072.css rel=stylesheet integrity>
 <script src=https://code.jquery.com/jquery-3.5.1.min.js integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin=anonymous></script>
 </head>
-<body class=td-section>
+<body class=td-page>
 <header>
 <nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
 <a class=navbar-brand href=/>
@@ -53,52 +57,68 @@
 <div class="container-fluid td-outer">
 <div class=td-main>
 <div class="row flex-xl-nowrap">
-<div class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+<aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+<div id=td-sidebar-menu class=td-sidebar__inner>
+<form class="td-sidebar__search d-flex align-items-center">
+<button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type=button data-toggle=collapse data-target=#td-section-nav aria-controls=td-docs-nav aria-expanded=false aria-label="Toggle section navigation">
+</button>
+</form>
+<nav class="collapse td-sidebar-nav" id=td-section-nav>
+<ul class="td-sidebar-nav__section pr-md-3 ul-0">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-docs-li>
+<a href=/docs/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-docs><span>Documentation</span></a>
+<ul class=ul-1>
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-docsoverview-li>
+<a href=/docs/overview/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsoverview><span>Overview</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id=m-docsoverviewarchitecture-li>
+<a href=/docs/overview/architecture/ title="Findy Agency Architecture" class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id=m-docsoverviewarchitecture><span class=td-sidebar-nav-active-item>Architecture</span></a>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-docsgetting-started-li>
+<a href=/docs/getting-started/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsgetting-started><span>Getting Started</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsgetting-startedsetup-agency-li>
+<a href=/docs/getting-started/setup-agency/ title="First Steps with Findy Agency" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsgetting-startedsetup-agency><span>Setup Agency</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsgetting-startedservice-agent-li>
+<a href=/docs/getting-started/service-agent/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsgetting-startedservice-agent><span>Service Agents</span></a>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsdeployment-li>
+<a href=/docs/deployment/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsdeployment><span>Agency Deployment</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsdevelopment-li>
+<a href=/docs/development/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsdevelopment><span>Agency Development</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
 </div>
-<div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+</aside>
+<aside class="d-none d-xl-block col-xl-2 td-sidebar-toc d-print-none">
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+<a id=print href=/docs/overview/_print/><i class="fa fa-print fa-fw"></i> Print entire section</a>
 </div>
+</aside>
 <main class="col-12 col-md-9 col-xl-8 pl-md-5" role=main>
+<nav aria-label=breadcrumb class="d-none d-md-block d-print-none">
+<ol class="breadcrumb spb-1">
+<li class=breadcrumb-item>
+<a href=/docs/>Documentation</a>
+</li>
+<li class=breadcrumb-item>
+<a href=/docs/overview/>Overview</a>
+</li>
+<li class="breadcrumb-item active" aria-current=page>
+<a href=/docs/overview/architecture/>Architecture</a>
+</li>
+</ol>
+</nav>
 <div class=td-content>
-<div class="pageinfo pageinfo-primary d-print-none">
-<p>
-This the multi-page printable view of this section.
-<a href=# onclick="return print(),!1">Click here to print</a>.
-</p><p>
-<a href=/docs/overview/>Return to the regular view of this page</a>.
-</p>
-</div>
-<h1 class=title>Overview</h1>
-<div class=lead>Findy Agency Overview</div>
-<ul>
-<li>1: <a href=#pg-4b5205db67d5dd5c604c46b9fa27234a>Findy Agency Architecture</a></li>
-</ul>
-<div class=content>
-<p>Findy Agency provides a Hyperledger Aries compatible identity agent service. It includes a web wallet for individuals and an API for organizations to utilize functionality related to verified data exchange: issuing, holding, verifying, and proving credentials. The agents hosted by the agency operate using DIDComm messaging and Hyperledger Aries protocols. Thus it is interoperable with other Hyperledger Aries compatible agents. The supported verified credential format is currently Hyperledger Indy “Anoncreds” that work with Hyperledger Indy distributed ledger.</p>
-<p><strong>You should check out Findy Agency if</strong></p>
-<ul>
-<li>you are looking for a fully open-sourced, performant Aries compatible identity agency that you can easily run in your local computer</li>
-<li>you are a web service developer planning to use verified data in your application</li>
-<li>you would like to build or use a web wallet for individuals instead of mobile application in your use case</li>
-<li>you want to do experiments quickly without the need to setup or join actual Indy ledger</li>
-<li>you have experimental attitude and are interested how things can be done differently</li>
-</ul>
-<p><strong>However&mldr;</strong>
-There are other great solutions you should definitely check out if</p>
-<ul>
-<li>you expect to find ready-made product with full support and complete documentation</li>
-<li>you are not interested in running your own agency</li>
-<li>you are busy to get to production and would rather buy services than craft it yourself.</li>
-</ul>
-<h3 id=next>Next</h3>
-<ul>
-<li><strong>Check out</strong> <a href=/docs/overview/architecture/>the architecture overview</a></li>
-<li><strong>Start development</strong> <a href=/docs/getting-started/>by setting up agency to your local computer</a></li>
-</ul>
-</div>
-</div>
-<div class=td-content style=page-break-before:always>
-<h1 id=pg-4b5205db67d5dd5c604c46b9fa27234a>1 - Findy Agency Architecture</h1>
+<h1>Findy Agency Architecture</h1>
 <div class=lead>Brief description of Findy Agency architecture</div>
+<header class=article-meta>
+</header>
 <div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:685px>
 <img class=card-img-top src=/docs/overview/architecture/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_675x675_fit_catmullrom_3.png width=675 height=589>
 <div class="card-body px-0 pt-2 pb-0">
@@ -124,6 +144,8 @@ There are other great solutions you should definitely check out if</p>
 </div>
 <p>Service agents are applications that handle verified data on behalf of organizations. Service agents utilize Findy Agency through headless authentication and <a href=https://github.com/findy-network/findy-agent-api>gRPC API</a>. Samples and reference implementations can be found in agency gRPC helper libraries for <a href=https://github.com/findy-network/findy-common-go>golang</a> or <a href=https://github.com/findy-network/findy-common-ts>Typescript</a>.</p>
 <p>Agents can be also operated through a CLI, <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a>, that provides most of the functionality needed for agent and agency manipulation.</p>
+<div class="text-muted mt-5 pt-3 border-top">
+</div>
 </div>
 </main>
 </div>
