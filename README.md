@@ -15,7 +15,7 @@ Findy Agency technical documentation and blog.
 1. Install dependencies
 
    ```bash
-   cd findy-network.github.io.git
+   cd findy-network.github.io
    npm install
    ```
 
