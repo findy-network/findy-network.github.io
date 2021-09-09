@@ -3,9 +3,9 @@ date: 2021-09-03
 title: "Travelogue"
 linkTitle: "Travelogue"
 description: "We have used many different techniques, technologies and
-architectures to build a modern and high-performance DID agency. During the
-the journey we have not only been able to learn SSI essentials but also *align modern
-software and hardware technologies best suited for decentralized identity
+architectures to build a modern and high-performance DID agency. During the the
+journey we have not only been able to learn SSI essentials but also *align
+modern software and hardware technologies best suited for decentralized identity
 network*."
 author: Harri Lainio
 resources:
@@ -21,9 +21,9 @@ The success of the team I'm part of is measured:
 If you are asking yourself if the order of the list is wrong, the answer is, it
 is not.
 
-We have learned that you will fail if you prioritize technologies by their business
-value too early. There is a catch, though. You must be sure that
-you will not fall in love with the technologies you are studying. Certain scepticism
+We have learned that you will fail if you prioritize technologies by their
+business value too early. There is a catch, though. You must be sure that you
+will not fall in love with the technologies you are studying. Certain scepticism
 is welcomed in our line of work. That attitude may follow thru this post as
 well. You have now warned, at least.
 
@@ -36,14 +36,17 @@ well. You have now warned, at least.
 Technology roots present the most important *background knowledge* of our study.
 The most fundamental technologies and study subjects are in the trunk.  The
 trunk is the backbone of our work. It tights altogether. Branches and leaves
-are outcomes, conclusions, and key learnings. At the top of the tree, some future topics are considered but not implemented or even tried yet.
+are outcomes, conclusions, and key learnings. At the top of the tree, some
+future topics are considered but not implemented or even tried yet.
 
-Even if the technology tree illustrates the relevant technologies for the subject, we
-will not address them in this post. **We recommend you to study the tree
-for a moment** to get the picture. You will notice that there
-aren't any mention of VC. For us, the concept of VC is an internal feature of [DID system](https://www.w3.org/TR/vc-data-model/). Naturally, there are a huge
+Even if the technology tree illustrates the relevant technologies for the
+subject, we will not address them in this post. **We recommend you to study the
+tree for a moment** to get the picture. You will notice that there aren't any
+mention of VC. For us, the concept of VC is an internal feature of
+[DID system](https://www.w3.org/TR/vc-data-model/). Naturally, there are a huge
 amount of enormous study subjects inside VCs like ZKP, etc. But this approach
-has to lead us to concentrate on the network itself and the structure it should have.
+has to lead us to concentrate on the network itself and the structure it should
+have.
 
 The tree has helped us to see how things are bound together and what topics are
 the most relevant for the study area.
@@ -52,10 +55,11 @@ the most relevant for the study area.
 
 The famous SSI trust triangle is an excellent tool to simplify what is
 important and what is not. As we can see, everything builds on peer to peer
-connections, thick arrows. VCs are issued, and proofs are presented thru them. The only
-thing that's not yet solved *at the technology level* is the trust arrow in
-the triangle. (I know the recursive trust triangle, but I disagree with how it's
-thought to be implemented). But *this blog post* is not about that either. 
+connections, thick arrows. VCs are issued, and proofs are presented thru them.
+The only thing that's not yet solved *at the technology level* is the trust
+arrow in the triangle. (I know the recursive trust triangle, but I disagree with
+how it's thought to be implemented). But *this blog post* is not about that
+either. 
 
 {{< imgproc trust-triangle Fit "925x925" >}}
 <em>The SSI Trust Triangle</em>
@@ -70,10 +74,10 @@ standalone mobile app demo** of the identity wallet based on Hyperledger Indy.
 We started in *test drive mode* but built a full DID agency and
 published it as OSS. The journey has been inspiring, and we have learned a lot.
 
-In every project, it's important to maintain the scope. Thanks to the nature of our
-organisation we didn't have changing requirements. The widening of the
-scope came mostly from the fact that the whole area of SSI and DID were evolving.
-It still is.
+In every project, it's important to maintain the scope. Thanks to the nature of
+our organisation we didn't have changing requirements. The widening of the scope
+came mostly from the fact that the whole area of SSI and DID were evolving.  It
+still is.
 
 {{< imgproc targets.png  Fit "925x925" >}}
 <em>The Journey From Identity Wallet to Identity Ecosystem</em>
@@ -87,22 +91,22 @@ but have transited to the state where we have started to build our own related
 core technologies to the field.
 
 Incubators usually start their trip by testing different hypotheses and trying
-them out in practice. We did the same but more on the practical side. We didn't have
-a formal hypothesis, but we had some use cases and a vision of how modern
-architecture should work and its scaling requirements.
-Those kinds of principles lead our * decision-making process* during the project.
+them out in practice. We did the same but more on the practical side. We didn't
+have a formal hypothesis, but we had some use cases and a vision of how modern
+architecture should work and its scaling requirements.  Those kinds of
+principles lead our *decision-making process* during the project.
 (Maybe some of us write a detailed blog about how our emerging tech process and
 organisation worked.)
 
 ## The journey
 
-We have been building our multi-tenant agency since the beginning of 2019. During
-that time, we have tried many different techniques, technologies and
-architectures, and application metaphors. We think we have succeeded to
-find interesting results. 
+We have been building our multi-tenant agency since the beginning of 2019.
+During that time, we have tried many different techniques, technologies and
+architectures, and application metaphors. We think we have succeeded to find
+interesting results. 
 
-In the following chapters, we will report the time period from the beginning of 2019
-to autumn of 2021 in half of a year intervals. I really recommend that you
+In the following chapters, we will report the time period from the beginning of
+2019 to autumn of 2021 in half of a year intervals. I really recommend that you
 look at the timelines carefully because they include valuable outcomes.
 
 
@@ -152,7 +156,8 @@ used Web Sockets as a transport mechanism for indy's DIDComm messages.
 
 We hated the protocol. It was insane. But it was DID protocol, wasn't it?
 
-The system was end to end encrypted, but the indy protocol had its flaws, like being synchronous. We didn't yet have any persistent state machine or the other
+The system was end to end encrypted, but the indy protocol had its flaws, like
+being synchronous. We didn't yet have any persistent state machine or the other
 basics of the communication protocol systems. Also, the whole thing felted
 overly complicated and old -- it wasn't modern cloud protocol.
 
@@ -193,9 +198,10 @@ present and verify proofs in a quick and dirty way. Now we knew the potential.
 
 We had managed to implement pre-Aries DIDComm over HTTP and WebSocket. We had
 a multi-tenant agency running cloud agents even though it was far from
-production readiness. Everything was end to end encrypted. The current agency supported indy's ledger transactions, and first, We had taken some tests from issuing and
-proofing protocols. We started to understand what kind of beast was tearing at
-us from another end of the road.
+production readiness. Everything was end to end encrypted. The current agency
+supported indy's ledger transactions, and first, We had taken some tests from
+issuing and proofing protocols. We started to understand what kind of beast was
+tearing at us from another end of the road.
 
 ### 2019/H2
 
@@ -210,27 +216,29 @@ we had a clear idea of what kind of direction we should take and what to leave f
 later:
 - **Cloud-first** and we have newer wanted to step back on that.
 - **Modern micro-service architecture** targeting continuous delivery and
-scalability. That leads to a certain type of technology stack which consists of techs like
-Go, gRPC, Docker (or other containerization technology), container
+scalability. That leads to a certain type of technology stack which consists of
+techs like Go, gRPC, Docker (or other containerization technology), container
 orchestration like K8s, etc. One key requirement was that hardware utilization
 must be perfect, i.e. tiny servers are enough.
 - **No support for offline** use cases *for now*.
 - **No revocation** until there is a working solution. Credit card revocation has
 taught us a lot. Scalable and fast revocation is a hard problem to solve.
 - Message routing should not be part of the protocol's explicit 'headers', i.e.
-there is **only one service endpoint for a DID**. We should naturally handle the service endpoint so that privacy is maintained as it is in our agency.
-By leaving routing out, it has been making everything so much simple. Some technologies can do that for us for free, like TOR. We have tested TOR, and it works pretty well for setting service endpoints and also connecting to
-them.
+there is **only one service endpoint for a DID**. We should naturally handle the
+service endpoint so that privacy is maintained as it is in our agency. By
+leaving routing out, it has been making everything so much simple. Some
+technologies can do that for us for free, like TOR. We have tested TOR, and it
+works pretty well for setting service endpoints and also connecting to them.
 - **Use push notifications along with the WebSockets**, i.e. lent APNS to trigger
 edge agents when they were not connected to the server.
 
 ##### Multi-ledger Architecture 
 
-Because everything goes through our Go wrapper to the Plenum ledger, I made a version that used memory or plain file instead of the ledger as a hobby project. It
-was meant to be used only for tests and development. Later the plug-in
-architecture has allowed us to have other persistent saving media as
-well. But more importantly, it has helped development and automatic testing a
-lot.
+Because everything goes through our Go wrapper to the Plenum ledger, I made a
+version that used memory or plain file instead of the ledger as a hobby project.
+It was meant to be used only for tests and development. Later the plug-in
+architecture has allowed us to have other persistent saving media as well. But
+more importantly, it has helped development and automatic testing a lot.
 
 Technically the *hack* is to use `pool handle` to tell if the system is
 connected to a ledger or some other predefined media. `indy` API has only two
@@ -241,8 +249,8 @@ a handle is an option.
 
 During the server-side development, we wanted to have at least post-compromised
 secured key storage for cloud servers. Cloud environments like AWS give you
-managed storage for master secrets, but we needed more when developing OSS solutions with
-high performance and scalability requirements.
+managed storage for master secrets, but we needed more when developing OSS
+solutions with high performance and scalability requirements.
 
 Now we store our most important keys for LMDB-based fast key-value storage
 fully encrypted. Master keys for installation are in a managed cloud environments
@@ -260,10 +268,10 @@ use SCXML or some other exciting language for chatbot state machines later.
 About a year later, I implemented a state machine on my own with a proprietary YAML
 format.
 
-But that search isn't totally over. Before that, I considered many different options, but there wasn't much
-of an OSS alternative. One option could be
-to embed Lua combined with the current state machine engine and replace the
-memory model with Lua. We shall see what the real use case needs are.
+But that search isn't totally over. Before that, I considered many different
+options, but there wasn't much of an OSS alternative. One option could be to
+embed Lua combined with the current state machine engine and replace the memory
+model with Lua. We shall see what the real use case needs are.
 
 I personally think that an even more important approach would be **a state machine
 verifier**. Keeping that as a goal sets strict limits to the computation
@@ -291,7 +299,8 @@ especially on the web.
 ##### Findy-consortium Level OSS Publication
 
 At the beginning of 2020, we decided to publish all the produced
-code inside the Findy consortium. We produced the new GitHub account, and code without history moved from original repos to new ones.
+code inside the Findy consortium. We produced the new GitHub account, and code
+without history moved from original repos to new ones.
 
 Even the decision brought a lot of routine work for that moment, it also brought
 many good things:
@@ -305,22 +314,23 @@ We implemented the first version of the new async protocol engine with existing
 JSON messages came from legacy indy a2a protocols. It's mostly because I
 wanted to build it in small steps, and it worked pretty well.
 
-Most of the extra work did come from the legacy API we had. JSON messages over indy's
-proprietary DIDComm. As always, some bad but some good: because we had
-to keep both DIDComm message formats, I managed to integrate a clever way to
+Most of the extra work did come from the legacy API we had. JSON messages over
+indy's proprietary DIDComm. As always, some bad but some good: because we had to
+keep both DIDComm message formats, I managed to integrate a clever way to
 separate different formats and still generalise with Go's interfaces. 
 
 ##### New CLI
 
 We noticed that Agency's command-line UI started to be too complicated. Go has
 a clever idea of how you can do services without environmental variables. I'm
-still the guy who would keep with that, but it was a good idea to widen the scope to make our tools
-comfortable for all new users.
+still the guy who would keep with that, but it was a good idea to widen the
+scope to make our tools comfortable for all new users.
 
-Our design idea was to build CLI, which follows subcommands like git and docker nowadays. The latest version we have now is quite good
-already, but the road was rocky. It is not easy to find the right structure the first
-time. The more you use your CLI by yourself, the more you start to notice what is intuitive
-and what is not.
+Our design idea was to build CLI, which follows subcommands like git and docker
+nowadays. The latest version we have now is quite good already, but the road was
+rocky. It is not easy to find the right structure the first time. The more you
+use your CLI by yourself, the more you start to notice what is intuitive and
+what is not.
 
 We decided to separate CLI commands from Agency to own tool and git repo. It was
 good to move for that time, and when we managed to make it right, we were able to
@@ -337,37 +347,43 @@ yourself for change.
 
 ##### Architecture Planning
 
-I had had quite a long time the idea of using gRPC for the Cloud Agent controller.
-My core idea was to get rid of the EA because, currently, it was just an onboarding tool. The wallet had, included only the pairwise DID to its cloud
-agent, nothing else. The actual wallet (we called it worker edge agent wallet)
-was the real wallet, where the VCs were. I went thru many similar protocols
-until I found FIDO UAF. The protocol is similar to DIDComm's pairwise protocol, but it's not symmetric. Another end is the server, and the other has the
-authenticator -- the cryptographical root of trust.
+I had had quite a long time the idea of using gRPC for the Cloud Agent
+controller.  My core idea was to get rid of the EA because, currently, it was
+just an onboarding tool. The wallet had, included only the pairwise DID to its
+cloud agent, nothing else. The actual wallet (we called it worker edge agent
+wallet) was the real wallet, where the VCs were. I went thru
+many similar protocols until I found FIDO UAF. The protocol is similar to
+DIDComm's pairwise protocol, but it's not symmetric. Another end is the server,
+and the other has the authenticator -- the cryptographical root of
+trust.
 
-When I presented an internal demo of the gRPC with the JWT
-authorization and explained that authentications would be FIDO2 WebAuth, we were
-ready to start the architecture transition. Everything was still good when I
-implemented the first FIDO server with the help of Duo Labs Go packages. Our FIDO2 server
-was now capable to allocated cloud agents. But there was one missing part I was
-hoping someone in the OSS community would implement until we needed it. It
-was a headless WebAuthn/UAF authenticator for those issuers/verifiers running as service agents. How to onboard them, and how they would access
-the agency's resources with the same JWT authorization? To allow us to proceed, we added
+When I presented an internal demo of the gRPC with the JWT authorization and
+explained that authentications would be FIDO2 WebAuth, we were ready to start
+the architecture transition. Everything was still good when I implemented the
+first FIDO server with the help of Duo Labs Go packages. Our FIDO2 server was
+now capable to allocated cloud agents. But there was one missing part I was
+hoping someone in the OSS community would implement until we needed it. It was a
+headless WebAuthn/UAF authenticator for those issuers/verifiers running as
+service agents. How to onboard them, and how they would access the agency's
+resources with the same JWT authorization? To allow us to proceed, we added
 support to get JWT by our old API. It's was only intermediated solution but
 served its purpose.
 
 ##### Learnings when implementing the new architecture 
+
 - implicit JWT authorization helps gRPC usage a lot and simplifies it too.
 - gRPC streams and Go's channel is just excellent together.
 - You should use pre-generated wallet keys for indy wallets.
 - We can integrate performance and scalability tests into CI.
-- gRPC integration and unit testing could be done in the same way as with HTTP stack
-in Go, i.e. inside a single process that can play both client and server.
+- gRPC integration and unit testing could be done in the same way as with HTTP
+stack in Go, i.e. inside a single process that can play both client and server.
 
 ##### Highlights of the end of the year 2020
 
-We started to build for new SA architecture and allowed both our APIs to existing.
-WebAuth server, headless authenticator, and Vault first versions were now ready.
-Also, I did the first version of a state machine for service agent implementation. We had an option to use immuDB instead of Plenum ledger.
+We started to build for new SA architecture and allowed both our APIs to
+existing.  WebAuth server, headless authenticator, and Vault first versions were
+now ready.  Also, I did the first version of a state machine for service agent
+implementation. We had an option to use immuDB instead of Plenum ledger.
 
 ### 2021/H1
 
@@ -375,8 +391,8 @@ Also, I did the first version of a state machine for service agent implementatio
 <em>2021/H1</em>
 {{< /imgproc >}}
 
-Now we have an architecture that we can live with. All the important elements are
-in place. Now we just clean it up.
+Now we have an architecture that we can live with. All the important elements
+are in place. Now we just clean it up.
 
 ##### Summary of Spring 2021 Results
 
@@ -392,13 +408,11 @@ Until the summer, the most important results have been:
 As said, all of the important elements are in place. However, our solution is
 based on `libindy`, which is interesting where the original contributor
 continues. Still, the rest of the Aries group are moving to shared libraries. We
-haven't made the decision yet on which direction we will go. Or do we even need to
-choose? At least in the meantime, we could just add some new solutions and run
-them both. Thanks to our own architecture and interfaces, that are plausible options
-for our agency.
+haven't made the decision yet on which direction we will go. Or do we even need
+to choose? At least in the meantime, we could just add some new solutions and
+run them both. Thanks to our own architecture and interfaces, that are plausible
+options for our agency.
 
-There are many interesting study subjects we are continuing to work on within SSI/DID. We will report them in upcoming blog posts. Stay tuned, folks!
-
-
-
+There are many interesting study subjects we are continuing to work on within
+SSI/DID. We will report them in upcoming blog posts. Stay tuned, folks!
 
