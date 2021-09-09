@@ -1,9 +1,9 @@
 ---
-date: 2021-09-03
+date: 2021-09-08
 title: "Travelogue"
 linkTitle: "Travelogue"
 description: "We have used many different techniques, technologies and
-architectures to build a modern and high-performance DID agency. During the the
+architectures to build a modern and high-performance DID agency. During the 
 journey we have not only been able to learn SSI essentials but also *align
 modern software and hardware technologies best suited for decentralized identity
 network*."
@@ -180,6 +180,9 @@ needed.
 
 > **Async with explicit state machine**
 
+DIDComm must be async and message-driven simple because it's deliberative in
+its nature. Two agents are negotiating for issuing, proofing, etc.
+
 ##### Aries news
 
 Hyperledger Aries was set up during the summer, which was good because it showed
@@ -227,7 +230,7 @@ taught us a lot. Scalable and fast revocation is a hard problem to solve.
 there is **only one service endpoint for a DID**. We should naturally handle the
 service endpoint so that privacy is maintained as it is in our agency. By
 leaving routing out, it has been making everything so much simple. Some
-technologies can do that for us for free, like TOR. We have tested TOR, and it
+technologies can do that for us for free, like Tor. We have tested Tor, and it
 works pretty well for setting service endpoints and also connecting to them.
 - **Use push notifications along with the WebSockets**, i.e. lent APNS to trigger
 edge agents when they were not connected to the server.
