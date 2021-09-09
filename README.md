@@ -30,8 +30,13 @@ Findy Agency technical documentation and blog.
    ```
    hugo server
    ```
+   Or if you need to connect from some other host in the same network.
+   ```
+   hugo server --bind 172.16.0.10
+   ```
 
-1. Open browser at http://localhost:1313
+1. Open browser at http://localhost:1313 or if from other host use its address
+   instead of `localhost`.
 
 1. Problem Solving:
    - use extended version
