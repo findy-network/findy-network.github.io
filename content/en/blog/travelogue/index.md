@@ -202,7 +202,7 @@ present and verify proofs in a quick and dirty way. Now we knew the potential.
 We had managed to implement pre-Aries DIDComm over HTTP and WebSocket. We had
 a multi-tenant agency running cloud agents even though it was far from
 production readiness. Everything was end to end encrypted. The current agency
-supported indy's ledger transactions, and first, We had taken some tests from
+supported indy's ledger transactions, and first, we had taken some tests from
 issuing and proofing protocols. We started to understand what kind of beast was
 tearing at us from another end of the road.
 
@@ -286,7 +286,7 @@ could just be enough.
 #### 2019/H2 Results
 
 We had implemented all the most important use cases with our new protocol
-engine. We had an asymmetric agent which could be in all of the needed roles of SSI:
+engine. We had an symmetric agent which could be in all of the needed roles of SSI:
 a holder, an issuer, and a verifier. Also, the API seemed to be OK at a high
 level of abstraction. The individual messages were shit.
 
