@@ -13,7 +13,7 @@ resources:
   title: "Image #:counter"
 ---
 
-The success of the team I'm part of is measured:
+The success of our team is measured:
 - How well do we understand *certain* emerging technologies?
 - How relevant they are to the business we are in?
 - How much potential do they have for our company's business? 
@@ -25,7 +25,7 @@ We have learned that you will fail if you prioritize technologies by their
 business value too early. There is a catch, though. You must be sure that you
 will not fall in love with the technologies you are studying. Certain scepticism
 is welcomed in our line of work. That attitude may follow thru this post as
-well. You have now warned, at least.
+well. You have now been warned, at least.
 
 ### Technology Tree
 
@@ -35,7 +35,7 @@ well. You have now warned, at least.
 
 Technology roots present the most important *background knowledge* of our study.
 The most fundamental technologies and study subjects are in the trunk.  The
-trunk is the backbone of our work. It tights altogether. Branches and leaves
+trunk is the backbone of our work. It ties it all together. Branches and leaves
 are outcomes, conclusions, and key learnings. At the top of the tree, some
 future topics are considered but not implemented or even tried yet.
 
@@ -68,11 +68,12 @@ either.
 ### Targets and Goals
 
 Every project's objectives and goals change during the execution. The longer the
-project more pivots it has. (Note that I use the term *project* quite freely in
-the post). When we started to work with DID/SSI field, the goal was to build **a
-standalone mobile app demo** of the identity wallet based on Hyperledger Indy.
-We started in *test drive mode* but built a full DID agency and
-published it as OSS. The journey has been inspiring, and we have learned a lot.
+project, the more pivots it has. (Note that I use the term *project* quite
+freely in the post). When we started to work with DID/SSI field, the goal was to
+build **a standalone mobile app demo** of the identity wallet based on
+Hyperledger Indy.  We started in *test drive mode* but built a full DID agency
+and published it as OSS. The journey has been inspiring, and we have learned a
+lot.
 
 In every project, it's important to maintain the scope. Thanks to the nature of
 our organisation we didn't have changing requirements. The widening of the scope
@@ -326,7 +327,7 @@ separate different formats and still generalise with Go's interfaces.
 
 We noticed that Agency's command-line UI started to be too complicated. Go has
 a clever idea of how you can do services without environmental variables. I'm
-still the guy who would keep with that, but it was a good idea to widen the
+still the guy who would stick with that, but it was a good idea to widen the
 scope to make our tools comfortable for all new users.
 
 Our design idea was to build CLI, which follows subcommands like git and docker
@@ -361,10 +362,10 @@ and the other has the authenticator -- the cryptographical root of
 trust.
 
 When I presented an internal demo of the gRPC with the JWT authorization and
-explained that authentications would be FIDO2 WebAuth, we were ready to start
+explained that authentications would be FIDO2 WebAuthn, we were ready to start
 the architecture transition. Everything was still good when I implemented the
 first FIDO server with the help of Duo Labs Go packages. Our FIDO2 server was
-now capable to allocated cloud agents. But there was one missing part I was
+now capable of allocating cloud agents. But there was one missing part I was
 hoping someone in the OSS community would implement until we needed it. It was a
 headless WebAuthn/UAF authenticator for those issuers/verifiers running as
 service agents. How to onboard them, and how they would access the agency's
@@ -409,12 +410,12 @@ Until the summer, the most important results have been:
 - The full OSS release 
 
 As said, all of the important elements are in place. However, our solution is
-based on `libindy`, which is interesting where the original contributor
-continues. Still, the rest of the Aries group are moving to shared libraries. We
-haven't made the decision yet on which direction we will go. Or do we even need
-to choose? At least in the meantime, we could just add some new solutions and
-run them both. Thanks to our own architecture and interfaces, that are plausible
-options for our agency.
+based on `libindy`, which will be interesting because the Aries group moves to
+shared libraries, whereas the original contributor continues with it. We haven't
+made the decision yet on which direction we will go. Or do we even need to
+choose? At least in the meantime, we could add some new solutions and run them
+both. Thanks to our own architecture and interfaces, those are plausible options
+for our agency.
 
 There are many interesting study subjects we are continuing to work on within
 SSI/DID. We will report them in upcoming blog posts. Stay tuned, folks!
