@@ -1,4 +1,375 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 20 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Announcing Findy Agency</title><link>/blog/2021/08/11/announcing-findy-agency/</link><pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate><guid>/blog/2021/08/11/announcing-findy-agency/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 08 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Travelogue</title><link>/blog/2021/09/08/travelogue/</link><pubDate>Wed, 08 Sep 2021 00:00:00 +0000</pubDate><guid>/blog/2021/09/08/travelogue/</guid><description>
+&lt;p>The success of our team is measured:&lt;/p>
+&lt;ul>
+&lt;li>How well do we understand &lt;em>certain&lt;/em> emerging technologies?&lt;/li>
+&lt;li>How relevant they are to the business we are in?&lt;/li>
+&lt;li>How much potential do they have for our company&amp;rsquo;s business?&lt;/li>
+&lt;/ul>
+&lt;p>If you are asking yourself if the order of the list is wrong, the answer is, it
+is not.&lt;/p>
+&lt;p>We have learned that you will fail if you prioritize technologies by their
+business value too early. There is a catch, though. You must be sure that you
+will not fall in love with the technologies you are studying. Certain scepticism
+is welcomed in our line of work. That attitude may follow thru this post as
+well. You have now been warned, at least.&lt;/p>
+&lt;h3 id="technology-tree">Technology Tree&lt;/h3>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2001px">
+&lt;img class="card-img-top" src="/blog/2021/09/08/travelogue/TechTree_hucb3e947ff7ac3c644fea522c44e98b42_1584631_1991x0_resize_catmullrom_3.png" width="1991" height="1120">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Findy Agency Tech Tree&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>Technology roots present the most important &lt;em>background knowledge&lt;/em> of our study.
+The most fundamental technologies and study subjects are in the trunk. The
+trunk is the backbone of our work. It ties it all together. Branches and leaves
+are outcomes, conclusions, and key learnings. At the top of the tree, some
+future topics are considered but not implemented or even tried yet.&lt;/p>
+&lt;p>Even if the technology tree illustrates the relevant technologies for the
+subject, we will not address them in this post. &lt;strong>We recommend you to study the
+tree for a moment&lt;/strong> to get the picture. You will notice that there aren&amp;rsquo;t any
+mention of VC. For us, the concept of VC is an internal feature of
+&lt;a href="https://www.w3.org/TR/vc-data-model/">DID system&lt;/a>. Naturally, there are a huge
+amount of enormous study subjects inside VCs like ZKP, etc. But this approach
+has to lead us to concentrate on the network itself and the structure it should
+have.&lt;/p>
+&lt;p>The tree has helped us to see how things are bound together and what topics are
+the most relevant for the study area.&lt;/p>
+&lt;h3 id="trust-triangle">Trust Triangle&lt;/h3>
+&lt;p>The famous SSI trust triangle is an excellent tool to simplify what is
+important and what is not. As we can see, everything builds on peer to peer
+connections, thick arrows. VCs are issued, and proofs are presented thru them.
+The only thing that&amp;rsquo;s not yet solved &lt;em>at the technology level&lt;/em> is the trust
+arrow in the triangle. (I know the recursive trust triangle, but I disagree with
+how it&amp;rsquo;s thought to be implemented). But &lt;em>this blog post&lt;/em> is not about that
+either.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 605px">
+&lt;img class="card-img-top" src="/blog/2021/09/08/travelogue/trust-triangle_hua2e42792a9d20037c5f572b0412e67c1_57626_925x925_fit_catmullrom_3.png" width="595" height="392">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>The SSI Trust Triangle&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h3 id="targets-and-goals">Targets and Goals&lt;/h3>
+&lt;p>Every project&amp;rsquo;s objectives and goals change during the execution. The longer the
+project, the more pivots it has. (Note that I use the term &lt;em>project&lt;/em> quite
+freely in the post). When we started to work with DID/SSI field, the goal was to
+build &lt;strong>a standalone mobile app demo&lt;/strong> of the identity wallet based on
+Hyperledger Indy. We started in &lt;em>test drive mode&lt;/em> but built a full DID agency
+and published it as OSS. The journey has been inspiring, and we have learned a
+lot.&lt;/p>
+&lt;p>In every project, it&amp;rsquo;s important to maintain the scope. Thanks to the nature of
+our organisation we didn&amp;rsquo;t have changing requirements. The widening of the scope
+came mostly from the fact that the whole area of SSI and DID were evolving. It
+still is.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="/blog/2021/09/08/travelogue/targets_hu3c26761ab0ee4aee9c5a7a0b4088e778_867526_925x925_fit_catmullrom_3.png" width="925" height="520">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>The Journey From Identity Wallet to Identity Ecosystem&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>Many project goals changed significantly during the execution, but that was part
+of the job. And as DID/SSI matured, we matured as well, and goals to our work
+aren&amp;rsquo;t &lt;em>so&lt;/em> &lt;em>test-driven&lt;/em> mode anymore. We still test other related technologies
+that can be matched to DID/SSI or even replace some parts of it
+but have transited to the state where we have started to build our own related
+core technologies to the field.&lt;/p>
+&lt;p>Incubators usually start their trip by testing different hypotheses and trying
+them out in practice. We did the same but more on the practical side. We didn&amp;rsquo;t
+have a formal hypothesis, but we had some use cases and a vision of how modern
+architecture should work and its scaling requirements. Those kinds of
+principles lead our &lt;em>decision-making process&lt;/em> during the project.
+(Maybe some of us write a detailed blog about how our emerging tech process and
+organisation worked.)&lt;/p>
+&lt;h2 id="the-journey">The journey&lt;/h2>
+&lt;p>We have been building our multi-tenant agency since the beginning of 2019.
+During that time, we have tried many different techniques, technologies and
+architectures, and application metaphors. We think we have succeeded to find
+interesting results.&lt;/p>
+&lt;p>In the following chapters, we will report the time period from the beginning of
+2019 to autumn of 2021 in half of a year intervals. I really recommend that you
+look at the timelines carefully because they include valuable outcomes.&lt;/p>
+&lt;h3 id="2019h1">2019/H1&lt;/h3>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2010px">
+&lt;img class="card-img-top" src="/blog/2021/09/08/travelogue/spring19_hu29db0a4a24cce1cc4a7a017360286d3b_559718_2000x0_resize_catmullrom_3.png" width="2000" height="1125">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>2019/H1&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h5 id="the-start">The Start&lt;/h5>
+&lt;p>Me:&lt;/p>
+&lt;blockquote>
+&lt;p>&amp;ldquo;I&amp;rsquo;m interested in studying new tech by programming with it.&amp;rdquo;&lt;/p>
+&lt;/blockquote>
+&lt;p>Some block-chain experts in the emerging technologies team:&lt;/p>
+&lt;blockquote>
+&lt;p>&amp;ldquo;We need an identity wallet to be able to continue with our other projects.
+Have you ever heard of Hyperledger Indy..&amp;rdquo;&lt;/p>
+&lt;/blockquote>
+&lt;p>In one week, I have been smoke-tested indy SDK on iOS and Linux. During the
+spring, we ended up following the Indy&amp;rsquo;s proprietary agent to agent
+protocol, &lt;strong>but&lt;/strong> we didn&amp;rsquo;t use &lt;em>libcvx&lt;/em> for that because:&lt;/p>
+&lt;blockquote>
+&lt;p>This library is currently in an &lt;strong>experimental&lt;/strong> state and is not part of
+official releases. - [indy SDK GitHub pages]&lt;/p>
+&lt;/blockquote>
+&lt;p>To be honest, that was the most important reason because we have had so much
+extra work with other Indy libs, and of course, we would need a wrapper at least for
+Go. It was an easy decision. Afterwards, it was the right because the DIDComm
+protocol is the backbone of everything with SSI/DID. And now, when it&amp;rsquo;s in our
+own (capable) hands, it&amp;rsquo;s made many such things possible which weren&amp;rsquo;t otherwise.
+We will publish a whole new technical blog series of our multi-tenant DIDComm
+protocol engine.&lt;/p>
+&lt;p>All of the modern, native mobile apps end up been written from two parts: the mobile
+app component running on the device and the server part doing everything it can
+to make the mobile app&amp;rsquo;s life easier. Early stages, DIDComm&amp;rsquo;s edge and cloud agent
+roles weren&amp;rsquo;t that straightforward. From every point of view, it seemed overly
+complicated. But still, we stuck to it.&lt;/p>
+&lt;h5 id="first-results">First Results&lt;/h5>
+&lt;p>At the end of spring 2019, we had a quick and dirty demo of the system, which had
+&lt;strong>multi-tenant&lt;/strong> agency to serve cloud agents and iOS mobile app to run edge
+agents. An EA onboarded itself to the agency with the same DID Connect
+protocol, which was used everywhere. Actually, an EA and a CA
+used Web Sockets as a transport mechanism for indy&amp;rsquo;s DIDComm messages.&lt;/p>
+&lt;p>We hated the protocol. It was insane. But it was DID protocol, wasn&amp;rsquo;t it?&lt;/p>
+&lt;p>The system was end to end encrypted, but the indy protocol had its flaws, like
+being synchronous. We didn&amp;rsquo;t yet have any persistent state machine or the other
+basics of the communication protocol systems. Also, the whole thing felted
+overly complicated and old &amp;ndash; it wasn&amp;rsquo;t modern cloud protocol.&lt;/p>
+&lt;h5 id="third-party-integration-demo">Third party integration demo&lt;/h5>
+&lt;p>In early summer ended up building a demo that didn&amp;rsquo;t follow totally the current
+architecture, because the mobile app&amp;rsquo;s edge agent was communicating directly to
+the third party agent. This gave us a lot of experience, and for me, it gave
+needed time to spec what kind of protocol the DIDComm should be and what kind of
+protocol engine should run it.&lt;/p>
+&lt;p>It was a weird time because indy&amp;rsquo;s legacy agent to agent protocol didn&amp;rsquo;t have a
+public, structured and formal specification of its protocol.&lt;/p>
+&lt;p>Those who are interested in history can read more from
+&lt;a href="https://hyperledger-indy.readthedocs.io/projects/hipe/en/latest/text/0002-agents/README.html">here&lt;/a>.&lt;/p>
+&lt;p>The integration project made it pretty clear for us what kind of protocol was
+needed.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Async with explicit state machine&lt;/strong>&lt;/p>
+&lt;/blockquote>
+&lt;p>DIDComm must be async and message-driven simple because it&amp;rsquo;s deliberative in
+its nature. Two agents are negotiating for issuing, proofing, etc.&lt;/p>
+&lt;h5 id="aries-news">Aries news&lt;/h5>
+&lt;p>Hyperledger Aries was set up during the summer, which was good because it showed
+the same we learned. We were on the right path.&lt;/p>
+&lt;h5 id="code-delivery-for-a-business-partner">Code Delivery For a Business Partner&lt;/h5>
+&lt;p>For this mail-stone, we ended up producing some documentation, mostly to
+explain the architecture. During the whole project, we have had a comprehensive
+unit and integration test harness.&lt;/p>
+&lt;p>At this point, we had all of the important features covered: issuing, holding,
+present and verify proofs in a quick and dirty way. Now we knew the potential.&lt;/p>
+&lt;h5 id="results-2019-summer">Results 2019 Summer&lt;/h5>
+&lt;p>We had managed to implement pre-Aries DIDComm over HTTP and WebSocket. We had
+a multi-tenant agency running cloud agents even though it was far from
+production readiness. Everything was end to end encrypted. The current agency
+supported indy&amp;rsquo;s ledger transactions, and first, we had taken some tests from
+issuing and proofing protocols. We started to understand what kind of beast was
+tearing at us from another end of the road.&lt;/p>
+&lt;h3 id="2019h2">2019/H2&lt;/h3>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2010px">
+&lt;img class="card-img-top" src="/blog/2021/09/08/travelogue/autumn19_hu29db0a4a24cce1cc4a7a017360286d3b_515478_2000x0_resize_catmullrom_3.png" width="2000" height="1125">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>2019/H2&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h5 id="start-of-the-async-protocol-development">Start Of The Async Protocol Development&lt;/h5>
+&lt;p>When we started architecture redesign after the summer break,
+we had a clear idea of what kind of direction we should take and what to leave for
+later:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Cloud-first&lt;/strong> and we have newer wanted to step back on that.&lt;/li>
+&lt;li>&lt;strong>Modern micro-service architecture&lt;/strong> targeting continuous delivery and
+scalability. That leads to a certain type of technology stack which consists of
+techs like Go, gRPC, Docker (or other containerization technology), container
+orchestration like K8s, etc. One key requirement was that hardware utilization
+must be perfect, i.e. tiny servers are enough.&lt;/li>
+&lt;li>&lt;strong>No support for offline&lt;/strong> use cases &lt;em>for now&lt;/em>.&lt;/li>
+&lt;li>&lt;strong>No revocation&lt;/strong> until there is a working solution. Credit card revocation has
+taught us a lot. Scalable and fast revocation is a hard problem to solve.&lt;/li>
+&lt;li>Message routing should not be part of the protocol&amp;rsquo;s explicit &amp;lsquo;headers&amp;rsquo;, i.e.
+there is &lt;strong>only one service endpoint for a DID&lt;/strong>. We should naturally handle the
+service endpoint so that privacy is maintained as it is in our agency. By
+leaving routing out, it has been making everything so much simple. Some
+technologies can do that for us for free, like Tor. We have tested Tor, and it
+works pretty well for setting service endpoints and also connecting to them.&lt;/li>
+&lt;li>&lt;strong>Use push notifications along with the WebSockets&lt;/strong>, i.e. lent APNS to trigger
+edge agents when they were not connected to the server.&lt;/li>
+&lt;/ul>
+&lt;h5 id="multi-ledger-architecture">Multi-ledger Architecture&lt;/h5>
+&lt;p>Because everything goes through our Go wrapper to the Plenum ledger, I made a
+version that used memory or plain file instead of the ledger as a hobby project.
+It was meant to be used only for tests and development. Later the plug-in
+architecture has allowed us to have other persistent saving media as well. But
+more importantly, it has helped development and automatic testing a lot.&lt;/p>
+&lt;p>Technically the &lt;em>hack&lt;/em> is to use &lt;code>pool handle&lt;/code> to tell if the system is
+connected to a ledger or some other predefined media. &lt;code>indy&lt;/code> API has only two
+functions that take &lt;code>pool handle&lt;/code> as an argument but doesn&amp;rsquo;t use it at all &lt;em>or&lt;/em>
+a handle is an option.&lt;/p>
+&lt;h5 id="server-side-secure-enclaves">Server Side Secure Enclaves&lt;/h5>
+&lt;p>During the server-side development, we wanted to have at least post-compromised
+secured key storage for cloud servers. Cloud environments like AWS give you
+managed storage for master secrets, but we needed more when developing OSS
+solutions with high performance and scalability requirements.&lt;/p>
+&lt;p>Now we store our most important keys for LMDB-based fast key-value storage
+fully encrypted. Master keys for installation are in a managed cloud environments
+like AWS, Google, Azure, etc.&lt;/p>
+&lt;h5 id="first-multi-tenant-chat-bot">First Multi-tenant Chat Bot&lt;/h5>
+&lt;p>The first running version of the chatbot used a semi-hard-coded version.
+It supported only sequential steps: a single line in a text file,
+&lt;code>CredDefIds&lt;/code> in its own file, and finally text messages in its own files. The
+result was just a few lines of Go code, thanks to its concurrent model.&lt;/p>
+&lt;p>The result was so good that I made a backlog issue to start studying to
+use SCXML or some other exciting language for chatbot state machines later.
+About a year later, I implemented a state machine on my own with a proprietary YAML
+format.&lt;/p>
+&lt;p>But that search isn&amp;rsquo;t totally over. Before that, I considered many different
+options, but there wasn&amp;rsquo;t much of an OSS alternative. One option could be to
+embed Lua combined with the current state machine engine and replace the memory
+model with Lua. We shall see what the real use case needs are.&lt;/p>
+&lt;p>I personally think that an even more important approach would be &lt;strong>a state machine
+verifier&lt;/strong>. Keeping that as a goal sets strict limits to the computation
+model we could use. What we have learned now is you don&amp;rsquo;t need the full power of
+general programming language but
+&lt;a href="https://en.wikipedia.org/wiki/Automata_theory">finite state machine (automata theory)&lt;/a>
+could just be enough.&lt;/p>
+&lt;h4 id="2019h2-results">2019/H2 Results&lt;/h4>
+&lt;p>We had implemented all the most important use cases with our new protocol
+engine. We had an symmetric agent which could be in all of the needed roles of SSI:
+a holder, an issuer, and a verifier. Also, the API seemed to be OK at a high
+level of abstraction. The individual messages were shit.&lt;/p>
+&lt;p>At the end of the year, we also had a decent toolbox both on command-line and
+especially on the web.&lt;/p>
+&lt;h3 id="2020h1">2020/H1&lt;/h3>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2010px">
+&lt;img class="card-img-top" src="/blog/2021/09/08/travelogue/spring20_hu29db0a4a24cce1cc4a7a017360286d3b_486983_2000x0_resize_catmullrom_3.png" width="2000" height="1125">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>2020/H1&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h5 id="findy-consortium-level-oss-publication">Findy-consortium Level OSS Publication&lt;/h5>
+&lt;p>At the beginning of 2020, we decided to publish all the produced
+code inside the Findy consortium. We produced the new GitHub account, and code
+without history moved from original repos to new ones.&lt;/p>
+&lt;p>Even the decision brought a lot of routine work for that moment, it also brought
+many good things:&lt;/p>
+&lt;ul>
+&lt;li>refactoring,&lt;/li>
+&lt;li>interface cleanups,&lt;/li>
+&lt;li>documentation updates.&lt;/li>
+&lt;/ul>
+&lt;h5 id="aca-py-interoperability-tests">ACA-Py Interoperability Tests&lt;/h5>
+&lt;p>We implemented the first version of the new async protocol engine with existing
+JSON messages came from legacy indy a2a protocols. It&amp;rsquo;s mostly because I
+wanted to build it in small steps, and it worked pretty well.&lt;/p>
+&lt;p>Most of the extra work did come from the legacy API we had. JSON messages over
+indy&amp;rsquo;s proprietary DIDComm. As always, some bad but some good: because we had to
+keep both DIDComm message formats, I managed to integrate a clever way to
+separate different formats and still generalise with Go&amp;rsquo;s interfaces.&lt;/p>
+&lt;h5 id="new-cli">New CLI&lt;/h5>
+&lt;p>We noticed that Agency&amp;rsquo;s command-line UI started to be too complicated. Go has
+a clever idea of how you can do services without environmental variables. I&amp;rsquo;m
+still the guy who would stick with that, but it was a good idea to widen the
+scope to make our tools comfortable for all new users.&lt;/p>
+&lt;p>Our design idea was to build CLI, which follows subcommands like git and docker
+nowadays. The latest version we have now is quite good already, but the road was
+rocky. It is not easy to find the right structure the first time. The more you
+use your CLI by yourself, the more you start to notice what is intuitive and
+what is not.&lt;/p>
+&lt;p>We decided to separate CLI commands from Agency to own tool and git repo. It was
+good to move for that time, and when we managed to make it right, we were able to
+move those same commands pack to the agency one year later because we needed CLI
+tool without any &lt;em>libindy&lt;/em> dependencies. That is a good example of successful
+software architecture work. You cannot predict the future, but you can prepare
+yourself for change.&lt;/p>
+&lt;h3 id="2020h2">2020/H2&lt;/h3>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2010px">
+&lt;img class="card-img-top" src="/blog/2021/09/08/travelogue/autumn20_hu29db0a4a24cce1cc4a7a017360286d3b_544015_2000x0_resize_catmullrom_3.png" width="2000" height="1125">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>2020/H2&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h5 id="architecture-planning">Architecture Planning&lt;/h5>
+&lt;p>I had had quite a long time the idea of using gRPC for the Cloud Agent
+controller. My core idea was to get rid of the EA because, currently, it was
+just an onboarding tool. The wallet had, included only the pairwise DID to its
+cloud agent, nothing else. The actual wallet (we called it worker edge agent
+wallet) was the real wallet, where the VCs were. I went thru
+many similar protocols until I found FIDO UAF. The protocol is similar to
+DIDComm&amp;rsquo;s pairwise protocol, but it&amp;rsquo;s not symmetric. Another end is the server,
+and the other has the authenticator &amp;ndash; the cryptographical root of
+trust.&lt;/p>
+&lt;p>When I presented an internal demo of the gRPC with the JWT authorization and
+explained that authentications would be FIDO2 WebAuthn, we were ready to start
+the architecture transition. Everything was still good when I implemented the
+first FIDO server with the help of Duo Labs Go packages. Our FIDO2 server was
+now capable of allocating cloud agents. But there was one missing part I was
+hoping someone in the OSS community would implement until we needed it. It was a
+headless WebAuthn/UAF authenticator for those issuers/verifiers running as
+service agents. How to onboard them, and how they would access the agency&amp;rsquo;s
+resources with the same JWT authorization? To allow us to proceed, we added
+support to get JWT by our old API. It&amp;rsquo;s was only intermediated solution but
+served its purpose.&lt;/p>
+&lt;h5 id="learnings-when-implementing-the-new-architecture">Learnings when implementing the new architecture&lt;/h5>
+&lt;ul>
+&lt;li>implicit JWT authorization helps gRPC usage a lot and simplifies it too.&lt;/li>
+&lt;li>gRPC streams and Go&amp;rsquo;s channel is just excellent together.&lt;/li>
+&lt;li>You should use pre-generated wallet keys for indy wallets.&lt;/li>
+&lt;li>We can integrate performance and scalability tests into CI.&lt;/li>
+&lt;li>gRPC integration and unit testing could be done in the same way as with HTTP
+stack in Go, i.e. inside a single process that can play both client and server.&lt;/li>
+&lt;/ul>
+&lt;h5 id="highlights-of-the-end-of-the-year-2020">Highlights of the end of the year 2020&lt;/h5>
+&lt;p>We started to build for new SA architecture and allowed both our APIs to
+existing. WebAuth server, headless authenticator, and Vault first versions were
+now ready. Also, I did the first version of a state machine for service agent
+implementation. We had an option to use immuDB instead of Plenum ledger.&lt;/p>
+&lt;h3 id="2021h1">2021/H1&lt;/h3>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2010px">
+&lt;img class="card-img-top" src="/blog/2021/09/08/travelogue/spring21_hu29db0a4a24cce1cc4a7a017360286d3b_511190_2000x0_resize_catmullrom_3.png" width="2000" height="1125">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>2021/H1&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>Now we have an architecture that we can live with. All the important elements
+are in place. Now we just clean it up.&lt;/p>
+&lt;h5 id="summary-of-spring-2021-results">Summary of Spring 2021 Results&lt;/h5>
+&lt;p>Until the summer, the most important results have been:&lt;/p>
+&lt;ul>
+&lt;li>Headless WebAuthn authenticator&lt;/li>
+&lt;li>React-based Web Wallet&lt;/li>
+&lt;li>Lots of documentation and examples&lt;/li>
+&lt;li>Agency&amp;rsquo;s gRPC API v1&lt;/li>
+&lt;li>Polyglot implementations gRPC: TypeScript, Go, JavaScript&lt;/li>
+&lt;li>New toolbox both Web and Command-line&lt;/li>
+&lt;li>The full OSS release&lt;/li>
+&lt;/ul>
+&lt;p>As said, all of the important elements are in place. However, our solution is
+based on &lt;code>libindy&lt;/code>, which will be interesting because the Aries group moves to
+shared libraries, whereas the original contributor continues with it. We haven&amp;rsquo;t
+made the decision yet on which direction we will go. Or do we even need to
+choose? At least in the meantime, we could add some new solutions and run them
+both. Thanks to our own architecture and interfaces, those are plausible options
+for our agency.&lt;/p>
+&lt;p>There are many interesting study subjects we are continuing to work on within
+SSI/DID. We will report them in upcoming blog posts. Stay tuned, folks!&lt;/p></description></item><item><title>Blog: Announcing Findy Agency</title><link>/blog/2021/08/11/announcing-findy-agency/</link><pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate><guid>/blog/2021/08/11/announcing-findy-agency/</guid><description>
 &lt;p>Findy Agency provides a &lt;a href="https://www.hyperledger.org/use/aries">Hyperledger Aries&lt;/a> compatible identity agent service. It includes a web wallet for individuals and an API for organizations to utilize functionality related to verified data exchange: issuing, holding, verifying, and proving credentials. The agents hosted by the agency operate using DIDComm messaging and &lt;a href="https://github.com/hyperledger/aries-rfcs">Hyperledger Aries protocols&lt;/a>. Thus it is interoperable with other Hyperledger Aries compatible agents. The supported verified credential format is currently &lt;a href="https://github.com/hyperledger/indy-sdk">Hyperledger Indy&lt;/a> “Anoncreds” that work with Hyperledger Indy distributed ledger. However, the plan is to add more credential formats in the future.&lt;/p>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
 &lt;img class="card-img-top" src="/blog/2021/08/11/announcing-findy-agency/vision_hu68846d3af499a7706e2100471d9aa9d5_34254_925x925_fit_catmullrom_3.png" width="925" height="322">
