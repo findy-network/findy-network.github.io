@@ -30,12 +30,12 @@ Typically, when building images for Docker, the image inherits the architecture 
 
 Ok, so Docker takes care of the image selection when running images. How about building them then? There are [three strategies](https://docs.docker.com/buildx/working-with-buildx/#build-multi-platform-images).
 1. **QEMU emulation support in the kernel**: QEMU works by emulating all instructions of a foreign CPU instruction set on the host processor. For example, it can emulate ARM CPU instructions on an x86 host machine. The QEMU emulator enables building images that target another architecture than the host.
-1. **Multiple native nodes using the same builder instance**: With this approach, multiple hosts that run on different CPU architectures execute the build. The build time is faster. The drawback is that it requires access to native nodes.
+1. **Multiple native nodes using the same builder instance**: Multiple hosts running on different CPU architectures execute the build with this approach. The build time is faster. The drawback is that it requires access to native nodes.
 1. **Stage in a Dockerfile for cross-compilation**: This option is possible with languages that support cross-compilation. Arguments exposing the build and the target platforms are automatically available to the build stage. The build command can utilize these parameters to build the binary for the correct target.
 
 From these three options, we chose the first one, as it seemed the most straightforward route. However, in our case, the third option might have worked as well since we are building with tools that support cross-compilation, Rust, and GoLang. 
 
-A Docker CLI plugin, [buildx](https://docs.docker.com/buildx/working-with-buildx/), is required to build multi-architecture images. It extends the docker command with additional features, the multi-architecture build capability being one of them. Using buildx is almost the same as using the ordinary Docker build function. The target platform is added to the command wit the flag `--platform`.
+A Docker CLI plugin, [buildx](https://docs.docker.com/buildx/working-with-buildx/), is required to build multi-architecture images. Using the buildx is almost the same as using the ordinary Docker build function. It extends the docker command with additional features, the multi-architecture build capability being one of them. The target platform is added to the command with the flag `--platform`.
 
 Example of building Docker image with buildx for arm64:
 ```bash
@@ -46,9 +46,9 @@ docker buildx build --platform linux/arm64 -t image_label .
 
 Now we had chosen the strategy and had the tools installed. The next step was to review each image stack and ensure that it was possible to build all image layers for the needed variants.
 
-Our default image stack consists of [the custom base image](https://github.com/findy-network/findy-common-go/blob/master/infra/aws/Dockerfile.indy.ubuntu) and an application layer (service binary in question). The custom base image contains some tools and libraries that are common for all of our services. It expands the official Docker image for Ubuntu. For the official Docker images, there are no problems since Docker provides the needed variants out-of-the-shelf. However, our custom base image installs indy-sdk libraries from the Sovrin Debian repository, and unfortunately, the Debian repository did not provide binaries for arm64. So instead of installing the library from the Debian repository, we needed to add [a build step](https://github.com/findy-network/findy-common-go/blob/8bef1cbc4cc7d698275a69a9c9c4aff2622b84de/infra/aws/Dockerfile.indy.ubuntu#L12) that would build and install the indy-sdk from the sources.
+Our default image stack consists of [the custom base image](https://github.com/findy-network/findy-common-go/blob/master/infra/aws/Dockerfile.indy.ubuntu) and an application layer (service binary in question). The custom base image contains some tools and libraries that are common for all of our services. It expands the official Docker image for Ubuntu. For the official Docker images, there are no problems since Docker provides the needed variants out-of-the-shelf. However, our custom base image installs indy-SDK libraries from the Sovrin Debian repository, and unfortunately, the Debian repository did not provide binaries for arm64. So instead of installing the library from the Debian repository, we needed to add [a build step](https://github.com/findy-network/findy-common-go/blob/8bef1cbc4cc7d698275a69a9c9c4aff2622b84de/infra/aws/Dockerfile.indy.ubuntu#L12) that would build and install the indy-SDK from the sources.
 
-Otherwise, building for arm64 revealed no problems. The only needed change was that some of our server start scripts were missing [shebangs](https://en.wikipedia.org/wiki/Shebang_(Unix)) from the start of the script file. For yet an unknown reason, it prevented the shell from running the script properly on an arm64 container. The problem was fixed easily by adding the missing shebangs.
+Otherwise, building for arm64 revealed no problems. The only needed change was that some of our server start scripts were missing [shebangs](https://en.wikipedia.org/wiki/Shebang_(Unix)) from the start of the script file. We fixed the problem quickly by adding the missing shebangs. It prevented the shell from running the script properly on an arm64 container for an unknown reason.
 
 The final step was to modify our GitHub Actions pipelines to build the images for the different architectures. Fortunately, Docker provides ready-made actions for setting up QEMU (*[setup-qemu-action](https://github.com/docker/setup-qemu-action)*) and buildx (*[setup-buildx-action](https://github.com/docker/setup-buildx-action)*), logging to the Docker registry (*[login-action](https://github.com/docker/login-action)*), and building and pushing the ready images to the registry (*[build-push-action](https://github.com/docker/build-push-action)*).
 
@@ -99,7 +99,7 @@ jobs:
           file: ./scripts/deploy/Dockerfile
 ```
 
-The result was as expected, the actions take care of the building successfully. Building of the images is considerably slower with QEMU but luckily the build caches speed up the process a bit.
+The result was as expected. The actions took care of the building successfully. Building images is considerably slower with QEMU, but the build caches speed up the process a bit.
 
 Now have the needed variants for our service images in the registry. Furthermore, our colleague with the M1-Mac can run the agency successfully with his desktop.
 
