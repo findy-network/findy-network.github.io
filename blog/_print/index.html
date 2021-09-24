@@ -66,6 +66,7 @@ This the multi-page printable view of this section.
 </div>
 <h1 class=title>Findy Agency Blog</h1>
 <ul>
+<li><a href=#pg-01f27610185446a311586be6588425a0>The Arm Adventure on Docker</a></li>
 <li><a href=#pg-9a796d898f4a78defc54c95df256f75b>Travelogue</a></li>
 <li><a href=#pg-cb63dd4f3907bf281fd73b19c6270088>Announcing Findy Agency</a></li>
 </ul>
@@ -73,6 +74,104 @@ This the multi-page printable view of this section.
 </div>
 </div>
 <div class=td-content>
+<h1 id=pg-01f27610185446a311586be6588425a0>The Arm Adventure on Docker</h1>
+<div class=lead>Since the Findy Agency project launched, Docker has been one of our main tools to help set up the agency development and deployment environments. An unexpected headache developed when our colleague purchased an M1 Mac, and our images refused to run on the ARM platform.</div>
+<div class="td-byline mb-4">
+By <b>Laura Vuorenoja</b> |
+<time datetime=2021-09-20 class=text-muted>Monday, September 20, 2021</time>
+</div>
+<p>Since the Findy Agency project launched, Docker has been one of our main tools to help set up the agency development and deployment environments. First of all, we use Docker images for our cloud deployment. On a new release, the CI build pipeline bundles all needed binaries to each service image. After the build, the pipeline pushes Docker images to <a href=https://github.blog/2020-09-01-introducing-github-container-registry/>the GitHub container registry</a>, from where the deployment pipeline fetches them and updates the cloud environment.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:706px>
+<img class=card-img-top src=/blog/2021/09/20/the-arm-adventure-on-docker/agency-deployment-pipeline_hu45c26a180b4a9f8ed9e980905a894a35_52542_925x925_fit_catmullrom_3.png width=696 height=385>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Agency deployment pipeline: New release triggers image build in GitHub actions. When the new container image is in the registry, AWS Code Pipelines handles the deployment environment update.</em>
+</p>
+</div>
+</div>
+<p>In addition, we’ve used Docker to take care of the service orchestration in a local development environment. When developing the agency itself, a native setup with full debugging capabilities is naturally our primary choice. However, suppose one wishes only to use the agency services and develop, e.g., a web service utilizing agency capabilities. In that case, the most straightforward approach is to run agency containers with a preconfigured docker-compose script. The script pulls correct images to the local desktop and sets needed configuration parameters. Setting up and updating the three services could be cumbersome without the orchestration, at least for newbies.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:635px>
+<img class=card-img-top src=/blog/2021/09/20/the-arm-adventure-on-docker/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_625x625_fit_catmullrom_3.png width=625 height=546>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>High-level architecture of Findy Agency. Setting up the agency to localhost is most straightforward with the help of a container orchestration tool.</em>
+</p>
+</div>
+</div>
+<p>Until recently, we were happy with our image-building pipeline. Local environments booted up with ease, and the deployment pipeline rolled out updates beautifully. Then one day, our colleague with an M1-equipped Mac tried out the docker-compose script. Running the agency images in an Arm-based architecture was something we hadn&rsquo;t considered. We built our Docker images for amd64 architecture, while M1 Macs expect container images for arm64 CPU architecture. It became clear we needed to support also the arm64, as we knew that the popularity of the M1 chipped computers would only increase in the future.</p>
+<h2 id=multi-architecture-support-in-docker>Multi-architecture Support in Docker</h2>
+<p>Typically, when building images for Docker, the image inherits the architecture type from the building machine. And as each processor architecture requires a dedicated Docker image, one needs to build a different container image for each target architecture. To avoid the hassle with the multiple images, Docker has added support for multi-architecture images. It means that there is a single image in the registry, but it can have many variants. Docker will automatically choose the appropriate architecture for the processor and platform in question and pull the correct variant.</p>
+<p>Ok, so Docker takes care of the image selection when running images. How about building them then? There are <a href=https://docs.docker.com/buildx/working-with-buildx/#build-multi-platform-images>three strategies</a>.</p>
+<ol>
+<li><strong>QEMU emulation support in the kernel</strong>: QEMU works by emulating all instructions of a foreign CPU instruction set on the host processor. For example, it can emulate ARM CPU instructions on an x86 host machine, and thus, the QEMU emulator enables building images that target another architecture than the host. This approach usually requires the fewest modifications to the existing Dockerfiles, but the build time is the slowest.</li>
+<li><strong>Multiple native nodes using the same builder instance</strong>: Hosts with different CPU architectures execute the build. The build time is faster than with the other two alternatives. The drawback is that it requires access to as many native nodes as there are target architectures.</li>
+<li><strong>Stage in a Dockerfile for cross-compilation</strong>: This option is possible with languages that support cross-compilation. Arguments exposing the build and the target platforms are automatically available to the build stage. The build command can utilize these parameters to build the binary for the correct target. The drawback is that the builder needs to modify the Dockerfile build commands and perhaps familiarize oneself with using the cross-compilation tools for the target language.</li>
+</ol>
+<p>From these three options, we chose the first one, as it seemed the most straightforward route. However, in our case, the third option might have worked as well since we are building with tools that support cross-compilation, Rust, and GoLang.</p>
+<p>A Docker CLI plugin, <a href=https://docs.docker.com/buildx/working-with-buildx/>buildx</a>, is required to build multi-architecture images. It extends the docker command with additional features, the multi-architecture build capability being one of them. Using buildx is almost the same as using the ordinary Docker build function. The target platform is added to the command with the flag <code>--platform</code>.</p>
+<p>Example of building Docker image with buildx for arm64:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker buildx build --platform linux/arm64 -t image_label .
+</code></pre></div><h2 id=reviewing-the-build-receipts>Reviewing the Build Receipts</h2>
+<p>Now we had chosen the strategy and had the tools installed. The next step was to review each image stack and ensure that it was possible to build all image layers for the needed variants.</p>
+<p>Our default image stack consists of <a href=https://github.com/findy-network/findy-common-go/blob/master/infra/aws/Dockerfile.indy.ubuntu>the custom base image</a> and an application layer (service binary in question). The custom base image contains some tools and libraries that are common for all of our services. It expands the official Docker image for Ubuntu.</p>
+<p>For the official Docker images, there are no problems since Docker provides the needed variants out-of-the-shelf. However, our custom base image installs indy-sdk libraries from the Sovrin Debian repository, and unfortunately, the Debian repository did not provide binaries for arm64. So instead of installing the library from the Debian repository, we needed to add <a href=https://github.com/findy-network/findy-common-go/blob/8bef1cbc4cc7d698275a69a9c9c4aff2622b84de/infra/aws/Dockerfile.indy.ubuntu#L12>a build step</a> that would build and install the indy-sdk from the sources. Otherwise, building for arm64 revealed no problems.</p>
+<h2 id=integration-to-github-actions>Integration to GitHub Actions</h2>
+<p>The final step was to modify our GitHub Actions pipelines to build the images for the different architectures. Fortunately, Docker provides ready-made actions for setting up QEMU (<em><a href=https://github.com/docker/setup-qemu-action>setup-qemu-action</a></em>) and buildx (<em><a href=https://github.com/docker/setup-buildx-action>setup-buildx-action</a></em>), logging to the Docker registry (<em><a href=https://github.com/docker/login-action>login-action</a></em>), and building and pushing the ready images to the registry (<em><a href=https://github.com/docker/build-push-action>build-push-action</a></em>).</p>
+<p>We utilized the actions provided by Docker, and <a href=https://github.com/findy-network/findy-agent/blob/master/.github/workflows/release.yml>the release workflow</a> for findy-agent looks now like this:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#204a87;font-weight:700>name</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>release</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline></span><span style=color:#204a87;font-weight:700>on</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>  
+</span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>push</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>    </span><span style=color:#204a87;font-weight:700>tags</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#4e9a06>&#39;*&#39;</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline></span><span style=color:#204a87;font-weight:700>jobs</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>push-image</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>    </span><span style=color:#204a87;font-weight:700>runs-on</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>ubuntu-latest</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>    </span><span style=color:#204a87;font-weight:700>permissions</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>packages</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>write</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>contents</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>read</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>    </span><span style=color:#204a87;font-weight:700>steps</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#204a87;font-weight:700>uses</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>actions/checkout@v2</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#204a87;font-weight:700>name</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>Set up QEMU</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>uses</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>docker/setup-qemu-action@v1</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>with</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>platforms</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>all</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#204a87;font-weight:700>name</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>Set up Docker Buildx</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>uses</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>docker/setup-buildx-action@v1</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#204a87;font-weight:700>name</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>Login to Registry</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>uses</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>docker/login-action@v1</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>with</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>registry</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>ghcr.io</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>username</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>${{ github.repository_owner }}</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>password</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>${{ secrets.GITHUB_TOKEN }}</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#204a87;font-weight:700>run</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>echo &#34;version=$(cat ./VERSION)&#34; &gt;&gt; $GITHUB_ENV</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#204a87;font-weight:700>uses</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>docker/build-push-action@v2</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>with</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>platforms</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>linux/amd64,linux/arm64</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>push</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#204a87;font-weight:700>true</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>tags</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000;font-weight:700>|</span><span style=color:#8f5902;font-style:italic>
+</span><span style=color:#8f5902;font-style:italic>            ghcr.io/${{ github.repository_owner }}/findy-agent:${{ env.version }}
+</span><span style=color:#8f5902;font-style:italic>            ghcr.io/${{ github.repository_owner }}/findy-agent:latest</span><span style=color:#f8f8f8;text-decoration:underline>            
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>cache-from</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>type=registry,ref=ghcr.io/${{ github.repository_owner }}/findy-agent:latest</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>cache-to</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>type=inline</span><span style=color:#f8f8f8;text-decoration:underline>
+</span><span style=color:#f8f8f8;text-decoration:underline>          </span><span style=color:#204a87;font-weight:700>file</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>./scripts/deploy/Dockerfile</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></code></pre></div><p>The result was as expected; the actions took care of building of the container images successfully. The build process is considerably slower with QEMU, but luckily, the build caches speed up the process.</p>
+<p>Now have the needed variants for our service images in the registry. Furthermore, our colleague with the M1-Mac can run the agency successfully with his desktop.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:935px>
+<img class=card-img-top src=/blog/2021/09/20/the-arm-adventure-on-docker/findy-agent-packages_huee06773afc479fec8fbdb4f9dc73d730_149630_925x925_fit_catmullrom_3.png width=925 height=483>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em><a href=https://github.com/findy-network/findy-agent/pkgs/container/findy-agent>Docker registry</a> for Findy agent</em>
+</p>
+</div>
+</div>
+</div>
+<div class=td-content style=page-break-before:always>
 <h1 id=pg-9a796d898f4a78defc54c95df256f75b>Travelogue</h1>
 <div class=lead>We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also <em>align modern software and hardware technologies best suited for decentralized identity network</em>.</div>
 <div class="td-byline mb-4">
