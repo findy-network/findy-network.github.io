@@ -22,7 +22,7 @@
   "devDependencies": {
     "autoprefixer": "^10.3.7",
     "js-green-licenses": "^3.0.1",
-    "postcss": "^8.3.9",
+    "postcss": "^8.3.11",
     "postcss-cli": "^9.0.1"
   }
 }
