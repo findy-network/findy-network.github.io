@@ -1,0 +1,76 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+body {
+  font-family: "Open Sans";
+}
+
+h1,
+h2,
+h3 {
+  text-align: center;
+  font-family: "Poppins";
+  font-weight: normal;
+  color: #006ee6;
+}
+.remark-code,
+.remark-inline-code {
+  font-family: "Ubuntu Mono";
+}
+
+.remark-slide-number {
+  visibility: hidden;
+}
+
+.padded-slide h1 {
+  color: white;
+  position: absolute;
+  top: 0;
+  font-size: 100%;
+}
+
+ol {
+  font-size: 150%;
+}
+
+li {
+  padding: 1rem;
+}
+
+.img-200 {
+  vertical-align: middle;
+}
+
+.img-200 img {
+  max-width: 200px;
+}
+
+.img-fill img {
+  max-width: 100%;
+}
+
+.img-60percent img {
+  max-width: 60%;
+}
+
+.padded-slide {
+  padding-top: 5em;
+}
+
+.box {
+  display: block;
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 1rem;
+  font-size: 150%;
+}
+
+.small {
+  font-size: 60%;
+}
+
+.author-box {
+  display: block;
+  text-align: right;
+}

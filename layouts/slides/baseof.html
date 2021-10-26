@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{- .Title -}}</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/slides-styles.css">
+</head>
+
+<body>
+    <textarea id="source">
+{{- .RawContent -}}
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+        var slideshow = remark.create();
+    </script>
+</body>
+
+</html>
