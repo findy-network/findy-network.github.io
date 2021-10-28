@@ -24,10 +24,10 @@ h3 {
 }
 
 .padded-slide h1 {
-  color: white;
   position: absolute;
   top: 0;
   font-size: 100%;
+  color: white;
 }
 
 ol {
@@ -58,6 +58,7 @@ li {
   padding-top: 5em;
 }
 
+.padded-slide p:not(:first-child),
 .box {
   display: block;
   background-color: rgba(255, 255, 255, 0.8);
@@ -73,4 +74,37 @@ li {
 .author-box {
   display: block;
   text-align: right;
+}
+
+.image-credit {
+  font-size: 7px;
+  color: gray;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  font-style: italic;
+}
+
+a {
+  color: inherit;
+}
+
+.dark {
+  color: white;
+}
+
+.github a {
+  position: relative;
+}
+
+.github a::before {
+  background: url("/slides/GitHub-Mark-Light-32px.png") no-repeat;
+  background-size: contain;
+  content: " ";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: -21px;
+  top: 2px;
 }
