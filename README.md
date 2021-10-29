@@ -1,15 +1,19 @@
 # findy-network.github.io
 
+[![test](https://github.com/findy-network/findy-network.github.io/actions/workflows/test.yml/badge.svg?branch=dev)](https://github.com/findy-network/findy-network.github.io/actions/workflows/test.yml)
+
 Findy Agency technical documentation and blog.
 
 ## Setup local environment
 
 1. [Install hugo](https://gohugo.io/getting-started/installing/)
+
    - install latest version: `hugo version` > 0.78
    - You must install extended Sass/SCSS version
    - On Linux, **especially on Ubuntu**, which have `snap` use the following:
+
    ```sh
-	snap install hugo --channel=extended
+   snap install hugo --channel=extended
    ```
 
 1. Clone repository:
@@ -30,7 +34,9 @@ Findy Agency technical documentation and blog.
    ```
    hugo server
    ```
+
    Or if you need to connect from some other host in the same network.
+
    ```
    hugo server --bind 172.16.0.10
    ```
