@@ -24,10 +24,10 @@ h3 {
 }
 
 .padded-slide h1 {
-  color: white;
   position: absolute;
   top: 0;
   font-size: 100%;
+  color: white;
 }
 
 ol {
@@ -48,6 +48,7 @@ li {
 
 .img-fill img {
   max-width: 100%;
+  max-height: 500px;
 }
 
 .img-60percent img {
@@ -58,6 +59,7 @@ li {
   padding-top: 5em;
 }
 
+.padded-slide p:not(:first-child),
 .box {
   display: block;
   background-color: rgba(255, 255, 255, 0.8);
@@ -73,4 +75,47 @@ li {
 .author-box {
   display: block;
   text-align: right;
+}
+
+.image-credit {
+  font-size: 7px;
+  color: gray;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  font-style: italic;
+}
+
+a {
+  color: inherit;
+}
+
+.dark {
+  color: white;
+}
+
+.github a,
+.twitter a {
+  position: relative;
+}
+
+.github a::before,
+.twitter a::before {
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: " ";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: -21px;
+  top: 2px;
+}
+
+.github a::before {
+  background-image: url("/slides/GitHub-Mark-Light-32px.png");
+}
+
+.twitter a::before {
+  background-image: url("/slides/Logo blue.svg");
 }
