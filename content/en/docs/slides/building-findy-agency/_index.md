@@ -20,6 +20,7 @@ Helsinki Gophers meetup on 3.11.2021
 
 .author-box.small[Laura Vuorenoja<br> Technology Strategist @ OP Lab]
 .author-box.small.github[[@lauravuo-techlab](https://github.com/lauravuo-techlab)]
+.author-box.small.twitter[[@vuorenoja](https://twitter.com/vuorenoja)]
 
 ---
 
@@ -45,7 +46,7 @@ It provides functionality and APIs to identity holders for utilizing _verified d
 
 --
 
-Verified data exchange is based on _asymmetric cryptography_.
+Verified data exchange is based on _asymmetric cryptography_ and _Decentralized Public Key Infrastructure_ (DPKI).
 
 ???
 
@@ -59,19 +60,22 @@ Verified data exchange is based on _asymmetric cryptography_.
 
 --
 
-Credentials i.e. facts signed by different issuers are stored in _digital wallets_.
+Credentials, i.e., facts signed by different issuers, are stored in _digital wallets_.
 
 --
 
-Using their digital wallet, identity holders can _cryptographically prove_ that the credential data is valid, and that they in fact own the credential.
+Using their digital wallet, identity holders can _cryptographically prove_ that the credential data is valid and that they, in fact, own the credential.
 
 --
 
-Proof may reveal credential attributes only partially (_selective disclosure_).
+Proofs are _zero-knowledge_ and support _selective disclosure_.
 
 ???
 
 - Identity holder can be any entity that needs to prove facts about themselves. For example, an individual, an organization or an IoT device can be an identity holder.
+- Zero-knowledge methods allow keeping the issuer signature and parts of the signed message secret. Thus it is possible to:
+  - Prove that the attribute exists in the credential, but do not reveal its value.
+  - Reveal the value of an attribute without revealing any other attributes.
 - Findy Agency provides the digital wallet service together with needed communication capabilities to identity holders.
 
 ---
@@ -105,11 +109,11 @@ Bob creates a profile in an online dating service.
 
 --
 
-In service signup phase, Bob needs to verify her gender and age with his digital wallet. He presents a proof for his id card.
+In the service signup phase, Bob needs to verify his gender and age with his digital wallet. He presents proof for his id card.
 
 --
 
-Verified gender and age is shown to other service users when they are browsing Bob's profile.
+Verified gender and age are shown to other Service users when they are browsing Bob's profile.
 
 ---
 
@@ -131,15 +135,15 @@ class: center padded-slide
 
 --
 
-Alice wants to rent a car with self-service rental.
+Alice wants to rent a car with a self-service rental.
 
 --
 
-Car rental wants to verify that Alice has a driver's licence before she can make the order.
+Car rental wants to verify that Alice has a driver's license before she can make the order.
 
 --
 
-Alice uses her wallet to present the proof of her licence to drive, issued by the police.
+Alice uses her wallet to present the proof of her license to drive, issued by the police.
 
 ---
 
@@ -169,7 +173,7 @@ Bob wants to confirm that Dan is not a fake doctor.
 
 --
 
-Before completing the reservation, Bob sends a proof request to Dan for Dan's diploma. He can verify that Dan is graduated from a respected university.
+Before completing the reservation, Bob sends a proof request to Dan for Dan's diploma. He can verify that Dan graduated from a respected university.
 
 ---
 
@@ -189,14 +193,14 @@ class: img-fill
 ???
 
 - A public permissioned blockchain stores the shared data, such as the public keys of the credential issuers. Each network has a set of rules, how this data is maintained and updated.
-- In Finland, we have a joint public-private effort, the Findy cooperative, aiming to run the national Findy network and to maintain the verifibale data registry in the future.
-- Many countries has similar initiatives such as Germany, Spain and Canada. EU is also steering legislation to the direction of identity wallets.
+- In Finland, we have a joint public-private effort, the Findy cooperative, aiming to run the national Findy network and to maintain the verifiable data registry in the future.
+- Many countries have similar initiatives, such as Germany, Spain and, Canada. EU is also steering legislation in the direction of identity wallets.
 
 ---
 
 template: network
 
-# Like Internet... but Better
+# Trust Layer on top of Internet
 
 --
 
@@ -219,6 +223,7 @@ The next step of digitalization
 - Verified data networks make the internet a more secure place.
 - Privacy increases as end-users become the owners of their own data, and they may select which data they want to share.
 - The need for custom integrations between organizations decreases as they can handle the needed data exchange through the network.
+  - User and his digital wallet becomes the integration point between services.
 - The use of verified data networks will enable the digitalization of use cases traditionally cumbersome to implement. It will also allow entirely new use cases.
 
 ---
@@ -229,23 +234,23 @@ template: network
 
 --
 
-[DIDComm](https://identity.foundation/didcomm-messaging/spec/)
+[`DIDComm`](https://identity.foundation/didcomm-messaging/spec/)
 
 --
 
-[indy-sdk](https://github.com/hyperledger/indy-sdk) and Indy "AnonCreds"
+[`indy-sdk`](https://github.com/hyperledger/indy-sdk) and `Indy "AnonCreds"`
 
 --
 
-[Indy Blockchain](https://wiki.hyperledger.org/display/indy)
+[`Indy Blockchain`](https://wiki.hyperledger.org/display/indy)
 
 --
 
-[Hyperledger Aries](https://github.com/hyperledger/aries-rfcs)
+[`Hyperledger Aries`](https://github.com/hyperledger/aries-rfcs)
 
 ???
 
-- The technology is new and it is evolving rapidly. It is likely that some of these tools have been replaced when first use cases start in production.
+- The technology is new and it is evolving rapidly. Some of these tools have likely been replaced when first use cases start in production.
 - DIDComm-messaging is the foundation of all verified data communication. The DIDComm-connection is a secure messaging channel created by exchanging DIDs (identifiers for decentralized, digital identity).
 - Indy-sdk provides the needed cryptographic functionality. It supports the Indy "AnonCreds" credential format.
 - Digital identities are rooted in Hyperledger Indy blockchain, which works together with the indy-sdk-tools.
@@ -253,18 +258,18 @@ template: network
 
 ---
 
-class: img-fill middle
+class: middle
 
 ### Used Technologies
 
-![Agency Technologies](/docs/slides/building-findy-agency/agency-tech.drawio.png)
+.img-fill[![Agency Technologies](/docs/slides/building-findy-agency/agency-tech.drawio.png)]
 
 ???
 
 - Each identity holder owns an agent that can handle the credentials and the needed communication with other agents.
-- Depending on the implementation approach, agent functionality can be included into the service as a framework, or agent/agency can run as a separate service.
-- Findy Agency is a multitenant service i.e. single installation can host multiple identity agents.
-- At the time Findy Agency development was started, there was no open-source alternatives to choose from. Nowadays the situation is better, and there are multiple open source frameworks and agencies supporting Aries protocol.
+- Depending on the implementation approach, agent functionality can be included in the service as a framework, or agent/agency can run as a separate service.
+- Findy Agency is a multitenant service, i.e., a single installation can host multiple identity agents.
+- At the time Findy Agency development was started, there were no open-source alternatives to choose from. Nowadays, the situation is better, and there are multiple open source frameworks and agencies that support the Aries protocol.
 
 ---
 
@@ -286,42 +291,116 @@ class: img-fill middle center
 
 ---
 
-template: network
-
 # Why GoLang?
+
+--
+
+class: img-fill middle center
+
+.image-credit[Image by [Olivier Poitrey](https://twitter.com/Olivier_Poitrey)]
+
+![Performance](https://pbs.twimg.com/media/CtLy-vuUMAAvJmw?format=png&name=900x900)
 
 ???
 
 - Initially the technology was implemented by crypto-specialists coming from the academic world, and most of the examples were written in Python. As software professionals we knew that building an agency for this purpose would need more performant tools.
 
+- We thought that Go was the best choice of modern languages when the target is to make network intensive microservices.
+
+- Our approach using Go is pragmatic. We are not "Go-purists".
+
 ---
 
-background-image: url(https://coder.today/tech/2017-08-28_golang-it-was-love-at-first-sight/images/3.png)
+template: network
 
-# Highlights
+# Go: Highlights 1/2
+
+--
+
+C-bindings
+
+--
+
+Concurrency tools
+
+--
+
+Error handling
+
+--
+
+Library support: `gRPC`, `graphQL`, `boltDB`, `WebAuthn`, `postgres`, `cobra`, `viper`, `openAPI` code generation...
+
+---
+
+template: network
+
+# Go: Highlights 2/2
+
+Tooling: testing, `golangci-lint`, integration to CI
+
+--
+
+Cross-platform builds
+
+--
+
+Docker
+
+--
+
+Refactoring
+
+--
+
+Multiple development flavors
 
 ???
 
 - C-bindings to Indy
 - Concurrency handling with channels etc.
-- Good library support: gRPC, GraphQL, BoltDB, postgres, cobra, viper, openAPI generation
+- Excellent library support: gRPC, GraphQL, BoltDB, WebAuthn, postgres, cobra, viper, openAPI generation
 - Error handling
 - Native builds for CLI
 - Tooling: testing, linting, integration to CI
 
 ---
 
-background-image: url(https://coder.today/tech/2017-08-28_golang-it-was-love-at-first-sight/images/3.png)
+template: network
 
-# Problems/What would we do differently
+# Go: Challenges
+
+--
+
+Steep learning curve for developers with JS background and less CLI experience
+
+--
+
+Multiple repositories
+
+--
+
+Moving from GOPATH to modules
+
+--
+
+Short variable names
 
 ???
 
-- Moving to go packages from GOPATH in the middle of the project, refactoring
+- Moving to go packages from GOPATH in the middle of the project, refactoring difficulties
 - Multiple repositories instead of monorepo
 - Package version mismatches
 - Objection among team members
 
+---
+
+class: center, img-fill
+
 # Demo
+
+![Demo](https://github.com/findy-network/findy-wallet-pwa/raw/dev/docs/wallet-login.gif)
+
+[Try it out](https://findy-network.github.io/)
 
 ???

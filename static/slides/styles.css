@@ -48,6 +48,7 @@ li {
 
 .img-fill img {
   max-width: 100%;
+  max-height: 500px;
 }
 
 .img-60percent img {
@@ -93,12 +94,14 @@ a {
   color: white;
 }
 
-.github a {
+.github a,
+.twitter a {
   position: relative;
 }
 
-.github a::before {
-  background: url("/slides/GitHub-Mark-Light-32px.png") no-repeat;
+.github a::before,
+.twitter a::before {
+  background-repeat: no-repeat;
   background-size: contain;
   content: " ";
   display: inline-block;
@@ -107,4 +110,12 @@ a {
   position: absolute;
   left: -21px;
   top: 2px;
+}
+
+.github a::before {
+  background-image: url("/slides/GitHub-Mark-Light-32px.png");
+}
+
+.twitter a::before {
+  background-image: url("/slides/Logo blue.svg");
 }
