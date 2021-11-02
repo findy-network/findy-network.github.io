@@ -80,11 +80,268 @@ This the multi-page printable view of this section.
 <div class=td-content>
 <h1 id=pg-71212cca0760775d854c180eebae3f6d>1 - Findy Agency — Building Highway to Verified Data Networks</h1>
 <div class=lead>Overview of Findy Agency project for Helsinki Gophers meetup on 3.11.2021</div>
-<p>class: center, middle</p>
-<h1 id=findy-agency--building-highway-to-verified-data-networks>Findy Agency — Building Highway to Verified Data Networks</h1>
-<p>.author-box.small[Laura Vuorenoja<br> Technology Strategist @ OP Lab <br> <a href=https://github.com/lauravuo-techlab>@lauravuo-techlab</a>]</p>
+<p>background-image: url(<a href="https://images.unsplash.com/photo-1581010105267-67447703cfe9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1471&q=80">https://images.unsplash.com/photo-1581010105267-67447703cfe9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1471&q=80</a>)
+background-size: cover
+class: center, middle, dark</p>
+<p>.image-credit[Photo by <a href="https://unsplash.com/@markusspiske?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Markus Spiske</a> on <a href="https://unsplash.com/s/photos/highway?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>]</p>
+<h1 id=findy-agency--br-building-highway-to-verified-data-networks>Findy Agency — <br> Building Highway to Verified Data Networks</h1>
+<p>.img-200[<img src=https://secure.meetupstatic.com/photos/event/7/1/8/5/clean_485609061.jpeg alt="Helsinki Gophers logo">]</p>
+<p>Helsinki Gophers meetup on 3.11.2021</p>
+<p>.author-box.small[Laura Vuorenoja<br> Technology Strategist @ OP Lab]
+.author-box.small.github[<a href=https://github.com/lauravuo-techlab>@lauravuo-techlab</a>]
+.author-box.small.twitter[<a href=https://twitter.com/vuorenoja>@vuorenoja</a>]</p>
 <hr>
+<p>layout: true
+background-image: url(<a href="https://images.unsplash.com/photo-1495592822108-9e6261896da8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80">https://images.unsplash.com/photo-1495592822108-9e6261896da8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80</a>)
+background-size: cover
+class: center padded-slide
+name: network</p>
+<p>.image-credit[Photo by <a href="https://unsplash.com/@pietrozj?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Pietro Jeng</a> on <a href="https://unsplash.com/s/photos/net-green-red?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>]</p>
+<hr>
+<h1 id=findy-agency>Findy Agency</h1>
+<p>&ndash;</p>
+<p>Findy Agency is <em>an identity agent service</em> for individuals and organisations.</p>
+<p>&ndash;</p>
+<p>It provides functionality and APIs to identity holders for utilizing <em>verified data networks</em>.</p>
+<p>&ndash;</p>
+<p>Verified data exchange is based on <em>asymmetric cryptography</em> and <em>Decentralized Public Key Infrastructure</em> (DPKI).</p>
+<p>???</p>
+<ul>
+<li>Findy development team at OP Lab has been researching self-sovereign identity and verified data networks for almost three years now.</li>
+<li>Findy Agency project has been born as a side product of the research work, multiple PoCs, and demos around this technology.</li>
+<li>The project codes were published fully as open-source in summer 2021.</li>
+</ul>
+<hr>
+<h1 id=identity-wallet>Identity Wallet</h1>
+<p>&ndash;</p>
+<p>Credentials, i.e., facts signed by different issuers, are stored in <em>digital wallets</em>.</p>
+<p>&ndash;</p>
+<p>Using their digital wallet, identity holders can <em>cryptographically prove</em> that the credential data is valid and that they, in fact, own the credential.</p>
+<p>&ndash;</p>
+<p>Proofs are <em>zero-knowledge</em> and support <em>selective disclosure</em>.</p>
+<p>???</p>
+<ul>
+<li>Identity holder can be any entity that needs to prove facts about themselves. For example, an individual, an organization or an IoT device can be an identity holder.</li>
+<li>Zero-knowledge methods allow keeping the issuer signature and parts of the signed message secret. Thus it is possible to:
+<ul>
+<li>Prove that the attribute exists in the credential, but do not reveal its value.</li>
+<li>Reveal the value of an attribute without revealing any other attributes.</li>
+</ul>
+</li>
+<li>Findy Agency provides the digital wallet service together with needed communication capabilities to identity holders.</li>
+</ul>
+<hr>
+<p>layout: false</p>
+<h1 id=verified-data>Verified Data</h1>
 <p>.img-fill[<img src=/docs/slides/building-findy-agency/trust-triangle.png alt="Trust Triangle">]</p>
+<p>???</p>
+<ul>
+<li>The idea of verified data networks is to utilize cryptography so that different identities can hold and prove facts about themselves digitally.</li>
+<li>The main concepts in verified data handling are
+<ul>
+<li>Issuing credentials: signing facts and storing those in one&rsquo;s digital wallet</li>
+<li>Prooving credentials: generating proofs from the signed facts and presenting those to counterparties</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>background-image: url(<a href="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80">https://images.unsplash.com/photo-1512428559087-560fa5ceab42?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80</a>)
+background-size: cover
+class: center padded-slide</p>
+<p>.image-credit[Photo by <a href="https://unsplash.com/@nordwood?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">NordWood Themes</a> on <a href="https://unsplash.com/s/photos/mobile-device?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>]</p>
+<h1 id=example-dating-service-with-verified-data>Example: Dating Service with Verified Data</h1>
+<p>&ndash;</p>
+<p>Bob creates a profile in an online dating service.</p>
+<p>&ndash;</p>
+<p>In the service signup phase, Bob needs to verify his gender and age with his digital wallet. He presents proof for his id card.</p>
+<p>&ndash;</p>
+<p>Verified gender and age are shown to other Service users when they are browsing Bob&rsquo;s profile.</p>
+<hr>
+<p>class: img-fill middle</p>
+<h3 id=example-dating-service-with-verified-data-1>Example: Dating Service with Verified Data</h3>
+<p>.img-fill[<img src=/docs/slides/building-findy-agency/trust-triangle-ex1.png alt="Trust Triangle">]</p>
+<hr>
+<p>background-image: url(<a href="https://images.unsplash.com/photo-1535191595495-d3222b2eda44?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1471&q=80">https://images.unsplash.com/photo-1535191595495-d3222b2eda44?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1471&q=80</a>)
+background-size: cover
+class: center padded-slide</p>
+<p>.image-credit[Photo by <a href="https://unsplash.com/@trojantry?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Andy Art</a> on <a href="https://unsplash.com/s/photos/woman-car?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>]</p>
+<h1 id=example-car-rental-service-with-verified-data>Example: Car Rental Service with Verified Data</h1>
+<p>&ndash;</p>
+<p>Alice wants to rent a car with a self-service rental.</p>
+<p>&ndash;</p>
+<p>Car rental wants to verify that Alice has a driver&rsquo;s license before she can make the order.</p>
+<p>&ndash;</p>
+<p>Alice uses her wallet to present the proof of her license to drive, issued by the police.</p>
+<hr>
+<p>class: img-fill middle</p>
+<h3 id=example-car-rental-service-with-verified-data-1>Example: Car Rental Service with Verified Data</h3>
+<p><img src=/docs/slides/building-findy-agency/trust-triangle-ex2.png alt="Trust Triangle"></p>
+<hr>
+<p>background-image: url(<a href="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80</a>)
+background-size: cover
+class: center padded-slide</p>
+<p>.image-credit[Photo by <a href="https://unsplash.com/@hush52?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Hush Naidoo Jade Photography</a> on <a href="https://unsplash.com/s/photos/stethoscope?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>]</p>
+<h1 id=example-doctor-reservation-service-with-verified-data>Example: Doctor Reservation Service with Verified Data</h1>
+<p>&ndash;</p>
+<p>Bob is booking an appointment with doctor Dan. He has not visited Dan before.</p>
+<p>&ndash;</p>
+<p>Bob wants to confirm that Dan is not a fake doctor.</p>
+<p>&ndash;</p>
+<p>Before completing the reservation, Bob sends a proof request to Dan for Dan&rsquo;s diploma. He can verify that Dan graduated from a respected university.</p>
+<hr>
+<p>class: img-fill middle</p>
+<h3 id=example-doctor-reservation-service-with-verified-data-1>Example: Doctor Reservation Service with Verified Data</h3>
+<p><img src=/docs/slides/building-findy-agency/trust-triangle-ex3.png alt="Trust Triangle"></p>
+<hr>
+<p>class: img-fill</p>
+<p><img src=/docs/slides/building-findy-agency/findy-homepage.png alt="Findy Network Homepage">
+.center.small[<a href=https://findy.fi>Findy Network</a>]</p>
+<p>???</p>
+<ul>
+<li>A public permissioned blockchain stores the shared data, such as the public keys of the credential issuers. Each network has a set of rules, how this data is maintained and updated.</li>
+<li>In Finland, we have a joint public-private effort, the Findy cooperative, aiming to run the national Findy network and to maintain the verifiable data registry in the future.</li>
+<li>Many countries have similar initiatives, such as Germany, Spain and, Canada. EU is also steering legislation in the direction of identity wallets.</li>
+</ul>
+<hr>
+<p>template: network</p>
+<h1 id=trust-layer-on-top-of-internet>Trust Layer on top of Internet</h1>
+<p>&ndash;</p>
+<p>Founded on trust and security</p>
+<p>&ndash;</p>
+<p>Increased privacy</p>
+<p>&ndash;</p>
+<p>Decoupled services</p>
+<p>&ndash;</p>
+<p>The next step of digitalization</p>
+<p>???</p>
+<ul>
+<li>Verified data networks make the internet a more secure place.</li>
+<li>Privacy increases as end-users become the owners of their own data, and they may select which data they want to share.</li>
+<li>The need for custom integrations between organizations decreases as they can handle the needed data exchange through the network.
+<ul>
+<li>User and his digital wallet becomes the integration point between services.</li>
+</ul>
+</li>
+<li>The use of verified data networks will enable the digitalization of use cases traditionally cumbersome to implement. It will also allow entirely new use cases.</li>
+</ul>
+<hr>
+<p>template: network</p>
+<h1 id=used-technologies>Used Technologies</h1>
+<p>&ndash;</p>
+<p><a href=https://identity.foundation/didcomm-messaging/spec/><code>DIDComm</code></a></p>
+<p>&ndash;</p>
+<p><a href=https://github.com/hyperledger/indy-sdk><code>indy-sdk</code></a> and <code>Indy "AnonCreds"</code></p>
+<p>&ndash;</p>
+<p><a href=https://wiki.hyperledger.org/display/indy><code>Indy Blockchain</code></a></p>
+<p>&ndash;</p>
+<p><a href=https://github.com/hyperledger/aries-rfcs><code>Hyperledger Aries</code></a></p>
+<p>???</p>
+<ul>
+<li>The technology is new and it is evolving rapidly. Some of these tools have likely been replaced when first use cases start in production.</li>
+<li>DIDComm-messaging is the foundation of all verified data communication. The DIDComm-connection is a secure messaging channel created by exchanging DIDs (identifiers for decentralized, digital identity).</li>
+<li>Indy-sdk provides the needed cryptographic functionality. It supports the Indy &ldquo;AnonCreds&rdquo; credential format.</li>
+<li>Digital identities are rooted in Hyperledger Indy blockchain, which works together with the indy-sdk-tools.</li>
+<li>Hyperledger Aries defines the protocol by how identity agents communicate with each other.</li>
+</ul>
+<hr>
+<p>class: middle</p>
+<h3 id=used-technologies-1>Used Technologies</h3>
+<p>.img-fill[<img src=/docs/slides/building-findy-agency/agency-tech.drawio.png alt="Agency Technologies">]</p>
+<p>???</p>
+<ul>
+<li>Each identity holder owns an agent that can handle the credentials and the needed communication with other agents.</li>
+<li>Depending on the implementation approach, agent functionality can be included in the service as a framework, or agent/agency can run as a separate service.</li>
+<li>Findy Agency is a multitenant service, i.e., a single installation can host multiple identity agents.</li>
+<li>At the time Findy Agency development was started, there were no open-source alternatives to choose from. Nowadays, the situation is better, and there are multiple open source frameworks and agencies that support the Aries protocol.</li>
+</ul>
+<hr>
+<p>class: img-fill middle center</p>
+<h3 id=architecture-overview>Architecture Overview</h3>
+<p><img src=/docs/slides/building-findy-agency/agency-arch.drawio.png alt="Agency Architecture"></p>
+<p>???</p>
+<ul>
+<li>Multitenant agency serving both individuals and organizations</li>
+<li>Exceptional cloud-first approach: credential data is stored and handled only in the server-side</li>
+<li>Secure passwordless authentication via WebAuthn</li>
+<li>GraphQL for browser, gRPC for API clients</li>
+<li>Performant microservice architecture implemented with GoLang and gRPC</li>
+<li>Contanerized microservice images are built with GitHub Actions</li>
+<li>Fully open-source</li>
+</ul>
+<hr>
+<h1 id=why-golang>Why GoLang?</h1>
+<p>&ndash;</p>
+<p>class: img-fill middle center</p>
+<p>.image-credit[Image by <a href=https://twitter.com/Olivier_Poitrey>Olivier Poitrey</a>]</p>
+<p><img src="https://pbs.twimg.com/media/CtLy-vuUMAAvJmw?format=png&name=900x900" alt=Performance></p>
+<p>???</p>
+<ul>
+<li>
+<p>Initially the technology was implemented by crypto-specialists coming from the academic world, and most of the examples were written in Python. As software professionals we knew that building an agency for this purpose would need more performant tools.</p>
+</li>
+<li>
+<p>We thought that Go was the best choice of modern languages when the target is to make network intensive microservices.</p>
+</li>
+<li>
+<p>Our approach using Go is pragmatic. We are not &ldquo;Go-purists&rdquo;.</p>
+</li>
+</ul>
+<hr>
+<p>template: network</p>
+<h1 id=go-highlights-12>Go: Highlights 1/2</h1>
+<p>&ndash;</p>
+<p>C-bindings</p>
+<p>&ndash;</p>
+<p>Concurrency tools</p>
+<p>&ndash;</p>
+<p>Error handling</p>
+<p>&ndash;</p>
+<p>Library support: <code>gRPC</code>, <code>graphQL</code>, <code>boltDB</code>, <code>WebAuthn</code>, <code>postgres</code>, <code>cobra</code>, <code>viper</code>, <code>openAPI</code> code generation&mldr;</p>
+<hr>
+<p>template: network</p>
+<h1 id=go-highlights-22>Go: Highlights 2/2</h1>
+<p>Tooling: testing, <code>golangci-lint</code>, integration to CI</p>
+<p>&ndash;</p>
+<p>Cross-platform builds</p>
+<p>&ndash;</p>
+<p>Docker</p>
+<p>&ndash;</p>
+<p>Refactoring</p>
+<p>&ndash;</p>
+<p>Multiple development flavors</p>
+<p>???</p>
+<ul>
+<li>C-bindings to Indy</li>
+<li>Concurrency handling with channels etc.</li>
+<li>Excellent library support: gRPC, GraphQL, BoltDB, WebAuthn, postgres, cobra, viper, openAPI generation</li>
+<li>Error handling</li>
+<li>Native builds for CLI</li>
+<li>Tooling: testing, linting, integration to CI</li>
+</ul>
+<hr>
+<p>template: network</p>
+<h1 id=go-challenges>Go: Challenges</h1>
+<p>&ndash;</p>
+<p>Steep learning curve for developers with JS background and less CLI experience</p>
+<p>&ndash;</p>
+<p>Multiple repositories</p>
+<p>&ndash;</p>
+<p>Moving from GOPATH to modules</p>
+<p>&ndash;</p>
+<p>Short variable names</p>
+<p>???</p>
+<ul>
+<li>Moving to go packages from GOPATH in the middle of the project, refactoring difficulties</li>
+<li>Multiple repositories instead of monorepo</li>
+<li>Package version mismatches</li>
+<li>Objection among team members</li>
+</ul>
+<hr>
+<p>class: center, img-fill</p>
+<h1 id=demo>Demo</h1>
+<p><img src=https://github.com/findy-network/findy-wallet-pwa/raw/dev/docs/wallet-login.gif alt=Demo></p>
+<p><a href=https://findy-network.github.io/>Try it out</a></p>
+<p>???</p>
 </div>
 </main>
 </div>
