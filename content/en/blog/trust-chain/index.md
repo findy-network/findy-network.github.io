@@ -35,7 +35,7 @@ We all know that the connection protocols should cover all security
 issues, but protocols based on public-key cryptography might not be so
 obvious *public* key, you know? There are known subjects with protocols based on
 asymmetric cryptography like
-[trus-on-first-use](https://en.wikipedia.org/wiki/Trust_on_first_use).
+[trust-on-first-use](https://en.wikipedia.org/wiki/Trust_on_first_use).
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Man_in_the_middle_attack.svg" width="400" height="10" />
 <p align = "center"> MITM - Wikipedia </p>
@@ -251,7 +251,7 @@ To summarise, the above flow registers a new instance of an authenticator. Then
 it verifies that the same authenticator is bound to the account. That is done
 using a unique public/private key pair where the private key is in the
 authenticator. Note that the authenticator doesn't map a particular user to an
-account. That is done thru the other process flow and by the [relaying
+account. That is done thru the other process flow and by the [relying
 party](https://www.w3.org/TR/webauthn/#webauthn-relying-party).
 
 The flow below shows how a registered authenticator is used to authenticate the
