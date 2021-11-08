@@ -1,5 +1,5 @@
 ---
-date: 2021-11-04
+date: 2021-11-07
 title: "Anchoring Chains of Trust"
 linkTitle: "Anchoring Chains of Trust"
 description: "Everything is about chains in asymmetric cryptography, or more
