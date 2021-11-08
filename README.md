@@ -29,7 +29,7 @@ Findy Agency technical documentation and blog.
    npm install
    ```
 
-1. Run hugo
+1. Run hugo (`make run` just added)
 
    ```
    hugo server
@@ -38,7 +38,7 @@ Findy Agency technical documentation and blog.
    Or if you need to connect from some other host in the same network.
 
    ```
-   hugo server --bind 172.16.0.10
+   hugo server --bind=0.0.0.0 --baseURL=http://0.0.0.0:1313
    ```
 
 1. Open browser at http://localhost:1313 or if from other host use its address
