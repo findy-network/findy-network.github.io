@@ -31,7 +31,7 @@ interesting to replace general ledgers as DID's
 
 ## Crypto Chain Protocols
 
-We all know that the connection protocols should take care of all security
+We all know that the connection protocols should cover all security
 issues, but protocols based on public-key cryptography might not be so
 obvious *public* key, you know? There are known subjects with protocols based on
 asymmetric cryptography like
@@ -57,21 +57,22 @@ public-key cryptography only for
 the data transfer for performance reasons.
 
 The [DIDComm](https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0005-didcomm/README.md)
-a protocol is something that is not used only for authentication but communication without
-sacrificing privacy. My prediction is that the current message-oriented DIDComm
-protocol as a holistic transport layer is not enough. The ongoing [DIDComm
+a protocol is something that is not used only for authentication but
+communication without sacrificing privacy. My prediction is that the current
+message-oriented DIDComm protocol as a holistic transport layer is not enough.
+The ongoing [DIDComm
 V2](https://github.com/decentralized-identity/didcomm-messaging) mentions
 potential other protocols like DIDComm Stream, DIDComm Multicast, and so forth,
 but that will not be an easy task because of the current routing model, and
 especially because of the privacy needs.  That has been one reason we have
-focused our efforts on finding a solution that would scale for all modern needs of
-transporting data and keeping individuals private. For that, our cloud
-agency is a perfect candidate.
+focused our efforts on finding a solution that would scale for all modern needs
+of transporting data and keeping individuals private. For that, our cloud agency
+is a perfect candidate.
 
 ## Symmetry vs Asymmetry in Protocols
 
-Before we go any further with DIDComm, let's think about what it means when we
-have an asymmetric protocol. We know the differences between symmetric and asymmetric
+Before we go any further with DIDComm, let's think about what it means to have
+an asymmetric protocol. We know the differences between symmetric and asymmetric
 cryptography. Let's focus on communication, i.e. how we transport keys during
 the protocol.
 
@@ -105,7 +106,7 @@ its DID is by using public-key cryptography. The one who has DID controller's
 private key is the actual controller.
 
 For instance, an essential thing for SSI is *a DID pairwise*, i.e. the secure
-connection between two DIDs or DID
+the connection between two DIDs or DID
 [services](https://www.w3.org/TR/did-core/#dfn-service).  Unfortunately, W3C's
 specifications don't underline that enough. Probably because it concentrates on
 external properties of DIDs and how the presented specification can implement
@@ -124,10 +125,10 @@ form, i.e. *the root-of-trust*.
 
 ## DIDComm Protocols
 
-The following drawing describes a common installation scenario where agency
+The following drawing describes a common installation scenario where an agency
 based DID controller (leftmost) is implemented as verifiable automata (Finite
 State Machine) and it's controlling the DID in the agency. At the right, there
-is conventional Edge Agent running in a mobile device which needs a mediator to
+is conventional Edge Agent running in a mobile device that needs a mediator to
 help the agent is accessible from the network.
 
 {{< imgproc BaseArchitecture.png Resize "991x" >}}
@@ -188,9 +189,9 @@ or are making the same mistake we did at the beginning. My point is that
 treating secure elements as the root of the crypto chain only and not
 integrating it into the software agent or the device agent is running guided us
 in the right direction.  That allowed us to realize that we don't need a fully
-symmetric protocol to bind the controller to the agent. In all possible cases,
-all that we needed was the simplest possible thing, an authenticator, **a trust
-anchor**.
+symmetric protocol to bind the controller to the agent. All we needed was the
+simplest possible thing, an authenticator, **a trust anchor** in all potential
+cases.
 
 That innovation brought us a possibility to use modern existing solutions and
 still have an equally robust system where we have cryptographic root-of-rust.
@@ -207,12 +208,12 @@ tested the architecture with these questions:
 1. Could this work and be safe without any help from the current PKI? (Naturally,
    it doesn't mean that we couldn't use individual protocols like TLS, etc. The
    infrastructure is the keyword here.)
-2. Can an use case or a protocol action be executed peer to peer, i.e.
+2. Can a use case or a protocol action be executed peer to peer, i.e.
    between only two parties? (Doesn't still necessarily mean off-line)
 
 ## Headless FIDO2/WebAuthn Authenticator
 
-> FIDO2 is the name of the standard. WebAuthn is just a browser JS API to talk to
+> FIDO2 is the name of the standard. WebAuthn is just browser JS API to talk to
 > the authenticators. So correct way to call your server is "FIDO2 Server" and
 > to say "Authentication with FIDO2". - 
 > [WebAuthn Resource List](https://github.com/herrjemand/awesome-webauthn#faq)
@@ -268,9 +269,9 @@ The second thing was to figure out how we would like to implement interprocess
 communication. For that, the command pattern is suited very well. Fill the
 command with all the needed data and give one of the operations we were
 supporting: `register` and `login` from the FIDO2 standard. The process
-communication handled just as the process starts by reading the command from
-JSON. That suited for node.js use as well. (For the record, my awesome colleague
-Laura did all the needed node.js work.)
+communication is handled just as the process starts by reading the command from
+JSON. That is suited for node.js use as well. (For the record, my fantastic
+colleague Laura did all the needed node.js work.)
 
 When we considered a security, we followed our post-compromise principle. We
 didn't (yet) try to solve the situation where someone managed to hack the server
@@ -300,7 +301,7 @@ scalability issue to solve.
 
 The FIDO2 standard documentation describes a perfect solution for our needs
 which made our authenticator stateless. You give the other party your public
-key, but you give your private key as well in your `credential ID`. It might
+key, but you give your private key in your `credential ID`. It might
 first sound crazy, but it's genius indeed.
 
 Hold on! That cannot be?
@@ -317,13 +318,13 @@ The draft above illustrates how our stateless FIDO2 authenticator works at
 a master key level. Other factors like a cloning counter and an authenticator ID
 are left out for simplicity. 
 1. We can ask TEE to create a new key pair for FIDO2 registration, which gives
-   us a unique key-pair that includes `public key` and *encrypted private key*,
+   us a unique key pair that includes `public key` and *encrypted private key*,
    i.e.  `credential ID`.
 2. Our authenticator sends the FIDO2 `attestation object` to the server.
-3. When authenticator receives FIDO2 challenge during authentication, it builds
+3. When the authenticator receives the FIDO2 challenge during authentication, it builds
    it to the key pair in the same format as registration.
-4. The TEE inside authenticator builds us the `assertion object` ready to send
-   to FIDO2 server.
+4. The TEE inside the authenticator builds us the `assertion object` ready to send
+   to the FIDO2 server.
 
 As we can see, the master key never leaves the TEE. The implementation can
 be done with help cloud
@@ -340,12 +341,11 @@ server-side solutions* where you can use TEE or similar solutions.
 
 FIDO2 authentication is an excellent match for DID Wallet authentication. gRPC
 transport combined with JWT authorization has been straightforward to use. Our 
-gRPC SDK allows you to move the JWT token implicitly during the API calls after
-you open the server connection. Plus, gRPC's capability to have bidirectional
-streams make the programming experience very pleasant. Finally, there is an
-option to authenticate the gRPC connection between server and client with
-self-signed TLS certificates: You can authorize software components bind to your
-deployment.
+gRPC SDK allows you to implicitly move the JWT token during the API calls after
+opening the server connection. Plus, gRPC's capability to have bidirectional
+streams make the programming experience very pleasant. Finally, an option is to
+authenticate the gRPC connection between server and client with self-signed TLS
+certificates: You can authorize software components to bind to your deployment.
 
 The SDK and the API we have built with this stack have fulfilled all our
 expectations:
