@@ -1,5 +1,5 @@
 ---
-date: 2021-11-07
+date: 2021-11-09
 title: "Anchoring Chains of Trust"
 linkTitle: "Anchoring Chains of Trust"
 description: "Everything is about chains in asymmetric cryptography, or more
@@ -108,8 +108,8 @@ its DID is by using public-key cryptography. The one who has DID controller's
 private key is the actual controller.
 
 For instance, an essential thing for SSI is *a DID pairwise*, i.e. a secure
-connection between two DIDs or DID
-[services](https://www.w3.org/TR/did-core/#dfn-service). Unfortunately, W3C's
+connection between two DIDs or [DID
+services](https://www.w3.org/TR/did-core/#dfn-service). Unfortunately, W3C's
 specifications don't underline that enough. Probably because it concentrates on
 external properties of DIDs and how the presented specification can implement
 different methods. But DIDs cannot work on their own properly. They need to have
@@ -123,8 +123,8 @@ different contexts.
 
 In the digital world, it is expected that a controller has its controller, which
 has its controller, etc. When public-key cryptography is used to verify this
-controlling structure, it's a chain with its root, the final private key of the
-form, i.e. *the root-of-trust*.
+controlling structure, it's a chain with its root, the final private key, i.e.
+*the root-of-trust*.
 
 ## DIDComm Protocols
 
@@ -155,9 +155,9 @@ to all directions. Or, more precisely, when we understood that there must be one
 core agent for each identity domain and from that core or root agent, you should
 refer to multiple **separated authenticators**.
 
-Let's see what it means to have separate authenticators. The following
-drawing illustrates an oldish way of implementing, e.g. password manager, DID
-controller, SSI Edge Agent, etc.
+Let's see what it means to have separate authenticators. The following drawing
+illustrates an oldish and problematic way of implementing, e.g. password
+manager, DID controller, SSI Edge Agent, etc.
 
 {{< imgproc PwdMgrStart.png Resize "491x" >}}
 <em>Integrated Secure Enclave</em>
@@ -181,7 +181,8 @@ element to your agent in the same machine. In case you have only one integrated
 secure enclave for each edge agent, it's near impossible.
 
 When we separate the secure enclave from the identity domain's root controller
-at the design level, everything seems to be set in a place.
+at the design level, everything seems to be set in a place as we can see in the
+next drawing.
 
 {{< imgproc PwdMgrFull.png Resize "991x" >}}
 <em>Separated Secure Enclaves in Multiple Authenticators</em>
@@ -226,12 +227,14 @@ server* and by using only browsers at the beginning. When results, especially
 the performance and simplicity, were so good, we decided to go further.
 
 The following architecture-drawing present the final deployment diagram of the
-overall system. The FIDO2 components that we implemented by ourselves are marked
-in red. The basic idea was to have a system-level SSO where we implemented
-authorization with JWT and authentication with FIDO2 regardless of which type of
-the entity needs to be authenticated: individuals, organizations, legal
-entities, or system components. For us, it implicated that we needed FIDO2 for
-service agents, which meant that a *headless* FIDO2 Authenticator was required.
+overall system. The needed FIDO2 components are marked light red, and the ones
+we implemented ourselves are marked in red.
+
+The basic idea was to have a system-level SSO where we implemented authorization
+with JWT and authentication with FIDO2 regardless of which type of the entity
+needs to be authenticated: individuals, organizations, legal entities, or system
+components. For us, it implicated that we needed FIDO2 for service agents, which
+meant that a *headless* FIDO2 Authenticator was required.
 
 {{< imgproc DeploymentArchitecture.png Resize "1591x" >}}
 <em>All Key Components of The System Architecture</em>
