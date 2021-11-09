@@ -1,4 +1,339 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 26 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: The Arm Adventure on Docker</title><link>/blog/2021/09/20/the-arm-adventure-on-docker/</link><pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate><guid>/blog/2021/09/20/the-arm-adventure-on-docker/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 09 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Anchoring Chains of Trust</title><link>/blog/2021/11/09/anchoring-chains-of-trust/</link><pubDate>Tue, 09 Nov 2021 00:00:00 +0000</pubDate><guid>/blog/2021/11/09/anchoring-chains-of-trust/</guid><description>
+&lt;p>You will notice a repetitive pattern once you start to play with &lt;a href="https://en.wikipedia.org/wiki/Public-key_cryptography">public-key cryptography&lt;/a>. Everything is about chains, or more
+precisely about &lt;em>the links in the chain&lt;/em>. You build these links with
+public/private key pairs. Links are unidirectional, which means that if you must
+link or point both ways, you need to have two key pairs, one for each
+direction.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 601px">
+&lt;img class="card-img-top" src="/blog/2021/11/09/anchoring-chains-of-trust/RootOfChainWithAuthenticator_hud95e60c4b93d4f99683425572d5ff616_352781_591x0_resize_catmullrom_3.png" width="591" height="344">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Crypto Chain with Authenticator&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>In this blog post, we talk mostly about protocols built with asymmetric key pairs,
+but we can build immutable data structures like Merkle trees and blockchains with
+&lt;a href="https://en.wikipedia.org/wiki/One-way_function">one-way functions&lt;/a> as well. We
+will return to these data types in future posts by building something
+interesting to replace general ledgers as DID&amp;rsquo;s
+&lt;a href="https://www.w3.org/TR/did-imp-guide/#verifiable-data-registry">VDR&lt;/a>.&lt;/p>
+&lt;h2 id="crypto-chain-protocols">Crypto Chain Protocols&lt;/h2>
+&lt;p>We all know that the connection protocols should cover all security
+issues, but protocols based on public-key cryptography might not be so
+obvious &lt;em>public&lt;/em> key, you know? There are known subjects with protocols based on
+asymmetric cryptography like
+&lt;a href="https://en.wikipedia.org/wiki/Trust_on_first_use">trust-on-first-use&lt;/a>.&lt;/p>
+&lt;img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Man_in_the_middle_attack.svg" width="400" height="10" />
+&lt;p align = "center"> MITM - &lt;a href="https://upload.wikimedia.org/wikipedia/commons/e/e7/Man_in_the_middle_attack.svg">Wikipedia&lt;/a>&lt;/p>
+&lt;p>It&amp;rsquo;s trivial to execute &lt;a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">MITM&lt;/a>
+attack if we cannot be sure that the public key source is the one it
+should be. The industry has developed different ways to make sure that presented
+details are valid. That lays down one of the most fundamental aspects of modern
+cryptographic systems &amp;ndash; &lt;a href="https://en.wikipedia.org/wiki/Chain_of_trust">chain of
+trust&lt;/a>.&lt;/p>
+&lt;p>&lt;img src="https://upload.wikimedia.org/wikipedia/commons/0/02/Chain_Of_Trust.svg" alt="Trust Chain">&lt;/p>
+&lt;p align = "center"> PKI Chain of trust - &lt;a href="https://upload.wikimedia.org/wikipedia/commons/0/02/Chain_Of_Trust.svg">Wikipedia&lt;/a>&lt;/p>
+&lt;p>It is essential to understand that most of the modern security protocols use
+public-key cryptography only for
+&lt;a href="https://en.wikipedia.org/wiki/Authentication">authentication&lt;/a> and switch to
+&lt;a href="https://en.wikipedia.org/wiki/Symmetric-key_algorithm">symmetric keys&lt;/a> during
+the data transfer for performance reasons. The famous example of this kind of
+protocol is &lt;a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange">Diffie-Hellman&lt;/a>
+where the shared secret (the symmetric key) is transported over public network.&lt;/p>
+&lt;p>The &lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0005-didcomm/README.md">DIDComm&lt;/a>
+protocol is something that is not used only for authentication but
+communication without sacrificing privacy. My prediction is that the current
+message-oriented DIDComm protocol as a holistic transport layer is not enough.
+The ongoing &lt;a href="https://github.com/decentralized-identity/didcomm-messaging">DIDComm
+V2&lt;/a> mentions
+potential other protocols like DIDComm Stream, DIDComm Multicast, and so forth,
+but that will not be an easy task because of the current routing model, and
+especially because of the privacy needs. That has been one reason we have
+focused our efforts on finding a solution that would scale for all modern needs
+of transporting data and keeping individuals private. For that, our cloud agency
+is a perfect candidate.&lt;/p>
+&lt;h2 id="symmetry-vs-asymmetry-in-protocols">Symmetry vs Asymmetry in Protocols&lt;/h2>
+&lt;p>Before we go any further with DIDComm, let&amp;rsquo;s think about what it means to have
+an asymmetric protocol. We know the differences between symmetric and asymmetric
+cryptography. Let&amp;rsquo;s focus on communication, i.e. how we transport keys during
+the protocol.&lt;/p>
+&lt;p>Asymmetric protocol means that Bob can trust Alice when Alice
+have given her public key to Bob, and Bob can be sure that it&amp;rsquo;s Alice whose key
+he has received.&lt;/p>
+&lt;p>Every time Bob needs to authenticate Alice, he asks Alice to sign
+something with her private key. To make it crystal-clear, cryptographically, we
+can be only sure that it&amp;rsquo;s Alice who (still) controls the private key.&lt;/p>
+&lt;p>We could achieve symmetry only by that Alice has Bob&amp;rsquo;s public key as well. Now
+Alice can ask Bob to sign something for the authenticity of Bob.&lt;/p>
+&lt;p>Why is this important? There are several reasons for that, but the most crucial
+reason is &lt;strong>the root-of-trust model&lt;/strong>. &lt;em>The last link in the crypto chain
+doesn&amp;rsquo;t need to be bidirectional&lt;/em>, because &lt;em>the last private key is the
+cryptographic root-of-trust, i.e. it&amp;rsquo;s passive&lt;/em>. It doesn&amp;rsquo;t need authentication
+from the referrer. It&amp;rsquo;s like grounding in electronics.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 601px">
+&lt;img class="card-img-top" src="/blog/2021/11/09/anchoring-chains-of-trust/FirstChain_hud3a6f47a3b24ec8a1164faa8f7d21f8f_322561_591x0_resize_catmullrom_3.png" width="591" height="335">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Crypto Chain with Grounding&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h2 id="did-concepts">DID Concepts&lt;/h2>
+&lt;p>The DID&amp;rsquo;s controller is an essential piece of the puzzle. It defines
+who is the entity in the analogue world, i.e. who owns the DID cryptographically.
+As long as we stay in a digital world, it is easiest to bind the controller to
+its DID is by using public-key cryptography. The one who has DID controller&amp;rsquo;s
+private key is the actual controller.&lt;/p>
+&lt;p>For instance, an essential thing for SSI is &lt;em>a DID pairwise&lt;/em>, i.e. a secure
+connection between two DIDs or &lt;a href="https://www.w3.org/TR/did-core/#dfn-service">DID
+services&lt;/a>. Unfortunately, W3C&amp;rsquo;s
+specifications don&amp;rsquo;t underline that enough. Probably because it concentrates on
+external properties of DIDs and how the presented specification can implement
+different methods. But DIDs cannot work on their own properly. They need to have
+a controller, and in Aries, they have agents as well. Also, DIDs doesn&amp;rsquo;t always
+present the entity they are pointing, should I say, alone. DIDs present a
+&lt;em>subject&lt;/em>. A subject like an IoT device can have many different DIDs for many
+different contexts.&lt;/p>
+&lt;p>&lt;img src="https://www.w3.org/TR/did-core/diagrams/did_brief_architecture_overview.svg" alt="DID Concepts">&lt;/p>
+&lt;p align = "center"> DID Concepts - &lt;a href="https://www.w3.org/TR/did-core/diagrams/did_brief_architecture_overview.svg">www.w3.org&lt;/a>&lt;/p>
+&lt;p>In the digital world, it is expected that a controller has its controller, which
+has its controller, etc. When public-key cryptography is used to verify this
+controlling structure, it&amp;rsquo;s a chain with its root, the final private key, i.e.
+&lt;em>the root-of-trust&lt;/em>.&lt;/p>
+&lt;h2 id="didcomm-protocols">DIDComm Protocols&lt;/h2>
+&lt;p>The following drawing describes a common installation scenario where an agency
+based DID controller (leftmost) is implemented as verifiable automata (Finite
+State Machine) and it&amp;rsquo;s controlling the DID in the agency. At the right, there
+is conventional Edge Agent running in a mobile device that needs a mediator to
+help the agent is accessible from the network.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1001px">
+&lt;img class="card-img-top" src="/blog/2021/11/09/anchoring-chains-of-trust/BaseArchitecture_hu7901b95f6d30b4426ee2fd9a43a69eb4_499659_991x0_resize_catmullrom_3.png" width="991" height="406">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>DIDComm Installation Example&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>As we can see in the drawing below, there are many different crypto chains in
+the current installation. During the study, we were most interested in the
+question: what is the best way to implement the root-of-trust for the DID
+managed by the multi-tenant agency. Now we have found the answer. Luckily it
+existed already.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1001px">
+&lt;img class="card-img-top" src="/blog/2021/11/09/anchoring-chains-of-trust/FullArchitecture_hu4b865196eaf2233c1035106d36ae8f15_921984_991x0_resize_catmullrom_3.png" width="991" height="657">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>DIDComm Installation Example and Crypto Chain&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h2 id="fido2-authentication">FIDO2 Authentication&lt;/h2>
+&lt;p>When we started to understand that the DIDComm protocol chain is not symmetric
+to all directions. Or, more precisely, when we understood that there must be one
+core agent for each identity domain and from that core or root agent, you should
+refer to multiple &lt;strong>separated authenticators&lt;/strong>.&lt;/p>
+&lt;p>Let&amp;rsquo;s see what it means to have separate authenticators. The following drawing
+illustrates an oldish and problematic way of implementing, e.g. password
+manager, DID controller, SSI Edge Agent, etc.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 501px">
+&lt;img class="card-img-top" src="/blog/2021/11/09/anchoring-chains-of-trust/PwdMgrStart_hu0f6a53f8c1ff5985fbc060f44873529a_328558_491x0_resize_catmullrom_3.png" width="491" height="549">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Integrated Secure Enclave&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>That is how we first thought our edge agent implementation where the mobile
+device&amp;rsquo;s secure element was felt as a cryptographic root-of-trust for an
+identity domain that can be individual, organization, etc. However, that leads
+to many unnecessary problems in protocol implementation. Most importantly, to
+which part of the end-to-end protocol we should implement the use cases like:&lt;/p>
+&lt;ul>
+&lt;li>I want to use my identity domain from iPhone, iPad, etc. same time.&lt;/li>
+&lt;li>I want to have a &amp;lsquo;forget password&amp;rsquo; -type recovery option (by doing nothing)&lt;/li>
+&lt;li>I want to handle my identity domain&amp;rsquo;s keys easily. More precisely, I don&amp;rsquo;t
+want to know public-key cryptography is used under the hood&lt;/li>
+&lt;li>I want to have automatic backups and recovery&lt;/li>
+&lt;/ul>
+&lt;p>If we think about the drawing above, it&amp;rsquo;s easy to see that the presented use
+cases aren&amp;rsquo;t easy to implement secure way if you have integrated a secure
+element to your agent in the same machine. In case you have only one integrated
+secure enclave for each edge agent, it&amp;rsquo;s near impossible.&lt;/p>
+&lt;p>When we separate the secure enclave from the identity domain&amp;rsquo;s root controller
+at the design level, everything seems to be set in a place as we can see in the
+next drawing.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1001px">
+&lt;img class="card-img-top" src="/blog/2021/11/09/anchoring-chains-of-trust/PwdMgrFull_hu4232b9d9afbfe01e455d6f477f2365d3_1060150_991x0_resize_catmullrom_3.png" width="991" height="665">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Separated Secure Enclaves in Multiple Authenticators&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>I don&amp;rsquo;t imply that all of the other parties in the SSI/DID study scene have done
+or are making the same mistake we did at the beginning. My point is that
+treating secure elements as the root of the crypto chain only and not
+integrating it into the software agent or the device agent is running guided us
+in the right direction. That allowed us to realize that we don&amp;rsquo;t need a fully
+symmetric protocol to bind the controller to the agent. All we needed was the
+simplest possible thing, an authenticator, &lt;strong>a trust anchor&lt;/strong> in all potential
+cases.&lt;/p>
+&lt;p>That innovation brought us a possibility to use modern existing solutions and
+still have an equally robust system where we have cryptographic root-of-rust.&lt;/p>
+&lt;p>It&amp;rsquo;s essential to understand why we had to consider this so carefully. Should
+it be just obvious? We must remember what kind of technology we were
+developing. We didn&amp;rsquo;t want to make a mistake that would lead back to
+centralization. For example, if we would still totally relay
+&lt;a href="https://en.wikipedia.org/wiki/Public_key_infrastructure">PKI&lt;/a>, which is
+centralized, we couldn&amp;rsquo;t do that.&lt;/p>
+&lt;p>During the years we have studied the SSI/DID technology, we have constantly
+tested the architecture with these questions:&lt;/p>
+&lt;ol>
+&lt;li>Could this work and be safe without any help from the current PKI? (Naturally,
+it doesn&amp;rsquo;t mean that we couldn&amp;rsquo;t use individual protocols like TLS, etc. The
+infrastructure is the keyword here.)&lt;/li>
+&lt;li>Can a use case or a protocol action be executed peer to peer, i.e.
+between only two parties? (Doesn&amp;rsquo;t still necessarily mean off-line)&lt;/li>
+&lt;/ol>
+&lt;h2 id="headless-fido2webauthn-authenticator">Headless FIDO2/WebAuthn Authenticator&lt;/h2>
+&lt;blockquote>
+&lt;p>FIDO2 is the name of the standard. WebAuthn is just browser JS API to talk to
+the authenticators. So correct way to call your server is &amp;ldquo;FIDO2 Server&amp;rdquo; and
+to say &amp;ldquo;Authentication with FIDO2&amp;rdquo;. -
+&lt;a href="https://github.com/herrjemand/awesome-webauthn#faq">WebAuthn Resource List&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>We started our tests with the new agent API by using implementing our &lt;em>FIDO2
+server&lt;/em> and by using only browsers at the beginning. When results, especially
+the performance and simplicity, were so good, we decided to go further.&lt;/p>
+&lt;p>The following architecture-drawing present the final deployment diagram of the
+overall system. The needed FIDO2 components are marked light red, and the ones
+we implemented ourselves are marked in red.&lt;/p>
+&lt;p>The basic idea was to have a system-level SSO where we implemented authorization
+with JWT and authentication with FIDO2 regardless of which type of the entity
+needs to be authenticated: individuals, organizations, legal entities, or system
+components. For us, it implicated that we needed FIDO2 for service agents, which
+meant that a &lt;em>headless&lt;/em> FIDO2 Authenticator was required.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1601px">
+&lt;img class="card-img-top" src="/blog/2021/11/09/anchoring-chains-of-trust/DeploymentArchitecture_hu35f0112cd83673eb5666a9c53975c3bf_2052432_1591x0_resize_catmullrom_3.png" width="1591" height="867">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>All Key Components of The System Architecture&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>Architectural requirements for the solution were quite complex because we wanted
+to have security covered, not to compromise performance, and still support
+polyglot development.&lt;/p>
+&lt;h2 id="polyglot-authenticator-interface">Polyglot Authenticator Interface&lt;/h2>
+&lt;p>FIDO2/WebAuthn specification gives a well over a description of how main
+components work. Here we focus on the two most important ones. The first is the
+authenticator registration flow which is presented picture below.&lt;/p>
+&lt;p>&lt;img src="https://www.w3.org/TR/webauthn/images/webauthn-registration-flow-01.svg" alt="WebAuthn Registration">&lt;/p>
+&lt;p align = "center"> FIDO2 Authenticator Registration - &lt;a href="https://www.w3.org/TR/webauthn/images/webauthn-registration-flow-01.svg">www.w3.org&lt;/a>&lt;/p>
+&lt;p>To summarise, the above flow registers a new instance of an authenticator. Then
+it verifies that the same authenticator is bound to the account. That is done
+using a unique public/private key pair where the private key is in the
+authenticator. Note that the authenticator doesn&amp;rsquo;t map a particular user to an
+account. That is done thru the other process flow and by the &lt;a href="https://www.w3.org/TR/webauthn/#webauthn-relying-party">relying
+party&lt;/a>.&lt;/p>
+&lt;p>The flow below shows how a registered authenticator is used to authenticate the
+account holder.&lt;/p>
+&lt;p>&lt;img src="https://www.w3.org/TR/webauthn/images/webauthn-authentication-flow-01.svg" alt="WebAuthn Authentication">&lt;/p>
+&lt;p align = "center"> FIDO2 Authentication - &lt;a href="https://www.w3.org/TR/webauthn/images/webauthn-authentication-flow-01.svg">www.w3.org&lt;/a>&lt;/p>
+&lt;p>The Command pattern was the perfect solution for the first authenticator
+implementation because it supported all of our use cases, but same time was
+simplest. Most straightforward to integration was naturally with a programming
+language it was implemented which was Go.&lt;/p>
+&lt;p>The second thing was to figure out how we would like to implement interprocess
+communication. For that, the command pattern is suited very well. Fill the
+command with all the needed data and give one of the operations we were
+supporting: &lt;code>register&lt;/code> and &lt;code>login&lt;/code> from the FIDO2 standard. The process
+communication is handled just as the process starts by reading the command from
+JSON. That is suited for Node.js use as well. (For the record, my fantastic
+colleague Laura did all the needed Node.js work.)&lt;/p>
+&lt;p>When we considered security, we followed our post-compromise principle. We
+didn&amp;rsquo;t (yet) try to solve the situation where someone managed to hack the server
+and hook a debugger to our processes without our notice. To solve that, we need
+&lt;a href="https://en.wikipedia.org/wiki/Trusted_execution_environment">TEE&lt;/a> or similar.
+Our specification is ready, but before the implementation, we should think if
+it&amp;rsquo;s worth it, and about the use case we are implementing.&lt;/p>
+&lt;h3 id="stateless-authenticator">Stateless Authenticator&lt;/h3>
+&lt;p>Because you rarely find anything that removes complexity from your
+implementation from security-related standards or specifications, it&amp;rsquo;s forth of
+mentioning: By following &lt;a href="https://www.w3.org/TR/webauthn/">WebAuthn
+specification&lt;/a> I did learn that I could, once
+again, use crypto chaining!&lt;/p>
+&lt;p>We knew that you would use one authenticator for many different places. That was
+clear, of course. But when an authenticator is used for the service or as a
+service, there is the next tenancy level.&lt;/p>
+&lt;p>Before I started to write the whole thing, I thought that I use our server-side
+secure enclave to store all the key pairs there and let the tenant set the
+enclave&amp;rsquo;s master key. It would still mean that the implementation would be
+state-full. From the operations' perspective, we all know what that means: more
+things to take care of and manage, but most importantly, one potential
+scalability issue to solve.&lt;/p>
+&lt;p>The FIDO2 standard documentation describes a perfect solution for our needs
+which made our authenticator stateless. You give the other party your public
+key, but you give your private key in your &lt;code>credential ID&lt;/code>. It might
+first sound crazy, but it&amp;rsquo;s genius indeed.&lt;/p>
+&lt;p>Hold on! That cannot be?&lt;/p>
+&lt;p>But it is. You have to build your identifier to include your private key, but no
+one but you can use it because you have encrypted it with a symmetric master
+key. The key that no one but you controls.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1301px">
+&lt;img class="card-img-top" src="/blog/2021/11/09/anchoring-chains-of-trust/MasterKeyMain_hu010c6f71b85452493ec3cbb36ce48ca0_2698229_1291x0_resize_catmullrom_3.png" width="1291" height="663">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Stateless Authenticator Implementation&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>The draft above illustrates how our stateless FIDO2 authenticator works at
+a master key level. Other factors like a cloning counter and an authenticator ID
+are left out for simplicity.&lt;/p>
+&lt;ol>
+&lt;li>We can ask TEE to create a new key pair for FIDO2 registration, which gives
+us a unique key pair that includes &lt;code>public key&lt;/code> and &lt;em>encrypted private key&lt;/em>,
+i.e. &lt;code>credential ID&lt;/code>.&lt;/li>
+&lt;li>Our authenticator sends the FIDO2 &lt;code>attestation object&lt;/code> to the server.&lt;/li>
+&lt;li>When the authenticator receives the FIDO2 challenge during authentication, it builds
+it to the key pair in the same format as registration.&lt;/li>
+&lt;li>The TEE inside the authenticator builds us the &lt;code>assertion object&lt;/code> ready to send
+to the FIDO2 server.&lt;/li>
+&lt;/ol>
+&lt;p>As we can see, the master key never leaves the TEE. The implementation can
+be done with help cloud
+&lt;a href="https://en.wikipedia.org/wiki/Hardware_security_module">HSM&lt;/a> or
+&lt;a href="https://www.neclab.eu/research-areas/security/nec-labs-introduce-a-new-solution-enables-seamless-provisioning-and-decommissioning-of-tee-based-applications-in-the-cloud">TEE-based app&lt;/a>;
+or we can implement an application with the help of &lt;a href="https://aws.amazon.com/ec2/nitro/nitro-enclaves/">AWS
+Nitro Enclaves&lt;/a> or similar.&lt;/p>
+&lt;p>&lt;strong>Note!&lt;/strong> This is not a good solution for a pure client-side &lt;em>software-based&lt;/em>
+authenticator, because it needs help from the hardware, i.e. secure enclave.
+It&amp;rsquo;s suitable for &lt;em>hardware-based and certain types of server-side solutions&lt;/em>
+where you can use TEE or similar solutions.&lt;/p>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>FIDO2 authentication is an excellent match for DID Wallet authentication. gRPC
+transport combined with JWT authorization has been straightforward to use. Our
+gRPC SDK allows you to implicitly move the JWT token during the API calls after
+opening the server connection. Plus, gRPC&amp;rsquo;s capability to have bidirectional
+streams make the programming experience very pleasant. Finally, an option is to
+authenticate the gRPC connection between server and client with (no PKI is
+needed) TLS certificates: You can authorize software components to bind to your
+deployment.&lt;/p>
+&lt;p>The SDK and the API we have built with this stack have fulfilled all our
+expectations:&lt;/p>
+&lt;ul>
+&lt;li>security&lt;/li>
+&lt;li>performance&lt;/li>
+&lt;li>easy to use&lt;/li>
+&lt;li>solving &lt;a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY&lt;/a> e.g.
+error handling&lt;/li>
+&lt;li>polyglot&lt;/li>
+&lt;li>cloud-ready&lt;/li>
+&lt;li>micro-service friendly&lt;/li>
+&lt;/ul>
+&lt;p>And hopefully yours. Give it a try!&lt;/p></description></item><item><title>Blog: The Arm Adventure on Docker</title><link>/blog/2021/09/20/the-arm-adventure-on-docker/</link><pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate><guid>/blog/2021/09/20/the-arm-adventure-on-docker/</guid><description>
 &lt;p>Since the Findy Agency project launched, Docker has been one of our main tools to help set up the agency development and deployment environments. First of all, we use Docker images for our cloud deployment. On a new release, the CI build pipeline bundles all needed binaries to each service image. After the build, the pipeline pushes Docker images to &lt;a href="https://github.blog/2020-09-01-introducing-github-container-registry/">the GitHub container registry&lt;/a>, from where the deployment pipeline fetches them and updates the cloud environment.&lt;/p>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 706px">
 &lt;img class="card-img-top" src="/blog/2021/09/20/the-arm-adventure-on-docker/cover-agency-deployment-pipeline_hu45c26a180b4a9f8ed9e980905a894a35_52542_925x925_fit_catmullrom_3.png" width="696" height="385">
