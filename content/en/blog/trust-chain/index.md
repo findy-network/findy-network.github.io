@@ -38,26 +38,28 @@ asymmetric cryptography like
 [trust-on-first-use](https://en.wikipedia.org/wiki/Trust_on_first_use).
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Man_in_the_middle_attack.svg" width="400" height="10" />
-<p align = "center"> MITM - Wikipedia </p>
+<p align = "center"> MITM - <a href="https://upload.wikimedia.org/wikipedia/commons/e/e7/Man_in_the_middle_attack.svg">Wikipedia</a></p>
 
 It's trivial to execute [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack)
-attach if we cannot be sure that the public key source is the one it
+attack if we cannot be sure that the public key source is the one it
 should be. The industry has developed different ways to make sure that presented
 details are valid. That lays down one of the most fundamental aspects of modern
 cryptographic systems -- [chain of
 trust](https://en.wikipedia.org/wiki/Chain_of_trust).
  
 ![Trust Chain](https://upload.wikimedia.org/wikipedia/commons/0/02/Chain_Of_Trust.svg)
-<p align = "center"> PKI Chain of trust - Wikipedia </p>
+<p align = "center"> PKI Chain of trust - <a href="https://upload.wikimedia.org/wikipedia/commons/0/02/Chain_Of_Trust.svg">Wikipedia</a></p>
 
 It is essential to understand that most of the modern security protocols use
 public-key cryptography only for
 [authentication](https://en.wikipedia.org/wiki/Authentication) and switch to
 [symmetric keys](https://en.wikipedia.org/wiki/Symmetric-key_algorithm) during
-the data transfer for performance reasons.
+the data transfer for performance reasons. The famous example of this kind of
+protocol is [Diffie-Hellman](https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange)
+where the shared secret (the symmetric key) is transported over public network.
 
 The [DIDComm](https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0005-didcomm/README.md)
-a protocol is something that is not used only for authentication but
+protocol is something that is not used only for authentication but
 communication without sacrificing privacy. My prediction is that the current
 message-oriented DIDComm protocol as a holistic transport layer is not enough.
 The ongoing [DIDComm
@@ -105,9 +107,9 @@ As long as we stay in a digital world, it is easiest to bind the controller to
 its DID is by using public-key cryptography. The one who has DID controller's
 private key is the actual controller.
 
-For instance, an essential thing for SSI is *a DID pairwise*, i.e. the secure
-the connection between two DIDs or DID
-[services](https://www.w3.org/TR/did-core/#dfn-service).  Unfortunately, W3C's
+For instance, an essential thing for SSI is *a DID pairwise*, i.e. a secure
+connection between two DIDs or DID
+[services](https://www.w3.org/TR/did-core/#dfn-service). Unfortunately, W3C's
 specifications don't underline that enough. Probably because it concentrates on
 external properties of DIDs and how the presented specification can implement
 different methods. But DIDs cannot work on their own properly. They need to have
@@ -117,6 +119,7 @@ present the entity they are pointing, should I say, alone. DIDs present a
 different contexts.
 
 ![DID Concepts](https://www.w3.org/TR/did-core/diagrams/did_brief_architecture_overview.svg)
+<p align = "center"> DID Concepts - <a href="https://www.w3.org/TR/did-core/diagrams/did_brief_architecture_overview.svg">www.w3.org</a></p>
 
 In the digital world, it is expected that a controller has its controller, which
 has its controller, etc. When public-key cryptography is used to verify this
@@ -163,8 +166,8 @@ controller, SSI Edge Agent, etc.
 That is how we first thought our edge agent implementation where the mobile
 device's secure element was felt as a cryptographic root-of-trust for an
 identity domain that can be individual, organization, etc. However, that leads
-to many unnecessary problems in protocol implementation. Most importantly, what
-point of the end-to-end protocol we should implement the use cases like:
+to many unnecessary problems in protocol implementation. Most importantly, to
+which part of the end-to-end protocol we should implement the use cases like:
 
 - I want to use my identity domain from iPhone, iPad, etc. same time.
 - I want to have a 'forget password' -type recovery option (by doing nothing)
@@ -230,7 +233,7 @@ the entity needs to be authenticated: individuals, organizations, legal
 entities, or system components. For us, it implicated that we needed FIDO2 for
 service agents, which meant that a *headless* FIDO2 Authenticator was required.
 
-{{< imgproc cover-deployment.png Resize "1591x" >}}
+{{< imgproc DeploymentArchitecture.png Resize "1591x" >}}
 <em>All Key Components of The System Architecture</em>
 {{< /imgproc >}}
 
@@ -245,7 +248,7 @@ components work. Here we focus on the two most important ones. The first is the
 authenticator registration flow which is presented picture below.
 
 ![WebAuthn Registration](https://www.w3.org/TR/webauthn/images/webauthn-registration-flow-01.svg)
-<p align = "center"> FIDO2 Authenticator Registration - www.w3.org </p>
+<p align = "center"> FIDO2 Authenticator Registration - <a href="https://www.w3.org/TR/webauthn/images/webauthn-registration-flow-01.svg">www.w3.org</a></p>
 
 To summarise, the above flow registers a new instance of an authenticator. Then
 it verifies that the same authenticator is bound to the account. That is done
@@ -258,27 +261,27 @@ The flow below shows how a registered authenticator is used to authenticate the
 account holder.
 
 ![WebAuthn Authentication](https://www.w3.org/TR/webauthn/images/webauthn-authentication-flow-01.svg)
-<p align = "center"> FIDO2 Authentication - www.w3.org </p>
+<p align = "center"> FIDO2 Authentication - <a href="https://www.w3.org/TR/webauthn/images/webauthn-authentication-flow-01.svg">www.w3.org</a></p>
 
-The Command pattern was the perfect solution for the first implementation
-because it supported all of our use cases, but same time was simplest. Most
-straightforward to integration was naturally with a programming language it was
-implemented which was Go.
+The Command pattern was the perfect solution for the first authenticator
+implementation because it supported all of our use cases, but same time was
+simplest. Most straightforward to integration was naturally with a programming
+language it was implemented which was Go.
 
 The second thing was to figure out how we would like to implement interprocess
 communication. For that, the command pattern is suited very well. Fill the
 command with all the needed data and give one of the operations we were
 supporting: `register` and `login` from the FIDO2 standard. The process
 communication is handled just as the process starts by reading the command from
-JSON. That is suited for node.js use as well. (For the record, my fantastic
-colleague Laura did all the needed node.js work.)
+JSON. That is suited for Node.js use as well. (For the record, my fantastic
+colleague Laura did all the needed Node.js work.)
 
-When we considered a security, we followed our post-compromise principle. We
+When we considered security, we followed our post-compromise principle. We
 didn't (yet) try to solve the situation where someone managed to hack the server
 and hook a debugger to our processes without our notice. To solve that, we need
 [TEE](https://en.wikipedia.org/wiki/Trusted_execution_environment) or similar.
 Our specification is ready, but before the implementation, we should think if
-it's worth it.
+it's worth it, and about the use case we are implementing.
 
 ### Stateless Authenticator
 
@@ -295,7 +298,7 @@ service, there is the next tenancy level.
 Before I started to write the whole thing, I thought that I use our server-side
 secure enclave to store all the key pairs there and let the tenant set the
 enclave's master key. It would still mean that the implementation would be
-state-full. From the operations ' perspective, we all know what that means: more
+state-full. From the operations' perspective, we all know what that means: more
 things to take care of and manage, but most importantly, one potential
 scalability issue to solve.
 
@@ -333,9 +336,10 @@ be done with help cloud
 or we can implement an application with the help of [AWS
 Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/) or similar.
 
-**Note!** This is not a good solution for a pure client-side software-based
-authenticator. It's suitable for *hardware-based and certain types of
-server-side solutions* where you can use TEE or similar solutions.
+**Note!** This is not a good solution for a pure client-side *software-based*
+authenticator, because it needs help from the hardware, i.e. secure enclave.
+It's suitable for *hardware-based and certain types of server-side solutions*
+where you can use TEE or similar solutions.
 
 ## Conclusion
 
@@ -344,8 +348,9 @@ transport combined with JWT authorization has been straightforward to use. Our
 gRPC SDK allows you to implicitly move the JWT token during the API calls after
 opening the server connection. Plus, gRPC's capability to have bidirectional
 streams make the programming experience very pleasant. Finally, an option is to
-authenticate the gRPC connection between server and client with self-signed TLS
-certificates: You can authorize software components to bind to your deployment.
+authenticate the gRPC connection between server and client with (no PKI is
+needed) TLS certificates: You can authorize software components to bind to your
+deployment.
 
 The SDK and the API we have built with this stack have fulfilled all our
 expectations:

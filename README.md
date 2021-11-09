@@ -22,6 +22,11 @@ Findy Agency technical documentation and blog.
    git clone --recurse-submodules --depth 1 git@github.com:findy-network/findy-network.github.io.git
    ```
 
+   To get, e.g. `dev` branch from the server:
+   ```bash
+   git fetch origin dev:dev
+   ```
+
 1. Install dependencies
 
    ```bash
@@ -29,15 +34,23 @@ Findy Agency technical documentation and blog.
    npm install
    ```
 
-1. Run hugo (`make run` just added)
+1. Run hugo
 
+   By using a make rule `run` that will start hugo to be visible for the whole
+   LAN or for `ngrok`.
+   ```bash
+   make run
    ```
+   
+
+   Naturally you can start it with hugo
+   ```bash
    hugo server
    ```
 
    Or if you need to connect from some other host in the same network.
 
-   ```
+   ```bash
    hugo server --bind=0.0.0.0 --baseURL=http://0.0.0.0:1313
    ```
 
@@ -46,7 +59,9 @@ Findy Agency technical documentation and blog.
 
 1. Problem Solving:
    - use extended version
-   - use latest version
+   - first `git` cloning or must be used to get submodules (or to use some other
+     methods to get them)
+   - use latest version of hugo
    - when writing a blog post's hugo header be aware that the `date:` field tell
      hugo when to publish. If you are currently constructing the post **and want
      to see the rendering result use current or previous date**.
