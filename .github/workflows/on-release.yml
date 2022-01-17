@@ -1,8 +1,8 @@
 name: release
-on:  
+on:
   push:
     tags:
-      - '*'
+      - "*"
 jobs:
   merge:
     runs-on: ubuntu-latest
@@ -12,7 +12,7 @@ jobs:
         with:
           ref: master
       - name: merge
-        run:  |
+        run: |
           git fetch --tags origin
           git merge $GITHUB_REF
           git push origin master
@@ -28,12 +28,12 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest'
+          hugo-version: "0.91.2"
           extended: true
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: "16.x"
 
       - name: install deps
         run: npm ci
