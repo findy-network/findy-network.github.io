@@ -2,6 +2,7 @@
 title: "Demo: Findy Bots"
 linkTitle: "Findy Bots"
 date: 2021-12-08
+weight: 2
 description: >
   Example scenario implemented using Findy Agency.
 ---
