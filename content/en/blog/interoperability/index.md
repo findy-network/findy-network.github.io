@@ -1,5 +1,5 @@
 ---
-date: 2022-01-17
+date: 2022-01-19
 title: "Fostering Interoperability"
 linkTitle: "Fostering Interoperability"
 description: "Hyperledger Aries defines messaging protocols for identity agents capable of sharing verified data. Throughout Findy Agency development, the support for the Aries protocol and the compatibility with other Aries agents has been one of the top priorities for the project. Lately, we have lifted the interoperability testing to a new level by automating the testing and reporting with the help of tools provided by the Aries community. Furthermore, we received promising results from practical interoperability tests executed manually."
@@ -63,7 +63,7 @@ I executed the following tests:
 
 - **Test 1: Findy Agency based issuer/verifier with Lissi Wallet**
 
-  A Findy Agency utilizing issuer tool invites Lissi Wallet to form a pairwise connection. Issuer tool sends and verifies a credential with Lissi Wallet.
+  A Findy Agency utilizing [issuer tool](https://github.com/findy-network/findy-issuer-tool) invites Lissi Wallet to form a pairwise connection. Issuer tool sends and verifies a credential with Lissi Wallet.
 
 - **Test 2: Findy Agency Web Wallet with Trinsic Wallet**
 
