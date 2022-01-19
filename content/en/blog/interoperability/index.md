@@ -43,7 +43,7 @@ My first task was to create [a backchannel](https://github.com/findy-network/fin
 
 Once the bundle was ready, I made [a PR to the AATH repository](https://github.com/hyperledger/aries-agent-test-harness/pull/341) to include Findy Agency in the Aries interoperability test set. We decided to support AIP version 1.0, but leave out the revocation for now. Tests exposed some essential but mainly minor interoperability issues with our implementation, and we were able to solve all of the found problems quite swiftly. The tests use the latest Findy Agency release with each test run. One can monitor [the test results for Findy Agency](https://aries-interop.info/findy.html) on the test result site.
 
-{{< imgproc cover Fit "939x649" >}}
+{{< imgproc results Fit "939x649" >}}
 <em>Test result snapshot from <a href="https://aries-interop.info/" target="_blank" rel="noopener noreferer">Aries test reporting site</a></em>
 {{< /imgproc >}}
 
@@ -54,6 +54,10 @@ In addition to interoperability testing, we currently utilize the AATH tooling f
 Once the interoperability test automation reached an acceptable level, my focus moved to actual use cases that I could execute between the different agents.
 
 My main interests were two wallet applications freely available in the app stores, [Lissi Wallet](https://lissi.id/) and [Trinsic Wallet](https://trinsic.id/trinsic-wallet/). I was intrigued by how Findy Agency-based applications would work with these identity wallets. I also wanted to test our Findy Agency web wallet with an application from a different technology stack. [BCGov](https://github.com/bcgov) provides a freely available test network that both wallet applications support, so it was possible to execute the tests without network-related hassle.
+
+{{< imgproc cover Fit "925x925" >}}
+<em>Manual test setup</em>
+{{< /imgproc >}}
 
 I executed the following tests:
 
