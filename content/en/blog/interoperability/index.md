@@ -12,7 +12,7 @@ resources:
 Different services have different requirements and technical stacks; there are also multiple ways to implement the Aries agent support in an application. Some projects choose to rely on an Aries framework of a specific language and bundle the functionality within the service. Others might run the agent as a separate service or, as in the case of Findy Agency, as an agency that serves multiple clients.
 
 {{< imgproc manual Fit "925x925" >}}
-<em>Sending Aries basic messages between wallets from different technology stacks. See full demo in YouTube.</em>
+<em>Sending Aries basic messages between wallets from different technology stacks. See full demo in <a href="https://www.youtube.com/watch?v=W1H7ppS2Y6M" target="_blank" rel="noopener noreferer">YouTube</a>.</em>
 {{< /imgproc >}}
 
 Interoperability is a crucial element when we think about the adaptation and success of the Aries protocol. Even though the agent software might fulfill all the functional requirements and pass testing with use cases executed with a single agent technology stack, the story ending might be different when running the cases against another agent implementation. How can we then ensure that the two agents built with varying technology stacks can still work together and reach the same goals? Interoperability testing solves this problem. Its purpose is to verify that the agent software complies with the Aries protocol used to communicate between agents.
@@ -33,15 +33,15 @@ Harness operates the agents under test through backchannels. Backchannel is a RE
 
 {{< figure src="https://courses.edx.org/assets/courseware/v1/571727dd6d3f57d64158c9567f0d8ff2/asset-v1:LinuxFoundationX+LFS173x+1T2020+type@asset+block/The_Aries_Agent_Test_Harness.png" attr="image source: LinuxFoundationX LFS173x (CC BY 4.0)" attrlink="https://learning.edx.org/course/course-v1:LinuxFoundationX+LFS173x+1T2020/home" >}}
 
-Harness utilizes Docker containers for testing. It launches a container based on a required agent image for each test scenario actor during the test run. Before the test run, one needs to build and bundle the agent-required services and the backchannel to a single agent image that provides both the agent and the backchannel functionality. The recipes for making each of the different agent images, i.e., Dockerfiles with the needed scripts, are stored in the AATH repository. The same repository also contains CI scripts for executing the tests regularly and generating [an extensive test report site](https://aries-interop.info/).
+Harness utilizes Docker containers for testing. It launches a container based on a required agent image for each test scenario actor during the test run. Before the test run, one needs to build a single image containing all the needed agent services and the backchannel. The recipes for making each of the different agent images, i.e., Dockerfiles with the needed scripts, are stored in the AATH repository. The same repository also contains CI scripts for executing the tests regularly and generating [an extensive test report site](https://aries-interop.info/).
 
 ## Interoperability for Findy Agency
 
 One of our main themes for 2H/2021 was to verify the Aries interoperability level for Findy Agency. When I investigated the Aries interoperability tooling more, it became evident that we needed to utilize the AATH to accomplish the satisfactory test automation level.
 
-My first task was to create [a backchannel](https://github.com/findy-network/findy-agent-backchannel) for the harness to operate Findy Agency-hosted agents. Backchannel's role is to convert the harness's REST API requests to Findy Agency gRPC client interface. Another challenge was to bundle the agency microservices into a single Docker image. Each agency microservice runs in its dedicated container in a regular agency deployment. For AATH, I needed to bundle all of the required services into a single container, together with the backchannel. [The bundle](https://github.com/findy-network/findy-agent-backchannel/blob/master/aath/Dockerfile) is necessary because the harness runs a single container per agent.
+My first task was to create [a backchannel](https://github.com/findy-network/findy-agent-backchannel) for the harness to operate Findy Agency-hosted agents. Backchannel's role is to convert the harness's REST API requests to Findy Agency gRPC client interface. Another challenge was to combine the agency microservices into [a single Docker image](https://github.com/findy-network/findy-agent-backchannel/blob/master/aath/Dockerfile). Each agency microservice runs in its dedicated container in a regular agency deployment. For AATH, I needed to bundle all of the required services into a single container, together with the backchannel.
 
-Once the bundle was ready, I made [a PR to the AATH repository](https://github.com/hyperledger/aries-agent-test-harness/pull/341) to include Findy Agency in the Aries interoperability test set. We defined the supported AIP version (1.0) and the exception features (revocation). Tests exposed some essential but mainly minor interoperability issues with our implementation, and we were able to solve all of the found problems quite swiftly. The tests use the latest Findy Agency release with each test run. One can monitor [the test results for Findy Agency](https://aries-interop.info/findy.html) on the test result site.
+Once the bundle was ready, I made [a PR to the AATH repository](https://github.com/hyperledger/aries-agent-test-harness/pull/341) to include Findy Agency in the Aries interoperability test set. We decided to support AIP version 1.0, but leave out the revocation for now. Tests exposed some essential but mainly minor interoperability issues with our implementation, and we were able to solve all of the found problems quite swiftly. The tests use the latest Findy Agency release with each test run. One can monitor [the test results for Findy Agency](https://aries-interop.info/findy.html) on the test result site.
 
 {{< imgproc cover Fit "939x649" >}}
 <em>Test result snapshot from <a href="https://aries-interop.info/" target="_blank" rel="noopener noreferer">Aries test reporting site</a></em>
@@ -65,11 +65,13 @@ I executed the following tests:
 
   Findy Agency Web Wallet user forms a pairwise connection with Trinsic Wallet user. Wallet applications send Aries basic messages to each other.
 
-- **Test 3: AcaPy based issuer/verifier with Findy Agency Web Wallet**
+- **Test 3: ACA-Py based issuer/verifier with Findy Agency Web Wallet**
 
-  Aries Test Harness runs [AcaPy](https://github.com/hyperledger/aries-cloudagent-python)-based agents that issue and verify credentials with Findy Agency Web Wallet.
+  Aries Test Harness runs [ACA-Py](https://github.com/hyperledger/aries-cloudagent-python)-based agents that issue and verify credentials with Findy Agency Web Wallet.
 
-The practical interoperability of Findy Agency also seems to be good, as proven with these manual tests. You can find the video of the test screen recording on YouTube.
+The practical interoperability of Findy Agency also seems to be good, as proven with these manual tests. You can find the video of the test screen recording on [YouTube](https://www.youtube.com/watch?v=W1H7ppS2Y6M).
+
+{{< youtube W1H7ppS2Y6M >}}
 
 ## Next Steps
 
