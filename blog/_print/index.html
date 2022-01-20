@@ -66,6 +66,7 @@ This the multi-page printable view of this section.
 </div>
 <h1 class=title>Findy Agency Blog</h1>
 <ul>
+<li><a href=#pg-84fb4537e4edf11be52eda416e8de901>Fostering Interoperability</a></li>
 <li><a href=#pg-1d28bc35aa6447c9e2cde89f9bd1b9f3>Anchoring Chains of Trust</a></li>
 <li><a href=#pg-01f27610185446a311586be6588425a0>The Arm Adventure on Docker</a></li>
 <li><a href=#pg-9a796d898f4a78defc54c95df256f75b>Travelogue</a></li>
@@ -75,6 +76,83 @@ This the multi-page printable view of this section.
 </div>
 </div>
 <div class=td-content>
+<h1 id=pg-84fb4537e4edf11be52eda416e8de901>Fostering Interoperability</h1>
+<div class=lead>Hyperledger Aries defines messaging protocols for identity agents capable of sharing verified data. Throughout Findy Agency development, the support for the Aries protocol and the compatibility with other Aries agents has been one of the top priorities for the project. Lately, we have lifted the interoperability testing to a new level by automating the testing and reporting with the help of tools provided by the Aries community. Furthermore, we received promising results from practical interoperability tests executed manually.</div>
+<div class="td-byline mb-4">
+By <b>Laura Vuorenoja</b> |
+<time datetime=2022-01-19 class=text-muted>Wednesday, January 19, 2022</time>
+</div>
+<p>Different services have different requirements and technical stacks; there are also multiple ways to implement the Aries agent support in an application. Some projects choose to rely on an Aries framework of a specific language and bundle the functionality within the service. Others might run the agent as a separate service or, as in the case of Findy Agency, as an agency that serves multiple clients.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:935px>
+<img class=card-img-top src=/blog/2022/01/19/fostering-interoperability/manual-test_hu2ad66fb4e4e3677b9f68960c3b1b7d49_90636_925x925_fit_catmullrom_3.png width=925 height=486>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Sending Aries basic messages between wallets from different technology stacks. See full demo in <a href="https://www.youtube.com/watch?v=W1H7ppS2Y6M" target=_blank rel="noopener noreferer">YouTube</a>.</em>
+</p>
+</div>
+</div>
+<p>Interoperability is a crucial element when we think about the adaptation and success of the Aries protocol. Even though the agent software might fulfill all the functional requirements and pass testing with use cases executed with a single agent technology stack, the story ending might be different when running the cases against another agent implementation. How can we then ensure that the two agents built with varying technology stacks can still work together and reach the same goals? Interoperability testing solves this problem. Its purpose is to verify that the agent software complies with the Aries protocol used to communicate between agents.</p>
+<h2 id=aries-interoperability-testing>Aries Interoperability Testing</h2>
+<p>Interoperability considerations came along quite early to the protocol work of the Aries community. The community faced similar challenges as other technical protocol developers have faced over time. When the number of Aries protocols increases and the protocol flows and messages are updated as the protocols evolve, how can the agent developers maintain compatibility with other agent implementations? The community decided to take <a href=https://github.com/hyperledger/aries-rfcs/tree/main/concepts/0302-aries-interop-profile>Aries Interoperability Profiles (AIPs)</a> in use. Each AIP version defines a list of <a href=https://github.com/hyperledger/aries-rfcs>Aries RFCs</a> with specific versions. Every agent implementation states which AIP version it supports and expects other implementations with the same version support to be compatible.</p>
+<p>To ensure compatibility, the community had <a href=https://github.com/hyperledger/aries-rfcs/tree/main/concepts/0270-interop-test-suite>an idea of a test suite</a> that the agent developers could use to make sure that the agent supports the defined AIP version. The test suite would launch the agent software and run a test set that measures if the agent under test behaves as the specific protocol version requires. The test suite would generate a report of the test run, and anyone could then easily compare the interoperability results of different agents.</p>
+<p>At first, there were two competing test suites with different approaches to execute the tests. <a href=https://github.com/hyperledger/aries-protocol-test-suite>Aries Protocol Test Suite (APTS)</a> includes an agent implementation that interacts with the tested agent through the protocol messages. On the other hand, <a href=https://github.com/hyperledger/aries-agent-test-harness>Aries Agent Test Harness (AATH)</a> runs the tests operating the agent-client interface. This approach makes it possible to measure the compatibility of any two agent implementations. AATH seems to be the winning horse of the test suite race. Its test suite includes several test cases and has extensive reporting in place.</p>
+<h3 id=aries-agent-test-harness>Aries Agent Test Harness</h3>
+<p>Aries Agent Test Harness provides a BDD (behavioral driven) test execution engine and a set of tests derived from Aries RFCs. The aim is to run these tests regularly between different Aries agents (and agent frameworks) to monitor the compatibility score for each combination and catch compatibility issues.</p>
+<p>Harness operates the agents under test through backchannels. Backchannel is a REST interface defined by <a href=https://github.com/hyperledger/aries-agent-test-harness/blob/main/docs/assets/openapi-spec.yml>an OpenAPI definition</a>, and its purpose is to pass the harness requests to the agents. The target is to handle the agent as a black box without interfering with the agent&rsquo;s internal structures. Thus, the backchannel uses the agent&rsquo;s client interface to pass on the harness requests.</p>
+<figure>
+<img src=https://courses.edx.org/assets/courseware/v1/571727dd6d3f57d64158c9567f0d8ff2/asset-v1:LinuxFoundationX+LFS173x+1T2020+type@asset+block/The_Aries_Agent_Test_Harness.png> <figcaption>
+<p>
+<a href=https://learning.edx.org/course/course-v1:LinuxFoundationX+LFS173x+1T2020/home>image source: LinuxFoundationX LFS173x (CC BY 4.0)</a></p>
+</figcaption>
+</figure>
+<p>Harness utilizes Docker containers for testing. It launches a container based on a required agent image for each test scenario actor during the test run. Before the test run, one needs to build a single image containing all the needed agent services and the backchannel. The recipes for making each of the different agent images, i.e., Dockerfiles with the needed scripts, are stored in the AATH repository. The same repository also contains CI scripts for executing the tests regularly and generating <a href=https://aries-interop.info/>an extensive test report site</a>.</p>
+<h2 id=interoperability-for-findy-agency>Interoperability for Findy Agency</h2>
+<p>One of our main themes for 2H/2021 was to verify the Aries interoperability level for Findy Agency. When I investigated the Aries interoperability tooling more, it became evident that we needed to utilize the AATH to accomplish the satisfactory test automation level.</p>
+<p>My first task was to create <a href=https://github.com/findy-network/findy-agent-backchannel>a backchannel</a> for the harness to operate Findy Agency-hosted agents. Backchannel&rsquo;s role is to convert the harness&rsquo;s REST API requests to Findy Agency gRPC client interface. Another challenge was to combine the agency microservices into <a href=https://github.com/findy-network/findy-agent-backchannel/blob/master/aath/Dockerfile>a single Docker image</a>. Each agency microservice runs in its dedicated container in a regular agency deployment. For AATH, I needed to bundle all of the required services into a single container, together with the backchannel.</p>
+<p>Once the bundle was ready, I made <a href=https://github.com/hyperledger/aries-agent-test-harness/pull/341>a PR to the AATH repository</a> to include Findy Agency in the Aries interoperability test set. We decided to support AIP version 1.0, but leave out the revocation for now. Tests exposed some essential but mainly minor interoperability issues with our implementation, and we were able to solve all of the found problems quite swiftly. The tests use the latest Findy Agency release with each test run. One can monitor <a href=https://aries-interop.info/findy.html>the test results for Findy Agency</a> on the test result site.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:949px>
+<img class=card-img-top src=/blog/2022/01/19/fostering-interoperability/results_hufa4ee9cabbf5b53022a6b7fed8ad758e_125699_939x649_fit_catmullrom_3.png width=939 height=644>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Test result snapshot from <a href=https://aries-interop.info/ target=_blank rel="noopener noreferer">Aries test reporting site</a></em>
+</p>
+</div>
+</div>
+<p>In addition to interoperability testing, we currently utilize the AATH tooling for our functional acceptance testing. Whenever PR gets merged to our agency core repository that hosts the code for Aries protocol handlers, <a href=https://github.com/findy-network/findy-agent/blob/master/.github/workflows/iop.yml>CI builds</a> an image of the code snapshot and runs a partial test set with AATH. The testing does not work as a replacement for unit tests but more as a last acceptance gate. The agency core runs in the actual deployment Docker container. The intention is to verify both the successful agency bootup and the functionality of the primary protocol handlers. This testing step has proven to be an excellent addition to our test repertoire.</p>
+<h3 id=manual-tests>Manual Tests</h3>
+<p>Once the interoperability test automation reached an acceptable level, my focus moved to actual use cases that I could execute between the different agents.</p>
+<p>My main interests were two wallet applications freely available in the app stores, <a href=https://lissi.id/>Lissi Wallet</a> and <a href=https://trinsic.id/trinsic-wallet/>Trinsic Wallet</a>. I was intrigued by how Findy Agency-based applications would work with these identity wallets. I also wanted to test our Findy Agency web wallet with an application from a different technology stack. <a href=https://github.com/bcgov>BCGov</a> provides a freely available test network that both wallet applications support, so it was possible to execute the tests without network-related hassle.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:935px>
+<img class=card-img-top src=/blog/2022/01/19/fostering-interoperability/cover-demo.drawio_huf36e1a42bdf7cc78eb70fb813ee7e03b_414690_925x925_fit_catmullrom_3.png width=925 height=537>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Manual test setup</em>
+</p>
+</div>
+</div>
+<p>I executed the following tests:</p>
+<ul>
+<li>
+<p><strong>Test 1: Findy Agency based issuer/verifier with Lissi Wallet</strong></p>
+<p>A Findy Agency utilizing <a href=https://github.com/findy-network/findy-issuer-tool>issuer tool</a> invites Lissi Wallet to form a pairwise connection. Issuer tool sends and verifies a credential with Lissi Wallet.</p>
+</li>
+<li>
+<p><strong>Test 2: Findy Agency Web Wallet with Trinsic Wallet</strong></p>
+<p>Findy Agency Web Wallet user forms a pairwise connection with Trinsic Wallet user. Wallet applications send Aries basic messages to each other.</p>
+</li>
+<li>
+<p><strong>Test 3: ACA-Py based issuer/verifier with Findy Agency Web Wallet</strong></p>
+<p>Aries Test Harness runs <a href=https://github.com/hyperledger/aries-cloudagent-python>ACA-Py</a>-based agents that issue and verify credentials with Findy Agency Web Wallet.</p>
+</li>
+</ul>
+<p>The practical interoperability of Findy Agency also seems to be good, as proven with these manual tests. You can find the video of the test screen recording on <a href="https://www.youtube.com/watch?v=W1H7ppS2Y6M">YouTube</a>.</p>
+<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
+<iframe src=https://www.youtube.com/embed/W1H7ppS2Y6M style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
+</div>
+<h2 id=next-steps>Next Steps</h2>
+<p>Without a doubt, Aries interoperability will be one of the drivers guiding the development of Findy Agency also in the future. With the current test harness integration, the work towards AIP2.0 is now easier to verify. Our team will continue working with the most critical Aries features relevant to our use cases. We also welcome contributions from others who see the benefit in building an OS world-class enterprise-level identity agency.</p>
+</div>
+<div class=td-content style=page-break-before:always>
 <h1 id=pg-1d28bc35aa6447c9e2cde89f9bd1b9f3>Anchoring Chains of Trust</h1>
 <div class=lead>Everything is about chains in asymmetric cryptography, or more precisely about <em>the links in the chain</em>. You build these links with public/private key pairs. The chain needs grounding, and the FIDO2 authenticator is perfect for that purpose.</div>
 <div class="td-byline mb-4">

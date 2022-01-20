@@ -93,8 +93,9 @@ This the multi-page printable view of this section.
 </ul>
 <li>7: <a href=#pg-d36c0299b9659e27974469ce1f3e343c>Videos</a></li>
 <ul>
-<li>7.1: <a href=#pg-ec485ff122e8ec7cc0529e686c33f9d2>Demo: Findy Bots</a></li>
-<li>7.2: <a href=#pg-227a136138f74a8883b130d911b9f97e>Findy Agency Presentation</a></li>
+<li>7.1: <a href=#pg-227a136138f74a8883b130d911b9f97e>Findy Agency Presentation</a></li>
+<li>7.2: <a href=#pg-ec485ff122e8ec7cc0529e686c33f9d2>Demo: Findy Bots</a></li>
+<li>7.3: <a href=#pg-ba9a4a717ac99cf2bbdba612d5a2f307>Interoperability Testing Demo</a></li>
 </ul>
 </ul>
 <div class=content>
@@ -1046,18 +1047,40 @@ class: center padded-slide</p>
 <div class=lead>Findy Agency Videos</div>
 </div>
 <div class=td-content>
-<h1 id=pg-ec485ff122e8ec7cc0529e686c33f9d2>7.1 - Demo: Findy Bots</h1>
+<h1 id=pg-227a136138f74a8883b130d911b9f97e>7.1 - Findy Agency Presentation</h1>
+<div class=lead>Findy Agency presentation in Aries Working Group Call 2021/12</div>
+<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
+<iframe src=https://www.youtube.com/embed/kzmCbX-z7NA style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
+</div>
+</div>
+<div class=td-content style=page-break-before:always>
+<h1 id=pg-ec485ff122e8ec7cc0529e686c33f9d2>7.2 - Demo: Findy Bots</h1>
 <div class=lead>Example scenario implemented using Findy Agency.</div>
 <div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
 <iframe src=https://www.youtube.com/embed/gVr8KwISMS4 style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
 </div>
 </div>
 <div class=td-content style=page-break-before:always>
-<h1 id=pg-227a136138f74a8883b130d911b9f97e>7.2 - Findy Agency Presentation</h1>
-<div class=lead>Findy Agency presentation in Aries Working Group Call 2021/12</div>
+<h1 id=pg-ba9a4a717ac99cf2bbdba612d5a2f307>7.3 - Interoperability Testing Demo</h1>
+<div class=lead>Demo of Findy Agency interoperability testing</div>
 <div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
-<iframe src=https://www.youtube.com/embed/kzmCbX-z7NA style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
+<iframe src=https://www.youtube.com/embed/W1H7ppS2Y6M style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
 </div>
+<br>
+<ul>
+<li>
+<p><strong>Test 1: Findy Agency based issuer/verifier with Lissi Wallet</strong></p>
+<p>A Findy Agency utilizing <a href=https://github.com/findy-network/findy-issuer-tool>issuer tool</a> invites <a href=https://lissi.id>Lissi Wallet</a> to form a pairwise connection. Issuer tool sends and verifies a credential with Lissi Wallet.</p>
+</li>
+<li>
+<p><strong>Test 2: Findy Agency Web Wallet with Trinsic Wallet</strong></p>
+<p>Findy Agency Web Wallet user forms a pairwise connection with <a href=https://trinsic.id/trinsic-wallet/>Trinsic Wallet</a> user. Wallet applications send Aries basic messages to each other.</p>
+</li>
+<li>
+<p><strong>Test 3: ACA-Py based issuer/verifier with Findy Agency Web Wallet</strong></p>
+<p><a href=https://github.com/hyperledger/aries-agent-test-harness>Aries Test Harness</a> runs <a href=https://github.com/hyperledger/aries-cloudagent-python>ACA-Py</a>-based agents that issue and verify credentials with Findy Agency Web Wallet.</p>
+</li>
+</ul>
 </div>
 </main>
 </div>
