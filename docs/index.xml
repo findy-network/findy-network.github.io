@@ -1,0 +1,600 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Documentation</title><link>/docs/</link><description>Recent content in Documentation on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 19 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Findy Agency Presentation</title><link>/docs/videos/presentation/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>/docs/videos/presentation/</guid><description>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/kzmCbX-z7NA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div></description></item><item><title>Docs: Findy Agency Architecture</title><link>/docs/overview/architecture/</link><pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/overview/architecture/</guid><description>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;img class="card-img-top" src="/docs/overview/architecture/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_675x675_fit_catmullrom_3.png" width="675" height="589">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Overview of Findy Agency. See more detailed description in &lt;a href="https://github.com/findy-network/findy-agent#agency-architecture">findy-agent documentation&lt;/a>.&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>The backend server of Findy Agency consists of three services:&lt;/p>
+&lt;ul>
+&lt;li>core/&lt;a href="https://github.com/findy-network/findy-agent">findy-agent&lt;/a> that handles all agent functionality including credential handling and Aries protocols&lt;/li>
+&lt;li>vault/&lt;a href="https://github.com/findy-network/findy-agent-vault">findy-agent-vault&lt;/a> that maintains a database of agents' data. Currently vault has only GraphQL-interface for data queries, that is intended mainly for browser web wallet use.&lt;/li>
+&lt;li>auth/&lt;a href="https://github.com/findy-network/findy-agent-auth">findy-agent-auth&lt;/a> that registers and authenticates all agency users.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-wallet-pwa">Reference web wallet&lt;/a> implementation is a React app that utilizes standard WebAuthn protocol and browser capabilities to authenticate to backend. Web wallet uses GraphQL to fetch and update agency data.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 391px">
+&lt;img class="card-img-top" src="/docs/overview/architecture/wallet-screenshot_hu6176385a109af25480dcf9343df0e1eb_63896_675x675_fit_catmullrom_3.png" width="381" height="675">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Wallet login screen.&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>Service agents are applications that handle verified data on behalf of organizations. Service agents utilize Findy Agency through headless authentication and &lt;a href="https://github.com/findy-network/findy-agent-api">gRPC API&lt;/a>. Samples and reference implementations can be found in agency gRPC helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">golang&lt;/a> or &lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a>.&lt;/p>
+&lt;p>Agents can be also operated through a CLI, &lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a>, that provides most of the functionality needed for agent and agency manipulation.&lt;/p></description></item><item><title>Docs: First Steps with Findy Agency</title><link>/docs/getting-started/setup-agency/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/getting-started/setup-agency/</guid><description>
+&lt;h2 id="full-agency-setup">Full Agency Setup&lt;/h2>
+&lt;p>Agency services can be setup easily locally using Docker. Check further instructions &lt;a href="https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development">here&lt;/a>. The instructions describe how to launch all the needed backend services in Docker containers together with a test ledger. There is also a native development setup instructions for web wallet application which will be needed in order to run web wallet application together with other agents.&lt;/p>
+&lt;p>Once you have the services running on your computer, you can start experimentation using CLI tool &lt;a href="#cli">findy-agent-cli&lt;/a>, UI tool &lt;a href="#ui-tool">findy-issuer-tool&lt;/a> or &lt;a href="/docs/getting-started/service-agent/">build a service agent of your own&lt;/a>.&lt;/p>
+&lt;h2 id="cli">CLI&lt;/h2>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a> is a command-line tool that can be used to&lt;/p>
+&lt;ul>
+&lt;li>register new agents&lt;/li>
+&lt;li>authenticate agents&lt;/li>
+&lt;li>operate agents
+&lt;ul>
+&lt;li>make connections&lt;/li>
+&lt;li>issue and accept credentials&lt;/li>
+&lt;li>verify and prove credentials&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>operate bots (simple service agents)&lt;/li>
+&lt;li>operate ledger
+&lt;ul>
+&lt;li>create schemas&lt;/li>
+&lt;li>create credential definitions&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>operate agency&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">Findy agent cli tool
+Usage:
+findy-agent-cli &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>command&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span>
+Available Commands:
+agency Manage Agency
+agent Work with the Cloud Agent
+authn WebAuthn commands
+bot Manage Bot
+completion Generate shell completion scripts
+connection Manage connections
+&lt;span style="color:#204a87">help&lt;/span> Help about any &lt;span style="color:#204a87">command&lt;/span>
+new-key Create a new key &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> the authenticator
+tree Prints the findy-agent-cli &lt;span style="color:#204a87">command&lt;/span> structure
+Flags:
+--config string configuration file, FCLI_CONFIG
+-n, --dry-run perform a trial run with no changes made, FCLI_DRY_RUN
+-h, --help &lt;span style="color:#204a87">help&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
+--logging string logging startup arguments, FCLI_LOGGING &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;-logtostderr=true -v=0&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
+--server string gRPC server addr:port, FCLI_SERVER &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;localhost:50051&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
+--tls-path string TLS cert path, FCLI_TLS_PATH
+-v, --version version &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
+Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp;#34;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> more information about a command.
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Check out &lt;a href="https://github.com/findy-network/findy-agent-cli/tree/master/scripts/fullstack#steps">the dedicated guide&lt;/a> for CLI commands to get familiar with the usage.&lt;/p>
+&lt;p>&lt;em>Note:&lt;/em>&lt;/p>
+&lt;ul>
+&lt;li>before CLI usage, you need to have a working Findy Agency installation&lt;/li>
+&lt;li>findy-agent-cli is also a reference on how to use the Agency gRPC API with golang. Check the sources for more details.&lt;/li>
+&lt;/ul>
+&lt;h2 id="ui-tool">UI Tool&lt;/h2>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-issuer-tool">findy-issuer-tool&lt;/a> is a UI tool for&lt;/p>
+&lt;ul>
+&lt;li>making pairwise connections&lt;/li>
+&lt;li>issuing credentials&lt;/li>
+&lt;li>verifying credentials&lt;/li>
+&lt;li>creating schemas and credential definitions.&lt;/li>
+&lt;/ul>
+&lt;figure>
+&lt;img src="https://github.com/findy-network/findy-issuer-tool/raw/master/docs/usage-03.gif" width="925"/>
+&lt;/figure>
+&lt;p>See &lt;a href="https://github.com/findy-network/findy-issuer-tool#setup-environment">setup instructions&lt;/a> and &lt;a href="https://github.com/findy-network/findy-issuer-tool#usage">usage instructions&lt;/a> in project repository.&lt;/p>
+&lt;p>&lt;em>Note:&lt;/em>&lt;/p>
+&lt;ul>
+&lt;li>before UI-tool usage, you need to have a working Findy Agency installation&lt;/li>
+&lt;li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Demo: Findy Bots</title><link>/docs/videos/findy-bots/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>/docs/videos/findy-bots/</guid><description>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/gVr8KwISMS4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div></description></item><item><title>Docs: Configuration</title><link>/docs/deployment/configuration/</link><pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate><guid>/docs/deployment/configuration/</guid><description>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 629px">
+&lt;img class="card-img-top" src="/docs/deployment/configuration/deployment_hu67f415b8019b0c239da86fb80f917bcf_403739_675x675_fit_catmullrom_3.png" width="619" height="675">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Overall Findy Agency Deployment Architecture&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h2 id="internet-facing-reverse-proxy">Internet-facing reverse proxy&lt;/h2>
+&lt;p>Nginx, AWS load balancer etc. can work as a reverse proxy. It is recommended to use single domain for request routing to avoid hassle with FIDO2 origin requirements and CORS.&lt;/p>
+&lt;h3 id="port-443">Port 443&lt;/h3>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Path&lt;/th>
+&lt;th>Target&lt;/th>
+&lt;th>Note&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>/&lt;/td>
+&lt;td>pwa&lt;/td>
+&lt;td>Static html&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>/query&lt;/td>
+&lt;td>vault&lt;/td>
+&lt;td>GQL queries from PWA. Websocket support needed.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>/register, /login&lt;/td>
+&lt;td>auth&lt;/td>
+&lt;td>Webauthn requires HTTPS. Domain needs to match with PWA.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>/a2a&lt;/td>
+&lt;td>agency&lt;/td>
+&lt;td>Endpoint can be set with the agency&amp;rsquo;s start up flag.&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="port-50051">Port 50051&lt;/h3>
+&lt;p>Agency gRPC interface communication.&lt;/p>
+&lt;p>&lt;strong>Note:&lt;/strong> Currently also all internal microservices assume gRPC SSL/TLS communication. Unencrypted communication should be enabled within private network in the future.&lt;/p>
+&lt;h2 id="findy-agent">findy-agent&lt;/h2>
+&lt;p>Sources and more documentation in repository &lt;a href="https://github.com/findy-network/findy-agent">findy-agent&lt;/a>&lt;/p>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-agent/pkgs/container/findy-agent">Docker image registry in GitHub Packages&lt;/a>.&lt;/p>
+&lt;h3 id="settings">Settings&lt;/h3>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Variable&lt;/th>
+&lt;th>Example&lt;/th>
+&lt;th>Default&lt;/th>
+&lt;th>Description&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>FCLI_IMPORT_WALLET_FILE&lt;/code>&lt;/td>
+&lt;td>&lt;code>/steward.exported&lt;/code>&lt;/td>
+&lt;td>&lt;code>/steward.exported&lt;/code>&lt;/td>
+&lt;td>File path to steward wallet to import&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_IMPORT_WALLET_NAME&lt;/code>&lt;/td>
+&lt;td>&lt;code>steward&lt;/code>&lt;/td>
+&lt;td>&lt;code>steward&lt;/code>&lt;/td>
+&lt;td>Steward wallet name&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_IMPORT_WALLET_FILE_KEY&lt;/code>&lt;/td>
+&lt;td>&lt;code>import-indy-key&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Key to wallet file to import&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_IMPORT_WALLET_KEY&lt;/code>, &lt;code>FCLI_AGENCY_STEWARD_WALLET_KEY&lt;/code>&lt;/td>
+&lt;td>&lt;code>valid-indy-key&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Steward wallet key&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_STEWARD_DID&lt;/code>&lt;/td>
+&lt;td>&lt;code>Th7MpTaRZVRYnPiabds81Y&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Steward DID&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_POOL_GENESIS_TXN_FILE&lt;/code>&lt;/td>
+&lt;td>&lt;code>/genesis_transactions&lt;/code>&lt;/td>
+&lt;td>&lt;code>/genesis_transactions&lt;/code>&lt;/td>
+&lt;td>Ledger genesis file path&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_POOL_NAME&lt;/code>, &lt;code>FCLI_AGENCY_POOL_NAME&lt;/code>&lt;/td>
+&lt;td>&lt;code>findy&lt;/code>&lt;/td>
+&lt;td>&lt;code>findy&lt;/code>&lt;/td>
+&lt;td>Ledger pool name&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_HOST_ADDRESS&lt;/code>&lt;/td>
+&lt;td>&lt;code>agency.example.com&lt;/code>&lt;/td>
+&lt;td>&lt;code>localhost&lt;/code>&lt;/td>
+&lt;td>Host address as seen from internet&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_HOST_PORT&lt;/code>&lt;/td>
+&lt;td>&lt;code>80&lt;/code>&lt;/td>
+&lt;td>&lt;code>8080&lt;/code>&lt;/td>
+&lt;td>Host port as seen from internet&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_SERVER_PORT&lt;/code>&lt;/td>
+&lt;td>&lt;code>8080&lt;/code>&lt;/td>
+&lt;td>&lt;code>8080&lt;/code>&lt;/td>
+&lt;td>Server port in local network&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_PSM_DATABASE_FILE&lt;/code>&lt;/td>
+&lt;td>&lt;code>/root/findy.bolt&lt;/code>&lt;/td>
+&lt;td>&lt;code>/root/findy.bolt&lt;/code>&lt;/td>
+&lt;td>PSM database file path&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_REGISTER_FILE&lt;/code>&lt;/td>
+&lt;td>&lt;code>/root/findy.json&lt;/code>&lt;/td>
+&lt;td>&lt;code>/root/findy.json&lt;/code>&lt;/td>
+&lt;td>Handshake register file path&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_HOST_SCHEME&lt;/code>&lt;/td>
+&lt;td>&lt;code>https&lt;/code>&lt;/td>
+&lt;td>&lt;code>http&lt;/code>&lt;/td>
+&lt;td>Scheme of the host&amp;rsquo;s url address&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_ENCLAVE_KEY&lt;/code>&lt;/td>
+&lt;td>&lt;code>0ADF..00DCAE&lt;/code>&lt;/td>
+&lt;td>&amp;quot;&amp;quot;&lt;/td>
+&lt;td>Secure enclave for wallet keys&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_ENCLAVE_PATH&lt;/code>&lt;/td>
+&lt;td>&lt;code>findy-enclave.bolt&lt;/code>&lt;/td>
+&lt;td>&lt;code>~/.indy_client/enclave.bolt&lt;/code>&lt;/td>
+&lt;td>Secure enclave&amp;rsquo;s filename&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_GRPC&lt;/code>&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;td>&lt;code>true&lt;/code>&lt;/td>
+&lt;td>Whether to enable gRPC service or not&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_GRPC_CERT_PATH&lt;/code>&lt;/td>
+&lt;td>&lt;code>/cert&lt;/code>&lt;/td>
+&lt;td>&lt;code>src/github.com/findy-network/findy-common-go/cert&lt;/code>&lt;/td>
+&lt;td>File path to gRPC client and server certificates*&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_GRPC_JWT_SECRET&lt;/code>&lt;/td>
+&lt;td>&lt;code>randomstring&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>JWT key for token validation&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_GRPC_PORT&lt;/code>&lt;/td>
+&lt;td>&lt;code>50051&lt;/code>&lt;/td>
+&lt;td>&lt;code>50051&lt;/code>&lt;/td>
+&lt;td>gRPC interface port&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_ADMIN_ID&lt;/code>&lt;/td>
+&lt;td>&lt;code>root039499&lt;/code>&lt;/td>
+&lt;td>&lt;code>findy-root&lt;/code>&lt;/td>
+&lt;td>Agency API user ID which is to authorization&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_ENCLAVE_BACKUP&lt;/code>&lt;/td>
+&lt;td>&lt;code>~/backups/enclave.bolt.bak&lt;/code>&lt;/td>
+&lt;td>&amp;quot;&amp;quot;&lt;/td>
+&lt;td>Full file name template for enclave backup file&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_ENCLAVE_BACKUP_TIME&lt;/code>&lt;/td>
+&lt;td>&lt;code>04:00&lt;/code>&lt;/td>
+&lt;td>&amp;quot;&amp;quot;&lt;/td>
+&lt;td>Time of day when enclave backup is started&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_WALLET_BACKUP&lt;/code>&lt;/td>
+&lt;td>&lt;code>~/wallet/backups&lt;/code>&lt;/td>
+&lt;td>&amp;quot;&amp;quot;&lt;/td>
+&lt;td>Path for wallet backups&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_WALLET_BACKUP_TIME&lt;/code>&lt;/td>
+&lt;td>&lt;code>05:00&lt;/code>&lt;/td>
+&lt;td>&amp;quot;&amp;quot;&lt;/td>
+&lt;td>Time of day when when wallet backup is started&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_REGISTER_BACKUP&lt;/code>&lt;/td>
+&lt;td>&lt;code>~/backups/findy.json.bak&lt;/code>&lt;/td>
+&lt;td>&amp;quot;&amp;quot;&lt;/td>
+&lt;td>Full file name template for register backup file&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FCLI_AGENCY_REGISTER_BACKUP_INTERVAL&lt;/code>&lt;/td>
+&lt;td>&lt;code>20m:30s&lt;/code>&lt;/td>
+&lt;td>&lt;code>12h&lt;/code>&lt;/td>
+&lt;td>Time interval between backup starts&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>*Cert path is the root. Both &lt;code>server&lt;/code> and &lt;code>client&lt;/code> certificates needs be in this folder in their own separated folders named accordingly: &lt;code>server&lt;/code> and &lt;code>client&lt;/code>.&lt;/p>
+&lt;h3 id="configuration-files">Configuration files&lt;/h3>
+&lt;ul>
+&lt;li>Steward wallet&lt;/li>
+&lt;li>Genesis transactions&lt;/li>
+&lt;li>gRPC client certificate + key (if TLS termination not handled by reverse proxy)&lt;/li>
+&lt;li>gRPC server certificate + key (if TLS termination not handled by reverse proxy)&lt;/li>
+&lt;/ul>
+&lt;h3 id="data-storage-file-system">Data storage (file system)&lt;/h3>
+&lt;ul>
+&lt;li>&lt;strong>Handshake register&lt;/strong> (has backup capability): Text file (JSON) for onboarded agent ids&lt;/li>
+&lt;li>&lt;strong>PSM database&lt;/strong>: &lt;em>Bolt&lt;/em> db for protocol state machine data&lt;/li>
+&lt;li>&lt;strong>Enclave&lt;/strong> (has backup capability): &lt;em>Bolt&lt;/em> db for wallet key data&lt;/li>
+&lt;li>&lt;strong>Indy wallets&lt;/strong> (has backup capability): &lt;em>SQLite&lt;/em> db for wallet data
+&lt;ul>
+&lt;li>in backup recovery wallet must be imported to system with indy SDK API call&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="findy-agent-auth-fido2">findy-agent-auth (FIDO2)&lt;/h2>
+&lt;p>Sources and more documentation in repository &lt;a href="https://github.com/findy-network/findy-agent-auth">findy-agent-auth&lt;/a>&lt;/p>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-agent-auth/pkgs/container/findy-agent-auth">Docker image registry in GitHub Packages&lt;/a>.&lt;/p>
+&lt;h3 id="settings-1">Settings&lt;/h3>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Variable&lt;/th>
+&lt;th>Example&lt;/th>
+&lt;th>Default&lt;/th>
+&lt;th>Description&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>--port&lt;/code>&lt;/td>
+&lt;td>&lt;code>8888&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Port for auth service&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>--agency&lt;/code>&lt;/td>
+&lt;td>&lt;code>localhost&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Agency gRPC service host&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>--gport&lt;/code>&lt;/td>
+&lt;td>&lt;code>50051&lt;/code>&lt;/td>
+&lt;td>&lt;code>50051&lt;/code>&lt;/td>
+&lt;td>Agency gRPC service port&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>--domain&lt;/code>&lt;/td>
+&lt;td>&lt;code>agency.example.com&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Site domain name&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>--origin&lt;/code>&lt;/td>
+&lt;td>&lt;code>https://agency.example.com&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Request origin URL&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>--jwt-secret&lt;/code>&lt;/td>
+&lt;td>&lt;code>randomstring&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>JWT key for access token generation&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>-sec-file&lt;/code>&lt;/td>
+&lt;td>&lt;code>fido-enclave.bolt&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>sec enclave file name&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>-sec-key&lt;/code>&lt;/td>
+&lt;td>&lt;code>0A0834BF...DFEA&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>sec enclave master encrypt key&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>-admin&lt;/code>&lt;/td>
+&lt;td>&lt;code>findy-03029394&lt;/code>&lt;/td>
+&lt;td>&lt;code>findy-root&lt;/code>&lt;/td>
+&lt;td>agency admin id&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>-cert-path&lt;/code>&lt;/td>
+&lt;td>&lt;code>/cert&lt;/code>&lt;/td>
+&lt;td>&amp;quot;&amp;quot;&lt;/td>
+&lt;td>gRPC cert root folder&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>-sec-backup-file&lt;/code>&lt;/td>
+&lt;td>&lt;code>~/backups/fido-enclave.bolt.bak&lt;/code>&lt;/td>
+&lt;td>&amp;quot;&amp;quot;&lt;/td>
+&lt;td>Full file name template for enclave backup file&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code> -sec-backup-interval&lt;/code>&lt;/td>
+&lt;td>&lt;code>12&lt;/code>&lt;/td>
+&lt;td>&lt;code>24&lt;/code>&lt;/td>
+&lt;td>Time interval between backup checks&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="configuration-files-1">Configuration files&lt;/h3>
+&lt;ul>
+&lt;li>gRPC client certificate + key&lt;/li>
+&lt;li>gRPC server certificate&lt;/li>
+&lt;/ul>
+&lt;h3 id="data-storage-file-system-1">Data storage (file system)&lt;/h3>
+&lt;ul>
+&lt;li>&lt;strong>FIDO enclave&lt;/strong> it&amp;rsquo;s key/value database and encrypted by &lt;code>enclave-key&lt;/code> which should be transferred as &lt;em>an important secret&lt;/em> to the app.
+&lt;ul>
+&lt;li>&lt;em>Bolt&lt;/em> db for user data&lt;/li>
+&lt;li>Uses &lt;em>file system&lt;/em> for data storage and backups as well&lt;/li>
+&lt;li>a DB is a single file&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="findy-agent-vault">findy-agent-vault&lt;/h2>
+&lt;p>Sources and more documentation in repository &lt;a href="https://github.com/findy-network/findy-agent-vault">findy-agent-vault&lt;/a>.&lt;/p>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-agent-vault/pkgs/container/findy-agent-vault">Docker image registry in GitHub Packages&lt;/a>.&lt;/p>
+&lt;h3 id="settings-2">Settings&lt;/h3>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Variable&lt;/th>
+&lt;th>Example&lt;/th>
+&lt;th>Default&lt;/th>
+&lt;th>Description&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>FAV_SERVER_PORT&lt;/code>&lt;/td>
+&lt;td>&lt;code>8085&lt;/code>&lt;/td>
+&lt;td>&lt;code>8085&lt;/code>&lt;/td>
+&lt;td>Port for vault service&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FAV_JWT_KEY&lt;/code>&lt;/td>
+&lt;td>&lt;code>randomstring&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>JWT key for access token validation&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FAV_DB_HOST&lt;/code>&lt;/td>
+&lt;td>&lt;code>xxx.rds.amazonaws.com&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Postgres db host address&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FAV_DB_PORT&lt;/code>&lt;/td>
+&lt;td>&lt;code>5432&lt;/code>&lt;/td>
+&lt;td>&lt;code>5432&lt;/code>&lt;/td>
+&lt;td>Postgres db port&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FAV_DB_PASSWORD&lt;/code>&lt;/td>
+&lt;td>&lt;code>db-password&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Postgres db password&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FAV_AGENCY_HOST&lt;/code>&lt;/td>
+&lt;td>&lt;code>localhost&lt;/code>&lt;/td>
+&lt;td>&lt;code>localhost&lt;/code>&lt;/td>
+&lt;td>Agency gRPC server host&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FAV_AGENCY_PORT&lt;/code>&lt;/td>
+&lt;td>&lt;code>50051&lt;/code>&lt;/td>
+&lt;td>&lt;code>50051&lt;/code>&lt;/td>
+&lt;td>Agency gRPC server port&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>FAV_AGENCY_GRPC_CERT_PATH&lt;/code>&lt;/td>
+&lt;td>&lt;code>/cert&lt;/code>&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>Agency gRPC certificate path&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="configuration-files-2">Configuration files&lt;/h3>
+&lt;ul>
+&lt;li>gRPC client certificate + key&lt;/li>
+&lt;li>gRPC server certificate&lt;/li>
+&lt;/ul>
+&lt;h3 id="data-storage-postgres">Data storage (postgres)&lt;/h3>
+&lt;ul>
+&lt;li>&lt;strong>Database&lt;/strong>
+&lt;ul>
+&lt;li>&lt;em>Postgres&lt;/em> (e.g. AWS RDS)&lt;/li>
+&lt;li>&lt;strong>Note&lt;/strong>: Already on first start, vault service expects that the database called &lt;code>vault&lt;/code>exists in the db instance&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="findy-wallet-pwa">findy-wallet-pwa&lt;/h2>
+&lt;p>Sources and more documentation in repository &lt;a href="https://github.com/findy-network/findy-wallet-pwa">findy-wallet-pwa&lt;/a>&lt;/p>
+&lt;h3 id="settings-buildtime">Settings (buildtime)&lt;/h3>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Variable&lt;/th>
+&lt;th>Example&lt;/th>
+&lt;th>Default&lt;/th>
+&lt;th>Description&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>REACT_APP_GQL_HOST&lt;/code>&lt;/td>
+&lt;td>&lt;code>agency.example.com&lt;/code>&lt;/td>
+&lt;td>&lt;code>localhost:8085&lt;/code>&lt;/td>
+&lt;td>Agency vault service host address&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>REACT_APP_AUTH_HOST&lt;/code>&lt;/td>
+&lt;td>&lt;code>agency.example.com&lt;/code>&lt;/td>
+&lt;td>&lt;code>localhost:8088&lt;/code>&lt;/td>
+&lt;td>Agency auth service host address&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>REACT_APP_HTTP_SCHEME&lt;/code>&lt;/td>
+&lt;td>&lt;code>https&lt;/code>&lt;/td>
+&lt;td>&lt;code>http&lt;/code>&lt;/td>
+&lt;td>HTTP URL scheme&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>REACT_APP_WS_SCHEME&lt;/code>&lt;/td>
+&lt;td>&lt;code>wss&lt;/code>&lt;/td>
+&lt;td>&lt;code>ws&lt;/code>&lt;/td>
+&lt;td>Websocket URL scheme&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item><item><title>Docs: Service Agents</title><link>/docs/getting-started/service-agent/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/getting-started/service-agent/</guid><description>
+&lt;p>Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, &lt;em>acator&lt;/em>, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, &lt;a href="https://github.com/findy-network/findy-agent-api">findy-agent-api&lt;/a>.&lt;/p>
+&lt;p>You can use our helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">golang&lt;/a> or &lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a> or use directly &lt;a href="https://github.com/findy-network/findy-agent-api">the GRPC interface&lt;/a> with the language of your choice.&lt;/p>
+&lt;p>You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:&lt;/p>
+&lt;ul>
+&lt;li>golang: &lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a>&lt;/li>
+&lt;li>JavaScript: &lt;a href="https://github.com/findy-network/findy-issuer-tool">findy-issuer-tool&lt;/a>, specifically &lt;a href="https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js">api/src/agent/index.js&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="sample-flow-connecting-to-another-agent">Sample flow: connecting to another agent&lt;/h2>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 591px">
+&lt;img class="card-img-top" src="/docs/getting-started/service-agent/service-agent_hua21be9aae7ff35f4d15c00a03487f315_97837_675x675_fit_catmullrom_3.png" width="581" height="675">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Service Agent onboarding and connecting to another agent by creating a connection invitation.&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;ol>
+&lt;li>Service Agent (SA) registers with acator tool/library to agency. SA should use a unique user name and the selected authenticator key should be kept secret. &lt;em>Note: the registration needs to be done only once. After the first registration, authentication is done using the same user name and authenticator key.&lt;/em>&lt;/li>
+&lt;li>SA does login with acator tool/library. After successful login, a JWT token is returned to SA.&lt;/li>
+&lt;li>SA starts listening to agent status events with gRPC API.&lt;/li>
+&lt;li>SA creates connection invitation using gRPC API.&lt;/li>
+&lt;li>SA displays/sends/etc. invitation json to another Aries compatible agent (invitee).&lt;/li>
+&lt;li>Invitee sends connection request to the core agency, that handles the connection protocol on behalf of SA.&lt;/li>
+&lt;li>Core agency notifies SA when the connection is established. SA can query core agency for the needed connection details and continue with e.g. issuing or verifying data with the new connection.&lt;/li>
+&lt;/ol></description></item><item><title>Docs: Interoperability Testing Demo</title><link>/docs/videos/interoperability/</link><pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate><guid>/docs/videos/interoperability/</guid><description>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/W1H7ppS2Y6M" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;br>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>Test 1: Findy Agency based issuer/verifier with Lissi Wallet&lt;/strong>&lt;/p>
+&lt;p>A Findy Agency utilizing &lt;a href="https://github.com/findy-network/findy-issuer-tool">issuer tool&lt;/a> invites &lt;a href="https://lissi.id">Lissi Wallet&lt;/a> to form a pairwise connection. Issuer tool sends and verifies a credential with Lissi Wallet.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Test 2: Findy Agency Web Wallet with Trinsic Wallet&lt;/strong>&lt;/p>
+&lt;p>Findy Agency Web Wallet user forms a pairwise connection with &lt;a href="https://trinsic.id/trinsic-wallet/">Trinsic Wallet&lt;/a> user. Wallet applications send Aries basic messages to each other.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Test 3: ACA-Py based issuer/verifier with Findy Agency Web Wallet&lt;/strong>&lt;/p>
+&lt;p>&lt;a href="https://github.com/hyperledger/aries-agent-test-harness">Aries Test Harness&lt;/a> runs &lt;a href="https://github.com/hyperledger/aries-cloudagent-python">ACA-Py&lt;/a>-based agents that issue and verify credentials with Findy Agency Web Wallet.&lt;/p>
+&lt;/li>
+&lt;/ul></description></item></channel></rss>

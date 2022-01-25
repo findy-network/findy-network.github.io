@@ -1,0 +1,95 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Getting Started</title><link>/docs/getting-started/</link><description>Recent content in Getting Started on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 10 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/docs/getting-started/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: First Steps with Findy Agency</title><link>/docs/getting-started/setup-agency/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/getting-started/setup-agency/</guid><description>
+&lt;h2 id="full-agency-setup">Full Agency Setup&lt;/h2>
+&lt;p>Agency services can be setup easily locally using Docker. Check further instructions &lt;a href="https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development">here&lt;/a>. The instructions describe how to launch all the needed backend services in Docker containers together with a test ledger. There is also a native development setup instructions for web wallet application which will be needed in order to run web wallet application together with other agents.&lt;/p>
+&lt;p>Once you have the services running on your computer, you can start experimentation using CLI tool &lt;a href="#cli">findy-agent-cli&lt;/a>, UI tool &lt;a href="#ui-tool">findy-issuer-tool&lt;/a> or &lt;a href="/docs/getting-started/service-agent/">build a service agent of your own&lt;/a>.&lt;/p>
+&lt;h2 id="cli">CLI&lt;/h2>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a> is a command-line tool that can be used to&lt;/p>
+&lt;ul>
+&lt;li>register new agents&lt;/li>
+&lt;li>authenticate agents&lt;/li>
+&lt;li>operate agents
+&lt;ul>
+&lt;li>make connections&lt;/li>
+&lt;li>issue and accept credentials&lt;/li>
+&lt;li>verify and prove credentials&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>operate bots (simple service agents)&lt;/li>
+&lt;li>operate ledger
+&lt;ul>
+&lt;li>create schemas&lt;/li>
+&lt;li>create credential definitions&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>operate agency&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">Findy agent cli tool
+Usage:
+findy-agent-cli &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>command&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span>
+Available Commands:
+agency Manage Agency
+agent Work with the Cloud Agent
+authn WebAuthn commands
+bot Manage Bot
+completion Generate shell completion scripts
+connection Manage connections
+&lt;span style="color:#204a87">help&lt;/span> Help about any &lt;span style="color:#204a87">command&lt;/span>
+new-key Create a new key &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> the authenticator
+tree Prints the findy-agent-cli &lt;span style="color:#204a87">command&lt;/span> structure
+Flags:
+--config string configuration file, FCLI_CONFIG
+-n, --dry-run perform a trial run with no changes made, FCLI_DRY_RUN
+-h, --help &lt;span style="color:#204a87">help&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
+--logging string logging startup arguments, FCLI_LOGGING &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;-logtostderr=true -v=0&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
+--server string gRPC server addr:port, FCLI_SERVER &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;localhost:50051&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
+--tls-path string TLS cert path, FCLI_TLS_PATH
+-v, --version version &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
+Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp;#34;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> more information about a command.
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Check out &lt;a href="https://github.com/findy-network/findy-agent-cli/tree/master/scripts/fullstack#steps">the dedicated guide&lt;/a> for CLI commands to get familiar with the usage.&lt;/p>
+&lt;p>&lt;em>Note:&lt;/em>&lt;/p>
+&lt;ul>
+&lt;li>before CLI usage, you need to have a working Findy Agency installation&lt;/li>
+&lt;li>findy-agent-cli is also a reference on how to use the Agency gRPC API with golang. Check the sources for more details.&lt;/li>
+&lt;/ul>
+&lt;h2 id="ui-tool">UI Tool&lt;/h2>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-issuer-tool">findy-issuer-tool&lt;/a> is a UI tool for&lt;/p>
+&lt;ul>
+&lt;li>making pairwise connections&lt;/li>
+&lt;li>issuing credentials&lt;/li>
+&lt;li>verifying credentials&lt;/li>
+&lt;li>creating schemas and credential definitions.&lt;/li>
+&lt;/ul>
+&lt;figure>
+&lt;img src="https://github.com/findy-network/findy-issuer-tool/raw/master/docs/usage-03.gif" width="925"/>
+&lt;/figure>
+&lt;p>See &lt;a href="https://github.com/findy-network/findy-issuer-tool#setup-environment">setup instructions&lt;/a> and &lt;a href="https://github.com/findy-network/findy-issuer-tool#usage">usage instructions&lt;/a> in project repository.&lt;/p>
+&lt;p>&lt;em>Note:&lt;/em>&lt;/p>
+&lt;ul>
+&lt;li>before UI-tool usage, you need to have a working Findy Agency installation&lt;/li>
+&lt;li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.&lt;/li>
+&lt;/ul></description></item><item><title>Docs: Service Agents</title><link>/docs/getting-started/service-agent/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/getting-started/service-agent/</guid><description>
+&lt;p>Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, &lt;em>acator&lt;/em>, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, &lt;a href="https://github.com/findy-network/findy-agent-api">findy-agent-api&lt;/a>.&lt;/p>
+&lt;p>You can use our helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">golang&lt;/a> or &lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a> or use directly &lt;a href="https://github.com/findy-network/findy-agent-api">the GRPC interface&lt;/a> with the language of your choice.&lt;/p>
+&lt;p>You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:&lt;/p>
+&lt;ul>
+&lt;li>golang: &lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a>&lt;/li>
+&lt;li>JavaScript: &lt;a href="https://github.com/findy-network/findy-issuer-tool">findy-issuer-tool&lt;/a>, specifically &lt;a href="https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js">api/src/agent/index.js&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="sample-flow-connecting-to-another-agent">Sample flow: connecting to another agent&lt;/h2>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 591px">
+&lt;img class="card-img-top" src="/docs/getting-started/service-agent/service-agent_hua21be9aae7ff35f4d15c00a03487f315_97837_675x675_fit_catmullrom_3.png" width="581" height="675">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Service Agent onboarding and connecting to another agent by creating a connection invitation.&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;ol>
+&lt;li>Service Agent (SA) registers with acator tool/library to agency. SA should use a unique user name and the selected authenticator key should be kept secret. &lt;em>Note: the registration needs to be done only once. After the first registration, authentication is done using the same user name and authenticator key.&lt;/em>&lt;/li>
+&lt;li>SA does login with acator tool/library. After successful login, a JWT token is returned to SA.&lt;/li>
+&lt;li>SA starts listening to agent status events with gRPC API.&lt;/li>
+&lt;li>SA creates connection invitation using gRPC API.&lt;/li>
+&lt;li>SA displays/sends/etc. invitation json to another Aries compatible agent (invitee).&lt;/li>
+&lt;li>Invitee sends connection request to the core agency, that handles the connection protocol on behalf of SA.&lt;/li>
+&lt;li>Core agency notifies SA when the connection is established. SA can query core agency for the needed connection details and continue with e.g. issuing or verifying data with the new connection.&lt;/li>
+&lt;/ol></description></item></channel></rss>
