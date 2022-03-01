@@ -15,6 +15,14 @@ Findy Agency technical documentation and blog.
    ```sh
    snap install hugo --channel=extended
    ```
+   - On ARM (Sample, Linux Ubuntu), you can easily build it by your own:
+   ```console
+   wget https://github.com/gohugoio/hugo/archive/refs/tags/v0.93.0.tar.gz
+   tar -zxvf v0.93.0.tar.gz 
+   cd hugo-0.93.0
+   go build --tags extended
+   sudo mv hugo /usr/local/bin/hugo
+   ```
 
 1. Clone repository:
 
