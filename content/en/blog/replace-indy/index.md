@@ -9,16 +9,14 @@ resources:
   title: "Image #:counter"
 ---
 
-## Replacing Indy SDK
-
 Once again, we are at the technology crossroad: we have to decide how to
 proceed with our SSI/DID research and development. Naturally, the business
 potential is the most critical aspect, but the
 research subject has faced the phase where we have to change the foundation.
 
-Changing any foundation could be an enormous task. Fortunately, we have taken care
-this type of a need early in the design where the underlying foundation, Indy SDK
-is double wrapped:
+Changing any foundation could be an enormous task. Fortunately, we have taken
+care this type of a need early in the design where the underlying foundation,
+[Indy SDK](https://github.com/hyperledger/indy-sdk) is double wrapped:
 
 1. We needed a Go wrapper for `libindy` itself.
 2. At the beginning of the `findy-agent` project, we tried to find agent-level
@@ -41,10 +39,11 @@ You should read this if:
   and fundamentals from here.
 
 - You are in the middle of the development of your own platform, and you need a
-  a concrete list of aspects you should take care of.
+  concrete list of aspects you should take care of.
 
 - You are currently using Indy SDK, and you are designing your architecture based
-  on Aries reference architecture and its shared libraries.
+  on [Aries reference architecture](https://github.com/hyperledger/aries)
+  and its shared libraries.
 
 Indy SDK and related technologies are obsolete, and they are proprietary already.
 
@@ -69,10 +68,10 @@ Well, let's start from the beginning. I did write the following list on January
    doesn't isolate parts like ledger from other parts like a wallet in a right
    way, etc.
 
-   - Indy SDK has too many dynamic library dependencies when compared to the
-     what those libraries achieve. 
+   - Indy SDK has too many dynamic library dependencies when compared to
+     what those libraries achieve.
 
-2. No one in the SSI industry seems to be able to find perfect focus
+2. No one in the SSI industry seems to be able to find perfect focus.
 
    - There are too few solutions running in production (yes, globally as well)
      which would give us needed references to drive a good design from.
@@ -89,7 +88,7 @@ Well, let's start from the beginning. I did write the following list on January
 
    - We *rarely* need an identifier just for *referring* but we continuously need
      *self-certified identifiers for secure communication*: should we first fully
-     solve the communication problem and not the other way around.
+     solve the communication problem and not the other way around?
 
    - Trust always seems to lead back to a specific type of centralization. There are
    many existing studies like web-of-trust that should at least take in a
@@ -97,7 +96,7 @@ Well, let's start from the beginning. I did write the following list on January
    example of that kind of work.
 
    - We must align the SSI/DID technology to the current state of the art like
-     open ID and federated identity providers. [Self-Issued OpenID Provider
+     Open ID and federated identity providers. [Self-Issued OpenID Provider
      v2](https://openid.net/specs/openid-connect-self-issued-v2-1_0.html)
      the protocol takes steps in the right direction and will work as a bridge.
 
@@ -110,21 +109,23 @@ deeper, we have learned that the DID W3C "standard" has its flaws itself:
    "Encourages divergence rather than
    convergence."](https://lists.w3.org/Archives/Public/public-new-work/2021Sep/0000.html) 
 
-3. For some reason, unknown [DID-core](https://www.w3.org/TR/did-core/) doesn't
-   cover protocol specifications, but protocols are in Aries RFCs. You'll face
-   the problem in [the DID peer method
+3. For some reason, [DID-core](https://www.w3.org/TR/did-core/) doesn't
+   cover protocol specifications, but protocols are in [Aries
+   RFCs](https://github.com/hyperledger/aries-rfcs/blob/main/index.md). You'll
+   face the problem in [the DID peer method
    specification](https://identity.foundation/peer-did-method-spec/).
 
 4. It misses layer structures typical for network protocols. When you start to
    implement it, you notice that there are no network layers to help you to hide
    abstractions. Could we have [OSI
    layer](https://www.networkworld.com/article/3239677/the-osi-model-explained-and-how-to-easily-remember-its-7-layers.html)
-   mappings or similar at least? [See more information about the layers in](#How Design and Implement Best Possible DID Agency?)
+   mappings or similar at least? (See more information about the network layers
+   at the end.)
 
 5. Many performance red flags pop up when you start to engineer the
    implementation. Just think about [tail
    latency](https://brooker.co.za/blog/2021/04/19/latency.html) in DID resolving
-   And you see it. Especially if you think [the performance demand of the
+   and you see it. Especially if you think [the performance demand of the
    DNS](https://lig-membres.imag.fr/loiseapa/pdfs/2015/Hours-etal_ImpactDNSCausal_ITC2015.pdf).
    The comparison is pretty fair.
 
@@ -165,7 +166,7 @@ for the actual *super* [DID Method
 ## No Need For The Ledger
 
 The `did:onion` is currently the only straightforward way to build self-certified
-public DIDs that cannot be correlated. The `did:web` is analogue, but it doesn't offer
+*public* DIDs that cannot be correlated. The `did:web` is analogue, but it doesn't offer
 privacy as itself. However, it provides privacy for the individual agents through
 [*herd privacy* if DID specification doesn't fail in
 it](https://github.com/w3c/did-core/issues/539).
@@ -187,9 +188,10 @@ It's a DID who's DIDDoc you can solve without an
 
 The `did:key` is superior because it is complete. You can compute (solve) a DID
 document by receiving a valid DID key identifier. No third party or additional
-source of truth. However, we cannot communicate with the `did:key`'s holder because
-the DIDDoc doesn't include service endpoints. So, there is no one listening and
-nothing to connect to.
+source of truth is needed. However, we cannot communicate with the `did:key`'s
+holder because the DIDDoc doesn't include [service
+endpoints](https://www.w3.org/TR/did-core/#services). So, there is no one
+listening and nothing to connect to.
 
 Both `did:onion`'s and `did:web`'s DIDDocs can include service endpoints because
 they can offer the DID document by their selves from their own servers. We must
@@ -214,13 +216,13 @@ Even though it has a layer model, it doesn't help us build technical solutions.
 
 Luckily, I found [a blog
 post](https://medium.com/decentralized-identity/the-self-sovereign-identity-stack-8a2cc95f2d45)
-which seems to be needed, but I didn't find any follow-up work.
+which seems to be the right one, but I didn't find any follow-up work.
 However, we can use it as a reference and proof that there exists this kind of
 need.
 
-The following picture is from the blog post. As we can see, it includes
-problems, and the weirdest one is the missing OSI mapping. Even the post
-explains how vital the layer model is for interoperability and portability.
+The following picture is from the blog post. As we can see, *it includes
+problems*, and the weirdest one is the *missing OSI mapping*. Even the post
+explains how vital the layer model is for *interoperability* and *portability*.
 Another maybe even more weird mistake is mentioning that layers could *be
 coupled* when the whole point of layered models is to have **decoupled layers**.
 Especially when building **privacy holding technology**, it should be evident
@@ -239,16 +241,17 @@ model.
 We all know that the internet was created without security and privacy, and still,
 it's incredibly successful and scalable. From the layer model, it's easy to see
 that security and privacy solutions should be put under the transport layer to
-allow all of the current applications to work. But it's not enough if we want to
-have end-to-end encrypted and secure communication pipes. We need to take the
-best of both worlds: fix as much as possible, as a low layer as you can one
-layer at a time.
+allow all of the current applications to work without changes. But it's not
+enough if we want to have end-to-end encrypted and secure communication pipes.
+
+**We need to take the best of both worlds: fix as much as possible, as a low layer
+as you can one layer at a time.**
 
 ### Secure & Private Transport Layer
 
 There is one existing solution, and others are coming:
-- [Tor](https://www.torproject.org/) and its onion routing.
-- [NYM](https://nymtech.net/), etc.
+1. [Tor](https://www.torproject.org/) and its onion routing.
+1. [NYM](https://nymtech.net/), etc.
 
 I know that Tor has its performance problems, etc., but the point is not about
 that. The point is to which network layer should handle secure and private
@@ -261,7 +264,7 @@ The following picture shows how OSI and TCP/IP layers map. It also shows one
 possibility to use onion routing instead on insecure and public TCP/IP routing
 for DID communication.
 
-{{< imgproc OSIMap.png Resize "591x" >}}
+{{< imgproc OSIMap.png Resize "1200x" >}}
 <em>DID Communication OSI Mapping</em>
 {{< /imgproc >}}
 
@@ -272,11 +275,11 @@ could lead to correlation.
 
 The elephant is eaten one bite at a time is a strategy we have used
 successfully and continue to use here. We start with missing core
-concepts: `DID`, `DID document`, `DID method`, `DID resolving`.  
-The following UML diagram present our high-level conceptual model of these
-concepts and their relations.
+concepts: `DID`, `DID document`, `DID method`, `DID resolving`. The following
+UML diagram present our high-level conceptual model of these concepts and their
+relations.
 
-{{< imgproc classes.png Resize "590x" >}}
+{{< imgproc classes.png Resize "1200x" >}}
 <em>Agency DID Core Concepts</em>
 {{< /imgproc >}}
 
@@ -291,7 +294,7 @@ more.
 The following diagram is our first draft of how we will integrate DID document
 resolving to our agency.
 
-{{< imgproc resolve.png Resize "590x" >}}
+{{< imgproc resolve.png Resize "800x" >}}
 <em>Agency DID Core Concepts</em>
 {{< /imgproc >}}
 
@@ -304,7 +307,7 @@ documents and *invitations* as well. It's essential because our existing
 applications have proven that pairwise connections are often made. The more we
 can streamline it, the better.
 
-{{< imgproc pairwise.png Resize "590x" >}}
+{{< imgproc pairwise.png Resize "800x" >}}
 <em>Agency DID Core Concepts</em>
 {{< /imgproc >}}
 
@@ -316,7 +319,7 @@ should we leave that for public DIDs and try not to solve only by invitation.
 
 Naturally, Indy SDK is not the only solution for SSI/DID. Actually, many of us
 who are working DID field are moving from Indy SDK to something other. When
-Aries project and its goals were published. Most of us thought that replacing
+Aries project and its goals were published, most of us thought that replacing
 solutions would come faster. Unfortunately, that didn't happen, and there are
 many reasons for that. Building software has many internal
 'ecosystems' mainly directed by programming language. For instance, it's
