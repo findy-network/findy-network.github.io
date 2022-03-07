@@ -210,7 +210,7 @@ have a layer model similar to the OSI network model to handle complexity.
 Unfortunately, the famous trust-over-IP picture below isn't the one that is
 missing:
 
-![SSI Layers](https://blockchain.tno.nl/media/18029/figure_1_the_toip_technology_stack_and_its_four_layers_20042021_1200_675.png?anchor=center&mode=crop&quality=90&width=760&slimmage=true&rnd=132633967270000000)
+![SSI Layers](https://blockchain.tno.nl/media/18029/figure_1_the_toip_technology_stack_and_its_four_layers_20042021_1200_675.png?anchor=center&mode=crop&quality=90&width=1200&slimmage=true&rnd=132633967270000000)
 
 Even though it has a layer model, it doesn't help us build technical solutions.
 
@@ -258,7 +258,7 @@ that. The point is to which network layer should handle secure and private
 transport. It's not DIDComm, and it definitely isn't implemented as *statical
 routing like currently in DIDComm*. Just think about it: What it means when you
 have to change your mediator or add another one, and compare it to current
-TCP/IP network. It's a no-brainer that routing should be isolated in a layer.
+TCP/IP network? It's a no-brainer that routing should be isolated in a layer.
 
 The following picture shows how OSI and TCP/IP layers map. It also shows one
 possibility to use onion routing instead on insecure and public TCP/IP routing
