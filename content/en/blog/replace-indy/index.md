@@ -2,21 +2,29 @@
 date: 2022-03-03
 title: "Replacing Indy SDK"
 linkTitle: "Replacing Indy SDK"
-description: "Actually, ranting what and how we should fix the upcoming standard."
+description: "I am ranting what and how we should fix the upcoming standard."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
   title: "Image #:counter"
 ---
 
-Once again, we are at the technology crossroad: we have to decide how to
-proceed with our SSI/DID research and development. Naturally, the business
-potential is the most critical aspect, but the
-research subject has faced the phase where we have to change the foundation.
+[Once again, we are at the technology
+crossroad](https://findy-network.github.io/blog/2021/09/08/travelogue/): we have
+to decide how to proceed with our SSI/DID research and development. Naturally,
+the business potential is the most critical aspect, but the research subject has
+faced the phase where we have to change the foundation.
 
-Changing any foundation could be an enormous task. Fortunately, we have taken
-care this type of a need early in the design where the underlying foundation,
-[Indy SDK](https://github.com/hyperledger/indy-sdk) is double wrapped:
+![SSI Layers](https://findy-network.github.io/blog/2021/09/08/travelogue/TechTree_hucb3e947ff7ac3c644fea522c44e98b42_1584631_1991x0_resize_catmullrom_3.png)
+<p align = "center"> Our Technology Tree - <a
+href="https://findy-network.github.io/blog/2021/09/08/travelogue/">
+Travelogue</a></p>
+
+Changing any foundation could be an enormous task, especially when such a broad
+spectrum of technologies is put together. (Please see the picture above).
+Fortunately, we have taken care of this type of a need early in the design where
+the underlying foundation, [Indy SDK](https://github.com/hyperledger/indy-sdk)
+is double wrapped:
 
 1. We needed a Go wrapper for `libindy` itself.
 2. At the beginning of the `findy-agent` project, we tried to find agent-level
@@ -45,6 +53,8 @@ You should read this if:
   on [Aries reference architecture](https://github.com/hyperledger/aries)
   and its shared libraries.
 
+## Indy SDK Is Obsolete
+
 Indy SDK and related technologies are obsolete, and they are proprietary already.
 
 You might think that I have lost my mind. We have just reported that our Indy
@@ -58,10 +68,10 @@ Well, let's start from the beginning. I did write the following list on January
 
 1. Indy SDK is on the sidetrack from the DID state of the art.
 
-   - Core concepts as explicit entities are missing: *DIDDoc*, *DID method*,
-   *DID resolving*, etc.
+   - Core concepts as explicit entities are missing: *DID method*,
+   *DID resolving*, *DID Documents*, etc.
 
-   - Because of the previous reasons, the *API* of Indy SDK is not optimal
+   - Because of the previous reasons, the *API* of Indy SDK is not optimal.
 
    - `libindy` is too much framework than a library, i.e. it assumes how things
    will be tight together, it tries to do too much in one function, or it
@@ -100,8 +110,10 @@ Well, let's start from the beginning. I did write the following list on January
      v2](https://openid.net/specs/openid-connect-self-issued-v2-1_0.html)
      the protocol takes steps in the right direction and will work as a bridge.
 
+### W3C DID Specification Problems
+
 Now, February 20th 2022, the list is still valid, but now, when we have dug
-deeper, we have learned that the DID W3C "standard" has its flaws itself:
+deeper, we have learned that the DID W3C "standard" has its flaws itself.
 
 1. It's far too complex and redundant -- the scope is too broad.
 
@@ -129,11 +141,19 @@ deeper, we have learned that the DID W3C "standard" has its flaws itself:
    DNS](https://lig-membres.imag.fr/loiseapa/pdfs/2015/Hours-etal_ImpactDNSCausal_ITC2015.pdf).
    The comparison is pretty fair.
 
+## The Problem Statement Summary
+
+We have faced two different but related problems:
+1. Indy SDK doesn't align the current W3C and Aries specifications.
+2. The W3C and Aries specifications are too wide and they lack clear focus.
+
+### Fixing W3C & Aries Specifications Problems
+
 I cannot guide the work of W3C or Aries, but I can participate in our own team's
 decision making, and we will continue on the road where we'll concentrate our
 efforts to [DIDComm](https://identity.foundation/didcomm-messaging/spec/),
 which will mean that we'll keep the same Aries protocols implemented as we have
-now:
+now, but with the latest DID message formats:
 
 1. [DID
    Exchange](https://github.com/hyperledger/aries-rfcs/blob/main/features/0023-did-exchange/README.md)
@@ -156,20 +176,22 @@ Indy SDK doesn't have, e.g. a concept for `DID Method`. At the end of the Januar
 2022, no one has implemented `did:indy` method either, and its specification is
 still in work-in-progress.
 
-The methods we'll support first are `did:peer` and `did:key` because we'll
-get versions of those from Aries Framework Go. (Please see more information
-in its own chapter at the end.) The `did:web` method is probably the next in the
-line as we get it from AFGO as well, and it gives us an implementation baseline
-for the actual *super* [DID Method
+The methods we'll support first are `did:peer` and `did:key`. The first is
+evident because our current Indy implementation builds almost identical pairwise
+connections with Indy DIDs. The `did:key` method replaces all public keys in
+DIDComm messages, and it has other use as well.
+
+The `did:web` method is probably the next in the line. It gives us an
+implementation baseline for the actual *super* [DID Method
 `did:onion`](https://blockchaincommons.github.io/did-method-onion/).
 
 ## No Need For The Ledger
 
-The `did:onion` is currently the only straightforward way to build self-certified
-*public* DIDs that cannot be correlated. The `did:web` is analogue, but it doesn't offer
-privacy as itself. However, it provides privacy for the individual agents through
-[*herd privacy* if DID specification doesn't fail in
-it](https://github.com/w3c/did-core/issues/539).
+The `did:onion` method is currently the only straightforward way to build
+self-certified *public* DIDs that cannot be correlated. The `did:web` is
+analogue, but it doesn't offer privacy as itself. However, it provides privacy
+for the individual agents through [*herd privacy* if DID specification doesn't
+fail in it](https://github.com/w3c/did-core/issues/539).
 
 Indy stores [credential definitions and
 schemas](https://docs.cheqd.io/node/architecture/adr-list/adr-008-identity-resources)
@@ -279,6 +301,9 @@ could lead to correlation.
 
 ## Putting All Together
 
+We stated our problems in [the problem statement summary](#the-problem-statement-summary).
+In the next chapters, we will start to fix the problems and put things together.
+
 The elephant is eaten one bite at a time is a strategy we have used
 successfully and continue to use here. We start with missing core
 concepts: `DID`, `DID document`, `DID method`, `DID resolving`. The following
@@ -347,7 +372,8 @@ the same and use modern API technologies with local/remote transparency.
 
 ## We Are Going To Evaluate AFGO
 
-Currently, the Aries Framework Go seems to be the best option for us because:
+Currently, the Aries Framework Go seems to be the best evaluation option for us
+because:
 - It's written in Go, and all its dependencies are native Go packages.
 - It follows the Aries specifications by the book.
 
