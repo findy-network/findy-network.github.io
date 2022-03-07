@@ -211,6 +211,9 @@ Unfortunately, the famous trust-over-IP picture below isn't the one that is
 missing:
 
 ![SSI Layers](https://blockchain.tno.nl/media/18029/figure_1_the_toip_technology_stack_and_its_four_layers_20042021_1200_675.png?anchor=center&mode=crop&quality=90&width=1200&slimmage=true&rnd=132633967270000000)
+<p align = "center"> The ToIP technology stack and its four layers - <a
+href="https://blockchain.tno.nl/blog/self-sovereign-communication/">SSI
+Communication</a></p>
 
 Even though it has a layer model, it doesn't help us build technical solutions.
 
@@ -230,6 +233,9 @@ that **there cannot be leaks between layers**.
 
 <img src="https://miro.medium.com/max/1400/1*4zUczSBaVH-8qilvK4nKwQ.png"
 width="350" />
+<p align = "center"> The Self-sovereign Identity Stack - <a
+href="https://medium.com/decentralized-identity/the-self-sovereign-identity-stack-8a2cc95f2d45">The Blog
+Post</a></p>
 
 ### Missing Layer - Fixing The Internet
 
@@ -300,20 +306,23 @@ resolving to our agency.
 
 ### Building Pairwise -- DID Exchange
 
-You can have an explicit invitation (OOB) protocol, or you can just have public DID
-that implies an invitation just by existing and resolvable the way that
-leads service endpoints. Our resolver handles DIDs and DID
-documents and *invitations* as well. It's essential because our existing
-applications have proven that pairwise connections are often made. The more we
-can streamline it, the better.
+You can have an explicit invitation
+([OOB](https://github.com/hyperledger/aries-rfcs/blob/main/features/0434-outofband/README.md))
+protocol, or you can just have public DID that implies an invitation just by
+existing and resolvable the way that leads service endpoints. Our resolver
+handles DIDs and DID documents and *invitations* as well. It's essential because
+our existing applications have proven that pairwise connections are often made.
+The more we can streamline it, the better.
 
 {{< imgproc pairwise.png Resize "800x" >}}
 <em>Agency DID Core Concepts</em>
 {{< /imgproc >}}
 
-We should be critical just to avoid complexity. If the goal is to
-reuse existing pairwise (connection), and the most common case is a public website
-should we leave that for public DIDs and try not to solve only by invitation.
+We should be critical just to avoid complexity. If the goal is to reuse existing
+pairwise (connection), and the most common case is a public website, should we
+leave that for public DIDs and try not to solve by invitation? When public DIDs
+would scale and wouldn't be correlatable, we might be able to simplify
+invitations at least? 
 
 ## Existing Reusable Solutions?
 
@@ -322,14 +331,15 @@ who are working DID field are moving from Indy SDK to something other. When
 Aries project and its goals were published, most of us thought that replacing
 solutions would come faster. Unfortunately, that didn't happen, and there are
 many reasons for that. Building software has many internal
-'ecosystems' mainly directed by programming language. For instance, it's
+'ecosystems' mainly directed by programming languages. For instance, it's
 unfortunate that we gophers behave like managed language programmers and rarely
 use pure native binary libraries because we lose too much if we do that.
 
 Sadly, it is so much easier to keep your Go project only written with Go
 than have to try to follow the correct binary dependency tree coming from behind just
-one ABI library usage. If you can find a module just written only Go, you select
-that even it would be some sort of a compromise.
+one [ABI](https://en.wikipedia.org/wiki/Application_binary_interface) library
+usage. If you can find a module just written only Go, you select that even it
+would be some sort of a compromise.
 
 That's been one reason we have to build our own API with gRPC. That will offer
 the best from both worlds and allow efficient polyglot usage. I hope others do
@@ -349,6 +359,9 @@ Unfortunately, it also has the following problems:
    framework is much more complex to replace than a library.
 
    ![framework vs library](https://csharpcorner-mindcrackerinc.netdna-ssl.com/UploadFile/a85b23/framework-vs-library/Images/DqCkT.png)
+   <p align = "center"> Difference Between Library and Framework - <a
+   href="https://www.c-sharpcorner.com/uploadfile/a85b23/framework-vs-library/">The Blog
+   Post</a></p>
 
 
 1. Its protocol state machine implementation is not as good as ours:
@@ -360,7 +373,7 @@ Unfortunately, it also has the following problems:
      be declarative enough.
 
 1. It has totally different concepts than we and Indy SDK have for the key
-   concepts like DID and storage like a wallet.
+   entities like DID and storage like a wallet.
 
 We will try to wrap AFGO to use it as a library and 
 produce an interface that we can implement with Indy SDK. This way, we can use
