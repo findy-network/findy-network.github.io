@@ -79,8 +79,8 @@ deeper, we have learned that the DID W3C "standard" has its flaws itself.
    implement it, you notice that there are no network layers to help you to hide
    abstractions. Could we have [OSI
    layer](https://www.networkworld.com/article/3239677/the-osi-model-explained-and-how-to-easily-remember-its-7-layers.html)
-   mappings or similar at least? (Please see the chapter [Missing Layer - Fixing The
-   Internet](#missing-layer---fixing-the-internet))
+   mappings or similar at least? (Please see the chapter [The Missing Layer - Fixing The
+   Internet](#the-missing-layer---fixing-the-internet))
 
 5. Many performance red flags pop up when you start to engineer the
    implementation. Just think about [tail
