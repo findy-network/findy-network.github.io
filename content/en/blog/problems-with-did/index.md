@@ -1,8 +1,8 @@
 ---
-date: 2022-03-03
+date: 2022-03-05
 title: "The Missing Network Layer Model"
 linkTitle: "The Missing Network Layer Model"
-description: "I am ranting what and how we should fix the upcoming DID standard."
+description: "I am ranting about what and how we should fix the upcoming DID standard."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
@@ -99,11 +99,11 @@ fail in it](https://github.com/w3c/did-core/issues/539).
 
 Indy stores [credential definitions and
 schemas](https://docs.cheqd.io/node/architecture/adr-list/adr-008-identity-resources)
-to the ledger addition to public DIDs. However, when [verifiable credentials
+to the ledger addition to public DIDs. Nonetheless, when [verifiable credentials
 move to use BBS+ credential definitions aren't
 needed](https://www.evernym.com/blog/bbs-verifiable-credentials/) and schemas
 can be read, e.g. from [schema.org](schema.org). Only those DID methods need
-a ledger which is using a ledger as *public DID's* [trust
+a ledger that is using a ledger as *public DID's* [trust
 anchor](https://findy-network.github.io/blog/2021/11/09/anchoring-chains-of-trust/)
 and source of truth.
 
@@ -150,7 +150,7 @@ share common ground detailed enough.
 Luckily, I found [a blog
 post](https://medium.com/decentralized-identity/the-self-sovereign-identity-stack-8a2cc95f2d45)
 which seems to be the right one, but I didn't find any follow-up work.
-However, we can use it as a reference and proof that there exists this kind of
+Nonetheless, we can use it as a reference and proof that there exists this kind of
 need.
 
 The following picture is from the blog post. As we can see, *it includes
@@ -162,12 +162,12 @@ Especially when building **privacy holding technology**, it should be evident
 that **there cannot be leaks between layers**.
 
 <img src="https://miro.medium.com/max/1400/1*4zUczSBaVH-8qilvK4nKwQ.png"
-width="350" />
+width="550" />
 <p align = "center"> The Self-sovereign Identity Stack - <a
 href="https://medium.com/decentralized-identity/the-self-sovereign-identity-stack-8a2cc95f2d45">The Blog
 Post</a></p>
 
-### Missing Layer - Fixing The Internet
+### The Missing Layer - Fixing The Internet
 
 The following picture illustrates mappings from the OSI model through protocols to TCP/IP
 model.
@@ -227,10 +227,10 @@ more.
 
 ### Replacing the Indy SDK
 
-We will publish our own post about replacing Indy SDK or bringing other Aries
+We will publish a separate post about replacing Indy SDK or bringing other Aries
 solutions as a library. What the basic strategy will be is decided
-during the work. During the process, we'll implement new concepts and implement
-only these DID methods:
+during the work. We’ll implement new concepts and implement only these DID
+methods during the process:
 
 - *DID Key*, needed to replace public key references, and it's usable for many
   other purposes as well.
