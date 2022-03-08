@@ -186,3 +186,19 @@ enable = false
 #	icon = "fa fa-envelope"
 #        desc = "Discuss development issues around the project"
 
+[params.katex]
+enable = true
+
+[params.plantuml]
+enable = true
+theme = "default"
+
+#Set url to plantuml server
+#default is http://www.plantuml.com/plantuml/svg/
+svg_image_url = "https://www.plantuml.com/plantuml/svg/"
+
+#By default the plantuml implementation uses <img /> tags to display UML diagrams.
+#When svg is set to true, diagrams are displayed using <svg /> tags, maintaining functionality like links e.d.
+#default = false
+svg = true
+
