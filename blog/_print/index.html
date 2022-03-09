@@ -67,6 +67,7 @@ This the multi-page printable view of this section.
 </div>
 <h1 class=title>Findy Agency Blog</h1>
 <ul>
+<li><a href=#pg-97dcb007a94de94cf05a2e1bdad74429>The Missing Network Layer Model</a></li>
 <li><a href=#pg-84fb4537e4edf11be52eda416e8de901>Fostering Interoperability</a></li>
 <li><a href=#pg-1d28bc35aa6447c9e2cde89f9bd1b9f3>Anchoring Chains of Trust</a></li>
 <li><a href=#pg-01f27610185446a311586be6588425a0>The Arm Adventure on Docker</a></li>
@@ -77,6 +78,243 @@ This the multi-page printable view of this section.
 </div>
 </div>
 <div class=td-content>
+<h1 id=pg-97dcb007a94de94cf05a2e1bdad74429>The Missing Network Layer Model</h1>
+<div class=lead>I am ranting about what and how we should fix the upcoming DID standard.</div>
+<div class="td-byline mb-4">
+By <b>Harri Lainio</b> |
+<time datetime=2022-03-05 class=text-muted>Saturday, March 05, 2022</time>
+</div>
+<p><a href=https://www.w3.org/TR/did-core/>The W3C&rsquo;s DID Specification</a> is flawed without
+<strong>the network layer model</strong>.</p>
+<p>You might think that I have lost my mind. We have just reported that our Indy
+SDK based DID agency is <a href=https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0302-aries-interop-profile/README.md>AIP
+1.0</a>
+compatible, and everything is wonderful. What&rsquo;s going on?</p>
+<p>Well, let&rsquo;s start from the beginning. I did write the following list on January
+19th 2022:</p>
+<ol>
+<li>
+<p>Indy SDK doesn&rsquo;t align the current W3C and Aries specifications.</p>
+<ul>
+<li>Core concepts (below) as explicit entities are missing: <em>DID method</em>,
+<em>DID resolving</em>, <em>DID Documents</em>, etc.</li>
+</ul>
+<p><img src=https://www.w3.org/TR/did-core/diagrams/did_brief_architecture_overview.svg alt="DID Concepts"></p>
+<p align=center> DID Concepts - <a href=https://www.w3.org/TR/did-core/diagrams/did_brief_architecture_overview.svg>www.w3.org</a></p>
+</li>
+<li>
+<p>No one in the SSI industry seems to be able to find perfect focus.</p>
+<ul>
+<li>
+<p>There are too few solutions running in production (yes, globally as well)
+which would give us needed references to drive a good design from.</p>
+</li>
+<li>
+<p><a href=https://lists.w3.org/Archives/Public/public-new-work/2021Sep/0000.html>Standardization in W3C didn&rsquo;t proceed as it
+should</a>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Findings during our study of SSI/DID and others in the industry.</p>
+<ul>
+<li>
+<p>We don&rsquo;t need a ledger to solve
+<a href=https://github.com/SmithSamuelM/Papers/blob/master/whitepapers/10-ssi-key-management.pdf>self-certified</a>
+identities.</p>
+</li>
+<li>
+<p>We don&rsquo;t need human <em>memorable</em> identifiers. (memorable \(\ne\) meaningful
+\(\ne\) typeable \(\ne\) codeable)</p>
+</li>
+<li>
+<p>We <em>rarely</em> need an identifier just for <em>referring</em> but we continuously need
+<em>self-certified identifiers for secure communication</em>: should we first fully
+solve the communication problem and not the other way around?</p>
+</li>
+<li>
+<p>Trust always seems to lead back to a specific type of centralization. There are
+many existing studies like web-of-trust that should at least take in a
+review. <a href=https://www.weboftrust.info/>Rebooting Web-of-Trust</a> is an excellent
+example of that kind of work.</p>
+</li>
+<li>
+<p>We must align the SSI/DID technology to the current state of the art like
+Open ID and federated identity providers. <a href=https://openid.net/specs/openid-connect-self-issued-v2-1_0.html>Self-Issued OpenID Provider
+v2</a>
+the protocol takes steps in the right direction and will work as a bridge.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id=w3c-did-specification-problems>W3C DID Specification Problems</h2>
+<p>Now, February 20th 2022, the list is still valid, but now, when we have dug
+deeper, we have learned that the DID W3C &ldquo;standard&rdquo; has its flaws itself.</p>
+<ol>
+<li>
+<p>It&rsquo;s far too complex and redundant &ndash; the scope is too broad.</p>
+</li>
+<li>
+<p>There should not be so many DID methods. <a href=https://lists.w3.org/Archives/Public/public-new-work/2021Sep/0000.html>&ldquo;No practical interoperability.&rdquo; &
+&ldquo;Encourages divergence rather than
+convergence."</a></p>
+</li>
+<li>
+<p>For some reason, <a href=https://www.w3.org/TR/did-core/>DID-core</a> doesn&rsquo;t
+cover protocol specifications, but protocols are in <a href=https://github.com/hyperledger/aries-rfcs/blob/main/index.md>Aries
+RFCs</a>. You&rsquo;ll
+face the problem in <a href=https://identity.foundation/peer-did-method-spec/>the DID peer method
+specification</a>.</p>
+</li>
+<li>
+<p>It misses layer structures typical for network protocols. When you start to
+implement it, you notice that there are no network layers to help you to hide
+abstractions. Could we have <a href=https://www.networkworld.com/article/3239677/the-osi-model-explained-and-how-to-easily-remember-its-7-layers.html>OSI
+layer</a>
+mappings or similar at least? (Please see the chapter <a href=#the-missing-layer---fixing-the-internet>The Missing Layer - Fixing The
+Internet</a>)</p>
+</li>
+<li>
+<p>Many performance red flags pop up when you start to engineer the
+implementation. Just think about <a href=https://brooker.co.za/blog/2021/04/19/latency.html>tail
+latency</a> in DID resolving
+and you see it. Especially if you think <a href=https://lig-membres.imag.fr/loiseapa/pdfs/2015/Hours-etal_ImpactDNSCausal_ITC2015.pdf>the performance demand of the
+DNS</a>.
+The comparison is pretty fair.</p>
+</li>
+</ol>
+<h2 id=no-need-for-the-ledger>No Need For The Ledger</h2>
+<p>The <code>did:onion</code> method is currently the only straightforward way to build
+self-certified <em>public</em> DIDs that cannot be correlated. The <code>did:web</code> is
+analogue, but it doesn&rsquo;t offer privacy as itself. However, it provides privacy
+for the individual agents through <a href=https://github.com/w3c/did-core/issues/539><em>herd privacy</em> if DID specification doesn&rsquo;t
+fail in it</a>.</p>
+<p>Indy stores <a href=https://docs.cheqd.io/node/architecture/adr-list/adr-008-identity-resources>credential definitions and
+schemas</a>
+to the ledger addition to public DIDs. Nonetheless, when <a href=https://www.evernym.com/blog/bbs-verifiable-credentials/>verifiable credentials
+move to use BBS+ credential definitions aren&rsquo;t
+needed</a> and schemas
+can be read, e.g. from <a href=schema.org>schema.org</a>. Only those DID methods need
+a ledger that is using a ledger as <em>public DID&rsquo;s</em> <a href=https://findy-network.github.io/blog/2021/11/09/anchoring-chains-of-trust/>trust
+anchor</a>
+and source of truth.</p>
+<h3 id=what-is-a-public-did>What Is A Public DID?</h3>
+<p>It&rsquo;s a DID who&rsquo;s DIDDoc you can solve without an
+<a href=https://github.com/hyperledger/aries-rfcs/blob/b3a3942ef052039e73cd23d847f42947f8287da2/features/0434-outofband/README.md>invitation</a>.</p>
+<p>The <code>did:key</code> is superior because it is complete. You can compute (solve) a DID
+document by receiving a valid DID key identifier. No third party or additional
+source of truth is needed. However, we cannot communicate with the <code>did:key</code>&rsquo;s
+holder because the DIDDoc doesn&rsquo;t include <a href=https://www.w3.org/TR/did-core/#services>service
+endpoints</a>. So, there is no one
+listening and nothing to connect to.</p>
+<p>Both <code>did:onion</code>&rsquo;s and <code>did:web</code>&rsquo;s DIDDocs can include service endpoints because
+they can offer the DID document by their selves from their own servers. We must
+remember that the DID document offers <a href=https://www.w3.org/TR/did-core/#verification-methods>verification
+methods</a> which can be used
+to build the actual <a href=https://findy-network.github.io/blog/2021/11/09/anchoring-chains-of-trust/>cryptographic
+trust</a>.</p>
+<h2 id=how-to-design-best-agency>How To Design Best Agency?</h2>
+<p>How to do it right now when <em>we don&rsquo;t have a working standard or de facto
+specifications</em>? We have thought that for a long time, over three years for now.</p>
+<p>I have thought and compared SSI/DID networks and solutions. I think we need to
+have a layer model similar to the OSI network model to handle complexity.
+Unfortunately, the famous trust-over-IP picture below isn&rsquo;t the one that is
+missing:</p>
+<p><img src="https://blockchain.tno.nl/media/18029/figure_1_the_toip_technology_stack_and_its_four_layers_20042021_1200_675.png?anchor=center&mode=crop&quality=90&width=1200&slimmage=true&rnd=132633967270000000" alt="SSI Layers"></p>
+<p align=center> The ToIP technology stack and its four layers - <a href=https://blockchain.tno.nl/blog/self-sovereign-communication/>SSI
+Communication</a></p>
+<p>Even though the ToIP has a layer model, it doesn&rsquo;t help us build technical
+solutions. It&rsquo;s even more unfortunate that <em>many in the industry think that
+it&rsquo;s the network layer model when it&rsquo;s not</em>. It&rsquo;s been making communication between
+different stakeholders difficult because we see things differently, and we don&rsquo;t
+share common ground detailed enough.</p>
+<p>Luckily, I found <a href=https://medium.com/decentralized-identity/the-self-sovereign-identity-stack-8a2cc95f2d45>a blog
+post</a>
+which seems to be the right one, but I didn&rsquo;t find any follow-up work.
+Nonetheless, we can use it as a reference and proof that there exists this kind of
+need.</p>
+<p>The following picture is from the blog post. As we can see, <em>it includes
+problems</em>, and the weirdest one is the <em>missing OSI mapping</em>. Even the post
+explains how vital the layer model is for <em>interoperability</em> and <em>portability</em>.
+Another maybe even more weird mistake is mentioning that layers could <em>be
+coupled</em> when the whole point of layered models is to have <strong>decoupled layers</strong>.
+Especially when building <strong>privacy holding technology</strong>, it should be evident
+that <strong>there cannot be leaks between layers</strong>.</p>
+<p><img src=https://miro.medium.com/max/1400/1*4zUczSBaVH-8qilvK4nKwQ.png width=550></p>
+<p align=center> The Self-sovereign Identity Stack - <a href=https://medium.com/decentralized-identity/the-self-sovereign-identity-stack-8a2cc95f2d45>The Blog
+Post</a></p>
+<h3 id=the-missing-layer---fixing-the-internet>The Missing Layer - Fixing The Internet</h3>
+<p>The following picture illustrates mappings from the OSI model through protocols to TCP/IP
+model.</p>
+<p><img src=https://www.dummies.com/wp-content/uploads/296299.image0.jpg alt="TCP/IP and OSI"></p>
+<p>We all know that the internet was created without security and privacy, and still,
+it&rsquo;s incredibly successful and scalable. From the layer model, it&rsquo;s easy to see
+that security and privacy solutions should be put under the transport layer to
+allow all of the current applications to work without changes. But it&rsquo;s not
+enough if we want to have end-to-end encrypted and secure communication pipes.</p>
+<p><strong>We need to take the best of both worlds: fix as much as possible, as a low layer
+as you can one layer at a time.</strong></p>
+<h3 id=secure--private-transport-layer>Secure & Private Transport Layer</h3>
+<p>There is one existing solution, and others are coming:</p>
+<ol>
+<li><a href=https://www.torproject.org/>Tor</a> and its onion routing.</li>
+<li><a href=https://nymtech.net/>NYM</a>, etc.</li>
+</ol>
+<p>I know that Tor has its performance problems, etc., but the point is not about
+that. The point is to which network layer should handle secure and private
+transport. It&rsquo;s not DIDComm, and it definitely isn&rsquo;t implemented as <em>statical
+routing like currently in DIDComm</em>. Just think about it: What it means when you
+have to change your mediator or add another one, and compare it to current
+TCP/IP network? It&rsquo;s a no-brainer that routing should be isolated in a layer.</p>
+<p>The following picture shows how OSI and TCP/IP layers map. It also shows one
+possibility to use onion routing instead on insecure and public TCP/IP routing
+for DID communication.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:1210px>
+<img class=card-img-top src=/blog/2022/03/05/the-missing-network-layer-model/OSIMap_hue1e7d1ebdd8994d467756b8af57eda38_245909_1200x0_resize_catmullrom_3.png width=1200 height=945>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>DID Communication OSI Mapping</em>
+</p>
+</div>
+</div>
+<p>The solution is secure and private, and there aren&rsquo;t no leaks between layers which
+could lead to correlation.</p>
+<h2 id=putting-all-together>Putting All Together</h2>
+<p>The elephant is eaten one bite at a time is a strategy we have used
+successfully and continue to use here. We start with missing core
+concepts: <code>DID</code>, <code>DID document</code>, <code>DID method</code>, <code>DID resolving</code>. The following
+UML diagram present our high-level conceptual model of these concepts and their
+relations.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:1210px>
+<img class=card-img-top src=/blog/2022/03/05/the-missing-network-layer-model/classes_hu68169d6d854aa04b756d328f13ce2f4e_177274_1200x0_resize_catmullrom_3.png width=1200 height=1046>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Agency DID Core Concepts</em>
+</p>
+</div>
+</div>
+<p>Because current DID specification allows or supports many different <em>DID
+Methods</em> we have to take care of them in the model. It would be naive to think
+we could use only external <em>DID resolver</em> and delegate DIDDoc solving.
+Just for think about performance, it would be a nightmare, security issues even
+more.</p>
+<h3 id=replacing-the-indy-sdk>Replacing the Indy SDK</h3>
+<p>We will publish a separate post about replacing Indy SDK or bringing other Aries
+solutions as a library. What the basic strategy will be is decided
+during the work. We’ll implement new concepts and implement only these DID
+methods during the process:</p>
+<ul>
+<li><em>DID Key</em>, needed to replace public key references, and it&rsquo;s usable for many
+other purposes as well.</li>
+<li><em>DID Peer</em>, building pairwise connection is a foundation to DIDComm. However,
+we are still figuring out the proper implementation scope for
+the <code>did:peer</code>.</li>
+<li><em>DID Web and Onion</em>, it seems that this is an excellent transition method towards
+more private and sovereign <code>did:onion</code> method.</li>
+</ul>
+<p>Stay tuned. The following blog post is coming out in a week.</p>
+</div>
+<div class=td-content style=page-break-before:always>
 <h1 id=pg-84fb4537e4edf11be52eda416e8de901>Fostering Interoperability</h1>
 <div class=lead>Hyperledger Aries defines messaging protocols for identity agents capable of sharing verified data. Throughout Findy Agency development, the support for the Aries protocol and the compatibility with other Aries agents has been one of the top priorities for the project. Lately, we have lifted the interoperability testing to a new level by automating the testing and reporting with the help of tools provided by the Aries community. Furthermore, we received promising results from practical interoperability tests executed manually.</div>
 <div class="td-byline mb-4">
@@ -1049,6 +1287,10 @@ By <b>Laura Vuorenoja</b> |
 </div>
 <script src=https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js integrity=sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN crossorigin=anonymous></script>
 <script src=https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js integrity=sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF crossorigin=anonymous></script>
-<script src=/js/main.min.5c74b870c6953931a705f390a49c7e4c0a842ec5c83b24354758dd674343ed0d.js integrity="sha256-XHS4cMaVOTGnBfOQpJx+TAqELsXIOyQ1R1jdZ0ND7Q0=" crossorigin=anonymous></script>
+<script src=/js/deflate.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.css integrity=sha384-Cqd8ihRLum0CCg8rz0hYKPoLZ3uw+gES2rXQXycqnL5pgVQIflxAUDS7ZSjITLb5 crossorigin=anonymous>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.js integrity=sha384-1Or6BdeNQb0ezrmtGeqQHFpppNd7a/gw29xeiSikBbsb44xu3uAo8c7FwbF5jhbd crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous onload=renderMathInElement(document.body,null)></script>
+<script src=/js/main.min.e3e43cdfe247113e3550f81c49513affa8f22ae816f194be67a30cc568af55d1.js integrity="sha256-4+Q83+JHET41UPgcSVE6/6jyKugW8ZS+Z6MMxWivVdE=" crossorigin=anonymous></script>
 </body>
 </html>
