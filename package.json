@@ -1,6 +1,6 @@
 {
   "name": "findy-network.github.io",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Findy Agency documentation",
   "main": "none.js",
   "scripts": {
