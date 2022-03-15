@@ -1,4 +1,302 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 05 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: The Missing Network Layer Model</title><link>/blog/2022/03/05/the-missing-network-layer-model/</link><pubDate>Sat, 05 Mar 2022 00:00:00 +0000</pubDate><guid>/blog/2022/03/05/the-missing-network-layer-model/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 14 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Replacing Indy SDK</title><link>/blog/2022/03/14/replacing-indy-sdk/</link><pubDate>Mon, 14 Mar 2022 00:00:00 +0000</pubDate><guid>/blog/2022/03/14/replacing-indy-sdk/</guid><description>
+&lt;p>&lt;a href="https://findy-network.github.io/blog/2021/09/08/travelogue/">Once again, we are at the technology
+crossroad&lt;/a>: we have
+to decide how to proceed with our SSI/DID research and development. Naturally,
+the business potential is the most critical aspect, but the research subject has
+faced the phase where &lt;em>we have to change the foundation&lt;/em>.&lt;/p>
+&lt;p>&lt;img src="https://findy-network.github.io/blog/2021/09/08/travelogue/TechTree_hucb3e947ff7ac3c644fea522c44e98b42_1584631_1991x0_resize_catmullrom_3.png" alt="SSI Layers">&lt;/p>
+&lt;p align = "center"> Our Technology Tree - &lt;a
+href="https://findy-network.github.io/blog/2021/09/08/travelogue/">
+Travelogue&lt;/a>&lt;/p>
+&lt;p>Changing any foundation could be an enormous task, especially when a broad
+spectrum of technologies is put together. (Please see the picture above).
+Fortunately, we have taken care of this type of a need early in the design when
+the underlying foundation, &lt;a href="https://github.com/hyperledger/indy-sdk">Indy SDK&lt;/a>
+is double wrapped:&lt;/p>
+&lt;ol>
+&lt;li>We needed a Go wrapper for &lt;code>libindy&lt;/code> itself, i.e. &lt;em>language wrapping&lt;/em>.&lt;/li>
+&lt;li>At the beginning of the &lt;code>findy-agent&lt;/code> project, we tried to find agent-level
+concepts and interfaces for multi-tenant agency use, i.e. &lt;em>conceptual
+wrapping&lt;/em>.&lt;/li>
+&lt;/ol>
+&lt;p>This post is peculiar because I&amp;rsquo;m writing it up front and not just reporting
+something that we have been studied and verified carefully.&lt;/p>
+&lt;blockquote>
+&lt;p>&amp;ldquo;I am in a bit of a paradox, for I have assumed that there is no good in
+assuming.&amp;rdquo; - Mr. Eugene Lewis Fordsworthe&lt;/p>
+&lt;/blockquote>
+&lt;p>I&amp;rsquo;m still writing this. Be patient; I&amp;rsquo;ll try to answer &lt;em>why&lt;/em> in the following chapters.&lt;/p>
+&lt;h2 id="who-should-read-this">Who Should Read This?&lt;/h2>
+&lt;p>You should read this if:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>You are considering jumping on the SSI/DID wagon, and you are searching good
+technology platform for your SSI application. You will get selection criteria
+and fundamentals from here.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>You are in the middle of the development of your own platform, and you need
+a concrete list of aspects you should take care of.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>You are currently using Indy SDK, and you are designing your architecture based
+on &lt;a href="https://github.com/hyperledger/aries">Aries reference architecture&lt;/a>
+and its shared libraries.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>You are interested to see the direction the &lt;code>findy-agent&lt;/code> DID agency core is
+taking.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="indy-sdk-is-obsolete">Indy SDK Is Obsolete&lt;/h2>
+&lt;p>Indy SDK and related technologies are obsolete, and they are proprietary already.&lt;/p>
+&lt;p>We have just reported that our Indy SDK based DID agency is &lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/concepts/0302-aries-interop-profile/README.md">AIP
+1.0&lt;/a>
+compatible, and everything is wonderful. How in the hell did Indy SDK become
+obsolete and proprietary in a month or so?&lt;/p>
+&lt;p>Well, let&amp;rsquo;s start from the beginning. I did write the following on January
+19th 2022:&lt;/p>
+&lt;p>&lt;strong>Indy SDK is on the sidetrack from the DID state of the art.&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Core concepts as explicit entities are missing: &lt;em>DID method&lt;/em>,
+&lt;em>DID resolving&lt;/em>, &lt;em>DID Documents&lt;/em>, etc.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Because of the previous reasons, the &lt;em>API&lt;/em> of Indy SDK is not optimal
+anymore.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>libindy&lt;/code> is too much framework than a library, i.e. it assumes how things
+will be tight together, it tries to do too much in one function, or it
+doesn&amp;rsquo;t isolate parts like ledger from other components like a wallet in a correct
+way, etc.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Indy SDK has too many dynamic library dependencies when compared to
+what those libraries achieve.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="the-problem-statement-summary">The Problem Statement Summary&lt;/h2>
+&lt;p>We have faced two different but related problems:&lt;/p>
+&lt;ol>
+&lt;li>Indy SDK doesn&amp;rsquo;t align with the current W3C and Aries specifications.&lt;/li>
+&lt;li>&lt;a href="https://findy-network.github.io/blog/2022/03/05/the-missing-network-layer-model/">The W3C and Aries specifications are too broad and lack clear
+focus&lt;/a>.&lt;/li>
+&lt;/ol>
+&lt;h3 id="did-specifications">DID Specifications&lt;/h3>
+&lt;p>I cannot guide the work of W3C or Aries, but I can participate in our own team&amp;rsquo;s
+decision making, and we will continue on the road where we&amp;rsquo;ll concentrate our
+efforts to &lt;a href="https://identity.foundation/didcomm-messaging/spec/">DIDComm&lt;/a>,
+which will mean that we&amp;rsquo;ll keep the same Aries protocols implemented as we have
+now, but with the latest DID message formats:&lt;/p>
+&lt;ol>
+&lt;li>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0023-did-exchange/README.md">DID
+Exchange&lt;/a>
+to build a DIDComm connection over an invitation or towards public DID.&lt;/li>
+&lt;li>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0453-issue-credential-v2/README.md">Issue
+Credential&lt;/a>
+to use a DIDComm connection to issue credentials to a holder.&lt;/li>
+&lt;li>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0454-present-proof-v2/README.md">Present
+Proofs&lt;/a>
+to present proof over a DIDComm connection.&lt;/li>
+&lt;li>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0095-basic-message/README.md">Basic
+Message&lt;/a>
+to have private conversations over a DIDComm connection.&lt;/li>
+&lt;li>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0048-trust-ping/README.md">Trust
+Ping&lt;/a>
+to test a DIDComm connection.&lt;/li>
+&lt;/ol>
+&lt;p>Keeping the same protocol set might sound simple, but unfortunately, it&amp;rsquo;s not because
+Indy SDK doesn&amp;rsquo;t have, e.g. a concept for &lt;code>DID Method&lt;/code>. At the end of the January
+2022, no one has implemented the &lt;code>did:indy&lt;/code> method either, and its specification is
+still in work-in-progress.&lt;/p>
+&lt;p>The methods we&amp;rsquo;ll support first are &lt;code>did:peer&lt;/code> and &lt;code>did:key&lt;/code>. The first is
+evident because our current Indy implementation builds almost identical pairwise
+connections with Indy DIDs. The &lt;code>did:key&lt;/code> method replaces all public keys in
+DIDComm messages. It has other use as well.&lt;/p>
+&lt;p>The &lt;code>did:web&lt;/code> method is probably the next. It gives us an
+implementation baseline for the actual &lt;em>super&lt;/em> &lt;a href="https://blockchaincommons.github.io/did-method-onion/">DID Method
+&lt;code>did:onion&lt;/code>&lt;/a>.
+In summary, onion routing gives us &lt;a href="https://findy-network.github.io/blog/2022/03/05/the-missing-network-layer-model/">a new transport layer (OSI
+L4)&lt;/a>.&lt;/p>
+&lt;p>We all know how difficult adding security and privacy to the internet&amp;rsquo;s (TCP/IP)
+network layers are
+(&lt;a href="https://www.securityweek.com/top-five-worst-dns-security-incidents">DNS&lt;/a>,
+&lt;a href="https://neeva.com/learn/data-privacy-4-common-issues-and-how-to-solve-them">etc.&lt;/a>).
+But replacing the transport layer with a new one is the best solution. Using
+&lt;strong>onion addresses for &lt;a href="https://ldapwiki.com/wiki/DID%20Service%20Endpoint">the DID Service
+Endpoints&lt;/a> solves
+routing in own decoupled layer&lt;/strong> which reduces complexity tremendously.&lt;/p>
+&lt;p>&lt;img src="https://i.imgflip.com/xk14q.jpg" alt="air">&lt;/p>
+&lt;blockquote>
+&lt;p>&amp;ldquo;In some sense IP addresses are not even meaningful to Onion Services: they
+are not even used in the protocol.&amp;rdquo; - &lt;a href="https://community.torproject.org/onion-services/overview/">Onion
+Services&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="indy-sdk-replacement">Indy SDK Replacement&lt;/h3>
+&lt;p>Indy SDK is obsolete and proprietary. It&amp;rsquo;s not based on &lt;a href="https://www.w3.org/TR/did-core/">the current W3C DID core
+concepts&lt;/a>. That makes it too hard to build reasonable
+solutions over Indy SDK without reinventing the wheel. We have decided to
+architect the ideal solution first and then make the selection criteria from it.
+With the requirements, we start to select candidates for our crypto libraries.&lt;/p>
+&lt;p>We don&amp;rsquo;t want to replace Indy SDK right away. We want to keep it until we don&amp;rsquo;t
+need it anymore. When all parties have changed their verified credential formats
+according to the standard, we decide again if we can drop it.&lt;/p>
+&lt;h2 id="putting-all-together">Putting All Together&lt;/h2>
+&lt;p>We described our problems in &lt;a href="#the-problem-statement-summary">the problem statement summary&lt;/a>.
+We will put things together in the following chapters and present our problem-solving strategy.&lt;/p>
+&lt;p>First, we need to align our current software solution to W3C specifications.
+Aries protocols are already covered. Secondly, we need to find our way for
+specification issues like selecting &lt;a href="https://findy-network.github.io/blog/2022/03/05/the-missing-network-layer-model/">proper DID methods to
+support&lt;/a>.&lt;/p>
+&lt;p>The missing (from Indy SDK) DID core concepts: &lt;code>DID&lt;/code>, &lt;code>DID document&lt;/code>, &lt;code>DID method&lt;/code>, &lt;code>DID resolving&lt;/code>, will be the base for &lt;strong>our target architecture&lt;/strong>. The following UML
+diagram presents our high-level conceptual model of these concepts and
+their relations.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1210px">
+&lt;img class="card-img-top" src="/blog/2022/03/14/replacing-indy-sdk/cover-classes_hu68169d6d854aa04b756d328f13ce2f4e_177274_1200x0_resize_catmullrom_3.png" width="1200" height="1046">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Agency DID Core Concepts&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>The class diagram shows that &lt;code>DIDMethodBase&lt;/code> is a critical abstraction because
+it hides implementation details together with the interfaces it extends. Our
+current agent implementation uses &lt;em>factory pattern&lt;/em> with &lt;em>new-by-name&lt;/em>, which
+allows our system to read protocol streams and implicitly create native Go objects.
+That has proven to be extremely fast and programmer-friendly. We will use
+a similar strategy in our upcoming &lt;code>DID method&lt;/code> and &lt;code>DID resolving&lt;/code> solutions.&lt;/p>
+&lt;h3 id="resolving">Resolving&lt;/h3>
+&lt;p>The following diagram is our first draft of how we will integrate DID document
+resolving to our agency.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 810px">
+&lt;img class="card-img-top" src="/blog/2022/03/14/replacing-indy-sdk/resolve_hu68843e186b7e94ed4412e82ad891eddc_57470_800x0_resize_catmullrom_3.png" width="800" height="988">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Agency DID Core Concepts&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>The sequence diagram is a draft where &lt;code>did:key&lt;/code> is solved. The method is solved
+by computation. It doesn&amp;rsquo;t need persistent storage for &lt;code>DID documents&lt;/code>. However,
+the drawing still illustrates our idea to have one internal resolver (&lt;em>factory&lt;/em>)
+for everything. That gives many advantages like caching, but it also
+keeps things simple and testable.&lt;/p>
+&lt;h3 id="building-pairwise----did-exchange">Building Pairwise &amp;ndash; DID Exchange&lt;/h3>
+&lt;p>You can have an explicit invitation
+(&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0434-outofband/README.md">OOB&lt;/a>)
+protocol or you can just have &lt;a href="https://findy-network.github.io/blog/2022/03/05/the-missing-network-layer-model/#what-is-a-public-did">a public
+DID&lt;/a>
+that implies an invitation just by existing and resolvable the way that leads
+service endpoints. Our resolver handles DIDs and DID documents and &lt;em>invitations&lt;/em>
+as well. It&amp;rsquo;s essential because our existing applications have proven that
+a pairwise connection is the fundamental building block of the DID system.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 810px">
+&lt;img class="card-img-top" src="/blog/2022/03/14/replacing-indy-sdk/pairwise_hu8e4606477e1f49816dced191085ba872_138973_800x0_resize_catmullrom_3.png" width="800" height="826">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Agency DID Core Concepts&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>We should be critical just to avoid complexity. If the goal is to reuse existing
+pairwise (connection), and the most common case is a public website, should we
+leave that for public DIDs and try not to solve by invitation? When public DIDs
+would scale and wouldn&amp;rsquo;t be correlatable, we might be able to simplify
+invitations at least? Or, should we think if we really need &lt;em>connectable&lt;/em> public
+DIDs? Or maybe we don&amp;rsquo;t need both of them anymore, just another?&lt;/p>
+&lt;p>&lt;strong>Our target architecture&lt;/strong> helps us to find answers to these questions. It also
+allows us to keep track of non-functional requirements like &lt;em>modifiability,
+scalability, security, privacy, performance, simplicity, testability&lt;/em>. These are
+the most important ones, and everyone is equally important to us.&lt;/p>
+&lt;h2 id="existing-sdk-options">Existing SDK Options?&lt;/h2>
+&lt;p>Naturally, Indy SDK is not the only solution for SSI/DID. When the Aries project
+and its goals were published, most of us thought that replacing SDKs for Indy
+would come faster. Unfortunately, that didn&amp;rsquo;t happen, and there are many reasons
+for that.&lt;/p>
+&lt;p>Building software has many internal &amp;lsquo;ecosystems&amp;rsquo; mainly directed by programming
+languages. For instance, it&amp;rsquo;s unfortunate that gophers behave like managed
+language programmers and rarely use pure native binary libraries because we lose
+too many good Go features. For example, we would have compromised in super-fast
+builds, standalone binaries, broad platform support, etc. They might sound like
+small things, but they aren&amp;rsquo;t. For example, the container image sizes for
+standalone Go binaries are almost the same as the original Go binary.&lt;/p>
+&lt;p>It is easier to keep your Go project only written in Go. Just one
+&lt;a href="https://en.wikipedia.org/wiki/Application_binary_interface">ABI&lt;/a> library usage
+would force you to follow the binary dependency tree, and you could not use
+standalone Go binary. If you can find a module just written in Go, you select
+that even it would be some sort of a compromise.&lt;/p>
+&lt;p>That&amp;rsquo;s been one reason we have to build our own API with gRPC. That will offer
+the best from both worlds and allow efficient polyglot usage. I hope others do
+the same and use modern API technologies with local/remote transparency.&lt;/p>
+&lt;h2 id="we-are-going-to-evaluate-afgo">We Are Going To Evaluate AFGO&lt;/h2>
+&lt;p>Currently, the Aries Framework Go seems to be the best &lt;em>evaluation&lt;/em> option for us
+because:&lt;/p>
+&lt;ul>
+&lt;li>It&amp;rsquo;s written in Go, and all its dependencies are native Go packages.&lt;/li>
+&lt;li>It follows the Aries specifications by the book.&lt;/li>
+&lt;/ul>
+&lt;p>Unfortunately, it also has the following problems:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>It&amp;rsquo;s is &lt;em>a framework&lt;/em> which typically means all or nothing, i.e. you have to
+use the whole framework because it takes care of everything, and it only offers
+you extension points where you can put your application handlers. A
+framework is much more complex to replace than a library.&lt;/p>
+&lt;p>&lt;img src="https://csharpcorner-mindcrackerinc.netdna-ssl.com/UploadFile/a85b23/framework-vs-library/Images/DqCkT.png" alt="framework vs library">&lt;/p>
+&lt;p align = "center"> Difference Between Library and Framework - &lt;a
+href="https://www.c-sharpcorner.com/uploadfile/a85b23/framework-vs-library/">The Blog
+Post&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Its protocol state machine implementation is not as good as ours:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>It doesn&amp;rsquo;t fork protocol handlers immediately after receiving the
+message payload.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>It doesn&amp;rsquo;t offer a 30.000 ft view to machines, i.e. it doesn&amp;rsquo;t seem to
+be declarative enough.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>It has totally different concepts than we and Indy SDK have for the critical
+entities like DID and storage like a wallet. Of course, that&amp;rsquo;s not
+necessarily a bad thing. We have to check how AFGO&amp;rsquo;s concepts map to our
+target architecture.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>During the first skimming of the code, a few alarms were raised primarily for
+the performance.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>We will try to wrap AFGO to use it as a library and produce an interface that we
+can implement with Indy SDK and AFGO. This way, we can use our current core
+components to implement different Aries protocols and even verifiable
+credentials.&lt;/p>
+&lt;p>Our agency has bought the following features and components which we have measured
+to be superior to other similar DID solutions:&lt;/p>
+&lt;ul>
+&lt;li>Multi-tenancy model, i.e. symmetric agent model&lt;/li>
+&lt;li>Fast server-side secure enclaves for KMS&lt;/li>
+&lt;li>General and simple DID controller gRPC API&lt;/li>
+&lt;li>Minimal dependencies&lt;/li>
+&lt;li>Horizontal scalability&lt;/li>
+&lt;li>Minimal requirements for hardware&lt;/li>
+&lt;li>Cloud-centric design&lt;/li>
+&lt;/ul>
+&lt;p>We really try to avoid inventing the wheel, but with the current knowledge, we
+cannot switch to AFGO. Instead, we can wrap it and use it as an independent
+library.&lt;/p>
+&lt;blockquote>
+&lt;p>Don&amp;rsquo;t call us, we&amp;rsquo;ll call you. - &lt;a href="https://en.wiktionary.org/wiki/Hollywood_principle">Hollywood
+Principle&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>We will continue to report our progress and publish the AFGO wrapper when
+ready. Stay tuned, folks, something extraordinary is coming!&lt;/p></description></item><item><title>Blog: The Missing Network Layer Model</title><link>/blog/2022/03/05/the-missing-network-layer-model/</link><pubDate>Sat, 05 Mar 2022 00:00:00 +0000</pubDate><guid>/blog/2022/03/05/the-missing-network-layer-model/</guid><description>
 &lt;p>&lt;a href="https://www.w3.org/TR/did-core/">The W3C&amp;rsquo;s DID Specification&lt;/a> is flawed without
 &lt;strong>the network layer model&lt;/strong>.&lt;/p>
 &lt;p>You might think that I have lost my mind. We have just reported that our Indy
