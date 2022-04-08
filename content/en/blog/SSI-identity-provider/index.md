@@ -28,10 +28,13 @@ and it seems evident that using verified data would fix many of the known weakne
 
 Let's suppose that our imaginary friend Alice uses an application, say a dating service,
 that provides a Facebook login button for its users. Each time Alice logs in, Facebook becomes
-aware that Alice uses the dating service. It also learns at which time and how often Alice is
-using the service. Alice probably didn't want to share this data with Facebook and did this
+aware that Alice uses the dating service. Depending on the service authentication model, i.e., how
+often the service requires users to reauthenticate, it can also
+learn a great deal at which time and how often Alice is using the service.
+
+Alice probably didn't want to share this data with Facebook and did this
 unintentionally. Even worse, Alice probably uses a similar login approach with other applications.
-Little by little, Facebook learns a great deal about which applications Alice is using
+Little by little, Facebook learns about which applications Alice is using
 and how often. Moreover, as applications usually provide a limited amount of login options,
 most users choose the biggest identity providers such as Facebook and Google.
 The big players end up collecting an enormous amount of data over users.
@@ -48,10 +51,10 @@ the login to take place.
 Furthermore, the transparent proof presentation process lets the user know which data fields
 the application sees. On the contrary, in the traditional flow, the user data usually gets
 transferred server-to-server invisibly. That makes the user unable to determine which data
-in detail the identity provider forwards from its' silo.
+in detail the identity provider forwards from its silo.
 
 {{< imgproc attributes Fit "625x625" >}}
-<em>In proof presentation, the wallet user sees in detail which attributes she shares with the application.</em>
+<em>In the proof presentation, the wallet user sees in detail which attributes she shares with the application.</em>
 {{< /imgproc >}}
 
 The verifiable credentials technology would even allow computations on the user data without
@@ -61,19 +64,22 @@ to the dating service.
 
 ## Midway Solution for Speeding up Adoption
 
-The ideal SSI-enabled OIDC login process wouldn't have any identity provider role. The identity
-provider (or any other suitable issuer) would issue the credential to the user's wallet before
-any logins. After the issuance, the user can use the data directly with the client applications
-as she wishes without the identity provider knowing it. The OIDC extension
+The ideal SSI-enabled OIDC login process wouldn't have any identity provider role, or actually,
+the user would be the identity provider herself. The current identity provider (or any other service
+holding the needed identity data) would issue the credential to the user’s wallet before any logins.
+After the issuance, the user could use the data directly with the client applications
+as she wishes without the original issuer knowing it.
+
+The OIDC extension
 [SIOP (Self-Issued OpenID Provider)](https://openid.net/specs/openid-connect-self-issued-v2-1_0.html)
-tries to reach this goal. The specification defines how the client applications can verify users'
-credential data through the renewed OIDC protocol. Unfortunately, implementing SIOP would require
-considerable changes to all OIDC client applications.
+tries to reach this ambitious goal. The specification defines how the client applications can verify
+users' credential data through the renewed OIDC protocol. Unfortunately, implementing SIOP would require
+considerable changes to existing OIDC client applications.
 
 As adapting these changes to OIDC client applications is undoubtedly slow, we think a midway
 solution not requiring too many changes to the OIDC clients would be ideal for speeding up
 the SSI adoption. The identity provider would work as an SSI proxy in this solution, utilizing
-SSI agent capabilities. Instead of storing the sensitive user data in its' database, the provider
+SSI agent capabilities. Instead of storing the sensitive user data in its database, the provider
 would verify the user's credential data and deliver it to the client applications using the same
 API interfaces as traditional OIDC.
 
@@ -99,23 +105,28 @@ an excellent user experience for SSI wallet users.
 
 ## Demo
 
+{{< youtube JU4deabpyqU >}}
+*The demo video shows how the user logs in to a protected service using the web wallet.*
+
 The basic setup for the demo is familiar to OIDC utilizers. The end-user uses a browser and wishes
 to log in to a sample web service (["issuer tool"](https://github.com/findy-network/findy-issuer-tool)).
 The sample service has configured an SSI-enabled identity provider
 (["findy-oidc-provider"](https://github.com/findy-network/findy-oidc-provider)) as a login method
-and displays the button "Login via credential" on its' login page. The service redirects the user
+and displays the button "Login via credential" on its login page. The service redirects the user
 to the identity provider login page with a button click.
-
-VIDEO
 
 Then the flow changes from the usual OIDC routine. The user has already acquired the needed data
 (an FTN - Finnish Trust Network credential) in her wallet before the login. She reads the connection
 invitation as a QR code from the login page to begin the DIDComm communication with the identity
 provider. The identity provider will then verify the user's credential and acquire the data
 the client application needs for the login. The rest of the flow continues as with traditional OIDC,
-and finally, the client application redirects the user to the protected service. The full process
-sequence can be found
-[here](https://github.com/findy-network/findy-oidc-provider#oidc-login-flow-with-didcomm) in detail.
+and finally, the client application redirects the user to the protected service. The entire process
+sequence is below in detail:
+
+{{< figure src="/blog/2022/04/07/ssi-empowered-identity-provider/sequence.svg" >}}
+*Step-by-step sequence for the login process*
+
+## Implementation
 
 The demo services utilize OIDC JS helper libraries
 ([client](https://github.com/panva/node-openid-client),
@@ -125,13 +136,13 @@ for SSI functionality. For the identity provider, we took
 [the JS OIDC provider sample code](https://github.com/panva/node-oidc-provider/tree/main/example)
 as the basis and extended the logic with
 [the SSI-agent controller](https://github.com/findy-network/findy-oidc-provider/blob/master/src/agent/index.js).
-The number of needed code changes was relatively small, which showed us that with
-a proper SSI agency and a usable API, these kinds of integrations to the "legacy" world are 1.
-possible and 2. even easy to implement.
+The number of needed code changes was relatively small, which showed us that these integrations to
+the “legacy” world are possible and *easy* to implement with an SSI agency that provides
+a straightforward API.
 
 All of the codes are available on GitHub
 ([client](https://github.com/findy-network/findy-issuer-tool),
 [provider](https://github.com/findy-network/findy-oidc-provider))
 so that you can take a closer look or even set up the demo on your local computer.
 
-_We will continue our exploration journey with the verified data and the OIDC world, so stay tuned!_
+*We will continue our exploration journey with the verified data and the OIDC world, so stay tuned!*

@@ -193,6 +193,7 @@ enable = true
 enable = true
 theme = "default"
 
+
 #Set url to plantuml server
 #default is http://www.plantuml.com/plantuml/svg/
 svg_image_url = "https://www.plantuml.com/plantuml/svg/"
@@ -202,3 +203,6 @@ svg_image_url = "https://www.plantuml.com/plantuml/svg/"
 #default = false
 svg = true
 
+[params.mermaid]
+enable = true
+theme = "default"
