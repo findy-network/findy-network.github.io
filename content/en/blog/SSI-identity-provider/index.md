@@ -41,17 +41,18 @@ The big players end up collecting an enormous amount of data over users.
 
 ## How Would SSI and Verified Data Change the Scenario?
 
-In the traditional OIDC flow, identity providers hold sensitive end-user data and personally
+In the traditional OIDC flow, identity providers hold the sensitive end-user data and personally
 identifiable information. Yet, this is not the case with the SSI model, where the user owns
 her data and stores it in her digital wallet as verifiable credentials. In the SSI-enabled
 authentication process, instead of typing username and password to the identity provider login
-form, the user presents verifiable proof of the needed data. No third parties are necessary for
+form, *the user presents verifiable proof of the needed data*. No third parties are necessary for
 the login to take place.
 
 Furthermore, the transparent proof presentation process lets the user know which data fields
-the application sees. On the contrary, in the traditional flow, the user data usually gets
-transferred server-to-server invisibly. That makes the user unable to determine which data
-in detail the identity provider forwards from its silo.
+the application sees. In the traditional flow, even though the service usually asks if the user
+wishes to share her profile information, the data is transferred server-to-server invisibly.
+The level of transparency depends on the identity provider’s goodwill and service design quality.
+In the proof presentation, the wallet user sees in detail which attributes she shares with the application.
 
 {{< imgproc attributes Fit "625x625" >}}
 <em>In the proof presentation, the wallet user sees in detail which attributes she shares with the application.</em>
@@ -69,6 +70,11 @@ the user would be the identity provider herself. The current identity provider (
 holding the needed identity data) would issue the credential to the user’s wallet before any logins.
 After the issuance, the user could use the data directly with the client applications
 as she wishes without the original issuer knowing it.
+
+{{< imgproc shift Fit "925x925" >}}
+<em>In SSI-Enabled OIDC login flow there is no need for traditional identity provider
+with user data silos.</em>
+{{< /imgproc >}}
 
 The OIDC extension
 [SIOP (Self-Issued OpenID Provider)](https://openid.net/specs/openid-connect-self-issued-v2-1_0.html)
@@ -90,7 +96,7 @@ The experiments were successful, but our technology stack
 [has matured](https://findy-network.github.io/blog/2021/08/11/announcing-findy-agency/) since then.
 We decided to rewrite the experiments on top of our latest stack and take a closer look at this topic.
 
-{{< imgproc overview Fit "625x625" >}}
+{{< imgproc overview Fit "825x825" >}}
 <em>Overview of the midway solution process participants</em>
 {{< /imgproc >}}
 
@@ -105,23 +111,26 @@ an excellent user experience for SSI wallet users.
 
 ## Demo
 
-{{< youtube JU4deabpyqU >}}
-*The demo video shows how the user logs in to a protected service using the web wallet.*
+{{< youtube V5FWX0g3HVk >}}
+*The demo video shows how the technical PoC works on localhost setup.
+The user logs in to a protected service using the web wallet.*
 
-The basic setup for the demo is familiar to OIDC utilizers. The end-user uses a browser and wishes
-to log in to a sample web service (["issuer tool"](https://github.com/findy-network/findy-issuer-tool)).
-The sample service has configured an SSI-enabled identity provider
-(["findy-oidc-provider"](https://github.com/findy-network/findy-oidc-provider)) as a login method
-and displays the button "Login via credential" on its login page. The service redirects the user
-to the identity provider login page with a button click.
+The basic setup for the demo is familiar to OIDC utilizers. The end-user uses a browser
+on the laptop and wishes to log in to a protected web service. The protected sample service
+for this demo playing the OIDC client role is called
+the ["issuer tool"](https://github.com/findy-network/findy-issuer-tool). The service has configured
+[an SSI-enabled identity provider](https://github.com/findy-network/findy-oidc-provider)
+as a login method. It displays the button “Login via credential” on its login page.
+The service redirects the user to the identity provider login page with a button click.
 
-Then the flow changes from the usual OIDC routine. The user has already acquired the needed data
-(an FTN - Finnish Trust Network credential) in her wallet before the login. She reads the connection
-invitation as a QR code from the login page to begin the DIDComm communication with the identity
-provider. The identity provider will then verify the user's credential and acquire the data
-the client application needs for the login. The rest of the flow continues as with traditional OIDC,
-and finally, the client application redirects the user to the protected service. The entire process
-sequence is below in detail:
+Then the flow changes from the usual OIDC routine. Before the login, the user has already acquired
+the needed data (an FTN - Finnish Trust Network credential) in her SSI wallet. She uses her
+[web wallet](https://github.com/findy-network/findy-wallet-pwa) on her mobile device to read
+the connection invitation as a QR code from the login page
+to begin the DIDComm communication with the identity provider. The identity provider will then
+verify the user’s credential and acquire the data the client application needs for the login.
+The rest of the flow continues as with traditional OIDC, and finally, the client application
+redirects the user to the protected service. The entire process sequence is below in detail:
 
 {{< figure src="/blog/2022/04/07/ssi-empowered-identity-provider/sequence.svg" >}}
 *Step-by-step sequence for the login process*
