@@ -1,4 +1,146 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 14 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Replacing Indy SDK</title><link>/blog/2022/03/14/replacing-indy-sdk/</link><pubDate>Mon, 14 Mar 2022 00:00:00 +0000</pubDate><guid>/blog/2022/03/14/replacing-indy-sdk/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 07 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: SSI-Empowered Identity Provider</title><link>/blog/2022/04/07/ssi-empowered-identity-provider/</link><pubDate>Thu, 07 Apr 2022 00:00:00 +0000</pubDate><guid>/blog/2022/04/07/ssi-empowered-identity-provider/</guid><description>
+&lt;p>Utilizing SSI wallets and verifiable credentials in OIDC authentication flows has been an
+interesting research topic for &lt;a href="https://findy-network.github.io">our team&lt;/a> already for a while now.
+As said, &lt;a href="https://openid.net/connect/">the OIDC protocol&lt;/a> is popular. Countless web services sign
+their users in using OIDC identity providers. And indeed, it provides many benefits, as it
+simplifies the authentication for service developers and end-users. The developers do not have
+to reinvent the authentication wheel and worry about storing username/password information.
+The users do not have to maintain countless digital identities with several different passwords.&lt;/p>
+&lt;figure>
+&lt;img src="https://pbs.twimg.com/media/FA_yO0jUcAM2fMa.jpg" width="500px"/> &lt;figcaption>
+&lt;p>
+&lt;a href="https://indieweb.org/NASCAR_problem">&lt;small>Example of login page with support for multiple identity providers.&lt;br/> Image source: IndieWeb NASCAR Problem&lt;/small>&lt;/a>&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>However, &lt;a href="https://medium.com/mattr-global/if-you-build-an-island-youll-need-a-boat-537f48525edc">the protocol is not flawless&lt;/a>,
+and it seems evident that using verified data would fix many of the known weaknesses.&lt;/p>
+&lt;p>&lt;strong>Our most significant concerns for current OIDC protocol practices are related to privacy.&lt;/strong>&lt;/p>
+&lt;p>Let&amp;rsquo;s suppose that our imaginary friend Alice uses an application, say a dating service,
+that provides a Facebook login button for its users. Each time Alice logs in, Facebook becomes
+aware that Alice uses the dating service. Depending on the service authentication model, i.e., how
+often the service requires users to reauthenticate, it can also
+learn a great deal at which time and how often Alice is using the service.&lt;/p>
+&lt;p>Alice probably didn&amp;rsquo;t want to share this data with Facebook and did this
+unintentionally. Even worse, Alice probably uses a similar login approach with other applications.
+Little by little, Facebook learns about which applications Alice is using
+and how often. Moreover, as applications usually provide a limited amount of login options,
+most users choose the biggest identity providers such as Facebook and Google.
+The big players end up collecting an enormous amount of data over users.&lt;/p>
+&lt;h2 id="how-would-ssi-and-verified-data-change-the-scenario">How Would SSI and Verified Data Change the Scenario?&lt;/h2>
+&lt;p>In the traditional OIDC flow, identity providers hold the sensitive end-user data and personally
+identifiable information. Yet, this is not the case with the SSI model, where the user owns
+her data and stores it in her digital wallet as verifiable credentials. In the SSI-enabled
+authentication process, instead of typing username and password to the identity provider login
+form, &lt;em>the user presents verifiable proof of the needed data&lt;/em>. No third parties are necessary for
+the login to take place.&lt;/p>
+&lt;p>Furthermore, the transparent proof presentation process lets the user know which data fields
+the application sees. In the traditional flow, even though the service usually asks if the user
+wishes to share her profile information, the data is transferred server-to-server invisibly.
+The level of transparency depends on the identity provider’s goodwill and service design quality.
+In the proof presentation, the wallet user sees in detail which attributes she shares with the application.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 635px">
+&lt;img class="card-img-top" src="/blog/2022/04/07/ssi-empowered-identity-provider/attributes_hu577c77636a56cb15542063a613041bde_197358_625x625_fit_catmullrom_3.png" width="625" height="436">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>In the proof presentation, the wallet user sees in detail which attributes she shares with the application.&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>The verifiable credentials technology would even allow computations on the user data without
+revealing it. For example, if we assume that Alice has a credential about her birthdate
+in her wallet, she could prove that she is over 18 without exposing her birthdate when registering
+to the dating service.&lt;/p>
+&lt;h2 id="midway-solution-for-speeding-up-adoption">Midway Solution for Speeding up Adoption&lt;/h2>
+&lt;p>The ideal SSI-enabled OIDC login process wouldn&amp;rsquo;t have any identity provider role, or actually,
+the user would be the identity provider herself. The current identity provider (or any other service
+holding the needed identity data) would issue the credential to the user’s wallet before any logins.
+After the issuance, the user could use the data directly with the client applications
+as she wishes without the original issuer knowing it.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="/blog/2022/04/07/ssi-empowered-identity-provider/shift.drawio_hu78bea64891b44cd1059188eeedccda7e_263949_925x925_fit_catmullrom_3.png" width="925" height="456">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>In SSI-Enabled OIDC login flow there is no need for traditional identity provider
+with user data silos.&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>The OIDC extension
+&lt;a href="https://openid.net/specs/openid-connect-self-issued-v2-1_0.html">SIOP (Self-Issued OpenID Provider)&lt;/a>
+tries to reach this ambitious goal. The specification defines how the client applications can verify
+users' credential data through the renewed OIDC protocol. Unfortunately, implementing SIOP would require
+considerable changes to existing OIDC client applications.&lt;/p>
+&lt;p>As adapting these changes to OIDC client applications is undoubtedly slow, we think a midway
+solution not requiring too many changes to the OIDC clients would be ideal for speeding up
+the SSI adoption. The identity provider would work as an SSI proxy in this solution, utilizing
+SSI agent capabilities. Instead of storing the sensitive user data in its database, the provider
+would verify the user&amp;rsquo;s credential data and deliver it to the client applications using the same
+API interfaces as traditional OIDC.&lt;/p>
+&lt;h2 id="findy-agency-under-test">Findy Agency under Test&lt;/h2>
+&lt;p>In the summer of 2020, our team did some initial proofs-of-concept around this subject.
+The experiments were successful, but our technology stack
+&lt;a href="https://findy-network.github.io/blog/2021/08/11/announcing-findy-agency/">has matured&lt;/a> since then.
+We decided to rewrite the experiments on top of our latest stack and take a closer look at this topic.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="/blog/2022/04/07/ssi-empowered-identity-provider/overview.drawio_hu9ec8414f57daa6762ef8cf1942977f73_180118_825x825_fit_catmullrom_3.png" width="825" height="427">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Overview of the midway solution process participants&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>Other teams have created &lt;a href="https://github.com/bcgov/vc-authn-oidc/blob/main/docs/README.md">similar demos&lt;/a>
+in the past but using different SSI technology stacks. Our target was to test our
+&lt;a href="https://github.com/findy-network/findy-agent-api">Findy Agency gRPC API&lt;/a> hands-on. Also, our
+web wallet&amp;rsquo;s user experience is somewhat different from other SSI wallets. The web wallet
+can be used securely with the browser without installing mobile applications. Furthermore,
+the core concept of our wallet app is the chat feature, which is almost missing altogether from
+other SSI wallet applications. We think that the chat feature has an essential role in creating
+an excellent user experience for SSI wallet users.&lt;/p>
+&lt;h2 id="demo">Demo&lt;/h2>
+&lt;p>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/V5FWX0g3HVk" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;em>The demo video shows how the technical PoC works on localhost setup.
+The user logs in to a protected service using the web wallet.&lt;/em>&lt;/p>
+&lt;p>The basic setup for the demo is familiar to OIDC utilizers. The end-user uses a browser
+on the laptop and wishes to log in to a protected web service. The protected sample service
+for this demo playing the OIDC client role is called
+the &lt;a href="https://github.com/findy-network/findy-issuer-tool">&amp;ldquo;issuer tool&amp;rdquo;&lt;/a>. The service has configured
+&lt;a href="https://github.com/findy-network/findy-oidc-provider">an SSI-enabled identity provider&lt;/a>
+as a login method. It displays the button “Login via credential” on its login page.
+The service redirects the user to the identity provider login page with a button click.&lt;/p>
+&lt;p>Then the flow changes from the usual OIDC routine. Before the login, the user has already acquired
+the needed data (an FTN - Finnish Trust Network credential) in her SSI wallet. She uses her
+&lt;a href="https://github.com/findy-network/findy-wallet-pwa">web wallet&lt;/a> on her mobile device to read
+the connection invitation as a QR code from the login page
+to begin the DIDComm communication with the identity provider. The identity provider will then
+verify the user’s credential and acquire the data the client application needs for the login.
+The rest of the flow continues as with traditional OIDC, and finally, the client application
+redirects the user to the protected service. The entire process sequence is below in detail:&lt;/p>
+&lt;p>
+&lt;figure>
+&lt;img src="/blog/2022/04/07/ssi-empowered-identity-provider/sequence.svg"/>
+&lt;/figure>
+&lt;em>Step-by-step sequence for the login process&lt;/em>&lt;/p>
+&lt;h2 id="implementation">Implementation&lt;/h2>
+&lt;p>The demo services utilize OIDC JS helper libraries
+(&lt;a href="https://github.com/panva/node-openid-client">client&lt;/a>,
+&lt;a href="https://github.com/panva/node-oidc-provider">server&lt;/a>). We implemented the client application
+integration similarly to any OIDC login integration, so there was no need to add any dedicated code
+for SSI functionality. For the identity provider, we took
+&lt;a href="https://github.com/panva/node-oidc-provider/tree/main/example">the JS OIDC provider sample code&lt;/a>
+as the basis and extended the logic with
+&lt;a href="https://github.com/findy-network/findy-oidc-provider/blob/master/src/agent/index.js">the SSI-agent controller&lt;/a>.
+The number of needed code changes was relatively small, which showed us that these integrations to
+the “legacy” world are possible and &lt;em>easy&lt;/em> to implement with an SSI agency that provides
+a straightforward API.&lt;/p>
+&lt;p>All of the codes are available on GitHub
+(&lt;a href="https://github.com/findy-network/findy-issuer-tool">client&lt;/a>,
+&lt;a href="https://github.com/findy-network/findy-oidc-provider">provider&lt;/a>)
+so that you can take a closer look or even set up the demo on your local computer.&lt;/p>
+&lt;p>&lt;em>We will continue our exploration journey with the verified data and the OIDC world, so stay tuned!&lt;/em>&lt;/p></description></item><item><title>Blog: Replacing Indy SDK</title><link>/blog/2022/03/14/replacing-indy-sdk/</link><pubDate>Mon, 14 Mar 2022 00:00:00 +0000</pubDate><guid>/blog/2022/03/14/replacing-indy-sdk/</guid><description>
 &lt;p>&lt;a href="https://findy-network.github.io/blog/2021/09/08/travelogue/">Once again, we are at the technology
 crossroad&lt;/a>: we have
 to decide how to proceed with our SSI/DID research and development. Naturally,
