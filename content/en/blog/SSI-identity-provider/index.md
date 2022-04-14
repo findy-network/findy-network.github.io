@@ -71,7 +71,7 @@ holding the needed identity data) would issue the credential to the user’s wal
 After the issuance, the user could use the data directly with the client applications
 as she wishes without the original issuer knowing it.
 
-{{< imgproc shift Fit "925x925" >}}
+{{< imgproc cover.shift Fit "925x925" >}}
 <em>In SSI-Enabled OIDC login flow there is no need for traditional identity provider
 with user data silos.</em>
 {{< /imgproc >}}
