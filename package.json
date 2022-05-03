@@ -20,7 +20,7 @@
   "homepage": "https://github.com/findy-network/findy-network.github.io#readme",
   "dependencies": {},
   "devDependencies": {
-    "autoprefixer": "^10.4.5",
+    "autoprefixer": "^10.4.7",
     "js-green-licenses": "^3.0.1",
     "postcss": "^8.4.12",
     "postcss-cli": "^9.1.0"
