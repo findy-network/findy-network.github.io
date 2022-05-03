@@ -67,6 +67,7 @@ This the multi-page printable view of this section.
 </div>
 <h1 class=title>Findy Agency Blog</h1>
 <ul>
+<li><a href=#pg-fee982eb3cb6188fa3fcc20b6b77686a>Trust in Your Wallet</a></li>
 <li><a href=#pg-1545230f4776b4db31114499e046462a>SSI-Empowered Identity Provider</a></li>
 <li><a href=#pg-f06adc9cecfadeb319132ff4a97cb895>Replacing Indy SDK</a></li>
 <li><a href=#pg-97dcb007a94de94cf05a2e1bdad74429>The Missing Network Layer Model</a></li>
@@ -80,6 +81,156 @@ This the multi-page printable view of this section.
 </div>
 </div>
 <div class=td-content>
+<h1 id=pg-fee982eb3cb6188fa3fcc20b6b77686a>Trust in Your Wallet</h1>
+<div class=lead>We have previously demonstrated how to speed up the leap to the SSI world for applications utilizing third-party identity providers. Another shortcut for SSI adoption is to use existing APIs when issuing credentials and build even so-called self-service issuers. In this post, we showcase how to implement a service for issuing credentials for Finnish Trust Network data.</div>
+<div class="td-byline mb-4">
+By <b>Laura Vuorenoja</b> |
+<time datetime=2022-04-27 class=text-muted>Wednesday, April 27, 2022</time>
+</div>
+<p><a href=/blog/2022/04/07/ssi-empowered-identity-provider/>Our previous post</a> showed how to speed up
+the leap to the SSI world for existing OIDC clients, i.e., web services using external identity
+providers for their user authentication. Our demonstrated concept enabled users to log in to
+web services using credentials from their identity wallet.</p>
+<p>We used an FTN credential in <a href=https://youtu.be/V5FWX0g3HVk>the demo</a>. After reading the post and
+seeing the demo, you may have wondered what this FTN credential is? Where did the user get it?
+And how the web service can trust this mysterious credential? This post will concentrate
+on these questions.</p>
+<h2 id=the-cryptographic-magic>The Cryptographic Magic</h2>
+<p>The core concept of self-sovereign identity is verified data. The idea is that entities can hold
+cryptographically signed data (aka credentials) in their digital identity wallets. They can produce
+proof of this data and hand it over to other parties for verification.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:935px>
+<img class=card-img-top src=/blog/2022/04/27/trust-in-your-wallet/triangle_hu10873f40dea6a8d6fde4ec70a9b2b7db_203065_925x925_fit_catmullrom_3.png width=925 height=513>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>The trust triangle describes the roles of the data verification scenario.
+Verifier utilizes cryptography to verify the proof that the holder provides.</em>
+</p>
+</div>
+</div>
+<p>The cryptographic magic during the verification allows the verifier to be sure of two aspects.
+Firstly, the issuer was the one who issued the credential, and secondly, the issuer issued
+it to the prover&rsquo;s wallet (and no one else&rsquo;s). The verifier must know the issuer&rsquo;s
+public key for this magic to happen.</p>
+<p>We showcased the cryptographic verification in the demo mentioned above. When logging in to
+the sample web service, instead of providing the user name and password, the user made proof of
+his credential and handed it over to the identity provider. The identity provider then verified the proof
+cryptographically and read and provided the needed data to the sample service (OIDC client application).</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:935px>
+<img class=card-img-top src=/blog/2022/04/27/trust-in-your-wallet/idp_hu7c7bccbf80a443065b433183313da6ac_215387_925x925_fit_catmullrom_3.png width=925 height=511>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>OIDC demo actors in the trust triangle. The user creates proof of his FTN credential for
+the identity provider's verification.</em>
+</p>
+</div>
+</div>
+<h2 id=who-to-trust>Who to Trust?</h2>
+<p>So cryptography gets our back regarding the authenticity of the data and its origin. But how can we
+trust the issuer, the entity that created the credential initially?</p>
+<figure>
+<img src=https://i.imgflip.com/2ab5u1.jpg width=800px>
+</figure>
+<p>The answer to this question is no different from the present situation regarding dealing with third
+parties. <em>We choose to trust the issuer.</em></p>
+<p>For example, consider the current OIDC flow, where identity providers deliver data from their silos
+to the client applications (relaying parties). The client application implementers consciously
+decide to trust that the IdP (identity provider) runs their server in a documented URL and
+provides them with correct data in the OIDC protocol flows. They may have secrets and keys
+to keep the OIDC data exchange secure and private, but ultimately, the decision to trust
+the OIDC provider is part of the application design.</p>
+<p>In the SSI scenario, we choose to trust the issuer similarly, only we are not aware of the issuer&rsquo;s
+servers but their public key for signing the credential. In our OIDC login demo,
+the client application (&ldquo;issuer-tool&rdquo;) has decided to trust the &ldquo;FTN service&rdquo; that has issued
+the data to the user&rsquo;s wallet.</p>
+<h2 id=finnish-trust-network>Finnish Trust Network</h2>
+<p><a href=https://www.kyberturvallisuuskeskus.fi/en/our-activities/regulation-and-supervision/electronic-identification>Finnish Trust Network</a>
+(FTN) consists of &ldquo;strong electronic identification&rdquo; providers. The concept
+means proving one&rsquo;s identity in electronic services that meets specific requirements laid down
+by Finnish law. The identity providers are required to implement multi-factor authentication
+to authenticate the users. The result data of the authentication process typically contains
+the user&rsquo;s name and personal identification code.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:952px>
+<img class=card-img-top src=/blog/2022/04/27/trust-in-your-wallet/identity-service-broker-view_hu92eff1541b0faa9532b79dff259ec600_56678_1025x1025_fit_catmullrom_3.png width=942 height=423>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>
+In the FTN flow, users usually authenticate using their bank ID.
+Before the users start the authentication,
+they select the identity provider in the identity service broker view.
+</em>
+</p>
+</div>
+</div>
+<p>FTN is an exciting playground for us as it is so essential part of the digital processes
+of Finnish society. Integrating FTN in one way or another into the SSI wallet seems like a natural
+next step for us when thinking about how to utilize verified data large scale in Finland.</p>
+<p>Even though regulation may initially prohibit using SSI wallets as a
+“strong electronic identification” method, the FTN credential could be part of onboarding wallet
+users or provide additional security to services that currently use weak authentication.
+<a href=https://www.w3.org/TR/vc-data-model/#dfn-selective-disclosure>The selective disclosure</a> feature
+would allow users to share only the needed data, e.g., age or name, without revealing sensitive
+personal identification code information.</p>
+<p>We decided to experiment with the FTN and create a PoC for a service (“FTN service”) that can issue
+credentials through an FTN authentication integration. And as it happened, we met our old friend
+OIDC protocol again.</p>
+<h2 id=the-demo>The Demo</h2>
+<p>The idea of the PoC FTN service is to authenticate users through FTN and issue a credential for
+the received FTN data. The PoC integrates an <a href=https://github.com/op-developer/Identity-Service-Broker-API>identity broker test service</a>
+with dummy data that enables us to test out the actual authentication flow.</p>
+<p>The process starts with the user reading the FTN service connection invitation QR code with his SSI wallet.
+After the connection is ready, the interaction with the FTN service and the user happens
+in the mobile device browser. FTN service instructs the user to authenticate with
+his bank credentials. After successful authentication, the FTN service receives
+the user information and issues a credential for the data.</p>
+<p>
+<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
+<iframe src=https://www.youtube.com/embed/7b4tKnSndxk style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
+</div>
+<em>The demo video shows how the technical PoC works.
+The user receives the FTN credential by authenticating himself with bank credentials.</em></p>
+<p>Our previous OIDC demo provided data from the credentials through the OIDC protocol.
+In this FTN issuer demo, we utilized the OIDC protocol again but now used it <em>as
+the credential data source</em>. Once the user has acquired the FTN credential to his wallet,
+he can prove facts about himself without reauthenticating with his bank credentials.</p>
+<h3 id=the-sequence-flow>The Sequence Flow</h3>
+<p>The entire process sequence is below in detail:</p>
+<p>
+<figure>
+<img src=/blog/2022/04/27/trust-in-your-wallet/sequence.svg>
+</figure>
+<em><a href=https://github.com/findy-network/findy-issuer-tool/blob/master/api/README.md#ftn-credential-flow>Step-by-step sequence for the issuing process</a></em></p>
+<h2 id=food-for-thought-self-service-issuers>Food for Thought: Self-Service Issuers</h2>
+<p>In the SSI dream world of the future, each organization would have the capabilities to issue
+credentials for the data they possess. Individuals could store these credentials in their wallets
+and use them how they see fit in other services. Verified data would enable many use cases that
+are cumbersome or even manual today. Only in the financial sector the possibilities to improve
+various processes (for example, AML, KYC, or GDPR) are countless.</p>
+<p>However, our pragmatic team realizes that this future may be distant, as the adoption of SSI
+technologies seems to be still slow. The presented experimentation led us to consider another
+shortcut to the SSI world. What if we could create similar services as the PoC FTN service
+to speed up the adoption? These “issuer self-services” would utilize existing API interfaces
+(such as OIDC) and issue credentials to users.</p>
+<p>And at the same time, we could utilize another significant benefit of verified data technology:
+<em>reducing the count of integrations between systems</em>.</p>
+<p>Once we have the data available in the user’s wallet, we do not need to fetch it from online servers
+and integrate services with countless APIs. Instead, the required data is directly available in
+the digital wallets of different process actors using a standard protocol for verified data exchange,
+Hyperledger Aries.</p>
+<p>Also, from the application developer’s point of view, the count of integrations reduces only to one
+point—and for that, the SSI agent provides the needed functionality.</p>
+<h2 id=try-it-out>Try It Out</h2>
+<p>The codes are available on GitHub. You can set up the demo on your localhost by launching
+<a href=https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development>the agency</a>
+and <a href=https://github.com/findy-network/findy-issuer-tool>the issuer service</a>.
+Once you have the services running, you can access the web wallet opening browser at <code>http://localhost:3000</code>
+and the FTN service at <code>http://localhost:8081</code>.</p>
+<p>If you have any questions about these demos or Findy Agency, you can contact our team and me
+via <a href=https://github.com/findy-network>GitHub</a>, <a href=https://www.linkedin.com/in/lauravuorenoja/>LinkedIn</a>,
+or <a href=https://twitter.com/vuorenoja>Twitter</a>. You can also find me in
+<a href=https://discord.gg/hyperledger>Hyperledger Discord</a>.</p>
+</div>
+<div class=td-content style=page-break-before:always>
 <h1 id=pg-1545230f4776b4db31114499e046462a>SSI-Empowered Identity Provider</h1>
 <div class=lead>Open ID Connect (OIDC) is a popular identity protocol for authenticating users and providing identity data for access control. It allows web services to externalize the authentication of end-users by securely signing users in using a third-party identity provider. Findy Agency team has experimented with integrating SSI (self-sovereign identity) agent capabilities to a sample OIDC provider, thus enabling verified data usage in the login flow. The proof-of-concept shows that this approach would allow numerous web applications to switch to SSI-based login with minimal changes.</div>
 <div class="td-byline mb-4">
