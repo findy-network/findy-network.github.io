@@ -26,6 +26,11 @@ The backend server of Findy Agency consists of three services:
 <em>Wallet login screen.</em>
 {{< /imgproc >}}
 
-Service agents are applications that handle verified data on behalf of organizations. Service agents utilize Findy Agency through headless authentication and [gRPC API](https://github.com/findy-network/findy-agent-api). Samples and reference implementations can be found in agency gRPC helper libraries for [golang](https://github.com/findy-network/findy-common-go) or [Typescript](https://github.com/findy-network/findy-common-ts).
+Service agents are applications that handle verified data on behalf of organizations.
+Service agents utilize Findy Agency through headless authentication and
+[gRPC API](https://github.com/findy-network/findy-agent-api). Samples and reference implementations
+can be found in agency gRPC helper libraries for [go](https://github.com/findy-network/findy-common-go),
+[Typescript](https://github.com/findy-network/findy-common-ts) or
+[Kotlin](https://github.com/findy-network/findy-common-kt).
 
 Agents can be also operated through a CLI, [findy-agent-cli](https://github.com/findy-network/findy-agent-cli), that provides most of the functionality needed for agent and agency manipulation.
