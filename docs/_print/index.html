@@ -161,7 +161,12 @@ There are other great solutions you should definitely check out if</p>
 </p>
 </div>
 </div>
-<p>Service agents are applications that handle verified data on behalf of organizations. Service agents utilize Findy Agency through headless authentication and <a href=https://github.com/findy-network/findy-agent-api>gRPC API</a>. Samples and reference implementations can be found in agency gRPC helper libraries for <a href=https://github.com/findy-network/findy-common-go>golang</a> or <a href=https://github.com/findy-network/findy-common-ts>Typescript</a>.</p>
+<p>Service agents are applications that handle verified data on behalf of organizations.
+Service agents utilize Findy Agency through headless authentication and
+<a href=https://github.com/findy-network/findy-agent-api>gRPC API</a>. Samples and reference implementations
+can be found in agency gRPC helper libraries for <a href=https://github.com/findy-network/findy-common-go>go</a>,
+<a href=https://github.com/findy-network/findy-common-ts>Typescript</a> or
+<a href=https://github.com/findy-network/findy-common-kt>Kotlin</a>.</p>
 <p>Agents can be also operated through a CLI, <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a>, that provides most of the functionality needed for agent and agency manipulation.</p>
 </div>
 <div class=td-content style=page-break-before:always>
@@ -249,10 +254,14 @@ Use <span style=color:#4e9a06>&#34;findy-agent-cli [command] --help&#34;</span> 
 <h1 id=pg-ff91144a7f65000b545408199df2a0ab>2.2 - Service Agents</h1>
 <div class=lead>Instructions how to get started with service agents.</div>
 <p>Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, <em>acator</em>, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, <a href=https://github.com/findy-network/findy-agent-api>findy-agent-api</a>.</p>
-<p>You can use our helper libraries for <a href=https://github.com/findy-network/findy-common-go>golang</a> or <a href=https://github.com/findy-network/findy-common-ts>Typescript</a> or use directly <a href=https://github.com/findy-network/findy-agent-api>the GRPC interface</a> with the language of your choice.</p>
+<p>You can use our helper libraries for <a href=https://github.com/findy-network/findy-common-go>go</a>,
+<a href=https://github.com/findy-network/findy-common-ts>Typescript</a> or
+<a href=https://github.com/findy-network/findy-common-kt>Kotlin</a>
+or use directly <a href=https://github.com/findy-network/findy-agent-api>the gRPC interface</a>
+with the language of your choice.</p>
 <p>You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:</p>
 <ul>
-<li>golang: <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a></li>
+<li>go: <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a></li>
 <li>JavaScript: <a href=https://github.com/findy-network/findy-issuer-tool>findy-issuer-tool</a>, specifically <a href=https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js>api/src/agent/index.js</a></li>
 </ul>
 <h2 id=sample-flow-connecting-to-another-agent>Sample flow: connecting to another agent</h2>

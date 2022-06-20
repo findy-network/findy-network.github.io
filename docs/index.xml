@@ -25,7 +25,12 @@
 &lt;/p>
 &lt;/div>
 &lt;/div>
-&lt;p>Service agents are applications that handle verified data on behalf of organizations. Service agents utilize Findy Agency through headless authentication and &lt;a href="https://github.com/findy-network/findy-agent-api">gRPC API&lt;/a>. Samples and reference implementations can be found in agency gRPC helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">golang&lt;/a> or &lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a>.&lt;/p>
+&lt;p>Service agents are applications that handle verified data on behalf of organizations.
+Service agents utilize Findy Agency through headless authentication and
+&lt;a href="https://github.com/findy-network/findy-agent-api">gRPC API&lt;/a>. Samples and reference implementations
+can be found in agency gRPC helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">go&lt;/a>,
+&lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a> or
+&lt;a href="https://github.com/findy-network/findy-common-kt">Kotlin&lt;/a>.&lt;/p>
 &lt;p>Agents can be also operated through a CLI, &lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a>, that provides most of the functionality needed for agent and agency manipulation.&lt;/p></description></item><item><title>Docs: First Steps with Findy Agency</title><link>/docs/getting-started/setup-agency/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/getting-started/setup-agency/</guid><description>
 &lt;h2 id="full-agency-setup">Full Agency Setup&lt;/h2>
 &lt;p>Agency services can be setup easily locally using Docker. Check further instructions &lt;a href="https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development">here&lt;/a>. The instructions describe how to launch all the needed backend services in Docker containers together with a test ledger. There is also a native development setup instructions for web wallet application which will be needed in order to run web wallet application together with other agents.&lt;/p>
@@ -556,10 +561,14 @@ Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp
 &lt;/tbody>
 &lt;/table></description></item><item><title>Docs: Service Agents</title><link>/docs/getting-started/service-agent/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/getting-started/service-agent/</guid><description>
 &lt;p>Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, &lt;em>acator&lt;/em>, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, &lt;a href="https://github.com/findy-network/findy-agent-api">findy-agent-api&lt;/a>.&lt;/p>
-&lt;p>You can use our helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">golang&lt;/a> or &lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a> or use directly &lt;a href="https://github.com/findy-network/findy-agent-api">the GRPC interface&lt;/a> with the language of your choice.&lt;/p>
+&lt;p>You can use our helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">go&lt;/a>,
+&lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a> or
+&lt;a href="https://github.com/findy-network/findy-common-kt">Kotlin&lt;/a>
+or use directly &lt;a href="https://github.com/findy-network/findy-agent-api">the gRPC interface&lt;/a>
+with the language of your choice.&lt;/p>
 &lt;p>You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:&lt;/p>
 &lt;ul>
-&lt;li>golang: &lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a>&lt;/li>
+&lt;li>go: &lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a>&lt;/li>
 &lt;li>JavaScript: &lt;a href="https://github.com/findy-network/findy-issuer-tool">findy-issuer-tool&lt;/a>, specifically &lt;a href="https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js">api/src/agent/index.js&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h2 id="sample-flow-connecting-to-another-agent">Sample flow: connecting to another agent&lt;/h2>

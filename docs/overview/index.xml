@@ -22,5 +22,10 @@
 &lt;/p>
 &lt;/div>
 &lt;/div>
-&lt;p>Service agents are applications that handle verified data on behalf of organizations. Service agents utilize Findy Agency through headless authentication and &lt;a href="https://github.com/findy-network/findy-agent-api">gRPC API&lt;/a>. Samples and reference implementations can be found in agency gRPC helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">golang&lt;/a> or &lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a>.&lt;/p>
+&lt;p>Service agents are applications that handle verified data on behalf of organizations.
+Service agents utilize Findy Agency through headless authentication and
+&lt;a href="https://github.com/findy-network/findy-agent-api">gRPC API&lt;/a>. Samples and reference implementations
+can be found in agency gRPC helper libraries for &lt;a href="https://github.com/findy-network/findy-common-go">go&lt;/a>,
+&lt;a href="https://github.com/findy-network/findy-common-ts">Typescript&lt;/a> or
+&lt;a href="https://github.com/findy-network/findy-common-kt">Kotlin&lt;/a>.&lt;/p>
 &lt;p>Agents can be also operated through a CLI, &lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a>, that provides most of the functionality needed for agent and agency manipulation.&lt;/p></description></item></channel></rss>

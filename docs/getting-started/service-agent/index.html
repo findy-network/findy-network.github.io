@@ -25,7 +25,7 @@
 <meta itemprop=description content="Instructions how to get started with service agents.
 "><meta itemprop=datePublished content="2021-08-10T00:00:00+00:00">
 <meta itemprop=dateModified content="2021-08-10T00:00:00+00:00">
-<meta itemprop=wordCount content="252">
+<meta itemprop=wordCount content="253">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Service Agents">
 <meta name=twitter:description content="Instructions how to get started with service agents.
@@ -144,10 +144,14 @@
 <header class=article-meta>
 </header>
 <p>Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, <em>acator</em>, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, <a href=https://github.com/findy-network/findy-agent-api>findy-agent-api</a>.</p>
-<p>You can use our helper libraries for <a href=https://github.com/findy-network/findy-common-go>golang</a> or <a href=https://github.com/findy-network/findy-common-ts>Typescript</a> or use directly <a href=https://github.com/findy-network/findy-agent-api>the GRPC interface</a> with the language of your choice.</p>
+<p>You can use our helper libraries for <a href=https://github.com/findy-network/findy-common-go>go</a>,
+<a href=https://github.com/findy-network/findy-common-ts>Typescript</a> or
+<a href=https://github.com/findy-network/findy-common-kt>Kotlin</a>
+or use directly <a href=https://github.com/findy-network/findy-agent-api>the gRPC interface</a>
+with the language of your choice.</p>
 <p>You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:</p>
 <ul>
-<li>golang: <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a></li>
+<li>go: <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a></li>
 <li>JavaScript: <a href=https://github.com/findy-network/findy-issuer-tool>findy-issuer-tool</a>, specifically <a href=https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js>api/src/agent/index.js</a></li>
 </ul>
 <h2 id=sample-flow-connecting-to-another-agent>Sample flow: connecting to another agent</h2>
