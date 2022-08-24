@@ -11,7 +11,7 @@ description: >
 
 Agency services can be setup easily locally using Docker. Check further instructions [here](https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development). The instructions describe how to launch all the needed backend services in Docker containers together with a test ledger. There is also a native development setup instructions for web wallet application which will be needed in order to run web wallet application together with other agents.
 
-Once you have the services running on your computer, you can start experimentation using CLI tool [findy-agent-cli](#cli), UI tool [findy-issuer-tool](#ui-tool) or [build a service agent of your own](/docs/getting-started/service-agent/).
+Once you have the services running on your computer, try to run [the Alice-Faber-Acme demo](https://github.com/findy-network/findy-agency-demo#findy-agency-demo). Or you can continue  with the CLI tool [findy-agent-cli](#cli), UI tool [findy-issuer-tool](#ui-tool) or [build a service agent of your own](/docs/getting-started/service-agent/).
 
 ## CLI
 
