@@ -2,7 +2,7 @@
 date: 2022-08-29
 title: "The Findy Agency API"
 linkTitle: "The Findy Agency API"
-description: "The Findy Agency API serves as an interface for Findy Agency clients who wish to use the agency services programmatically. The core use cases are issuing, receiving, verifying, or proving a credential. After onboarding to the agency, the client application can participate in these complex credential exchange protocol flows using the programmer-friendly API."
+description: "The Findy Agency API serves as an interface for Findy Agency clients who wish to use the agency services programmatically. The core use cases enable verified data exchange: issuing, receiving, verifying, or proving a credential. After onboarding to the agency, the client application can participate in these complex protocol flows using our programmer-friendly API."
 author: Laura Vuorenoja
 resources:
 - src: "**.{png,jpg}"
@@ -30,6 +30,12 @@ One option would have been switching our API implementation to traditional REST 
 solution than REST. We also wanted to be able to use the API using multiple different
 languages with ease. **The obvious choice was gRPC**, which provided us with protocol buffer messaging
 format, HTTP2-protocol performance gains, and tooling suitable for the polyglot, i.e., multilingual environment.
+
+The technology choice was even better than we expected. Given that we have an agency installation available
+in the cloud, we can listen to agent events through the gRPC stream without setting up external endpoints
+using tools such as ngrok. Thus, gRPC **streaming capabilities have** considerably **simplified** client application
+**development in a localhost environment**. Also, the logic of how gRPC handles errors out-of-the-box have helped
+us trace the development time problems efficiently. 
 
 ## The API Contract
 
@@ -108,26 +114,32 @@ the API takes in or spits out.
 
 ## Helpers and Samples
 
-We have developed two helper libraries containing the ready-built proto-code and functionality
-for handling the gRPC connection. One is for our favorite language Go ([findy-common-go](https://github.com/findy-network/findy-common-go)),
+We have developed two helper libraries that contain some common functionalities needed for building API client applications.
+One is for our favorite language Go ([findy-common-go](https://github.com/findy-network/findy-common-go)),
 and the other is for Typescript ([findy-common-ts](https://github.com/findy-network/findy-common-ts)) to demonstrate the API usage for one of
-the most popular web development languages. These helper libraries make building a Findy Agency
-client application even more straightforward.
+the most popular web development languages.
+
+These helper libraries make building a Findy Agency
+client application even more straightforward. They contain
+* the ready-built proto-code,
+* functionality for opening and closing the connection and streaming the data,
+* utilities for client authentication, and
+* further abstractions on top of the API interface.
 
 There already exist two excellent example client applications that utilize these helper libraries.
 In addition to being examples of using the API, they are handy tools for accessing and testing
 the agency functionality.
 
 Our [CLI tool](https://github.com/findy-network/findy-agent-cli) provides agent manipulation functionality through a command-line interface.
-It uses the agency API internally through the Go wrapper.
+It uses the agency API internally through the Go helper.
 
 {{< figure src="https://github.com/findy-network/findy-wallet-pwa/raw/dev/tools/env/docs/env-04.gif" title="" width="925" >}}
 
 *Example above shows how it is possible to use the CLI tool for chatting with web wallet user.*
 
-[The issuer tool](https://github.com/findy-network/findy-issuer-tool) is a sample web
-service with a simple UI for issuing and verifying credentials. It is written in Javascript
-and utilizes the Typescript wrapper.
+[The issuer tool](https://github.com/findy-network/findy-issuer-tool) is a sample web service with a simple UI
+that can issue and verify credentials using the issuer tool's cloud agent.
+It is written in Javascript and utilizes the Typescript helper.
 
 {{< figure src="https://github.com/findy-network/findy-issuer-tool/raw/master/docs/usage-04.gif" title="" width="925" >}}
 
