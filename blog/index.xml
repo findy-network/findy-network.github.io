@@ -1,4 +1,120 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 27 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Trust in Your Wallet</title><link>/blog/2022/04/27/trust-in-your-wallet/</link><pubDate>Wed, 27 Apr 2022 00:00:00 +0000</pubDate><guid>/blog/2022/04/27/trust-in-your-wallet/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 29 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: The Findy Agency API</title><link>/blog/2022/08/29/the-findy-agency-api/</link><pubDate>Mon, 29 Aug 2022 00:00:00 +0000</pubDate><guid>/blog/2022/08/29/the-findy-agency-api/</guid><description>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="/blog/2022/08/29/the-findy-agency-api/cover-agency-arch_hu69392f6fa2d36b75ea1764737da82802_153511_825x825_fit_catmullrom_3.png" width="825" height="451">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>The gRPC API serves the client applications.&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>The Findy Agency clients can control their agents through the Findy Agency API
+over &lt;a href="https://grpc.io/">the high-performing gRPC protocol&lt;/a>.
+The API design results from iterative planning and multiple development cycles.
+Initially, we implemented it using a custom protocol that utilized
+JSON structures and DIDComm as the transport mechanism.
+The initial design seemed like a good plan, as we got the chance to test the exact DIDComm implementation
+we were using to send the agent-2-agent messages (used in the credential exchange flows).&lt;/p>
+&lt;p>However, as we gained more experience using the API and the agent-2-agent protocol evolved as
+&lt;a href="https://www.hyperledger.org/blog/2019/05/14/announcing-hyperledger-aries-infrastructure-supporting-interoperable-identity-solutions">the community introduced Hyperledger Aries&lt;/a>, we realized our API was too laborious, clumsy,
+and inefficient for modern applications.&lt;/p>
+&lt;p>One option would have been switching our API implementation to traditional REST over HTTP1.1.
+&lt;strong>However, we wanted something better&lt;/strong>. We were tired of JSON parsing and wanted a better-performing
+solution than REST. We also wanted to be able to use the API using multiple different
+languages with ease. &lt;strong>The obvious choice was gRPC&lt;/strong>, which provided us with protocol buffer messaging
+format, HTTP2-protocol performance gains, and tooling suitable for the polyglot, i.e., multilingual environment.&lt;/p>
+&lt;p>The technology choice was even better than we expected. Given that we have an agency installation available
+in the cloud, we can listen to agent events through the gRPC stream without setting up external endpoints
+using tools such as ngrok. Thus, gRPC &lt;strong>streaming capabilities have&lt;/strong> considerably &lt;strong>simplified&lt;/strong> client application
+&lt;strong>development in a localhost environment&lt;/strong>. Also, the logic of how gRPC handles errors out-of-the-box have helped
+us trace the development time problems efficiently.&lt;/p>
+&lt;h2 id="the-api-contract">The API Contract&lt;/h2>
+&lt;p>Our API contract defined with proto files resides in a separate repository, &lt;a href="https://github.com/findy-network/findy-agent-api">findy-agent-api&lt;/a>.
+Using the gRPC tooling, one can take these proto files and compile them to several target languages,
+which enables the use of API structures directly from the target implementation.&lt;/p>
+&lt;p>A brief example is displayed below.
+&lt;a href="https://github.com/findy-network/findy-agent-api/blob/master/idl/v1/agent.proto#L54">We define the structures and an RPC call&lt;/a> for schema creation in protobuf language:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-protobuf" data-lang="protobuf">&lt;span style="color:#8f5902;font-style:italic">// SchemaCreate is structure for schema creation.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">message&lt;/span> &lt;span style="color:#000">SchemaCreate&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span> &lt;span style="color:#000">name&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">;&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// name is the name of the schema.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span> &lt;span style="color:#000">version&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">2&lt;/span>&lt;span style="color:#000;font-weight:bold">;&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// version is the schema version.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">repeated&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span> &lt;span style="color:#000">attributes&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">3&lt;/span>&lt;span style="color:#000;font-weight:bold">;&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// attributes is JSON array string.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span>&lt;span style="color:#8f5902;font-style:italic">// Schema is structure to transport schema ID.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">message&lt;/span> &lt;span style="color:#000">Schema&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span> &lt;span style="color:#000">ID&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">;&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// ID is a schema ID.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span>&lt;span style="color:#8f5902;font-style:italic">/*
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">AgentService is to communicate with your cloud agent. With the cloud agent
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">you can Listen your agent&amp;#39;s status, create invitations, manage its running environment,
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">and create schemas and credential definitions.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic"> */&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">service&lt;/span> &lt;span style="color:#000">AgentService&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// CreateSchema creates a new schema and writes it to ledger.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">rpc&lt;/span> &lt;span style="color:#000">CreateSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">SchemaCreate&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#204a87;font-weight:bold">returns&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">Schema&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{}&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">&lt;/span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;span style="color:#a40000">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The protobuf code is compiled to target languages using gRPC tooling, and after that
+the structures can be used natively from the application code.&lt;/p>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-agent-cli/blob/0dbee240e5cd5693ac818f2cacd0ce86987a950c/cmd/agent/createschema.go#L47">Go example&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go"> &lt;span style="color:#000">agent&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">NewAgentServiceClient&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">conn&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">r&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To1&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">agent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">CreateSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">ctx&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SchemaCreate&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">Name&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">name&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Version&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">version&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Attributes&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">attrs&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}))&lt;/span>
+&lt;span style="color:#000">fmt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Println&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// plain output for pipes
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;a href="https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js#L40">Typescript example&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-ts" data-lang="ts"> &lt;span style="color:#000">log&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">`Creating schema &lt;/span>&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">JSON&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">stringify&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">body&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>&lt;span style="color:#4e9a06">`&lt;/span>&lt;span style="color:#000;font-weight:bold">);&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">const&lt;/span> &lt;span style="color:#000">msg&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">new&lt;/span> &lt;span style="color:#000">agencyv1&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SchemaCreate&lt;/span>&lt;span style="color:#000;font-weight:bold">();&lt;/span>
+&lt;span style="color:#000">msg&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">setName&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">body&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">name&lt;/span>&lt;span style="color:#000;font-weight:bold">);&lt;/span>
+&lt;span style="color:#000">msg&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">setVersion&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">body&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">version&lt;/span>&lt;span style="color:#000;font-weight:bold">);&lt;/span>
+&lt;span style="color:#000">body&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">attrs&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">map&lt;/span>&lt;span style="color:#000;font-weight:bold">((&lt;/span>&lt;span style="color:#000">item&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&amp;gt;&lt;/span> &lt;span style="color:#000">msg&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">addAttributes&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">item&lt;/span>&lt;span style="color:#000;font-weight:bold">));&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">const&lt;/span> &lt;span style="color:#000">res&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">await&lt;/span> &lt;span style="color:#000">agentClient&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">createSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">msg&lt;/span>&lt;span style="color:#000;font-weight:bold">);&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">const&lt;/span> &lt;span style="color:#000">schemaId&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#000">res&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">getId&lt;/span>&lt;span style="color:#000;font-weight:bold">();&lt;/span>
+&lt;span style="color:#000">log&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">`Schema created with id &lt;/span>&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">schemaId&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>&lt;span style="color:#4e9a06">`&lt;/span>&lt;span style="color:#000;font-weight:bold">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The examples show that the code is simple and readable compared
+to making HTTP requests to arbitrary addresses and JSON manipulation.
+The code generated from the proto-files guides
+the programmer in the correct direction, and there are no obscurities about which kind of structures
+the API takes in or spits out.&lt;/p>
+&lt;h2 id="helpers-and-samples">Helpers and Samples&lt;/h2>
+&lt;p>We have developed two helper libraries that contain some common functionalities needed for building API client applications.
+One is for our favorite language Go (&lt;a href="https://github.com/findy-network/findy-common-go">findy-common-go&lt;/a>),
+and the other is for Typescript (&lt;a href="https://github.com/findy-network/findy-common-ts">findy-common-ts&lt;/a>) to demonstrate the API usage for one of
+the most popular web development languages.&lt;/p>
+&lt;p>These helper libraries make building a Findy Agency
+client application even more straightforward. They contain&lt;/p>
+&lt;ul>
+&lt;li>the ready-built proto-code,&lt;/li>
+&lt;li>functionality for opening and closing the connection and streaming the data,&lt;/li>
+&lt;li>utilities for client authentication, and&lt;/li>
+&lt;li>further abstractions on top of the API interface.&lt;/li>
+&lt;/ul>
+&lt;p>There already exist two excellent example client applications that utilize these helper libraries.
+In addition to being examples of using the API, they are handy tools for accessing and testing
+the agency functionality.&lt;/p>
+&lt;p>Our &lt;a href="https://github.com/findy-network/findy-agent-cli">CLI tool&lt;/a> provides agent manipulation functionality through a command-line interface.
+It uses the agency API internally through the Go helper.&lt;/p>
+&lt;figure>
+&lt;img src="https://github.com/findy-network/findy-wallet-pwa/raw/dev/tools/env/docs/env-04.gif" width="925"/>
+&lt;/figure>
+&lt;p>&lt;em>Example above shows how it is possible to use the CLI tool for chatting with web wallet user.&lt;/em>&lt;/p>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-issuer-tool">The issuer tool&lt;/a> is a sample web service with a simple UI
+that can issue and verify credentials using the issuer tool&amp;rsquo;s cloud agent.
+It is written in Javascript and utilizes the Typescript helper.&lt;/p>
+&lt;figure>
+&lt;img src="https://github.com/findy-network/findy-issuer-tool/raw/master/docs/usage-04.gif" width="925"/>
+&lt;/figure>
+&lt;p>&lt;em>Issuer tool provides functionality for testing different Aries protocols.&lt;/em>&lt;/p>
+&lt;p>One is not limited to using these two languages, as using the API from any language with
+gRPC tooling support is possible. Stay tuned for my next post that describes our latest experiment
+with Kotlin.&lt;/p></description></item><item><title>Blog: Trust in Your Wallet</title><link>/blog/2022/04/27/trust-in-your-wallet/</link><pubDate>Wed, 27 Apr 2022 00:00:00 +0000</pubDate><guid>/blog/2022/04/27/trust-in-your-wallet/</guid><description>
 &lt;p>&lt;a href="/blog/2022/04/07/ssi-empowered-identity-provider/">Our previous post&lt;/a> showed how to speed up
 the leap to the SSI world for existing OIDC clients, i.e., web services using external identity
 providers for their user authentication. Our demonstrated concept enabled users to log in to
