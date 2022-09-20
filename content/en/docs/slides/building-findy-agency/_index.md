@@ -4,6 +4,7 @@ date: "2021-10-26"
 type: "slides"
 description: "Overview of Findy Agency project for Helsinki Gophers meetup on 3.11.2021"
 toc_hide: true
+weight: 1
 ---
 
 background-image: url(https://images.unsplash.com/photo-1581010105267-67447703cfe9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1471&q=80)
