@@ -3,9 +3,10 @@ date: 2022-09-30
 title: "Ledger Multiplexer"
 linkTitle: "Ledger Multiplexer"
 description: "I implemented a ledger multiplexer in Go for Indy SDK (libindy).
-Be able to replace Indy ledger whit whatever verified data registry. Be able to
-have automatic ledger backups. Be able to remove the ledger's performance
-bottleneck with just a few simple and standard software engineering practices."
+You'll be able to replace Indy ledger with whatever verified data registry.
+You'll be able to have automatic ledger backups. And you'll be able to remove the
+ledger's performance bottleneck with just a few simple and standard software
+engineering practices."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
@@ -13,14 +14,17 @@ resources:
 ---
 
 In this technical blog post, I'll explain how I implemented a plugin system into
-our Indy SDK Go wrapper and then extended it to work as a multiplexer. The plugin
-system allows us to use a key/value-based storage system instead of the normal
-Indy ledger. And multiplexing extended the functionality to use multiple data
-sources simultaneously and asynchronously. For instance, we can add a memory cache
-to help Indy ledger, which has been proving to make a considerable difference in
-a multi-tenant agency that can serve thousands of different wallet users simultaneously.
+our [Indy SDK](https://github.com/hyperledger/indy-sdk)
+[Go wrapper](https://github.com/findy-network/findy-wrapper-go) and then
+extended it to work as a multiplexer. The plugin system allows us to use a
+key/value-based storage system instead of the normal Indy ledger. And
+multiplexing extended the functionality to use multiple data sources
+simultaneously and asynchronously. For instance, we can add a memory cache to
+help Indy ledger, which has been proving to make a considerable difference in a
+multi-tenant agency that can serve thousands of different wallet users
+simultaneously.
 
-{{< figure src="/blog/2022/09/27/ledger-multiplexer/Plugin.svg" >}}
+{{< figure src="/blog/2022/09/30/ledger-multiplexer/Plugin.svg" >}}
 *Package And Interface Structure*
 
 As you can see in the picture above `plugin` package defines just needed types
@@ -34,14 +38,14 @@ Indy ledger has been bugging me since we met each other:
 
 - Why was it written in Python when everybody had to know that it would be
   a performance-critical part of the system?
-- Why did it use ZeroMQ when it used so simple TCP/IP communication? (Was it
+- Why it was implemented with ZeroMQ when it used so simple TCP/IP communication? (Was it
   because of Python?) Anyway, every dependency is a dependency to handle.
 - Why didn't it offer a development run mode from the beginning? For instance, a
   pseudo node would offer local development and test environment?
 - Why it didn't offer a straightforward own separated API? With Indy SDK, you had to build
   each transaction with three separate functions that weren't general but
   entity-specific, like `indy_build_cred_def_request()`.
-- Why the transaction model was so unclear and 'hid' from the rest of the
+- Why the transaction model was so unclear and 'hid' from the rest of the?
   Indy SDK functions. (See previous one.)
 - Why could Indy nodes not idle? When no one was connected to the ledger, it still
   used a shit load of CPU time per node, and there was a four (4) node minimum in
@@ -105,7 +109,7 @@ I discovered that I could enumerate our ledger connection handles
 starting from -1 and going down like -1, -2, and so forth. So I didn't need any extra
 maps to convert connection handles, which would add complexity and affect
 performance. I could give connection handles with negative values to
-the above functions, and `libindy` was OK.
+the above functions, and `libindy` accepted that.
 
 Here you can see what the first function (`indy_key_for_did()`) looks like in
 our wrapper's API. And I can assure you that `c2go.KeyForDid` internal
@@ -302,7 +306,7 @@ above layer. The layer was using our Go wrapper.
 The following picture illustrates the whole system where the ledger connection *pool* is replaced
 with our own `pool` package.
 
-{{< figure src="/blog/2022/09/27/ledger-multiplexer/Main.svg" >}}
+{{< figure src="/blog/2022/09/30/ledger-multiplexer/Main.svg" >}}
 *Connection Pool's Relation To Ledger Multiplexer*
 
 The code using our Go wrapper looks like **the same as it has been
@@ -323,4 +327,4 @@ All of this just by following sound software engineering practices like:
 - polymorphism
 - modular structures
 
-I hope this was a help. Until the next time, see you!
+I hope this was helpful. Until the next time, see you!
