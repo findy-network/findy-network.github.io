@@ -45,8 +45,8 @@ Indy ledger has been bugging me since we met each other:
 - Why it didn't offer a straightforward own separated API? With Indy SDK, you had to build
   each transaction with three separate functions that weren't general but
   entity-specific, like `indy_build_cred_def_request()`.
-- Why the transaction model was so unclear and 'hid' from the rest of the?
-  Indy SDK functions. (See previous one.)
+- Why the transaction model was so unclear and 'hid' from the rest of the
+  Indy SDK functions? (See previous one.)
 - Why could Indy nodes not idle? When no one was connected to the ledger, it still
   used a shit load of CPU time per node, and there was a four (4) node minimum in
   the local setup.
