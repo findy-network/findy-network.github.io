@@ -67,6 +67,7 @@ This the multi-page printable view of this section.
 </div>
 <h1 class=title>Findy Agency Blog</h1>
 <ul>
+<li><a href=#pg-33bb27554cab57b4ea8b4c09d9feb21d>Ledger Multiplexer</a></li>
 <li><a href=#pg-f22c7845c54c724197562951d0c505bc>The Hyperledger Global Forum Experience</a></li>
 <li><a href=#pg-d8b7acb71c709923c9f7d913e39cb27e>The Findy Agency API</a></li>
 <li><a href=#pg-fee982eb3cb6188fa3fcc20b6b77686a>Trust in Your Wallet</a></li>
@@ -83,6 +84,289 @@ This the multi-page printable view of this section.
 </div>
 </div>
 <div class=td-content>
+<h1 id=pg-33bb27554cab57b4ea8b4c09d9feb21d>Ledger Multiplexer</h1>
+<div class=lead>I implemented a ledger multiplexer in Go for Indy SDK (libindy). You&rsquo;ll be able to replace Indy ledger with whatever verified data registry. You&rsquo;ll be able to have automatic ledger backups. And you&rsquo;ll be able to remove the ledger&rsquo;s performance bottleneck with just a few simple and standard software engineering practices.</div>
+<div class="td-byline mb-4">
+By <b>Harri Lainio</b> |
+<time datetime=2022-09-30 class=text-muted>Friday, September 30, 2022</time>
+</div>
+<p>In this technical blog post, I&rsquo;ll explain how I implemented a plugin system into
+our <a href=https://github.com/hyperledger/indy-sdk>Indy SDK</a>
+<a href=https://github.com/findy-network/findy-wrapper-go>Go wrapper</a> and then
+extended it to work as a multiplexer. The plugin system allows us to use a
+key/value-based storage system instead of the normal Indy ledger. And
+multiplexing extended the functionality to use multiple data sources
+simultaneously and asynchronously. For instance, we can add a memory cache to
+help Indy ledger, which has been proving to make a considerable difference in a
+multi-tenant agency that can serve thousands of different wallet users
+simultaneously.</p>
+<p>
+<figure>
+<img src=/blog/2022/09/30/ledger-multiplexer/Plugin.svg>
+</figure>
+<em>Package And Interface Structure</em></p>
+<p>As you can see in the picture above <code>plugin</code> package defines just needed types
+and interfaces that the <code>addons</code> package&rsquo;s plugins implement. The <code>FINDY_LEDGER</code>
+plugin routes transactions to the authentic Indy ledger. We will show in this
+post how it&rsquo;s implemented and used.</p>
+<h2 id=reduce-setup-complexity>Reduce Setup Complexity</h2>
+<p>Indy ledger has been bugging me since we met each other:</p>
+<ul>
+<li>Why was it written in Python when everybody had to know that it would be
+a performance-critical part of the system?</li>
+<li>Why it was implemented with ZeroMQ when it used so simple TCP/IP communication? (Was it
+because of Python?) Anyway, every dependency is a dependency to handle.</li>
+<li>Why didn&rsquo;t it offer a development run mode from the beginning? For instance, a
+pseudo node would offer local development and test environment?</li>
+<li>Why it didn&rsquo;t offer a straightforward own separated API? With Indy SDK, you had to build
+each transaction with three separate functions that weren&rsquo;t general but
+entity-specific, like <code>indy_build_cred_def_request()</code>.</li>
+<li>Why the transaction model was so unclear and &lsquo;hid&rsquo; from the rest of the
+Indy SDK functions? (See previous one.)</li>
+<li>Why could Indy nodes not idle? When no one was connected to the ledger, it still
+used a shit load of CPU time per node, and there was a four (4) node minimum in
+the local setup.</li>
+</ul>
+<p>For the record, first, it&rsquo;s too easy to write the previous list when someone has
+done everything ready; second, I appreciate all the work Hyperledger Indy has
+done.</p>
+<p>So why bother nagging? To learn and share that learning. If our team or I will
+ever build anything where we would use a distributed ledger from scratch, we
+would follow these guidelines:</p>
+<ul>
+<li>Give a straightforward and separated API for ledger access.</li>
+<li>Implement some out-of-the-box mocking for development, e.g., use a memory
+database.</li>
+<li>Offer a way to set up a production system without an actual consensus protocol and
+DLT but offer a single database and tools to migrate that to real DLT when
+the time comes.</li>
+</ul>
+<h2 id=support-tdd-test-driven-development>Support TDD (Test-Driven Development)</h2>
+<p>I have noticed that we programmers far too easily avoid automating or
+documenting our work. Luckily, Go as a language selection supports that very
+well. Fortunately, our two-person team focused on how we should rely on
+code-centric automated testing in everything from the beginning.</p>
+<p>I wanted to support both unit and integration tests without the mock framework&rsquo;s
+help and the need to set up a complex environment just for simple testing. My
+choice was to have a memory ledger. That would also help with instrumentation
+and debugging of our code.</p>
+<p>Soon I noticed that the memory ledger was insufficient to support fast phase
+development, but we would need some persistence. A JSON file, aka file ledger,
+seemed an excellent way to start. The JSON would support tracing and offer
+another interface for us humans.</p>
+<p>When putting these two together, I ended up building our first plugin system for
+VDR.</p>
+<p>We were so happy <em>without</em> the bloated ledger that we all started to think about
+how we could remove the whole ledger out of the picture permanently, but that&rsquo;s
+it is own story to tell.</p>
+<h2 id=reverse-engineering-indy-sdk>Reverse-engineering Indy SDK</h2>
+<p>Before I could safely relay that my solution won&rsquo;t hit my face later, I had to
+check what Indy functions don&rsquo;t separate wallet and ledger access, i.e., they
+take both wallet handle and ledger connection handle as their argument. I found
+two that kinds of functions that we were using at that time:</p>
+<ol>
+<li><code>indy_key_for_did()</code></li>
+<li><code>indy_get_endpoint_for_did()</code></li>
+</ol>
+<p>Both functions check if they can find information from the wallet, and the
+ledger is the backup. <em>For those listening to our presentation on Hyperledger
+Global Forum, I mistakenly said that I used -1 for the wallet handle, which is
+incorrect. Sorry about that. (1-0, once again, for documentation.)</em></p>
+<p>I discovered that I could enumerate our ledger connection handles
+starting from -1 and going down like -1, -2, and so forth. So I didn&rsquo;t need any extra
+maps to convert connection handles, which would add complexity and affect
+performance. I could give connection handles with negative values to
+the above functions, and <code>libindy</code> accepted that.</p>
+<p>Here you can see what the first function (<code>indy_key_for_did()</code>) looks like in
+our wrapper&rsquo;s API. And I can assure you that <code>c2go.KeyForDid</code> internal
+implementation wrapper for Go&rsquo;s CGO, which is a C-API bridge, doesn&rsquo;t treat
+<code>pool</code> and <code>wallet</code> handles differently before passing them to Indy SDK&rsquo;s Rust
+code. The pool handle can be -1, -2, etc.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8f5902;font-style:italic>// Key returns DIDs key from wallet. Indy&#39;s internal version tries to get the
+</span><span style=color:#8f5902;font-style:italic>// key from the ledger if it cannot get from wallet. NOTE! Because we have our
+</span><span style=color:#8f5902;font-style:italic>// Ledger Plugin system at the top of the wrappers we cannot guarantee that
+</span><span style=color:#8f5902;font-style:italic>// ledger fetch will work. Make sure that the key is stored to the wallet.
+</span><span style=color:#8f5902;font-style:italic></span><span style=color:#204a87;font-weight:700>func</span> <span style=color:#000>Key</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>pool</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>wallet</span> <span style=color:#204a87;font-weight:700>int</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>didName</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000>ctx</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Channel</span> <span style=color:#000;font-weight:700>{</span>
+	<span style=color:#204a87;font-weight:700>return</span> <span style=color:#000>c2go</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>KeyForDid</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>pool</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>wallet</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>didName</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></div><p>Some versions of <code>libindy</code> worked so well that if the connection handle wasn&rsquo;t
+valid, it didn&rsquo;t crash but just returned that it could not fetch the key. Of course,
+that helped my job.</p>
+<h2 id=the-plugin-interface>The Plugin Interface</h2>
+<p>I started with a straightforward key/value interface first. But when we decided to
+promote Indy ledger to one of the plugins, which it wasn&rsquo;t before multiplexing,
+we brought transaction information to a still simple interface. It has only
+<code>Write</code> and <code>Read</code> functions.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8f5902;font-style:italic>// Mapper is an property getter/setter interface for addon ledger
+</span><span style=color:#8f5902;font-style:italic>// implementations.
+</span><span style=color:#8f5902;font-style:italic></span><span style=color:#204a87;font-weight:700>type</span> <span style=color:#000>Mapper</span> <span style=color:#204a87;font-weight:700>interface</span> <span style=color:#000;font-weight:700>{</span>
+	<span style=color:#000>Write</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tx</span> <span style=color:#000>TxInfo</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>data</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>)</span> <span style=color:#204a87;font-weight:700>error</span>
+
+	<span style=color:#8f5902;font-style:italic>// Read follows ErrNotExist semantics
+</span><span style=color:#8f5902;font-style:italic></span>	<span style=color:#000>Read</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tx</span> <span style=color:#000>TxInfo</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>(</span><span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>,</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>,</span> <span style=color:#204a87;font-weight:700>error</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></div><p>Naturally, the plugin system has an interface <code>Plugin</code>, but it&rsquo;s even more
+straightforward, and it does not interest us now, but you see it in the UML
+picture above.</p>
+<p>The following code block shows how transaction information is used to keep
+the public interface simple and generic.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#204a87;font-weight:700>func</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>ao</span> <span style=color:#ce5c00;font-weight:700>*</span><span style=color:#000>Indy</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000>Write</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tx</span> <span style=color:#000>plugin</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TxInfo</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>data</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>)</span> <span style=color:#204a87;font-weight:700>error</span> <span style=color:#000;font-weight:700>{</span>
+	<span style=color:#204a87;font-weight:700>switch</span> <span style=color:#000>tx</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TxType</span> <span style=color:#000;font-weight:700>{</span>
+	<span style=color:#204a87;font-weight:700>case</span> <span style=color:#000>plugin</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TxTypeDID</span><span style=color:#000;font-weight:700>:</span>
+		<span style=color:#204a87;font-weight:700>return</span> <span style=color:#000>ao</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>writeDID</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tx</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>data</span><span style=color:#000;font-weight:700>)</span>
+
+	<span style=color:#204a87;font-weight:700>case</span> <span style=color:#000>plugin</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TxTypeSchema</span><span style=color:#000;font-weight:700>:</span>
+		<span style=color:#204a87;font-weight:700>return</span> <span style=color:#000>ao</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>writeSchema</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tx</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>data</span><span style=color:#000;font-weight:700>)</span>
+
+	<span style=color:#204a87;font-weight:700>case</span> <span style=color:#000>plugin</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TxTypeCredDef</span><span style=color:#000;font-weight:700>:</span>
+		<span style=color:#204a87;font-weight:700>return</span> <span style=color:#000>ao</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>writeCredDef</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tx</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>data</span><span style=color:#000;font-weight:700>)</span>
+
+	<span style=color:#000;font-weight:700>}</span>
+
+	<span style=color:#204a87;font-weight:700>return</span> <span style=color:#204a87;font-weight:700>nil</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></div><p>The following code block is an example of how the Indy ledger plugin implements
+<em>schema</em> writing transaction with <code>libindy</code>:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#204a87;font-weight:700>func</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>ao</span> <span style=color:#ce5c00;font-weight:700>*</span><span style=color:#000>Indy</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000>writeSchema</span><span style=color:#000;font-weight:700>(</span>
+	<span style=color:#000>tx</span> <span style=color:#000>plugin</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TxInfo</span><span style=color:#000;font-weight:700>,</span>
+	<span style=color:#000>ID</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>,</span>
+	<span style=color:#000>data</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>,</span>
+<span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>err</span> <span style=color:#204a87;font-weight:700>error</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+	<span style=color:#204a87;font-weight:700>defer</span> <span style=color:#000>err2</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Return</span><span style=color:#000;font-weight:700>(</span><span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>err</span><span style=color:#000;font-weight:700>)</span>
+
+	<span style=color:#000>glog</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>V</span><span style=color:#000;font-weight:700>(</span><span style=color:#0000cf;font-weight:700>1</span><span style=color:#000;font-weight:700>).</span><span style=color:#000>Infoln</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;submitter:&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>tx</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>SubmitterDID</span><span style=color:#000;font-weight:700>)</span>
+
+	<span style=color:#000>r</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#ce5c00;font-weight:700>&lt;-</span><span style=color:#000>ledger</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>BuildSchemaRequest</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tx</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>SubmitterDID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>data</span><span style=color:#000;font-weight:700>)</span>
+	<span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>r</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Err</span><span style=color:#000;font-weight:700>())</span>
+
+	<span style=color:#000>srq</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>r</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Str1</span><span style=color:#000;font-weight:700>()</span>
+	<span style=color:#000>r</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#ce5c00;font-weight:700>&lt;-</span><span style=color:#000>ledger</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>SignAndSubmitRequest</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>ao</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>handle</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>tx</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Wallet</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>tx</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>SubmitterDID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>srq</span><span style=color:#000;font-weight:700>)</span>
+	<span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>r</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Err</span><span style=color:#000;font-weight:700>())</span>
+
+	<span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>checkWriteResponse</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>r</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Str1</span><span style=color:#000;font-weight:700>()))</span>
+	<span style=color:#204a87;font-weight:700>return</span> <span style=color:#204a87;font-weight:700>nil</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></div><p>The <code>readFrom2</code> is the heart of the cache system of our multiplexer. As you can
+see, it&rsquo;s not a fully dynamic multiplexer with <em>n</em> data sources. It&rsquo;s made for
+just two, which is enough for all our use cases. It also depends on the
+actuality that the Indy ledger plugin is the first, and the cache plugin is the
+next. Please note that cache can still be whatever type of the plugins, even
+<code>immuDB</code>.</p>
+<p>Thanks to Go&rsquo;s powerful channel system, goroutines, and an essential control
+structure for concurrent programming with channels, the <code>select</code> -statement, the
+algorithm is quite simple, short, and elegant. Faster wins the reading contest,
+and if the Indy ledger wins, we can assume that the queried data is only in the
+Indy ledger. Like the case where other DID agents use the same Indy ledger, we
+are using DLT for interoperability.</p>
+<p>And yes, you noticed, we think that the ledger is always the slower one, and if
+it&rsquo;s not, it doesn&rsquo;t matter that we tried to write it to cache a second time. No
+errors and no one waits for us because writing is async.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#204a87;font-weight:700>func</span> <span style=color:#000>readFrom2</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tx</span> <span style=color:#000>plugin</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TxInfo</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>id</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>val</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>err</span> <span style=color:#204a87;font-weight:700>error</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+	<span style=color:#204a87;font-weight:700>defer</span> <span style=color:#000>err2</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Annotate</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;reading cached ledger&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>err</span><span style=color:#000;font-weight:700>)</span>
+
+	<span style=color:#204a87;font-weight:700>const</span> <span style=color:#000;font-weight:700>(</span>
+		<span style=color:#000>indyLedger</span>  <span style=color:#000;font-weight:700>=</span> <span style=color:#ce5c00;font-weight:700>-</span><span style=color:#0000cf;font-weight:700>1</span>
+		<span style=color:#000>cacheLedger</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#ce5c00;font-weight:700>-</span><span style=color:#0000cf;font-weight:700>2</span>
+	<span style=color:#000;font-weight:700>)</span>
+	<span style=color:#204a87;font-weight:700>var</span> <span style=color:#000;font-weight:700>(</span>
+		<span style=color:#000>result</span>    <span style=color:#204a87;font-weight:700>string</span>
+		<span style=color:#000>readCount</span> <span style=color:#204a87;font-weight:700>int</span>
+	<span style=color:#000;font-weight:700>)</span>
+
+	<span style=color:#000>ch1</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>asyncRead</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>indyLedger</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>tx</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>)</span>
+	<span style=color:#000>ch2</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>asyncRead</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>cacheLedger</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>tx</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>)</span>
+
+<span style=color:#000>loop</span><span style=color:#000;font-weight:700>:</span>
+	<span style=color:#204a87;font-weight:700>for</span> <span style=color:#000;font-weight:700>{</span>
+		<span style=color:#204a87;font-weight:700>select</span> <span style=color:#000;font-weight:700>{</span>
+		<span style=color:#204a87;font-weight:700>case</span> <span style=color:#000>r1</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#ce5c00;font-weight:700>&lt;-</span><span style=color:#000>ch1</span><span style=color:#000;font-weight:700>:</span>
+			<span style=color:#000>exist</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000;font-weight:700>!</span><span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Is</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>r1</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>err</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>plugin</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>ErrNotExist</span><span style=color:#000;font-weight:700>)</span>
+
+			<span style=color:#000>readCount</span><span style=color:#ce5c00;font-weight:700>++</span>
+			<span style=color:#000>glog</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>V</span><span style=color:#000;font-weight:700>(</span><span style=color:#0000cf;font-weight:700>5</span><span style=color:#000;font-weight:700>).</span><span style=color:#000>Infof</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;---- %d. winner -1 (exist=%v) ----&#34;</span><span style=color:#000;font-weight:700>,</span>
+				<span style=color:#000>readCount</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>exist</span><span style=color:#000;font-weight:700>)</span>
+			<span style=color:#000>result</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#000>r1</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>result</span>
+
+			<span style=color:#8f5902;font-style:italic>// Currently first plugin is the Indy ledger, if we are
+</span><span style=color:#8f5902;font-style:italic></span>			<span style=color:#8f5902;font-style:italic>// here, we must write data to cache ledger
+</span><span style=color:#8f5902;font-style:italic></span>			<span style=color:#204a87;font-weight:700>if</span> <span style=color:#000>readCount</span> <span style=color:#ce5c00;font-weight:700>&gt;=</span> <span style=color:#0000cf;font-weight:700>2</span> <span style=color:#ce5c00;font-weight:700>&amp;&amp;</span> <span style=color:#000>exist</span> <span style=color:#000;font-weight:700>{</span>
+				<span style=color:#000>glog</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>V</span><span style=color:#000;font-weight:700>(</span><span style=color:#0000cf;font-weight:700>5</span><span style=color:#000;font-weight:700>).</span><span style=color:#000>Infoln</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;--- update cache plugin:&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>r1</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>id</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>r1</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>result</span><span style=color:#000;font-weight:700>)</span>
+				<span style=color:#000>tmpTx</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>tx</span>
+				<span style=color:#000>tx</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Update</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#204a87;font-weight:700>true</span>
+				<span style=color:#000>err</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>openPlugins</span><span style=color:#000;font-weight:700>[</span><span style=color:#000>cacheLedger</span><span style=color:#000;font-weight:700>].</span><span style=color:#000>Write</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>tmpTx</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>r1</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>result</span><span style=color:#000;font-weight:700>)</span>
+				<span style=color:#204a87;font-weight:700>if</span> <span style=color:#000>err</span> <span style=color:#ce5c00;font-weight:700>!=</span> <span style=color:#204a87;font-weight:700>nil</span> <span style=color:#000;font-weight:700>{</span>
+					<span style=color:#000>glog</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Errorln</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;error cache update&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>err</span><span style=color:#000;font-weight:700>)</span>
+				<span style=color:#000;font-weight:700>}</span>
+			<span style=color:#000;font-weight:700>}</span>
+			<span style=color:#204a87;font-weight:700>break</span> <span style=color:#000>loop</span>
+
+		<span style=color:#204a87;font-weight:700>case</span> <span style=color:#000>r2</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#ce5c00;font-weight:700>&lt;-</span><span style=color:#000>ch2</span><span style=color:#000;font-weight:700>:</span>
+			<span style=color:#000>notExist</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Is</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>r2</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>err</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>plugin</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>ErrNotExist</span><span style=color:#000;font-weight:700>)</span>
+
+			<span style=color:#000>readCount</span><span style=color:#ce5c00;font-weight:700>++</span>
+			<span style=color:#000>glog</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>V</span><span style=color:#000;font-weight:700>(</span><span style=color:#0000cf;font-weight:700>5</span><span style=color:#000;font-weight:700>).</span><span style=color:#000>Infof</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;---- %d. winner -2 (notExist=%v, result=%s) ----&#34;</span><span style=color:#000;font-weight:700>,</span>
+				<span style=color:#000>readCount</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>notExist</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>r2</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>result</span><span style=color:#000;font-weight:700>)</span>
+			<span style=color:#000>result</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#000>r2</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>result</span>
+
+			<span style=color:#204a87;font-weight:700>if</span> <span style=color:#000>notExist</span> <span style=color:#000;font-weight:700>{</span>
+				<span style=color:#000>glog</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>V</span><span style=color:#000;font-weight:700>(</span><span style=color:#0000cf;font-weight:700>5</span><span style=color:#000;font-weight:700>).</span><span style=color:#000>Infoln</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;--- NO CACHE HIT:&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>readCount</span><span style=color:#000;font-weight:700>)</span>
+				<span style=color:#204a87;font-weight:700>continue</span> <span style=color:#000>loop</span>
+			<span style=color:#000;font-weight:700>}</span>
+			<span style=color:#204a87;font-weight:700>break</span> <span style=color:#000>loop</span>
+		<span style=color:#000;font-weight:700>}</span>
+	<span style=color:#000;font-weight:700>}</span>
+	<span style=color:#204a87;font-weight:700>return</span> <span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>result</span><span style=color:#000;font-weight:700>,</span> <span style=color:#204a87;font-weight:700>nil</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></div><p>I hope you at least tried to read the previous function even when you aren&rsquo;t
+familiar with Go because that might be the needed trigger point to start to understand
+<strong>why Go is such a powerful tool for distributed programming.</strong> I, who have written
+these kinds of algorithms with almost everything which existed before Go, even to
+OS, which didn&rsquo;t have threads but only interrupts, has been so happy. Those who
+are interested in computer science, please read them
+<a href=https://dl.acm.org/doi/10.1145/359576.359585>Hoare&rsquo;s paper of CSP</a>. Of course,
+Go inventors aren&rsquo;t the only ones using the paper since 1978.</p>
+<h2 id=putting-all-together>Putting All Together</h2>
+<p>At the beginning of the document, I had a relatively long list of what&rsquo;s not so
+good in Indy SDK, and that was even all. I tried to leave out those things
+caused because C-API has put together quite fast, I think. The <code>libindy</code> is
+written in Rust.</p>
+<p>But still, the C-API has hints of namespacing, and luckily I have been following
+the namespace structure in our Go wrapper&rsquo;s package structure by the book. So,
+we have these Go packages:</p>
+<ul>
+<li><code>did</code></li>
+<li><code>wallet</code></li>
+<li><code>pairwise</code></li>
+<li><code>crypto</code></li>
+<li><code>ledger</code></li>
+<li><code>pool</code>, this was very important, because it gave as the entry point to
+above layer. The layer was using our Go wrapper.</li>
+</ul>
+<p>The following picture illustrates the whole system where the ledger connection <em>pool</em> is replaced
+with our own <code>pool</code> package.</p>
+<p>
+<figure>
+<img src=/blog/2022/09/30/ledger-multiplexer/Main.svg>
+</figure>
+<em>Connection Pool&rsquo;s Relation To Ledger Multiplexer</em></p>
+<p>The code using our Go wrapper looks like <strong>the same as it has been
+since the beginning.</strong></p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8f5902;font-style:italic>// open real Indy ledger named &#34;iop&#34; and also use Memory Cache
+</span><span style=color:#8f5902;font-style:italic></span><span style=color:#000>r</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#ce5c00;font-weight:700>&lt;-</span><span style=color:#000>pool</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>OpenLedger</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;FINDY_LEDGER,iop,FINDY_MEM_LEDGER,cache&#34;</span><span style=color:#000;font-weight:700>)</span>
+<span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>r</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Err</span><span style=color:#000;font-weight:700>())</span>
+
+<span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>ledger</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>WriteSchema</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>pool</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>w1</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>stewardDID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>scJSON</span><span style=color:#000;font-weight:700>))</span>
+
+<span style=color:#000>sid</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>scJSON</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To2</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>ledger</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>ReadSchema</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>pool</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>stewardDID</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>sid</span><span style=color:#000;font-weight:700>))</span>
+</code></pre></div><p>All of this just by following sound software engineering practices like:</p>
+<ul>
+<li>abstraction hiding</li>
+<li>polymorphism</li>
+<li>modular structures</li>
+</ul>
+<p>I hope this was helpful. Until the next time, see you!</p>
+</div>
+<div class=td-content style=page-break-before:always>
 <h1 id=pg-f22c7845c54c724197562951d0c505bc>The Hyperledger Global Forum Experience</h1>
 <div class=lead>Hyperledger Foundation is a non-profit organization that hosts open-source software blockchain projects. It is part of the Linux Foundation. The Hyperledger Global Forum is the biggest annual gathering of the Hyperledger community, and this year the foundation organized the event in Dublin, Ireland.</div>
 <div class="td-byline mb-4">

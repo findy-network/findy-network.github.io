@@ -1,4 +1,260 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 27 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: The Hyperledger Global Forum Experience</title><link>/blog/2022/09/27/the-hyperledger-global-forum-experience/</link><pubDate>Tue, 27 Sep 2022 00:00:00 +0000</pubDate><guid>/blog/2022/09/27/the-hyperledger-global-forum-experience/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 30 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Ledger Multiplexer</title><link>/blog/2022/09/30/ledger-multiplexer/</link><pubDate>Fri, 30 Sep 2022 00:00:00 +0000</pubDate><guid>/blog/2022/09/30/ledger-multiplexer/</guid><description>
+&lt;p>In this technical blog post, I&amp;rsquo;ll explain how I implemented a plugin system into
+our &lt;a href="https://github.com/hyperledger/indy-sdk">Indy SDK&lt;/a>
+&lt;a href="https://github.com/findy-network/findy-wrapper-go">Go wrapper&lt;/a> and then
+extended it to work as a multiplexer. The plugin system allows us to use a
+key/value-based storage system instead of the normal Indy ledger. And
+multiplexing extended the functionality to use multiple data sources
+simultaneously and asynchronously. For instance, we can add a memory cache to
+help Indy ledger, which has been proving to make a considerable difference in a
+multi-tenant agency that can serve thousands of different wallet users
+simultaneously.&lt;/p>
+&lt;p>
+&lt;figure>
+&lt;img src="/blog/2022/09/30/ledger-multiplexer/Plugin.svg"/>
+&lt;/figure>
+&lt;em>Package And Interface Structure&lt;/em>&lt;/p>
+&lt;p>As you can see in the picture above &lt;code>plugin&lt;/code> package defines just needed types
+and interfaces that the &lt;code>addons&lt;/code> package&amp;rsquo;s plugins implement. The &lt;code>FINDY_LEDGER&lt;/code>
+plugin routes transactions to the authentic Indy ledger. We will show in this
+post how it&amp;rsquo;s implemented and used.&lt;/p>
+&lt;h2 id="reduce-setup-complexity">Reduce Setup Complexity&lt;/h2>
+&lt;p>Indy ledger has been bugging me since we met each other:&lt;/p>
+&lt;ul>
+&lt;li>Why was it written in Python when everybody had to know that it would be
+a performance-critical part of the system?&lt;/li>
+&lt;li>Why it was implemented with ZeroMQ when it used so simple TCP/IP communication? (Was it
+because of Python?) Anyway, every dependency is a dependency to handle.&lt;/li>
+&lt;li>Why didn&amp;rsquo;t it offer a development run mode from the beginning? For instance, a
+pseudo node would offer local development and test environment?&lt;/li>
+&lt;li>Why it didn&amp;rsquo;t offer a straightforward own separated API? With Indy SDK, you had to build
+each transaction with three separate functions that weren&amp;rsquo;t general but
+entity-specific, like &lt;code>indy_build_cred_def_request()&lt;/code>.&lt;/li>
+&lt;li>Why the transaction model was so unclear and &amp;lsquo;hid&amp;rsquo; from the rest of the
+Indy SDK functions? (See previous one.)&lt;/li>
+&lt;li>Why could Indy nodes not idle? When no one was connected to the ledger, it still
+used a shit load of CPU time per node, and there was a four (4) node minimum in
+the local setup.&lt;/li>
+&lt;/ul>
+&lt;p>For the record, first, it&amp;rsquo;s too easy to write the previous list when someone has
+done everything ready; second, I appreciate all the work Hyperledger Indy has
+done.&lt;/p>
+&lt;p>So why bother nagging? To learn and share that learning. If our team or I will
+ever build anything where we would use a distributed ledger from scratch, we
+would follow these guidelines:&lt;/p>
+&lt;ul>
+&lt;li>Give a straightforward and separated API for ledger access.&lt;/li>
+&lt;li>Implement some out-of-the-box mocking for development, e.g., use a memory
+database.&lt;/li>
+&lt;li>Offer a way to set up a production system without an actual consensus protocol and
+DLT but offer a single database and tools to migrate that to real DLT when
+the time comes.&lt;/li>
+&lt;/ul>
+&lt;h2 id="support-tdd-test-driven-development">Support TDD (Test-Driven Development)&lt;/h2>
+&lt;p>I have noticed that we programmers far too easily avoid automating or
+documenting our work. Luckily, Go as a language selection supports that very
+well. Fortunately, our two-person team focused on how we should rely on
+code-centric automated testing in everything from the beginning.&lt;/p>
+&lt;p>I wanted to support both unit and integration tests without the mock framework&amp;rsquo;s
+help and the need to set up a complex environment just for simple testing. My
+choice was to have a memory ledger. That would also help with instrumentation
+and debugging of our code.&lt;/p>
+&lt;p>Soon I noticed that the memory ledger was insufficient to support fast phase
+development, but we would need some persistence. A JSON file, aka file ledger,
+seemed an excellent way to start. The JSON would support tracing and offer
+another interface for us humans.&lt;/p>
+&lt;p>When putting these two together, I ended up building our first plugin system for
+VDR.&lt;/p>
+&lt;p>We were so happy &lt;em>without&lt;/em> the bloated ledger that we all started to think about
+how we could remove the whole ledger out of the picture permanently, but that&amp;rsquo;s
+it is own story to tell.&lt;/p>
+&lt;h2 id="reverse-engineering-indy-sdk">Reverse-engineering Indy SDK&lt;/h2>
+&lt;p>Before I could safely relay that my solution won&amp;rsquo;t hit my face later, I had to
+check what Indy functions don&amp;rsquo;t separate wallet and ledger access, i.e., they
+take both wallet handle and ledger connection handle as their argument. I found
+two that kinds of functions that we were using at that time:&lt;/p>
+&lt;ol>
+&lt;li>&lt;code>indy_key_for_did()&lt;/code>&lt;/li>
+&lt;li>&lt;code>indy_get_endpoint_for_did()&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;p>Both functions check if they can find information from the wallet, and the
+ledger is the backup. &lt;em>For those listening to our presentation on Hyperledger
+Global Forum, I mistakenly said that I used -1 for the wallet handle, which is
+incorrect. Sorry about that. (1-0, once again, for documentation.)&lt;/em>&lt;/p>
+&lt;p>I discovered that I could enumerate our ledger connection handles
+starting from -1 and going down like -1, -2, and so forth. So I didn&amp;rsquo;t need any extra
+maps to convert connection handles, which would add complexity and affect
+performance. I could give connection handles with negative values to
+the above functions, and &lt;code>libindy&lt;/code> accepted that.&lt;/p>
+&lt;p>Here you can see what the first function (&lt;code>indy_key_for_did()&lt;/code>) looks like in
+our wrapper&amp;rsquo;s API. And I can assure you that &lt;code>c2go.KeyForDid&lt;/code> internal
+implementation wrapper for Go&amp;rsquo;s CGO, which is a C-API bridge, doesn&amp;rsquo;t treat
+&lt;code>pool&lt;/code> and &lt;code>wallet&lt;/code> handles differently before passing them to Indy SDK&amp;rsquo;s Rust
+code. The pool handle can be -1, -2, etc.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8f5902;font-style:italic">// Key returns DIDs key from wallet. Indy&amp;#39;s internal version tries to get the
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">// key from the ledger if it cannot get from wallet. NOTE! Because we have our
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">// Ledger Plugin system at the top of the wrappers we cannot guarantee that
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">// ledger fetch will work. Make sure that the key is stored to the wallet.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000">Key&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">pool&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">wallet&lt;/span> &lt;span style="color:#204a87;font-weight:bold">int&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">didName&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000">ctx&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Channel&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span> &lt;span style="color:#000">c2go&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">KeyForDid&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">pool&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">wallet&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">didName&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Some versions of &lt;code>libindy&lt;/code> worked so well that if the connection handle wasn&amp;rsquo;t
+valid, it didn&amp;rsquo;t crash but just returned that it could not fetch the key. Of course,
+that helped my job.&lt;/p>
+&lt;h2 id="the-plugin-interface">The Plugin Interface&lt;/h2>
+&lt;p>I started with a straightforward key/value interface first. But when we decided to
+promote Indy ledger to one of the plugins, which it wasn&amp;rsquo;t before multiplexing,
+we brought transaction information to a still simple interface. It has only
+&lt;code>Write&lt;/code> and &lt;code>Read&lt;/code> functions.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8f5902;font-style:italic">// Mapper is an property getter/setter interface for addon ledger
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">// implementations.
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">type&lt;/span> &lt;span style="color:#000">Mapper&lt;/span> &lt;span style="color:#204a87;font-weight:bold">interface&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">Write&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tx&lt;/span> &lt;span style="color:#000">TxInfo&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">data&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#204a87;font-weight:bold">error&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// Read follows ErrNotExist semantics
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">Read&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tx&lt;/span> &lt;span style="color:#000">TxInfo&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#204a87;font-weight:bold">error&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Naturally, the plugin system has an interface &lt;code>Plugin&lt;/code>, but it&amp;rsquo;s even more
+straightforward, and it does not interest us now, but you see it in the UML
+picture above.&lt;/p>
+&lt;p>The following code block shows how transaction information is used to keep
+the public interface simple and generic.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">ao&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">Indy&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000">Write&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tx&lt;/span> &lt;span style="color:#000">plugin&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TxInfo&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">data&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#204a87;font-weight:bold">error&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">switch&lt;/span> &lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TxType&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">plugin&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TxTypeDID&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span> &lt;span style="color:#000">ao&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">writeDID&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">data&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">plugin&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TxTypeSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span> &lt;span style="color:#000">ao&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">writeSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">data&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">plugin&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TxTypeCredDef&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span> &lt;span style="color:#000">ao&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">writeCredDef&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">data&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span> &lt;span style="color:#204a87;font-weight:bold">nil&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The following code block is an example of how the Indy ledger plugin implements
+&lt;em>schema&lt;/em> writing transaction with &lt;code>libindy&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">ao&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">Indy&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000">writeSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">tx&lt;/span> &lt;span style="color:#000">plugin&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TxInfo&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">ID&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">data&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">err&lt;/span> &lt;span style="color:#204a87;font-weight:bold">error&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">defer&lt;/span> &lt;span style="color:#000">err2&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Return&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">err&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">V&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">).&lt;/span>&lt;span style="color:#000">Infoln&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;submitter:&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SubmitterDID&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">r&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">ledger&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BuildSchemaRequest&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SubmitterDID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">data&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Err&lt;/span>&lt;span style="color:#000;font-weight:bold">())&lt;/span>
+&lt;span style="color:#000">srq&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Str1&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span>
+&lt;span style="color:#000">r&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">ledger&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SignAndSubmitRequest&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">ao&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">handle&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Wallet&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SubmitterDID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">srq&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Err&lt;/span>&lt;span style="color:#000;font-weight:bold">())&lt;/span>
+&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">checkWriteResponse&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Str1&lt;/span>&lt;span style="color:#000;font-weight:bold">()))&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span> &lt;span style="color:#204a87;font-weight:bold">nil&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The &lt;code>readFrom2&lt;/code> is the heart of the cache system of our multiplexer. As you can
+see, it&amp;rsquo;s not a fully dynamic multiplexer with &lt;em>n&lt;/em> data sources. It&amp;rsquo;s made for
+just two, which is enough for all our use cases. It also depends on the
+actuality that the Indy ledger plugin is the first, and the cache plugin is the
+next. Please note that cache can still be whatever type of the plugins, even
+&lt;code>immuDB&lt;/code>.&lt;/p>
+&lt;p>Thanks to Go&amp;rsquo;s powerful channel system, goroutines, and an essential control
+structure for concurrent programming with channels, the &lt;code>select&lt;/code> -statement, the
+algorithm is quite simple, short, and elegant. Faster wins the reading contest,
+and if the Indy ledger wins, we can assume that the queried data is only in the
+Indy ledger. Like the case where other DID agents use the same Indy ledger, we
+are using DLT for interoperability.&lt;/p>
+&lt;p>And yes, you noticed, we think that the ledger is always the slower one, and if
+it&amp;rsquo;s not, it doesn&amp;rsquo;t matter that we tried to write it to cache a second time. No
+errors and no one waits for us because writing is async.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000">readFrom2&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tx&lt;/span> &lt;span style="color:#000">plugin&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TxInfo&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">id&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">val&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">err&lt;/span> &lt;span style="color:#204a87;font-weight:bold">error&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">defer&lt;/span> &lt;span style="color:#000">err2&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Annotate&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;reading cached ledger&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">err&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">const&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">indyLedger&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">-&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>
+&lt;span style="color:#000">cacheLedger&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">-&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">2&lt;/span>
+&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">var&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">result&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>
+&lt;span style="color:#000">readCount&lt;/span> &lt;span style="color:#204a87;font-weight:bold">int&lt;/span>
+&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">ch1&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">asyncRead&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">indyLedger&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">ch2&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">asyncRead&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">cacheLedger&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">loop&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">for&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">select&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">r1&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">ch1&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;span style="color:#000">exist&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000;font-weight:bold">!&lt;/span>&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Is&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">r1&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">err&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">plugin&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ErrNotExist&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">readCount&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">++&lt;/span>
+&lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">V&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">5&lt;/span>&lt;span style="color:#000;font-weight:bold">).&lt;/span>&lt;span style="color:#000">Infof&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;---- %d. winner -1 (exist=%v) ----&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">readCount&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">exist&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">result&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">r1&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">result&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// Currently first plugin is the Indy ledger, if we are
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// here, we must write data to cache ledger
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">readCount&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;gt;=&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">2&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#000">exist&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">V&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">5&lt;/span>&lt;span style="color:#000;font-weight:bold">).&lt;/span>&lt;span style="color:#000">Infoln&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;--- update cache plugin:&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">r1&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">id&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">r1&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">result&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">tmpTx&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">tx&lt;/span>
+&lt;span style="color:#000">tx&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Update&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">true&lt;/span>
+&lt;span style="color:#000">err&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">openPlugins&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#000">cacheLedger&lt;/span>&lt;span style="color:#000;font-weight:bold">].&lt;/span>&lt;span style="color:#000">Write&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tmpTx&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">r1&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">result&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">err&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">!=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">nil&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Errorln&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;error cache update&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">err&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">break&lt;/span> &lt;span style="color:#000">loop&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">r2&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">ch2&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;span style="color:#000">notExist&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Is&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">r2&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">err&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">plugin&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ErrNotExist&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">readCount&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">++&lt;/span>
+&lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">V&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">5&lt;/span>&lt;span style="color:#000;font-weight:bold">).&lt;/span>&lt;span style="color:#000">Infof&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;---- %d. winner -2 (notExist=%v, result=%s) ----&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">readCount&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">notExist&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">r2&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">result&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">result&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">r2&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">result&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">notExist&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">V&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">5&lt;/span>&lt;span style="color:#000;font-weight:bold">).&lt;/span>&lt;span style="color:#000">Infoln&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;--- NO CACHE HIT:&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">readCount&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">continue&lt;/span> &lt;span style="color:#000">loop&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">break&lt;/span> &lt;span style="color:#000">loop&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span> &lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">result&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#204a87;font-weight:bold">nil&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>I hope you at least tried to read the previous function even when you aren&amp;rsquo;t
+familiar with Go because that might be the needed trigger point to start to understand
+&lt;strong>why Go is such a powerful tool for distributed programming.&lt;/strong> I, who have written
+these kinds of algorithms with almost everything which existed before Go, even to
+OS, which didn&amp;rsquo;t have threads but only interrupts, has been so happy. Those who
+are interested in computer science, please read them
+&lt;a href="https://dl.acm.org/doi/10.1145/359576.359585">Hoare&amp;rsquo;s paper of CSP&lt;/a>. Of course,
+Go inventors aren&amp;rsquo;t the only ones using the paper since 1978.&lt;/p>
+&lt;h2 id="putting-all-together">Putting All Together&lt;/h2>
+&lt;p>At the beginning of the document, I had a relatively long list of what&amp;rsquo;s not so
+good in Indy SDK, and that was even all. I tried to leave out those things
+caused because C-API has put together quite fast, I think. The &lt;code>libindy&lt;/code> is
+written in Rust.&lt;/p>
+&lt;p>But still, the C-API has hints of namespacing, and luckily I have been following
+the namespace structure in our Go wrapper&amp;rsquo;s package structure by the book. So,
+we have these Go packages:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>did&lt;/code>&lt;/li>
+&lt;li>&lt;code>wallet&lt;/code>&lt;/li>
+&lt;li>&lt;code>pairwise&lt;/code>&lt;/li>
+&lt;li>&lt;code>crypto&lt;/code>&lt;/li>
+&lt;li>&lt;code>ledger&lt;/code>&lt;/li>
+&lt;li>&lt;code>pool&lt;/code>, this was very important, because it gave as the entry point to
+above layer. The layer was using our Go wrapper.&lt;/li>
+&lt;/ul>
+&lt;p>The following picture illustrates the whole system where the ledger connection &lt;em>pool&lt;/em> is replaced
+with our own &lt;code>pool&lt;/code> package.&lt;/p>
+&lt;p>
+&lt;figure>
+&lt;img src="/blog/2022/09/30/ledger-multiplexer/Main.svg"/>
+&lt;/figure>
+&lt;em>Connection Pool&amp;rsquo;s Relation To Ledger Multiplexer&lt;/em>&lt;/p>
+&lt;p>The code using our Go wrapper looks like &lt;strong>the same as it has been
+since the beginning.&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8f5902;font-style:italic">// open real Indy ledger named &amp;#34;iop&amp;#34; and also use Memory Cache
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#000">r&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">pool&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">OpenLedger&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;FINDY_LEDGER,iop,FINDY_MEM_LEDGER,cache&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Err&lt;/span>&lt;span style="color:#000;font-weight:bold">())&lt;/span>
+&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">ledger&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">WriteSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">pool&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">w1&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">stewardDID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">scJSON&lt;/span>&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;span style="color:#000">sid&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">scJSON&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To2&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">ledger&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ReadSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">pool&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">stewardDID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">sid&lt;/span>&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>All of this just by following sound software engineering practices like:&lt;/p>
+&lt;ul>
+&lt;li>abstraction hiding&lt;/li>
+&lt;li>polymorphism&lt;/li>
+&lt;li>modular structures&lt;/li>
+&lt;/ul>
+&lt;p>I hope this was helpful. Until the next time, see you!&lt;/p></description></item><item><title>Blog: The Hyperledger Global Forum Experience</title><link>/blog/2022/09/27/the-hyperledger-global-forum-experience/</link><pubDate>Tue, 27 Sep 2022 00:00:00 +0000</pubDate><guid>/blog/2022/09/27/the-hyperledger-global-forum-experience/</guid><description>
 &lt;p>Our team started utilizing Hyperledger technologies in 2019 when we began the experimentation with
 decentralized identity. Since then, we have implemented &lt;a href="https://findy-network.github.io/">our identity agency&lt;/a>
 with the help of two &lt;a href="https://www.hyperledger.org/">Hyperledger Foundation&lt;/a> projects:
