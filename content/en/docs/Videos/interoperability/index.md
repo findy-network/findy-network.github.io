@@ -2,7 +2,7 @@
 title: "Interoperability Testing Demo"
 linkTitle: "Interoperability Demo"
 date: 2022-01-19
-weight: 3
+weight: 5
 description: >
   Demo of Findy Agency interoperability testing
 ---

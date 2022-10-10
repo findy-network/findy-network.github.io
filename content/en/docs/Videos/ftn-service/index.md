@@ -2,7 +2,7 @@
 title: "FTN Issuer Demo"
 linkTitle: "FTN Issuer Demo"
 date: 2022-05-02
-weight: 5
+weight: 7
 description: >
   Demo of Finnish Trust Network issuer
 ---
