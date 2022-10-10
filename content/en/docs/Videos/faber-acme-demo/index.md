@@ -2,7 +2,7 @@
 title: "Demo: Alice-Faber-Acme"
 linkTitle: "Alice-Faber-Acme"
 date: 2022-08-24
-weight: 1
+weight: 3
 description: >
   Example scenario implemented using Findy Agency.
 ---

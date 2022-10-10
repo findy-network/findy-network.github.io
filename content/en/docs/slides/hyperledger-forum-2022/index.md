@@ -10,6 +10,8 @@ resources:
 
 [Slides](/pdf/findy-ssi-agency.pdf) for [Hyperledger Global Forum 2022](https://www.hyperledger.org/event/hyperledger-global-forum-2022-dublin-ireland) breakout session
 
+[Presentation](/docs/videos/hyperledger-forum/)
+
 {{< imgproc harri Fit "675x675" >}}
 {{< /imgproc >}}
 

@@ -2,7 +2,7 @@
 title: "SSI-Empowered Identity Provider"
 linkTitle: "SSI-Empowered Identity Provider"
 date: 2022-04-14
-weight: 4
+weight: 6
 description: >
   Demo of SSI-Empowered OIDC Identity Provider
 ---

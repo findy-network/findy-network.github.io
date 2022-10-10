@@ -33,6 +33,9 @@ chance to meet old friends and make new ones.
 
 ## Presenting Findy Agency
 
+{{< youtube dlWWMeiSUfE >}}
+*Our presentation is available on YouTube.*
+
 We had the opportunity to present our project’s achievements on the second day of the conference,
 Tuesday, 13th September. Our overall Hyperleger-timing was perfect because the other SSI agent
 builders had comforted the issues we had already solved. And for that reason, for example,
@@ -71,9 +74,7 @@ identity domain agent (the term we used in the talk). Our web wallet was a UI ex
 We could answer all the questions. We can say that we had an excellent discussion
 at the end of the presentation.
 
-The organizer recorded our talk and they will publish it on YouTube on October 11th.
-Hopefully, they will try to process volume levels in QA so that everybody can hear the questions.
-Stay tuned.
+The organizer recorded our talk and it is published on [YouTube](https://www.youtube.com/watch?v=dlWWMeiSUfE).
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">As shown in the Findy Agency demo at <a href="https://twitter.com/hashtag/HyperledgerForum?src=hash&amp;ref_src=twsrc%5Etfw">#HyperledgerForum</a>, using FIDO2 to authenticate to a web wallet is a great way to keep access to an online web wallet passwordless. <a href="https://t.co/GGuHnecnI7">pic.twitter.com/GGuHnecnI7</a></p>&mdash; Animo (@AnimoSolutions) <a href="https://twitter.com/AnimoSolutions/status/1569648888415670275?ref_src=twsrc%5Etfw">September 13, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
