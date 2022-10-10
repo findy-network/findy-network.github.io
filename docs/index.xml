@@ -1,10 +1,6 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Documentation</title><link>/docs/</link><description>Recent content in Documentation on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 13 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Demo: Alice-Faber-Acme</title><link>/docs/videos/faber-acme-demo/</link><pubDate>Wed, 24 Aug 2022 00:00:00 +0000</pubDate><guid>/docs/videos/faber-acme-demo/</guid><description>
-&lt;p>See description and instructions &lt;a href="https://github.com/findy-network/findy-agency-demo#findy-agency-demo">here&lt;/a>&lt;/p>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Documentation</title><link>/docs/</link><description>Recent content in Documentation on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 10 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Hyperledger Global Forum 2022 Presentation</title><link>/docs/videos/hyperledger-forum/</link><pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate><guid>/docs/videos/hyperledger-forum/</guid><description>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/rA2l0eW86Bs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div></description></item><item><title>Docs: Findy Agency Presentation</title><link>/docs/videos/presentation/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>/docs/videos/presentation/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/kzmCbX-z7NA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;iframe src="https://www.youtube.com/embed/dlWWMeiSUfE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
 &lt;/div></description></item><item><title>Docs: Findy Agency Architecture</title><link>/docs/overview/architecture/</link><pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/overview/architecture/</guid><description>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/overview/architecture/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_675x675_fit_catmullrom_3.png" width="675" height="589">
@@ -106,6 +102,7 @@ Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp
 &lt;li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.&lt;/li>
 &lt;/ul></description></item><item><title>Docs: Hyperledger Global Forum 2022</title><link>/docs/slides/hyperledger-forum-2022/</link><pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate><guid>/docs/slides/hyperledger-forum-2022/</guid><description>
 &lt;p>&lt;a href="/pdf/findy-ssi-agency.pdf">Slides&lt;/a> for &lt;a href="https://www.hyperledger.org/event/hyperledger-global-forum-2022-dublin-ireland">Hyperledger Global Forum 2022&lt;/a> breakout session&lt;/p>
+&lt;p>&lt;a href="/docs/videos/hyperledger-forum/">Presentation&lt;/a>&lt;/p>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/slides/hyperledger-forum-2022/harri_hu2cab6ca73704e1ee3bd023cf0ed509ec_598479_675x675_fit_catmullrom_3.png" width="675" height="353">
 &lt;div class="card-body px-0 pt-2 pb-0">
@@ -119,9 +116,9 @@ Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp
 &lt;p class="card-text">
 &lt;/p>
 &lt;/div>
-&lt;/div></description></item><item><title>Docs: Demo: Findy Bots</title><link>/docs/videos/findy-bots/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>/docs/videos/findy-bots/</guid><description>
+&lt;/div></description></item><item><title>Docs: Findy Agency Presentation</title><link>/docs/videos/presentation/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>/docs/videos/presentation/</guid><description>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/gVr8KwISMS4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;iframe src="https://www.youtube.com/embed/kzmCbX-z7NA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
 &lt;/div></description></item><item><title>Docs: Configuration</title><link>/docs/deployment/configuration/</link><pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate><guid>/docs/deployment/configuration/</guid><description>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 629px">
 &lt;img class="card-img-top" src="/docs/deployment/configuration/deployment_hu67f415b8019b0c239da86fb80f917bcf_403739_675x675_fit_catmullrom_3.png" width="619" height="675">
@@ -607,7 +604,14 @@ with the language of your choice.&lt;/p>
 &lt;li>SA displays/sends/etc. invitation json to another Aries compatible agent (invitee).&lt;/li>
 &lt;li>Invitee sends connection request to the core agency, that handles the connection protocol on behalf of SA.&lt;/li>
 &lt;li>Core agency notifies SA when the connection is established. SA can query core agency for the needed connection details and continue with e.g. issuing or verifying data with the new connection.&lt;/li>
-&lt;/ol></description></item><item><title>Docs: Interoperability Testing Demo</title><link>/docs/videos/interoperability/</link><pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate><guid>/docs/videos/interoperability/</guid><description>
+&lt;/ol></description></item><item><title>Docs: Demo: Alice-Faber-Acme</title><link>/docs/videos/faber-acme-demo/</link><pubDate>Wed, 24 Aug 2022 00:00:00 +0000</pubDate><guid>/docs/videos/faber-acme-demo/</guid><description>
+&lt;p>See description and instructions &lt;a href="https://github.com/findy-network/findy-agency-demo#findy-agency-demo">here&lt;/a>&lt;/p>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/rA2l0eW86Bs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div></description></item><item><title>Docs: Demo: Findy Bots</title><link>/docs/videos/findy-bots/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>/docs/videos/findy-bots/</guid><description>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/gVr8KwISMS4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div></description></item><item><title>Docs: Interoperability Testing Demo</title><link>/docs/videos/interoperability/</link><pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate><guid>/docs/videos/interoperability/</guid><description>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
 &lt;iframe src="https://www.youtube.com/embed/W1H7ppS2Y6M" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
 &lt;/div>
