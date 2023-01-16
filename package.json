@@ -21,7 +21,7 @@
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^10.4.13",
-    "js-green-licenses": "^3.0.1",
+    "js-green-licenses": "^4.0.0",
     "postcss": "^8.4.18",
     "postcss-cli": "^10.0.0"
   }
