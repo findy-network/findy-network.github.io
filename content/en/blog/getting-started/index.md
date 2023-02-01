@@ -194,13 +194,59 @@ The server starts a listener who gets notified when a new connection is establis
 The notification triggers either the credential issuance or verification,
 depending on the endpoint that displayed the invitation.
 
-Check the code and pay attention to
+{{< imgproc issue Fit "825x825" >}}
+<em>Reading the QR code from the issue page triggers a credential offer.
+The Web Wallet is displayed on the right side with its chat UI.</em>
+{{< /imgproc >}}
+
+{{< imgproc verify Fit "825x825" >}}
+<em>The connection created from the verify page triggers a proof request.
+The sample creates dedicated connections for both issue and verify operations,
+but it would be possible to use the same connection as well. </em>
+{{< /imgproc >}}
+
+Check the sample code for selected language and pay attention to
 
 * client registration and authentication,
 * schema and credential definition creation,
 * creating the pairwise connection invitation,
 * and starting the client listener and reacting to the notifications coming from the agency.
 
-{{< figure src="https://user-images.githubusercontent.com/29113682/215501289-29fbf029-f796-487b-8370-6255d036e50d.gif" width="800px">}}
+## Start with Your Use Case
 
-## Tune the Samples
+Now you should have the technical setup ready to start implementing your use case.
+But as with always in software development, we need more than technical capabilities.
+Before starting the implementation, try to figure out the roles and duties of your process participants:
+
+**Define the credential(s) content.**
+Think about which data attributes you need. The sample issues the type “foobar” credentials
+with a single attribute “foo.” Foobar data is probably not the type you wish to issue and utilize.
+
+**Define the data flow participants.**
+Draft your data flow and resolve which parties are the issuer, verifier, and holder or
+are some parties even in multiple roles. In the sample, a single service agent handles both issuing
+and verifying. That is not a probable scenario in a real-world use case, as the whole point of SSI
+and verified data use is to verify credentials that other parties have issued.
+
+**Define how you operate each verified data flow participant.**
+The sample had a CLI tool or API client as the issuer and verifier and a web wallet user
+as the holder. Depending on the use case, you might have a similar setup or, for example,
+another service agent as the holder in a service-to-service scenario. Or you would like
+to integrate the holder capabilities into your end-user application instead of using
+the agency web wallet.
+
+Of course, in cases where we have multiple real-world parties
+involved, the detailed design is done together with the other participants.
+
+## Feedback
+
+Let us know if you have any feedback regarding
+the Findy Agency functionality or documentation. It would also be cool [to hear about
+the PoCs, demos and applications you have built](https://github.com/findy-network/findy-agent/discussions/new?category=show-and-tell)
+using the agency. You can reach us, for example creating an issue or starting
+a discussion in GitHub
+or sending a message to me via these SoMe channels:
+[Twitter](https://twitter.com/vuorenoja),
+[Mastodon](https://mastodontti.fi/@lauravuo), and [LinkedIn](https://www.linkedin.com/in/lauravuorenoja/).
+
+*Good luck on your journey into the SSI world!*
