@@ -39,6 +39,9 @@ service agent development without using any extra proxies or network tools.
 
 **TL;DR** Take a look at the examples found in [the sample repository](https://github.com/findy-network/identity-hackathon-2023)!
 
+The sample repository provides simple yet comprehensive examples to start issuing and verifying
+using the CLI tool or with the agency API. The easiest path is to start with the CLI.
+
 ## Run the CLI
 
 ["findy-agent-cli"](https://github.com/findy-network/findy-agent-cli)
@@ -127,14 +130,12 @@ However, the process continues with a proof request sent by the verifier bot (**
 contains the attributes the bot wishes the holder to present. The web wallet user sees
 the requested data once they receive the message (**8**), and they can either accept or reject the request.
 
-Once the proof is accepted (**9**), the agency verifies it cryptographically.
+After the proof is accepted (**9**), the agency verifies it cryptographically.
 If the verification succeeds, the agency notifies the verifier bot with the proof values (**10**).
 It can reject the proof if the values are not acceptable by the business logic.
 The sample bot accepts all attribute values, so the verifying process is continued
 without extra validation (**11**).
 The bot exits when the proof is completed (**12-13**).
-
-And that’s all core features of verified data flow executed utilizing the CLI tool!
 
 ```mermaid
 sequenceDiagram
@@ -171,12 +172,34 @@ and create another client with the CLI tool to verify the issued data.
 
 ## Feedback
 
+The CLI sample script presented above demonstrates all the core features of verified data flow.
+It should make you well-equipped to play around with the CLI tool yourself!
+
+Your tool pack will extend even more with our next blog posts.
+They will describe how to use the agency API programmatically
+and dive deep into crafting verified data supporting chatbot state machines.
+
 Let us know if you have any feedback regarding
 the Findy Agency functionality or documentation.
-You can reach us, for example creating an issue or starting
-a discussion in GitHub
-or sending a message to me via these SoMe channels:
-[Twitter](https://twitter.com/vuorenoja),
-[Mastodon](https://mastodontti.fi/@lauravuo), and [LinkedIn](https://www.linkedin.com/in/lauravuorenoja/).
+You can reach us, for example [creating an issue](https://github.com/findy-network/findy-agent/issues)
+or [starting a discussion](https://github.com/findy-network/findy-agent/discussions) in GitHub.
+
+You can also reach us via SoMe channels:
+
+<div style="display: flex">
+<span>
+<img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width="100"/>
+<div>Laura</div>
+<div><a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer"><i class="fab fa-github ml-2 "></i></a>
+<a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer"><i class="fab fa-linkedin ml-2 "></i></a>
+<a href="https://mastodontti.fi/@lauravuo" target="_blank" rel="noopener noreferer"><i class="fab fa-mastodon ml-2 "></i></a>
+<a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer"><i class="fab fa-twitter ml-2 "></i></a></div>
+</span><span style="padding-left: 2em">
+<img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
+<div>Harri</div>
+<div><a href="https://github.com/lainio/" target="_blank" rel="noopener noreferer"><i class="fab fa-github ml-2 "></i></a>
+<a href="https://www.linkedin.com/in/harrilainio/" target="_blank" rel="noopener noreferer"><i class="fab fa-linkedin ml-2 "></i></a>
+<a href="https://twitter.com/harrilainio" target="_blank" rel="noopener noreferer"><i class="fab fa-twitter ml-2 "></i></a></div>
+</span></div><br><br>
 
 *Good luck on your journey into the SSI world!*
