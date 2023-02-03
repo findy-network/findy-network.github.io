@@ -1,4 +1,159 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 10 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Ledger Multiplexer</title><link>/blog/2022/09/30/ledger-multiplexer/</link><pubDate>Fri, 30 Sep 2022 00:00:00 +0000</pubDate><guid>/blog/2022/09/30/ledger-multiplexer/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 30 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Getting Started with SSI Service Agent Development</title><link>/blog/2023/01/30/getting-started-with-ssi-service-agent-development/</link><pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate><guid>/blog/2023/01/30/getting-started-with-ssi-service-agent-development/</guid><description>
+&lt;p>In the new SSI world, we craft digital services according to the self-sovereign identity model.
+We will have applications that issue credentials for the data they possess and applications
+that can verify these credentials. The central entity is the digital wallet owner
+that can hold these credentials and present them when needed.&lt;/p>
+&lt;p>&lt;em>&amp;ldquo;Ok, sounds great!&amp;quot;&lt;/em> you may think.
+&lt;em>&amp;ldquo;I want to utilize credentials also in my web application. But where to start?&amp;quot;&lt;/em>&lt;/p>
+&lt;p>Developing decentralized applications is tricky as it usually requires setting up
+multiple applications on your local computer or acquiring access to services set up by others.
+Using Findy Agency tackles this hurdle. It is an SSI solution that offers
+a complete set of tools for managing your digital wallet and agent via a user interface or an API.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="/blog/2023/01/30/getting-started-with-ssi-service-agent-development/cover-trust-triangle_hu6055598bbc117b5746e17689e6901128_77425_825x825_fit_catmullrom_3.png" width="825" height="464">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Findy Agency provides tools for playing each role in the trust triangle: CLI and API clients
+have the complete tool pack, and the web wallet user can currently hold and prove credentials.
+&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>The Agency tooling provides you with &lt;a href="https://github.com/findy-network/findy-wallet-pwa">a web wallet&lt;/a>
+and a CLI tool that you can use to test
+your service&amp;rsquo;s issuing and verifying features. You can easily setup the whole Findy Agency
+software to your local computer &lt;a href="https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development">using Docker containers and a simulated ledger&lt;/a>.
+Or, if you have an agency cloud installation available, you can utilize it for your
+service agent development without using any extra proxies or network tools.&lt;/p>
+&lt;p>&lt;em>&amp;ldquo;So, I have the agency up and running. What next?&amp;quot;&lt;/em>&lt;/p>
+&lt;p>&lt;strong>TL;DR&lt;/strong> Take a look at the examples found in &lt;a href="https://github.com/findy-network/identity-hackathon-2023">the sample repository&lt;/a>!&lt;/p>
+&lt;p>The sample repository provides simple yet comprehensive examples to start issuing and verifying
+using the CLI tool or with the agency API. The easiest path is to start with the CLI.&lt;/p>
+&lt;h2 id="run-the-cli">Run the CLI&lt;/h2>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-agent-cli">&amp;ldquo;findy-agent-cli&amp;rdquo;&lt;/a>
+is a command-line tool that provides all the required
+agent manipulation functionality. It provides means to quickly test out
+the issuing and verifying &lt;em>before writing any code&lt;/em>.&lt;/p>
+&lt;p>&lt;a href="https://github.com/findy-network/identity-hackathon-2023/tree/master/cli#cli-example">The sample script&lt;/a>
+is a good starting point. It shows how to allocate an agent in the cloud
+and issue and verify credentials using a simple chatbot. You can run it by cloning &lt;a href="https://github.com/findy-network/identity-hackathon-2023">the repository&lt;/a>
+and following the instructions in the README.&lt;/p>
+&lt;h3 id="cli-script-initialization-phase">CLI Script Initialization Phase&lt;/h3>
+&lt;p>The sample script initialization phase allocates a new agent from the agency (&lt;strong>1&lt;/strong>)
+and authenticates the CLI user (&lt;strong>2-3&lt;/strong>). The authentication returns a JWT token
+exposed to the script environment so that further CLI calls can utilize it
+automatically.&lt;/p>
+&lt;p>For the agent to issue credentials, an applicable schema needs to exist.
+The schema describes the contents of a credential, i.e., which attributes the credential contains.
+The sample script creates a schema &amp;ldquo;foobar&amp;rdquo; with a single attribute &amp;ldquo;foo&amp;rdquo; (&lt;strong>4-5&lt;/strong>).&lt;/p>
+&lt;p>There needs to be more than the mere schema for the issuing process; the agent needs also to create
+and publish its credential definition (&lt;strong>6-7&lt;/strong>) attached to the created schema so that it can issue
+credentials and verifiers can verify the proof presentations against the published credential definition.&lt;/p>
+&lt;p>We assume that the holder operates a web wallet and &lt;a href="https://github.com/findy-network/findy-wallet-pwa#registerlogin">has taken it into use&lt;/a>.
+Note that you can play the holder role also with the CLI tool.&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-mermaid" data-lang="mermaid">sequenceDiagram
+autonumber
+participant CLI
+participant Agency
+participant Web Wallet
+CLI-&amp;gt;&amp;gt;Agency: Register
+CLI-&amp;gt;&amp;gt;Agency: Login
+Agency--&amp;gt;&amp;gt;CLI: JWT token
+CLI-&amp;gt;&amp;gt;Agency: Create schema
+Agency--&amp;gt;&amp;gt;CLI: Schema ID
+CLI-&amp;gt;&amp;gt;Agency: Create cred def
+Agency--&amp;gt;&amp;gt;CLI: Cred def ID
+&lt;/code>&lt;/pre>&lt;h3 id="cli-script-issuing-credential">CLI Script Issuing Credential&lt;/h3>
+&lt;p>The next task is to create a pairwise connection between the agent operated by the CLI user
+and the web wallet user. The pairwise connection is an encrypted pipe between the two
+agents that they can use to exchange data securely. The CLI script creates an invitation (&lt;strong>1-2&lt;/strong>)
+and prints it out (&lt;strong>3&lt;/strong>) as a QR code that the web wallet user can read (&lt;strong>5&lt;/strong>).&lt;/p>
+&lt;p>Once the new connection ID is known, the CLI script starts a chatbot (&lt;strong>4&lt;/strong>) for the new connection.
+The bot logic follows the rules for changing the bot states in the YAML file. Therefore,
+the bot handles the rest of the issuing process (&lt;strong>6-7&lt;/strong>).&lt;/p>
+&lt;p>Once the issuer bot notices that credential issuing succeeded, it stops the bot (&lt;strong>10-11&lt;/strong>), and
+the sample script moves on to verifying the same credential.&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-mermaid" data-lang="mermaid">sequenceDiagram
+autonumber
+participant CLI
+participant Issue Bot
+participant Agency
+participant Web Wallet
+CLI-&amp;gt;&amp;gt;Agency: Create invitation
+Agency--&amp;gt;&amp;gt;CLI: Invitation URL
+CLI--&amp;gt;&amp;gt;Web Wallet: &amp;lt;&amp;lt;show QR code&amp;gt;
+CLI-&amp;gt;&amp;gt;Issue Bot: Start
+Web Wallet-&amp;gt;&amp;gt;Agency: Read QR code
+Agency--&amp;gt;&amp;gt;Issue Bot: Connection ready!
+Issue Bot-&amp;gt;&amp;gt;Agency: Issue credential
+Agency--&amp;gt;&amp;gt;Web Wallet: Accept offer?
+Web Wallet-&amp;gt;&amp;gt;Agency: Accept
+Agency--&amp;gt;&amp;gt;Issue Bot: Issue ready!
+Issue Bot-&amp;gt;&amp;gt;Issue Bot: Terminate
+&lt;/code>&lt;/pre>&lt;h3 id="cli-script-verifying-credential">CLI Script Verifying Credential&lt;/h3>
+&lt;p>Steps &lt;strong>1-6&lt;/strong> proceed similarly to the issuing: first, the agents form a new pairwise connection.
+However, the process continues with a proof request sent by the verifier bot (&lt;strong>7&lt;/strong>). The proof request
+contains the attributes the bot wishes the holder to present. The web wallet user sees
+the requested data once they receive the message (&lt;strong>8&lt;/strong>), and they can either accept or reject the request.&lt;/p>
+&lt;p>After the proof is accepted (&lt;strong>9&lt;/strong>), the agency verifies it cryptographically.
+If the verification succeeds, the agency notifies the verifier bot with the proof values (&lt;strong>10&lt;/strong>).
+It can reject the proof if the values are not acceptable by the business logic.
+The sample bot accepts all attribute values, so the verifying process is continued
+without extra validation (&lt;strong>11&lt;/strong>).
+The bot exits when the proof is completed (&lt;strong>12-13&lt;/strong>).&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-mermaid" data-lang="mermaid">sequenceDiagram
+autonumber
+participant CLI
+participant Verify Bot
+participant Agency
+participant Web Wallet
+CLI-&amp;gt;&amp;gt;Agency: Create invitation
+Agency--&amp;gt;&amp;gt;CLI: Invitation URL
+CLI--&amp;gt;&amp;gt;Web Wallet: &amp;lt;&amp;lt;show QR code&amp;gt;
+CLI-&amp;gt;&amp;gt;Verify Bot: Start
+Web Wallet-&amp;gt;&amp;gt;Agency: Read QR code
+Agency--&amp;gt;&amp;gt;Verify Bot: Connection ready!
+Verify Bot-&amp;gt;&amp;gt;Agency: Proof request
+Agency--&amp;gt;&amp;gt;Web Wallet: Accept request?
+Web Wallet-&amp;gt;&amp;gt;Agency: Accept
+Agency--&amp;gt;&amp;gt;Verify Bot: Proof paused
+Verify Bot-&amp;gt;&amp;gt;Agency: Resume proof
+Agency--&amp;gt;&amp;gt;Verify Bot: Proof ready!
+Verify Bot-&amp;gt;&amp;gt;Verify Bot: Terminate
+&lt;/code>&lt;/pre>&lt;h3 id="cli-as-a-test-tool">CLI as a Test Tool&lt;/h3>
+&lt;p>Note that you can also utilize the CLI for testing.
+It is an excellent tool to simulate the functionality on the other end.&lt;/p>
+&lt;p>For instance, let’s say you are developing an issuer service.
+You can use the CLI tool to act as the holder client and to receive the credential.
+Or you can use the web wallet to hold the credential
+and create another client with the CLI tool to verify the issued data.&lt;/p>
+&lt;h2 id="feedback">Feedback&lt;/h2>
+&lt;p>The CLI sample script presented above demonstrates all the core features of verified data flow.
+It should make you well-equipped to play around with the CLI tool yourself!&lt;/p>
+&lt;p>Your tool pack will extend even more with our next blog posts.
+They will describe how to use the agency API programmatically
+and dive deep into crafting verified data supporting chatbot state machines.&lt;/p>
+&lt;p>Let us know if you have any feedback regarding
+the Findy Agency functionality or documentation.
+You can reach us, for example &lt;a href="https://github.com/findy-network/findy-agent/issues">creating an issue&lt;/a>
+or &lt;a href="https://github.com/findy-network/findy-agent/discussions">starting a discussion&lt;/a> in GitHub.&lt;/p>
+&lt;p>You can also reach us via SoMe channels:&lt;/p>
+&lt;div style="display: flex">
+&lt;span>
+&lt;img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width="100"/>
+&lt;div>Laura&lt;/div>
+&lt;div>&lt;a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://mastodontti.fi/@lauravuo" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-mastodon ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;span style="padding-left: 2em">
+&lt;img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
+&lt;div>Harri&lt;/div>
+&lt;div>&lt;a href="https://github.com/lainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/harrilainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/harrilainio" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;/div>&lt;br>&lt;br>
+&lt;p>&lt;em>Good luck on your journey into the SSI world!&lt;/em>&lt;/p></description></item><item><title>Blog: Ledger Multiplexer</title><link>/blog/2022/09/30/ledger-multiplexer/</link><pubDate>Fri, 30 Sep 2022 00:00:00 +0000</pubDate><guid>/blog/2022/09/30/ledger-multiplexer/</guid><description>
 &lt;p>In this technical blog post, I&amp;rsquo;ll explain how I implemented a plugin system into
 our &lt;a href="https://github.com/hyperledger/indy-sdk">Indy SDK&lt;/a>
 &lt;a href="https://github.com/findy-network/findy-wrapper-go">Go wrapper&lt;/a> and then
