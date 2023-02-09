@@ -67,6 +67,7 @@ This the multi-page printable view of this section.
 </div>
 <h1 class=title>Findy Agency Blog</h1>
 <ul>
+<li><a href=#pg-dafd4e931a3bb4c6d4ec80cb0b83189a>How to Equip Your App with VC Superpowers</a></li>
 <li><a href=#pg-9376ea3da0d51324362354349d8897ae>Getting Started with SSI Service Agent Development </a></li>
 <li><a href=#pg-33bb27554cab57b4ea8b4c09d9feb21d>Ledger Multiplexer</a></li>
 <li><a href=#pg-f22c7845c54c724197562951d0c505bc>The Hyperledger Global Forum Experience</a></li>
@@ -85,6 +86,310 @@ This the multi-page printable view of this section.
 </div>
 </div>
 <div class=td-content>
+<h1 id=pg-dafd4e931a3bb4c6d4ec80cb0b83189a>How to Equip Your App with VC Superpowers</h1>
+<div class=lead>Integrating the support for verifiable credentials into your application is straightforward once you master some basic tricks. Our sample servers get you ongoing with a Go, Typescript, or Kotlin implementation at no time.</div>
+<div class="td-byline mb-4">
+By <b>Laura Vuorenoja</b> |
+<time datetime=2023-02-06 class=text-muted>Monday, February 06, 2023</time>
+</div>
+<p><a href=/blog/2023/01/30/getting-started-with-ssi-service-agent-development/>My previous blog post</a>
+explained how to get started with SSI service agents using our CLI tool.
+But what about the next step, the integration into your application?</p>
+<p>As I have previously described <a href=https://findy-network.github.io/blog/2022/08/29/the-findy-agency-api/>in my earlier blog post</a>,
+Findy Agency API is the interface to
+Findy Agency for clients that wish to use the agency services programmatically. You can compile the
+gRPC API for <a href=https://grpc.io/docs/languages/>multiple languages</a>.
+However, the most straightforward is to start with the ones for which we provide some additional tooling:
+<strong>Go</strong>, <strong>Typescript</strong> (JavaScript), or <strong>Kotlin</strong>.</p>
+<h2 id=the-server-samples>The Server Samples</h2>
+<p><a href=https://github.com/findy-network/identity-hackathon-2023>The sample repository</a> has an example
+server for each of the three languages. You can run the samples
+by cloning the repository and following
+the instructions in the README.</p>
+<p>The sample servers demonstrate a similar issuing and verifying example as the CLI script in the previous post.
+The server has two endpoints, <code>/issue</code> and <code>/verify</code>.
+Both endpoints display QR codes for connection invitations.
+The server starts a listener who gets notified when a new connection is established
+(the holder has read the invitation).
+The notification triggers either the credential issuance or verification,
+depending on the endpoint that displayed the invitation.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:835px>
+<img class=card-img-top src=/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/cover-issue_hu1186a2ecfb762399517a72c1f28aa084_224211_825x825_fit_catmullrom_3.png width=825 height=603>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Reading the QR code from the issue page triggers a credential offer.
+The Web Wallet is displayed on the right side with its chat UI.</em>
+</p>
+</div>
+</div>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:835px>
+<img class=card-img-top src=/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/verify_hu76fd486adc4246f4b95e4b1f8edf031d_241335_825x825_fit_catmullrom_3.png width=825 height=605>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>The connection created from the verify page triggers a proof request.
+The sample creates dedicated connections for both issue and verify operations,
+but it would be possible to use the same connection as well. </em>
+</p>
+</div>
+</div>
+<h2 id=the-server-code>The Server Code</h2>
+<p>I have gathered snippets to which you should pay close attention when checking the sample code.
+The snippets chosen here are from <a href=https://github.com/findy-network/identity-hackathon-2023/tree/master/go>the Go sample</a>,
+but each server contains similar functionality.</p>
+<h3 id=client-registration-and-authentication>Client Registration and Authentication</h3>
+<p>The agency API clients use <a href=/blog/2021/11/09/anchoring-chains-of-trust/#headless-fido2webauthn-authenticator>headless FIDO2 authentication</a>.
+Before the client
+can make any API requests, it must authenticate and acquire a JWT token using the FIDO2 protocol.
+This Go example uses the authenticator functionality from
+the <em><a href=https://github.com/findy-network/findy-agent-auth>github.com/findy-network/findy-agent-auth</a></em> package.
+Other implementations (Typescript, Kotlin)
+currently utilize the <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a>
+binary for headless authentication.</p>
+<p><a href=https://github.com/findy-network/identity-hackathon-2023/blob/b6462464dca79415271a7c179e0c5f8b1373b280/go/agent/agent.go#L186>The sample code</a>
+tries to authenticate first, and only if the authentication fails
+will it try the client registration. The registration binds the client key to the client account,
+and after a successful registration, the client can log in and receive the JWT token needed
+for the API calls.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#204a87;font-weight:700>import</span> <span style=color:#000;font-weight:700>(</span>
+  <span style=color:#ce5c00;font-weight:700>...</span>
+
+  <span style=color:#4e9a06>&#34;github.com/findy-network/findy-agent-auth/acator/authn&#34;</span>
+<span style=color:#000;font-weight:700>)</span>
+
+<span style=color:#ce5c00;font-weight:700>...</span>
+
+<span style=color:#8f5902;font-style:italic>// use command from the headless authenticator package
+</span><span style=color:#8f5902;font-style:italic></span><span style=color:#204a87;font-weight:700>var</span> <span style=color:#000>authnCmd</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#000>authn</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Cmd</span><span style=color:#000;font-weight:700>{</span>
+  <span style=color:#000>SubCmd</span><span style=color:#000;font-weight:700>:</span>   <span style=color:#4e9a06>&#34;&#34;</span><span style=color:#000;font-weight:700>,</span>
+  <span style=color:#000>UserName</span><span style=color:#000;font-weight:700>:</span> <span style=color:#000>os</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Getenv</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;FCLI_USER&#34;</span><span style=color:#000;font-weight:700>),</span><span style=color:#8f5902;font-style:italic>// client username
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>Url</span><span style=color:#000;font-weight:700>:</span>      <span style=color:#000>os</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Getenv</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;FCLI_URL&#34;</span><span style=color:#000;font-weight:700>),</span> <span style=color:#8f5902;font-style:italic>// FIDO2 server URL
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>AAGUID</span><span style=color:#000;font-weight:700>:</span>   <span style=color:#4e9a06>&#34;12c85a48-4baf-47bd-b51f-f192871a1511&#34;</span><span style=color:#000;font-weight:700>,</span>
+  <span style=color:#000>Key</span><span style=color:#000;font-weight:700>:</span>      <span style=color:#000>os</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Getenv</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;FCLI_KEY&#34;</span><span style=color:#000;font-weight:700>),</span> <span style=color:#8f5902;font-style:italic>// authenticator key
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>Counter</span><span style=color:#000;font-weight:700>:</span>  <span style=color:#0000cf;font-weight:700>0</span><span style=color:#000;font-weight:700>,</span>
+  <span style=color:#000>Token</span><span style=color:#000;font-weight:700>:</span>    <span style=color:#4e9a06>&#34;&#34;</span><span style=color:#000;font-weight:700>,</span>
+  <span style=color:#000>Origin</span><span style=color:#000;font-weight:700>:</span>   <span style=color:#000>os</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Getenv</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;FCLI_ORIGIN&#34;</span><span style=color:#000;font-weight:700>),</span>
+<span style=color:#000;font-weight:700>}</span>
+
+<span style=color:#ce5c00;font-weight:700>...</span>
+
+<span style=color:#204a87;font-weight:700>func</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>a</span> <span style=color:#ce5c00;font-weight:700>*</span><span style=color:#000>Agent</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000>register</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>err</span> <span style=color:#204a87;font-weight:700>error</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+  <span style=color:#204a87;font-weight:700>defer</span> <span style=color:#000>err2</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Handle</span><span style=color:#000;font-weight:700>(</span><span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>err</span><span style=color:#000;font-weight:700>)</span>
+
+  <span style=color:#000>myCmd</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>authnCmd</span>
+  <span style=color:#000>myCmd</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>SubCmd</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#4e9a06>&#34;register&#34;</span>
+
+  <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>myCmd</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Validate</span><span style=color:#000;font-weight:700>())</span>
+  <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To1</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>myCmd</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Exec</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>os</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Stdout</span><span style=color:#000;font-weight:700>))</span>
+  <span style=color:#204a87;font-weight:700>return</span>
+<span style=color:#000;font-weight:700>}</span>
+
+<span style=color:#204a87;font-weight:700>func</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>a</span> <span style=color:#ce5c00;font-weight:700>*</span><span style=color:#000>Agent</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000>login</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>err</span> <span style=color:#204a87;font-weight:700>error</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+  <span style=color:#204a87;font-weight:700>defer</span> <span style=color:#000>err2</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Handle</span><span style=color:#000;font-weight:700>(</span><span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>err</span><span style=color:#000;font-weight:700>)</span>
+
+  <span style=color:#000>myCmd</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>authnCmd</span>
+  <span style=color:#000>myCmd</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>SubCmd</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#4e9a06>&#34;login&#34;</span>
+
+  <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>myCmd</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Validate</span><span style=color:#000;font-weight:700>())</span>
+  <span style=color:#000>r</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To1</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>myCmd</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Exec</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>os</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Stdout</span><span style=color:#000;font-weight:700>))</span>
+
+  <span style=color:#8f5902;font-style:italic>// store token for successful authentication
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>a</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>JWT</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#000>r</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Token</span>
+  <span style=color:#204a87;font-weight:700>return</span>
+<span style=color:#000;font-weight:700>}</span>
+
+</code></pre></div><p>With a valid JWT, the client can create the gRPC API connection and the real fun can begin!</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#204a87;font-weight:700>import</span> <span style=color:#000;font-weight:700>(</span>
+  <span style=color:#ce5c00;font-weight:700>...</span>
+
+  <span style=color:#4e9a06>&#34;github.com/findy-network/findy-common-go/agency/client&#34;</span>
+  <span style=color:#000>agency</span> <span style=color:#4e9a06>&#34;github.com/findy-network/findy-common-go/grpc/agency/v1&#34;</span>
+  <span style=color:#4e9a06>&#34;google.golang.org/grpc&#34;</span>
+<span style=color:#000;font-weight:700>)</span>
+
+  <span style=color:#ce5c00;font-weight:700>...</span>
+  <span style=color:#8f5902;font-style:italic>// set up API connection
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>conf</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>client</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>BuildClientConnBase</span><span style=color:#000;font-weight:700>(</span>
+    <span style=color:#000>os</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Getenv</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;FCLI_TLS_PATH&#34;</span><span style=color:#000;font-weight:700>),</span>
+    <span style=color:#000>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>AgencyHost</span><span style=color:#000;font-weight:700>,</span>
+    <span style=color:#000>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>AgencyPort</span><span style=color:#000;font-weight:700>,</span>
+    <span style=color:#000;font-weight:700>[]</span><span style=color:#000>grpc</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>DialOption</span><span style=color:#000;font-weight:700>{},</span>
+  <span style=color:#000;font-weight:700>)</span>
+
+  <span style=color:#000>conn</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>client</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TryAuthOpen</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>JWT</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>conf</span><span style=color:#000;font-weight:700>)</span>
+
+  <span style=color:#000>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Client</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>AgencyClient</span><span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000>Conn</span><span style=color:#000;font-weight:700>:</span>           <span style=color:#000>conn</span><span style=color:#000;font-weight:700>,</span>
+    <span style=color:#000>AgentClient</span><span style=color:#000;font-weight:700>:</span>    <span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>NewAgentServiceClient</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>conn</span><span style=color:#000;font-weight:700>),</span>
+    <span style=color:#000>ProtocolClient</span><span style=color:#000;font-weight:700>:</span> <span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>NewProtocolServiceClient</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>conn</span><span style=color:#000;font-weight:700>),</span>
+  <span style=color:#000;font-weight:700>}</span>
+
+</code></pre></div><h3 id=schema-and-credential-definition-creation>Schema and Credential Definition Creation</h3>
+<p>When the server starts for the first time, it creates a schema and a credential definition.
+The issuer always needs a credential definition to issue credentials.
+For the verifier, it is enough to know the credential definition id.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>
+  <span style=color:#8f5902;font-style:italic>// use the agent API to create schema and credential definition
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>schemaRes</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To1</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>a</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Client</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>AgentClient</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>CreateSchema</span><span style=color:#000;font-weight:700>(</span>
+    <span style=color:#000>context</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TODO</span><span style=color:#000;font-weight:700>(),</span>
+    <span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>SchemaCreate</span><span style=color:#000;font-weight:700>{</span>
+      <span style=color:#000>Name</span><span style=color:#000;font-weight:700>:</span>       <span style=color:#000>schema</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Name</span><span style=color:#000;font-weight:700>,</span>
+      <span style=color:#000>Version</span><span style=color:#000;font-weight:700>:</span>    <span style=color:#4e9a06>&#34;1.0&#34;</span><span style=color:#000;font-weight:700>,</span>
+      <span style=color:#000>Attributes</span><span style=color:#000;font-weight:700>:</span> <span style=color:#000>schema</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Attributes</span><span style=color:#000;font-weight:700>,</span>
+    <span style=color:#000;font-weight:700>},</span>
+  <span style=color:#000;font-weight:700>))</span>
+  <span style=color:#ce5c00;font-weight:700>...</span> 
+  <span style=color:#8f5902;font-style:italic>// tag the credential definition with our client username
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>res</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To1</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>a</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Client</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>AgentClient</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>CreateCredDef</span><span style=color:#000;font-weight:700>(</span>
+    <span style=color:#000>context</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TODO</span><span style=color:#000;font-weight:700>(),</span>
+    <span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>CredDefCreate</span><span style=color:#000;font-weight:700>{</span>
+      <span style=color:#000>SchemaID</span><span style=color:#000;font-weight:700>:</span> <span style=color:#000>schemaRes</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>ID</span><span style=color:#000;font-weight:700>,</span>
+      <span style=color:#000>Tag</span><span style=color:#000;font-weight:700>:</span>      <span style=color:#000>authnCmd</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>UserName</span><span style=color:#000;font-weight:700>,</span>
+    <span style=color:#000;font-weight:700>},</span>
+  <span style=color:#000;font-weight:700>))</span>
+  <span style=color:#000>credDefID</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#000>res</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>GetID</span><span style=color:#000;font-weight:700>()</span>
+</code></pre></div><p>The app stores the created credential definition ID in a text file. The app will skip
+the credential definition creation step if this text file exists on the server bootup.</p>
+<p>The credential definition ID is essential.
+You should share it with whoever needs to verify the credentials issued by your issuer.</p>
+<h3 id=creating-the-invitation>Creating the Invitation</h3>
+<p>After the start routines, the server endpoints are ready to display the pairwise connection invitations.
+The holder agent can establish a secure pairwise connection with the information in the invitation.</p>
+<p>The client uses CreateInvitation-API to generate the invitation:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>  <span style=color:#000>res</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To1</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>ourAgent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Client</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>AgentClient</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>CreateInvitation</span><span style=color:#000;font-weight:700>(</span>
+    <span style=color:#000>context</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TODO</span><span style=color:#000;font-weight:700>(),</span>
+    <span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>InvitationBase</span><span style=color:#000;font-weight:700>{</span><span style=color:#000>Label</span><span style=color:#000;font-weight:700>:</span> <span style=color:#000>ourAgent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>UserName</span><span style=color:#000;font-weight:700>},</span>
+  <span style=color:#000;font-weight:700>))</span>
+</code></pre></div><p>The endpoint returns HTML that renders the invitation as QR code.</p>
+<p>When using a mobile device, the invitation can be read with the web wallet camera or desktop browser,
+copy-pasting the invitation URL to the Add connection -dialog.</p>
+<h3 id=listening-to-notifications>Listening to Notifications</h3>
+<p>Another core concept in the client implementation is listening to the agent notifications.
+The client opens a gRPC stream to the server and receives notifications of the agent
+events through the stream.</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>
+  <span style=color:#8f5902;font-style:italic>// pick notifications from stream channel
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>ch</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To1</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Client</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Conn</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>ListenStatus</span><span style=color:#000;font-weight:700>(</span>
+    <span style=color:#000>context</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TODO</span><span style=color:#000;font-weight:700>(),</span>
+    <span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>ClientID</span><span style=color:#000;font-weight:700>{</span><span style=color:#000>ID</span><span style=color:#000;font-weight:700>:</span> <span style=color:#000>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>ClientID</span><span style=color:#000;font-weight:700>},</span>
+  <span style=color:#000;font-weight:700>))</span>
+
+  <span style=color:#8f5902;font-style:italic>// start go routine for the channel listener
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#204a87;font-weight:700>go</span> <span style=color:#204a87;font-weight:700>func</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+    <span style=color:#204a87;font-weight:700>for</span> <span style=color:#000;font-weight:700>{</span>
+      <span style=color:#000>chRes</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>ok</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#ce5c00;font-weight:700>&lt;-</span><span style=color:#000>ch</span>
+      <span style=color:#204a87;font-weight:700>if</span> <span style=color:#000;font-weight:700>!</span><span style=color:#000>ok</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#204a87>panic</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;Listening failed&#34;</span><span style=color:#000;font-weight:700>)</span>
+      <span style=color:#000;font-weight:700>}</span>
+      <span style=color:#000>notification</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>chRes</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>GetNotification</span><span style=color:#000;font-weight:700>()</span>
+      <span style=color:#000>log</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Printf</span><span style=color:#000;font-weight:700>(</span><span style=color:#4e9a06>&#34;Received agent notification %v\n&#34;</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>notification</span><span style=color:#000;font-weight:700>)</span>
+
+      <span style=color:#ce5c00;font-weight:700>...</span>
+
+      <span style=color:#204a87;font-weight:700>switch</span> <span style=color:#000>notification</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>GetTypeID</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+      <span style=color:#ce5c00;font-weight:700>...</span>
+      <span style=color:#204a87;font-weight:700>case</span> <span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Notification_STATUS_UPDATE</span><span style=color:#000;font-weight:700>:</span>
+        <span style=color:#204a87;font-weight:700>switch</span> <span style=color:#000>notification</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>GetProtocolType</span><span style=color:#000;font-weight:700>()</span> <span style=color:#000;font-weight:700>{</span>
+        <span style=color:#204a87;font-weight:700>case</span> <span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Protocol_DIDEXCHANGE</span><span style=color:#000;font-weight:700>:</span>
+          <span style=color:#000>agent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Listener</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>HandleNewConnection</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>status</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>GetDIDExchange</span><span style=color:#000;font-weight:700>().</span><span style=color:#000>ID</span><span style=color:#000;font-weight:700>)</span>
+          <span style=color:#ce5c00;font-weight:700>...</span>
+        <span style=color:#000;font-weight:700>}</span>
+        <span style=color:#ce5c00;font-weight:700>...</span>
+      <span style=color:#000;font-weight:700>}</span>
+    <span style=color:#000;font-weight:700>}</span>
+ <span style=color:#000;font-weight:700>}()</span>
+
+</code></pre></div><p>For instance, when the server creates a pairwise connection so that the holder can connect to
+the issuer, the notification of the new connection is sent through the stream.</p>
+<pre tabindex=0><code class=language-mermaid data-lang=mermaid>sequenceDiagram
+  autonumber
+    participant Server
+    participant Agency
+    participant Web Wallet
+
+    Server-&gt;&gt;Agency: Start listening
+    Server--&gt;&gt;Web Wallet: Show QR code 
+    Web Wallet-&gt;&gt;Agency: Read QR code
+    Agency-&gt;&gt;Server: Connection created!
+    Note right of Server: Conn ID for issue
+    Server-&gt;&gt;Agency: Send credential offer
+    Agency-&gt;&gt;Web Wallet: Cred offer received!
+    Web Wallet-&gt;&gt;Agency: Accept offer
+    Agency-&gt;&gt;Server: Issue ok!
+</code></pre><p>In the sequence above, steps <strong>4</strong> and <strong>8</strong> are notifications sent through the listener stream.</p>
+<p>The client can then
+react to the event accordingly. For example,
+when a new connection is established from the issue endpoint, the client sends a credential offer:</p>
+<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#204a87;font-weight:700>func</span> <span style=color:#000;font-weight:700>(</span><span style=color:#000>a</span> <span style=color:#ce5c00;font-weight:700>*</span><span style=color:#000>AgentListener</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000>HandleNewConnection</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>id</span> <span style=color:#204a87;font-weight:700>string</span><span style=color:#000;font-weight:700>)</span> <span style=color:#000;font-weight:700>{</span>
+  <span style=color:#ce5c00;font-weight:700>...</span>
+  <span style=color:#8f5902;font-style:italic>// pairwise based on the connection id
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>pw</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>client</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>NewPairwise</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>ourAgent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Client</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Conn</span><span style=color:#000;font-weight:700>,</span> <span style=color:#000>id</span><span style=color:#000;font-weight:700>)</span>
+
+  <span style=color:#ce5c00;font-weight:700>...</span>
+  <span style=color:#8f5902;font-style:italic>// credential values
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>attributes</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#204a87>make</span><span style=color:#000;font-weight:700>([]</span><span style=color:#ce5c00;font-weight:700>*</span><span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Protocol_IssuingAttributes_Attribute</span><span style=color:#000;font-weight:700>,</span> <span style=color:#0000cf;font-weight:700>1</span><span style=color:#000;font-weight:700>)</span>
+  <span style=color:#000>attributes</span><span style=color:#000;font-weight:700>[</span><span style=color:#0000cf;font-weight:700>0</span><span style=color:#000;font-weight:700>]</span> <span style=color:#000;font-weight:700>=</span> <span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Protocol_IssuingAttributes_Attribute</span><span style=color:#000;font-weight:700>{</span>
+   <span style=color:#000>Name</span><span style=color:#000;font-weight:700>:</span>  <span style=color:#4e9a06>&#34;foo&#34;</span><span style=color:#000;font-weight:700>,</span>
+   <span style=color:#000>Value</span><span style=color:#000;font-weight:700>:</span> <span style=color:#4e9a06>&#34;bar&#34;</span><span style=color:#000;font-weight:700>,</span>
+  <span style=color:#000;font-weight:700>}</span>
+
+  <span style=color:#8f5902;font-style:italic>// send the offer
+</span><span style=color:#8f5902;font-style:italic></span>  <span style=color:#000>res</span> <span style=color:#ce5c00;font-weight:700>:=</span> <span style=color:#000>try</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>To1</span><span style=color:#000;font-weight:700>(</span><span style=color:#000>pw</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>IssueWithAttrs</span><span style=color:#000;font-weight:700>(</span>
+   <span style=color:#000>context</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>TODO</span><span style=color:#000;font-weight:700>(),</span>
+   <span style=color:#000>ourAgent</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>CredDefID</span><span style=color:#000;font-weight:700>,</span>
+   <span style=color:#ce5c00;font-weight:700>&amp;</span><span style=color:#000>agency</span><span style=color:#000;font-weight:700>.</span><span style=color:#000>Protocol_IssuingAttributes</span><span style=color:#000;font-weight:700>{</span>
+    <span style=color:#000>Attributes</span><span style=color:#000;font-weight:700>:</span> <span style=color:#000>attributes</span><span style=color:#000;font-weight:700>,</span>
+   <span style=color:#000;font-weight:700>}),</span>
+  <span style=color:#000;font-weight:700>)</span>
+  <span style=color:#ce5c00;font-weight:700>...</span>
+<span style=color:#000;font-weight:700>}</span>
+</code></pre></div><p>A similar flow happens when the proof is verified. The exception with the proof is that there is
+an additional step where the client
+can reject the proof
+if the proof values are not valid according to the business logic
+(even though the proof would be cryptographically valid).</p>
+<h2 id=start-with-your-use-case>Start with Your Use Case</h2>
+<p>Now you should have the technical setup ready to start implementing your use case.
+But as with always in software development, we need more than technical capabilities.
+Before starting the implementation, try to figure out the roles and duties of your process participants:</p>
+<p><strong>Define the credential(s) content.</strong>
+Think about which data attributes you need. The sample issues the type “foobar” credentials
+with a single attribute “foo.” Foobar data is probably not the type you wish to issue and utilize.</p>
+<p><strong>Define the data flow participants.</strong>
+Draft your data flow and resolve which parties are the issuer, verifier, and holder or
+are some parties even in multiple roles. In the sample, a single service agent handles both issuing
+and verifying. That is not a probable scenario in a real-world use case, as the whole point of SSI
+and verified data use is to verify credentials that other parties have issued.</p>
+<p><strong>Define how you operate each verified data flow participant.</strong>
+The sample had a CLI tool or API client as the issuer and verifier and a web wallet user
+as the holder. Depending on the use case, you might have a similar setup or, for example,
+another service agent as the holder in a service-to-service scenario. Or you would like
+to integrate the holder capabilities into your end-user application instead of using
+the agency web wallet.</p>
+<p>Of course, in cases where we have multiple real-world parties
+involved, the detailed design is done together with the other participants.</p>
+<h2 id=feedback>Feedback</h2>
+<p>Let us know if you have any feedback regarding
+the Findy Agency functionality or documentation. It would also be cool <a href="https://github.com/findy-network/findy-agent/discussions/new?category=show-and-tell">to hear about
+the PoCs, demos and applications you have built</a>
+using the agency.</p>
+<p>You can also reach us via SoMe channels:</p>
+<div style=display:flex>
+<span>
+<img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width=100>
+<div>Laura</div>
+<div><a href=https://github.com/lauravuo/ target=_blank rel="noopener noreferer"><i class="fab fa-github ml-2"></i></a>
+<a href=https://www.linkedin.com/in/lauravuorenoja/ target=_blank rel="noopener noreferer"><i class="fab fa-linkedin ml-2"></i></a>
+<a href=https://fosstodon.org/@lauravuo target=_blank rel="noopener noreferer"><i class="fab fa-mastodon ml-2"></i></a>
+<a href=https://twitter.com/vuorenoja target=_blank rel="noopener noreferer"><i class="fab fa-twitter ml-2"></i></a></div>
+</span><span style=padding-left:2em>
+<img src="https://avatars.githubusercontent.com/u/11439212?v=4" width=100>
+<div>Harri</div>
+<div><a href=https://github.com/lainio/ target=_blank rel="noopener noreferer"><i class="fab fa-github ml-2"></i></a>
+<a href=https://www.linkedin.com/in/harrilainio/ target=_blank rel="noopener noreferer"><i class="fab fa-linkedin ml-2"></i></a>
+<a href=https://twitter.com/harrilainio target=_blank rel="noopener noreferer"><i class="fab fa-twitter ml-2"></i></a></div>
+</span></div><br><br>
+</div>
+<div class=td-content style=page-break-before:always>
 <h1 id=pg-9376ea3da0d51324362354349d8897ae>Getting Started with SSI Service Agent Development </h1>
 <div class=lead>Self-sovereign identity sounds like an exciting concept for most, but starting with the development may seem overwhelming. We have gathered simple samples that get you full speed towards integrating the SSI functionality into your application.</div>
 <div class="td-byline mb-4">
@@ -239,7 +544,7 @@ or <a href=https://github.com/findy-network/findy-agent/discussions>starting a d
 <div>Laura</div>
 <div><a href=https://github.com/lauravuo/ target=_blank rel="noopener noreferer"><i class="fab fa-github ml-2"></i></a>
 <a href=https://www.linkedin.com/in/lauravuorenoja/ target=_blank rel="noopener noreferer"><i class="fab fa-linkedin ml-2"></i></a>
-<a href=https://mastodontti.fi/@lauravuo target=_blank rel="noopener noreferer"><i class="fab fa-mastodon ml-2"></i></a>
+<a href=https://fosstodon.org/@lauravuo target=_blank rel="noopener noreferer"><i class="fab fa-mastodon ml-2"></i></a>
 <a href=https://twitter.com/vuorenoja target=_blank rel="noopener noreferer"><i class="fab fa-twitter ml-2"></i></a></div>
 </span><span style=padding-left:2em>
 <img src="https://avatars.githubusercontent.com/u/11439212?v=4" width=100>

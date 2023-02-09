@@ -1,4 +1,276 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 30 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Getting Started with SSI Service Agent Development</title><link>/blog/2023/01/30/getting-started-with-ssi-service-agent-development/</link><pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate><guid>/blog/2023/01/30/getting-started-with-ssi-service-agent-development/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 06 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: How to Equip Your App with VC Superpowers</title><link>/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/</link><pubDate>Mon, 06 Feb 2023 00:00:00 +0000</pubDate><guid>/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/</guid><description>
+&lt;p>&lt;a href="/blog/2023/01/30/getting-started-with-ssi-service-agent-development/">My previous blog post&lt;/a>
+explained how to get started with SSI service agents using our CLI tool.
+But what about the next step, the integration into your application?&lt;/p>
+&lt;p>As I have previously described &lt;a href="https://findy-network.github.io/blog/2022/08/29/the-findy-agency-api/">in my earlier blog post&lt;/a>,
+Findy Agency API is the interface to
+Findy Agency for clients that wish to use the agency services programmatically. You can compile the
+gRPC API for &lt;a href="https://grpc.io/docs/languages/">multiple languages&lt;/a>.
+However, the most straightforward is to start with the ones for which we provide some additional tooling:
+&lt;strong>Go&lt;/strong>, &lt;strong>Typescript&lt;/strong> (JavaScript), or &lt;strong>Kotlin&lt;/strong>.&lt;/p>
+&lt;h2 id="the-server-samples">The Server Samples&lt;/h2>
+&lt;p>&lt;a href="https://github.com/findy-network/identity-hackathon-2023">The sample repository&lt;/a> has an example
+server for each of the three languages. You can run the samples
+by cloning the repository and following
+the instructions in the README.&lt;/p>
+&lt;p>The sample servers demonstrate a similar issuing and verifying example as the CLI script in the previous post.
+The server has two endpoints, &lt;code>/issue&lt;/code> and &lt;code>/verify&lt;/code>.
+Both endpoints display QR codes for connection invitations.
+The server starts a listener who gets notified when a new connection is established
+(the holder has read the invitation).
+The notification triggers either the credential issuance or verification,
+depending on the endpoint that displayed the invitation.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/cover-issue_hu1186a2ecfb762399517a72c1f28aa084_224211_825x825_fit_catmullrom_3.png" width="825" height="603">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Reading the QR code from the issue page triggers a credential offer.
+The Web Wallet is displayed on the right side with its chat UI.&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/verify_hu76fd486adc4246f4b95e4b1f8edf031d_241335_825x825_fit_catmullrom_3.png" width="825" height="605">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>The connection created from the verify page triggers a proof request.
+The sample creates dedicated connections for both issue and verify operations,
+but it would be possible to use the same connection as well. &lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;h2 id="the-server-code">The Server Code&lt;/h2>
+&lt;p>I have gathered snippets to which you should pay close attention when checking the sample code.
+The snippets chosen here are from &lt;a href="https://github.com/findy-network/identity-hackathon-2023/tree/master/go">the Go sample&lt;/a>,
+but each server contains similar functionality.&lt;/p>
+&lt;h3 id="client-registration-and-authentication">Client Registration and Authentication&lt;/h3>
+&lt;p>The agency API clients use &lt;a href="/blog/2021/11/09/anchoring-chains-of-trust/#headless-fido2webauthn-authenticator">headless FIDO2 authentication&lt;/a>.
+Before the client
+can make any API requests, it must authenticate and acquire a JWT token using the FIDO2 protocol.
+This Go example uses the authenticator functionality from
+the &lt;em>&lt;a href="https://github.com/findy-network/findy-agent-auth">github.com/findy-network/findy-agent-auth&lt;/a>&lt;/em> package.
+Other implementations (Typescript, Kotlin)
+currently utilize the &lt;a href="https://github.com/findy-network/findy-agent-cli">findy-agent-cli&lt;/a>
+binary for headless authentication.&lt;/p>
+&lt;p>&lt;a href="https://github.com/findy-network/identity-hackathon-2023/blob/b6462464dca79415271a7c179e0c5f8b1373b280/go/agent/agent.go#L186">The sample code&lt;/a>
+tries to authenticate first, and only if the authentication fails
+will it try the client registration. The registration binds the client key to the client account,
+and after a successful registration, the client can log in and receive the JWT token needed
+for the API calls.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#204a87;font-weight:bold">import&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#4e9a06">&amp;#34;github.com/findy-network/findy-agent-auth/acator/authn&amp;#34;&lt;/span>
+&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// use command from the headless authenticator package
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">var&lt;/span> &lt;span style="color:#000">authnCmd&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">authn&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Cmd&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">SubCmd&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">UserName&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">os&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Getenv&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;FCLI_USER&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span>&lt;span style="color:#8f5902;font-style:italic">// client username
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">Url&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">os&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Getenv&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;FCLI_URL&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// FIDO2 server URL
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">AAGUID&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;12c85a48-4baf-47bd-b51f-f192871a1511&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Key&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">os&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Getenv&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;FCLI_KEY&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// authenticator key
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">Counter&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Token&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Origin&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">os&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Getenv&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;FCLI_ORIGIN&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">a&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">Agent&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000">register&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">err&lt;/span> &lt;span style="color:#204a87;font-weight:bold">error&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">defer&lt;/span> &lt;span style="color:#000">err2&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Handle&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">err&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">myCmd&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">authnCmd&lt;/span>
+&lt;span style="color:#000">myCmd&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SubCmd&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;register&amp;#34;&lt;/span>
+&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">myCmd&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Validate&lt;/span>&lt;span style="color:#000;font-weight:bold">())&lt;/span>
+&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To1&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">myCmd&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Exec&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">os&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Stdout&lt;/span>&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">a&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">Agent&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000">login&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">err&lt;/span> &lt;span style="color:#204a87;font-weight:bold">error&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">defer&lt;/span> &lt;span style="color:#000">err2&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Handle&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">err&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">myCmd&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">authnCmd&lt;/span>
+&lt;span style="color:#000">myCmd&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SubCmd&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;login&amp;#34;&lt;/span>
+&lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">myCmd&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Validate&lt;/span>&lt;span style="color:#000;font-weight:bold">())&lt;/span>
+&lt;span style="color:#000">r&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To1&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">myCmd&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Exec&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">os&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Stdout&lt;/span>&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// store token for successful authentication
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">a&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">JWT&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Token&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">return&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>With a valid JWT, the client can create the gRPC API connection and the real fun can begin!&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#204a87;font-weight:bold">import&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#4e9a06">&amp;#34;github.com/findy-network/findy-common-go/agency/client&amp;#34;&lt;/span>
+&lt;span style="color:#000">agency&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;github.com/findy-network/findy-common-go/grpc/agency/v1&amp;#34;&lt;/span>
+&lt;span style="color:#4e9a06">&amp;#34;google.golang.org/grpc&amp;#34;&lt;/span>
+&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// set up API connection
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">conf&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">client&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BuildClientConnBase&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">os&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Getenv&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;FCLI_TLS_PATH&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span>
+&lt;span style="color:#000">agent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">AgencyHost&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">agent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">AgencyPort&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000;font-weight:bold">[]&lt;/span>&lt;span style="color:#000">grpc&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">DialOption&lt;/span>&lt;span style="color:#000;font-weight:bold">{},&lt;/span>
+&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">conn&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">client&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TryAuthOpen&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">agent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">JWT&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">conf&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">agent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Client&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">AgencyClient&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">Conn&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">conn&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">AgentClient&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">NewAgentServiceClient&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">conn&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span>
+&lt;span style="color:#000">ProtocolClient&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">NewProtocolServiceClient&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">conn&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="schema-and-credential-definition-creation">Schema and Credential Definition Creation&lt;/h3>
+&lt;p>When the server starts for the first time, it creates a schema and a credential definition.
+The issuer always needs a credential definition to issue credentials.
+For the verifier, it is enough to know the credential definition id.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">
+&lt;span style="color:#8f5902;font-style:italic">// use the agent API to create schema and credential definition
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">schemaRes&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To1&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">a&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Client&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">AgentClient&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">CreateSchema&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">context&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TODO&lt;/span>&lt;span style="color:#000;font-weight:bold">(),&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SchemaCreate&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">Name&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">schema&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Name&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Version&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;1.0&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Attributes&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">schema&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Attributes&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// tag the credential definition with our client username
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">res&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To1&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">a&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Client&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">AgentClient&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">CreateCredDef&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">context&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TODO&lt;/span>&lt;span style="color:#000;font-weight:bold">(),&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">CredDefCreate&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">SchemaID&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">schemaRes&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Tag&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">authnCmd&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">UserName&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;span style="color:#000">credDefID&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">res&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">GetID&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The app stores the created credential definition ID in a text file. The app will skip
+the credential definition creation step if this text file exists on the server bootup.&lt;/p>
+&lt;p>The credential definition ID is essential.
+You should share it with whoever needs to verify the credentials issued by your issuer.&lt;/p>
+&lt;h3 id="creating-the-invitation">Creating the Invitation&lt;/h3>
+&lt;p>After the start routines, the server endpoints are ready to display the pairwise connection invitations.
+The holder agent can establish a secure pairwise connection with the information in the invitation.&lt;/p>
+&lt;p>The client uses CreateInvitation-API to generate the invitation:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go"> &lt;span style="color:#000">res&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To1&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">ourAgent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Client&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">AgentClient&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">CreateInvitation&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">context&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TODO&lt;/span>&lt;span style="color:#000;font-weight:bold">(),&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">InvitationBase&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>&lt;span style="color:#000">Label&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">ourAgent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">UserName&lt;/span>&lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>The endpoint returns HTML that renders the invitation as QR code.&lt;/p>
+&lt;p>When using a mobile device, the invitation can be read with the web wallet camera or desktop browser,
+copy-pasting the invitation URL to the Add connection -dialog.&lt;/p>
+&lt;h3 id="listening-to-notifications">Listening to Notifications&lt;/h3>
+&lt;p>Another core concept in the client implementation is listening to the agent notifications.
+The client opens a gRPC stream to the server and receives notifications of the agent
+events through the stream.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">
+&lt;span style="color:#8f5902;font-style:italic">// pick notifications from stream channel
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">ch&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To1&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">agent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Client&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Conn&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ListenStatus&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">context&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TODO&lt;/span>&lt;span style="color:#000;font-weight:bold">(),&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ClientID&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>&lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">agent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ClientID&lt;/span>&lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// start go routine for the channel listener
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">go&lt;/span> &lt;span style="color:#204a87;font-weight:bold">func&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">for&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">chRes&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">ok&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">ch&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000;font-weight:bold">!&lt;/span>&lt;span style="color:#000">ok&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87">panic&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;Listening failed&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#000">notification&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">chRes&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">GetNotification&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span>
+&lt;span style="color:#000">log&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Printf&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;Received agent notification %v\n&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">notification&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">switch&lt;/span> &lt;span style="color:#000">notification&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">GetTypeID&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Notification_STATUS_UPDATE&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">switch&lt;/span> &lt;span style="color:#000">notification&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">GetProtocolType&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Protocol_DIDEXCHANGE&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;span style="color:#000">agent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Listener&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">HandleNewConnection&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">status&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">GetDIDExchange&lt;/span>&lt;span style="color:#000;font-weight:bold">().&lt;/span>&lt;span style="color:#000">ID&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}()&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>For instance, when the server creates a pairwise connection so that the holder can connect to
+the issuer, the notification of the new connection is sent through the stream.&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-mermaid" data-lang="mermaid">sequenceDiagram
+autonumber
+participant Server
+participant Agency
+participant Web Wallet
+Server-&amp;gt;&amp;gt;Agency: Start listening
+Server--&amp;gt;&amp;gt;Web Wallet: Show QR code
+Web Wallet-&amp;gt;&amp;gt;Agency: Read QR code
+Agency-&amp;gt;&amp;gt;Server: Connection created!
+Note right of Server: Conn ID for issue
+Server-&amp;gt;&amp;gt;Agency: Send credential offer
+Agency-&amp;gt;&amp;gt;Web Wallet: Cred offer received!
+Web Wallet-&amp;gt;&amp;gt;Agency: Accept offer
+Agency-&amp;gt;&amp;gt;Server: Issue ok!
+&lt;/code>&lt;/pre>&lt;p>In the sequence above, steps &lt;strong>4&lt;/strong> and &lt;strong>8&lt;/strong> are notifications sent through the listener stream.&lt;/p>
+&lt;p>The client can then
+react to the event accordingly. For example,
+when a new connection is established from the issue endpoint, the client sends a credential offer:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-go" data-lang="go">&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">a&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">AgentListener&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000">HandleNewConnection&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">id&lt;/span> &lt;span style="color:#204a87;font-weight:bold">string&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// pairwise based on the connection id
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">pw&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">client&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">NewPairwise&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">ourAgent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Client&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Conn&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">id&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// credential values
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">attributes&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#204a87">make&lt;/span>&lt;span style="color:#000;font-weight:bold">([]&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Protocol_IssuingAttributes_Attribute&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#000">attributes&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">0&lt;/span>&lt;span style="color:#000;font-weight:bold">]&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Protocol_IssuingAttributes_Attribute&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">Name&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;foo&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000">Value&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;bar&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;span style="color:#8f5902;font-style:italic">// send the offer
+&lt;/span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">res&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To1&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">pw&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">IssueWithAttrs&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;span style="color:#000">context&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TODO&lt;/span>&lt;span style="color:#000;font-weight:bold">(),&lt;/span>
+&lt;span style="color:#000">ourAgent&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">CredDefID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">agency&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Protocol_IssuingAttributes&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;span style="color:#000">Attributes&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">attributes&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}),&lt;/span>
+&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>A similar flow happens when the proof is verified. The exception with the proof is that there is
+an additional step where the client
+can reject the proof
+if the proof values are not valid according to the business logic
+(even though the proof would be cryptographically valid).&lt;/p>
+&lt;h2 id="start-with-your-use-case">Start with Your Use Case&lt;/h2>
+&lt;p>Now you should have the technical setup ready to start implementing your use case.
+But as with always in software development, we need more than technical capabilities.
+Before starting the implementation, try to figure out the roles and duties of your process participants:&lt;/p>
+&lt;p>&lt;strong>Define the credential(s) content.&lt;/strong>
+Think about which data attributes you need. The sample issues the type “foobar” credentials
+with a single attribute “foo.” Foobar data is probably not the type you wish to issue and utilize.&lt;/p>
+&lt;p>&lt;strong>Define the data flow participants.&lt;/strong>
+Draft your data flow and resolve which parties are the issuer, verifier, and holder or
+are some parties even in multiple roles. In the sample, a single service agent handles both issuing
+and verifying. That is not a probable scenario in a real-world use case, as the whole point of SSI
+and verified data use is to verify credentials that other parties have issued.&lt;/p>
+&lt;p>&lt;strong>Define how you operate each verified data flow participant.&lt;/strong>
+The sample had a CLI tool or API client as the issuer and verifier and a web wallet user
+as the holder. Depending on the use case, you might have a similar setup or, for example,
+another service agent as the holder in a service-to-service scenario. Or you would like
+to integrate the holder capabilities into your end-user application instead of using
+the agency web wallet.&lt;/p>
+&lt;p>Of course, in cases where we have multiple real-world parties
+involved, the detailed design is done together with the other participants.&lt;/p>
+&lt;h2 id="feedback">Feedback&lt;/h2>
+&lt;p>Let us know if you have any feedback regarding
+the Findy Agency functionality or documentation. It would also be cool &lt;a href="https://github.com/findy-network/findy-agent/discussions/new?category=show-and-tell">to hear about
+the PoCs, demos and applications you have built&lt;/a>
+using the agency.&lt;/p>
+&lt;p>You can also reach us via SoMe channels:&lt;/p>
+&lt;div style="display: flex">
+&lt;span>
+&lt;img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width="100"/>
+&lt;div>Laura&lt;/div>
+&lt;div>&lt;a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://fosstodon.org/@lauravuo" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-mastodon ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;span style="padding-left: 2em">
+&lt;img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
+&lt;div>Harri&lt;/div>
+&lt;div>&lt;a href="https://github.com/lainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/harrilainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/harrilainio" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;/div>&lt;br>&lt;br></description></item><item><title>Blog: Getting Started with SSI Service Agent Development</title><link>/blog/2023/01/30/getting-started-with-ssi-service-agent-development/</link><pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate><guid>/blog/2023/01/30/getting-started-with-ssi-service-agent-development/</guid><description>
 &lt;p>In the new SSI world, we craft digital services according to the self-sovereign identity model.
 We will have applications that issue credentials for the data they possess and applications
 that can verify these credentials. The central entity is the digital wallet owner
@@ -144,7 +416,7 @@ or &lt;a href="https://github.com/findy-network/findy-agent/discussions">startin
 &lt;div>Laura&lt;/div>
 &lt;div>&lt;a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
 &lt;a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
-&lt;a href="https://mastodontti.fi/@lauravuo" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-mastodon ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://fosstodon.org/@lauravuo" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-mastodon ml-2 ">&lt;/i>&lt;/a>
 &lt;a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
 &lt;/span>&lt;span style="padding-left: 2em">
 &lt;img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
