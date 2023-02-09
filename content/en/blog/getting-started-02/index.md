@@ -63,7 +63,8 @@ Other implementations (Typescript, Kotlin)
 currently utilize the [findy-agent-cli](https://github.com/findy-network/findy-agent-cli)
 binary for headless authentication.
 
-The sample code tries to authenticate first, and only if the authentication fails
+[The sample code](https://github.com/findy-network/identity-hackathon-2023/blob/b6462464dca79415271a7c179e0c5f8b1373b280/go/agent/agent.go#L186)
+tries to authenticate first, and only if the authentication fails
 will it try the client registration. The registration binds the client key to the client account,
 and after a successful registration, the client can log in and receive the JWT token needed
 for the API calls.
@@ -154,11 +155,9 @@ When the server starts for the first time, it creates a schema and a credential 
 The issuer always needs a credential definition to issue credentials.
 For the verifier, it is enough to know the credential definition id.
 
-The app stores the created credential definition id in a text file. The app will skip
-the credential definition creation step if this text file exists on the server bootup.
-
 ```go
 
+  // use the agent API to create schema and credential definition
   schemaRes := try.To1(a.Client.AgentClient.CreateSchema(
     context.TODO(),
     &agency.SchemaCreate{
@@ -179,25 +178,32 @@ the credential definition creation step if this text file exists on the server b
   credDefID = res.GetID()
 ```
 
-### Listening to Notifications
+The app stores the created credential definition ID in a text file. The app will skip
+the credential definition creation step if this text file exists on the server bootup.
 
-```mermaid
-sequenceDiagram
-  autonumber
-    participant Server
-    participant Agency
-    participant Web Wallet
+The credential definition ID is essential.
+You should share it with whoever needs to verify the credentials issued by your issuer.
 
-    Server->>Agency: Start listening
-    Server-->>Web Wallet: Show QR code 
-    Web Wallet->>Agency: Read QR code
-    Agency->>Server: Connection created!
-    Note right of Server: Conn ID for issue
-    Server->>Agency: Send credential offer
-    Agency->>Web Wallet: Cred offer received!
-    Web Wallet->>Agency: Accept offer
-    Agency->>Server: Issue ok!
+### Creating the Invitation
+
+After the start routines, the server endpoints are ready to display the pairwise connection invitations.
+The holder agent can establish a secure pairwise connection with the information in the invitation.
+
+The client uses CreateInvitation-API to generate the invitation:
+
+```go
+  res := try.To1(ourAgent.Client.AgentClient.CreateInvitation(
+    context.TODO(),
+    &agency.InvitationBase{Label: ourAgent.UserName},
+  ))
 ```
+
+The endpoint returns HTML that renders the invitation as QR code.
+
+When using a mobile device, the invitation can be read with the web wallet camera or desktop browser,
+copy-pasting the invitation URL to the Add connection -dialog.
+
+### Listening to Notifications
 
 Another core concept in the client implementation is listening to the agent notifications.
 The client opens a gRPC stream to the server and receives notifications of the agent
@@ -210,6 +216,8 @@ events through the stream.
     context.TODO(),
     &agency.ClientID{ID: agent.ClientID},
   ))
+
+  // start go routine for the channel listener
   go func() {
     for {
       chRes, ok := <-ch
@@ -237,8 +245,31 @@ events through the stream.
 ```
 
 For instance, when the server creates a pairwise connection so that the holder can connect to
-the issuer, the notification of the new connection is sent through the stream. The client can then
-react to the event accordingly and send a credential offer in the sample case.
+the issuer, the notification of the new connection is sent through the stream.
+
+```mermaid
+sequenceDiagram
+  autonumber
+    participant Server
+    participant Agency
+    participant Web Wallet
+
+    Server->>Agency: Start listening
+    Server-->>Web Wallet: Show QR code 
+    Web Wallet->>Agency: Read QR code
+    Agency->>Server: Connection created!
+    Note right of Server: Conn ID for issue
+    Server->>Agency: Send credential offer
+    Agency->>Web Wallet: Cred offer received!
+    Web Wallet->>Agency: Accept offer
+    Agency->>Server: Issue ok!
+```
+
+In the sequence above, steps **4** and **8** are notifications sent through the listener stream.
+
+The client can then
+react to the event accordingly. For example,
+when a new connection is established from the issue endpoint, the client sends a credential offer:
 
 ```go
 func (a *AgentListener) HandleNewConnection(id string) {
@@ -266,7 +297,9 @@ func (a *AgentListener) HandleNewConnection(id string) {
 }
 ```
 
-A similar flow happens when the proof is verified, except the client can reject the proof
+A similar flow happens when the proof is verified. The exception with the proof is that there is
+an additional step where the client
+can reject the proof
 if the proof values are not valid according to the business logic
 (even though the proof would be cryptographically valid).
 
