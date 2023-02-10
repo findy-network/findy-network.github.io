@@ -10,7 +10,15 @@ resources:
   title: "Image #:counter"
 ---
 
-Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, *acator*, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, [findy-agent-api](https://github.com/findy-network/findy-agent-api).
+Service agents i.e. organization agents utilize Findy Agency through its gRPC API.
+The agent creation and authentication is handled through the headless authenticator, *acator*,
+that implements the FIDO2 protocol. Once authenticated, all agent functionality is available
+to service agents via the core gRPC API, [findy-agent-api](https://github.com/findy-network/findy-agent-api).
+
+Read more about getting started with service agents from the blog:
+
+* [Getting Started with SSI Service Agent Development](https://findy-network.github.io/blog/2023/01/30/getting-started-with-ssi-service-agent-development/)
+* [How to Equip Your App with VC Superpowers](https://findy-network.github.io/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/)
 
 You can use our helper libraries for [go](https://github.com/findy-network/findy-common-go),
 [Typescript](https://github.com/findy-network/findy-common-ts) or
@@ -18,8 +26,10 @@ You can use our helper libraries for [go](https://github.com/findy-network/findy
 or use directly [the gRPC interface](https://github.com/findy-network/findy-agent-api)
 with the language of your choice.
 
-You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:
+You can also find reference implementations, that you should probably explore before starting
+to implement an agent of your own:
 
+* [sample repository for all supported languages](https://github.com/findy-network/identity-hackathon-2023)
 * go: [findy-agent-cli](https://github.com/findy-network/findy-agent-cli)
 * JavaScript: [findy-issuer-tool](https://github.com/findy-network/findy-issuer-tool), specifically [api/src/agent/index.js](https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js)
 

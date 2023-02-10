@@ -9,25 +9,35 @@ description: >
 
 ## Full Agency Setup
 
-Agency services can be setup easily locally using Docker. Check further instructions [here](https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development). The instructions describe how to launch all the needed backend services in Docker containers together with a test ledger. There is also a native development setup instructions for web wallet application which will be needed in order to run web wallet application together with other agents.
+Agency services can be setup easily locally using Docker.
+Check further instructions [here](https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development).
+The instructions describe how to launch all the needed backend services in Docker containers
+together with a simulated ledger. There is also a native development setup instructions
+for web wallet application which will be needed in order to run web wallet application together
+with other agents.
 
-Once you have the services running on your computer, try to run [the Alice-Faber-Acme demo](https://github.com/findy-network/findy-agency-demo#findy-agency-demo). Or you can continue  with the CLI tool [findy-agent-cli](#cli), UI tool [findy-issuer-tool](#ui-tool) or [build a service agent of your own](/docs/getting-started/service-agent/).
+Once you have the services running on your computer,
+
+* try to run [the Alice-Faber-Acme demo](https://github.com/findy-network/findy-agency-demo#findy-agency-demo)
+* start to [build a service agent of your own](/docs/getting-started/service-agent/).
+* or you can play around with the credentials using the tools: CLI tool [findy-agent-cli](#cli) or
+UI tool [findy-issuer-tool](#ui-tool)
 
 ## CLI
 
 [findy-agent-cli](https://github.com/findy-network/findy-agent-cli) is a command-line tool that can be used to
 
-- register new agents
-- authenticate agents
-- operate agents
-  - make connections
-  - issue and accept credentials
-  - verify and prove credentials
-- operate bots (simple service agents)
-- operate ledger
-  - create schemas
-  - create credential definitions
-- operate agency
+* register new agents
+* authenticate agents
+* operate agents
+  * make connections
+  * issue and accept credentials
+  * verify and prove credentials
+* operate bots (simple service agents)
+* operate ledger
+  * create schemas
+  * create credential definitions
+* operate agency
 
 ```shell
 Findy agent cli tool
@@ -62,17 +72,17 @@ Check out [the dedicated guide](https://github.com/findy-network/findy-agent-cli
 
 _Note:_
 
-- before CLI usage, you need to have a working Findy Agency installation
-- findy-agent-cli is also a reference on how to use the Agency gRPC API with golang. Check the sources for more details.
+* before CLI usage, you need to have a working Findy Agency installation
+* findy-agent-cli is also a reference on how to use the Agency gRPC API with golang. Check the sources for more details.
 
 ## UI Tool
 
 [findy-issuer-tool](https://github.com/findy-network/findy-issuer-tool) is a UI tool for
 
-- making pairwise connections
-- issuing credentials
-- verifying credentials
-- creating schemas and credential definitions.
+* making pairwise connections
+* issuing credentials
+* verifying credentials
+* creating schemas and credential definitions.
 
 {{< figure src="https://github.com/findy-network/findy-issuer-tool/raw/master/docs/usage-03.gif" title="" width="925" >}}
 
@@ -80,5 +90,5 @@ See [setup instructions](https://github.com/findy-network/findy-issuer-tool#setu
 
 _Note:_
 
-- before UI-tool usage, you need to have a working Findy Agency installation
-- findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.
+* before UI-tool usage, you need to have a working Findy Agency installation
+* findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.
