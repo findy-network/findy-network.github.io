@@ -180,8 +180,19 @@ can be found in agency gRPC helper libraries for <a href=https://github.com/find
 <h1 id=pg-74d550b45ef27cc8354ad50de3d9fad1>2.1 - First Steps with Findy Agency</h1>
 <div class=lead>Instructions how get started with Findy Agency.</div>
 <h2 id=full-agency-setup>Full Agency Setup</h2>
-<p>Agency services can be setup easily locally using Docker. Check further instructions <a href=https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development>here</a>. The instructions describe how to launch all the needed backend services in Docker containers together with a test ledger. There is also a native development setup instructions for web wallet application which will be needed in order to run web wallet application together with other agents.</p>
-<p>Once you have the services running on your computer, try to run <a href=https://github.com/findy-network/findy-agency-demo#findy-agency-demo>the Alice-Faber-Acme demo</a>. Or you can continue with the CLI tool <a href=#cli>findy-agent-cli</a>, UI tool <a href=#ui-tool>findy-issuer-tool</a> or <a href=/docs/getting-started/service-agent/>build a service agent of your own</a>.</p>
+<p>Agency services can be setup easily locally using Docker.
+Check further instructions <a href=https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development>here</a>.
+The instructions describe how to launch all the needed backend services in Docker containers
+together with a simulated ledger. There is also a native development setup instructions
+for web wallet application which will be needed in order to run web wallet application together
+with other agents.</p>
+<p>Once you have the services running on your computer,</p>
+<ul>
+<li>try to run <a href=https://github.com/findy-network/findy-agency-demo#findy-agency-demo>the Alice-Faber-Acme demo</a></li>
+<li>start to <a href=/docs/getting-started/service-agent/>build a service agent of your own</a>.</li>
+<li>or you can play around with the credentials using the tools: CLI tool <a href=#cli>findy-agent-cli</a> or
+UI tool <a href=#ui-tool>findy-issuer-tool</a></li>
+</ul>
 <h2 id=cli>CLI</h2>
 <p><a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a> is a command-line tool that can be used to</p>
 <ul>
@@ -256,14 +267,24 @@ Use <span style=color:#4e9a06>&#34;findy-agent-cli [command] --help&#34;</span> 
 <div class=td-content style=page-break-before:always>
 <h1 id=pg-ff91144a7f65000b545408199df2a0ab>2.2 - Service Agents</h1>
 <div class=lead>Instructions how to get started with service agents.</div>
-<p>Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, <em>acator</em>, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, <a href=https://github.com/findy-network/findy-agent-api>findy-agent-api</a>.</p>
+<p>Service agents i.e. organization agents utilize Findy Agency through its gRPC API.
+The agent creation and authentication is handled through the headless authenticator, <em>acator</em>,
+that implements the FIDO2 protocol. Once authenticated, all agent functionality is available
+to service agents via the core gRPC API, <a href=https://github.com/findy-network/findy-agent-api>findy-agent-api</a>.</p>
+<p>Read more about getting started with service agents from the blog:</p>
+<ul>
+<li><a href=https://findy-network.github.io/blog/2023/01/30/getting-started-with-ssi-service-agent-development/>Getting Started with SSI Service Agent Development</a></li>
+<li><a href=https://findy-network.github.io/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/>How to Equip Your App with VC Superpowers</a></li>
+</ul>
 <p>You can use our helper libraries for <a href=https://github.com/findy-network/findy-common-go>go</a>,
 <a href=https://github.com/findy-network/findy-common-ts>Typescript</a> or
 <a href=https://github.com/findy-network/findy-common-kt>Kotlin</a>
 or use directly <a href=https://github.com/findy-network/findy-agent-api>the gRPC interface</a>
 with the language of your choice.</p>
-<p>You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:</p>
+<p>You can also find reference implementations, that you should probably explore before starting
+to implement an agent of your own:</p>
 <ul>
+<li><a href=https://github.com/findy-network/identity-hackathon-2023>sample repository for all supported languages</a></li>
 <li>go: <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a></li>
 <li>JavaScript: <a href=https://github.com/findy-network/findy-issuer-tool>findy-issuer-tool</a>, specifically <a href=https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js>api/src/agent/index.js</a></li>
 </ul>

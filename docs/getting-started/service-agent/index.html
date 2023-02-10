@@ -25,7 +25,7 @@
 <meta itemprop=description content="Instructions how to get started with service agents.
 "><meta itemprop=datePublished content="2021-08-10T00:00:00+00:00">
 <meta itemprop=dateModified content="2021-08-10T00:00:00+00:00">
-<meta itemprop=wordCount content="253">
+<meta itemprop=wordCount content="285">
 <meta itemprop=keywords content><meta name=twitter:card content="summary">
 <meta name=twitter:title content="Service Agents">
 <meta name=twitter:description content="Instructions how to get started with service agents.
@@ -152,14 +152,24 @@
 <div class=lead>Instructions how to get started with service agents.</div>
 <header class=article-meta>
 </header>
-<p>Service agents i.e. organization agents utilize Findy Agency through its GRPC API. The agent creation and authentication is handled through the headless authenticator, <em>acator</em>, that implements the WebAuthn protocol. Once authenticated, all agent functionality is available to service agents via the core gRPC API, <a href=https://github.com/findy-network/findy-agent-api>findy-agent-api</a>.</p>
+<p>Service agents i.e. organization agents utilize Findy Agency through its gRPC API.
+The agent creation and authentication is handled through the headless authenticator, <em>acator</em>,
+that implements the FIDO2 protocol. Once authenticated, all agent functionality is available
+to service agents via the core gRPC API, <a href=https://github.com/findy-network/findy-agent-api>findy-agent-api</a>.</p>
+<p>Read more about getting started with service agents from the blog:</p>
+<ul>
+<li><a href=https://findy-network.github.io/blog/2023/01/30/getting-started-with-ssi-service-agent-development/>Getting Started with SSI Service Agent Development</a></li>
+<li><a href=https://findy-network.github.io/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/>How to Equip Your App with VC Superpowers</a></li>
+</ul>
 <p>You can use our helper libraries for <a href=https://github.com/findy-network/findy-common-go>go</a>,
 <a href=https://github.com/findy-network/findy-common-ts>Typescript</a> or
 <a href=https://github.com/findy-network/findy-common-kt>Kotlin</a>
 or use directly <a href=https://github.com/findy-network/findy-agent-api>the gRPC interface</a>
 with the language of your choice.</p>
-<p>You can also find reference implementations, that you should probably explore before starting to implement an agent of your own:</p>
+<p>You can also find reference implementations, that you should probably explore before starting
+to implement an agent of your own:</p>
 <ul>
+<li><a href=https://github.com/findy-network/identity-hackathon-2023>sample repository for all supported languages</a></li>
 <li>go: <a href=https://github.com/findy-network/findy-agent-cli>findy-agent-cli</a></li>
 <li>JavaScript: <a href=https://github.com/findy-network/findy-issuer-tool>findy-issuer-tool</a>, specifically <a href=https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js>api/src/agent/index.js</a></li>
 </ul>
