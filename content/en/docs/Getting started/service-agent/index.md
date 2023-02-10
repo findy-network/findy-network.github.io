@@ -10,7 +10,7 @@ resources:
   title: "Image #:counter"
 ---
 
-Service agents i.e. organization agents utilize Findy Agency through its GRPC API.
+Service agents i.e. organization agents utilize Findy Agency through its gRPC API.
 The agent creation and authentication is handled through the headless authenticator, *acator*,
 that implements the FIDO2 protocol. Once authenticated, all agent functionality is available
 to service agents via the core gRPC API, [findy-agent-api](https://github.com/findy-network/findy-agent-api).
