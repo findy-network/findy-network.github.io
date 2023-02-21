@@ -1,4 +1,7 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Documentation</title><link>/docs/</link><description>Recent content in Documentation on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 10 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Hyperledger Global Forum 2022 Presentation</title><link>/docs/videos/hyperledger-forum/</link><pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate><guid>/docs/videos/hyperledger-forum/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Documentation</title><link>/docs/</link><description>Recent content in Documentation on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 20 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>/docs/videos/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>/docs/videos/introduction-to-ssi/</guid><description>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/utNq_IsH_Y4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div></description></item><item><title>Docs: Hyperledger Global Forum 2022 Presentation</title><link>/docs/videos/hyperledger-forum/</link><pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate><guid>/docs/videos/hyperledger-forum/</guid><description>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
 &lt;iframe src="https://www.youtube.com/embed/dlWWMeiSUfE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
 &lt;/div></description></item><item><title>Docs: Findy Agency Architecture</title><link>/docs/overview/architecture/</link><pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/overview/architecture/</guid><description>
@@ -111,7 +114,17 @@ Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp
 &lt;ul>
 &lt;li>before UI-tool usage, you need to have a working Findy Agency installation&lt;/li>
 &lt;li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.&lt;/li>
-&lt;/ul></description></item><item><title>Docs: Hyperledger Global Forum 2022</title><link>/docs/slides/hyperledger-forum-2022/</link><pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate><guid>/docs/slides/hyperledger-forum-2022/</guid><description>
+&lt;/ul></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>/docs/slides/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>/docs/slides/introduction-to-ssi/</guid><description>
+&lt;p>&lt;a href="/pdf/Intro2SSI.pdf">Slides&lt;/a> for &lt;a href="https://sites.uwasa.fi/poweredbyblockchain/">Digital Identity Hack 2023 Kick-off&lt;/a>&lt;/p>
+&lt;p>&lt;a href="/docs/videos/introduction-to-ssi/">Presentation&lt;/a>&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;img class="card-img-top" src="/docs/slides/introduction-to-ssi/harri_hue0854f62c0200f8b9e71514cad06fad8_1488441_675x675_fit_q75_catmullrom.jpg" width="675" height="431">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Harri Lainio introducing SSI&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div></description></item><item><title>Docs: Hyperledger Global Forum 2022</title><link>/docs/slides/hyperledger-forum-2022/</link><pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate><guid>/docs/slides/hyperledger-forum-2022/</guid><description>
 &lt;p>&lt;a href="/pdf/findy-ssi-agency.pdf">Slides&lt;/a> for &lt;a href="https://www.hyperledger.org/event/hyperledger-global-forum-2022-dublin-ireland">Hyperledger Global Forum 2022&lt;/a> breakout session&lt;/p>
 &lt;p>&lt;a href="/docs/videos/hyperledger-forum/">Presentation&lt;/a>&lt;/p>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
