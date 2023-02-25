@@ -35,6 +35,13 @@ Findy Agency technical documentation and blog.
    git fetch origin dev:dev
    ```
 
+1. Get PR branch to local examination:
+
+   To get PR branch, e.g. `add-getting-started-blog` branch from the server:
+   ```bash
+   git fetch origin add-getting-started-blog:add-getting-started-blog
+   ```
+
 1. Install dependencies
 
    ```bash
