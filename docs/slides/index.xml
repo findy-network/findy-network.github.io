@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Slides</title><link>/docs/slides/</link><description>Recent content in Slides on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 20 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/docs/slides/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Findy Agency — Building Highway to Verified Data Networks</title><link>/docs/slides/building-findy-agency/</link><pubDate>Tue, 26 Oct 2021 00:00:00 +0000</pubDate><guid>/docs/slides/building-findy-agency/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Slides</title><link>/docs/slides/</link><description>Recent content in Slides on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 07 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/docs/slides/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Findy Agency — Building Highway to Verified Data Networks</title><link>/docs/slides/building-findy-agency/</link><pubDate>Tue, 26 Oct 2021 00:00:00 +0000</pubDate><guid>/docs/slides/building-findy-agency/</guid><description>
 &lt;p>background-image: url(&lt;a href="https://images.unsplash.com/photo-1581010105267-67447703cfe9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;amp;ixlib=rb-1.2.1&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1471&amp;amp;q=80">https://images.unsplash.com/photo-1581010105267-67447703cfe9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;amp;ixlib=rb-1.2.1&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1471&amp;amp;q=80&lt;/a>)
 background-size: cover
 class: center, middle, dark&lt;/p>
@@ -260,7 +260,16 @@ class: center padded-slide&lt;/p>
 &lt;h1 id="demo">Demo&lt;/h1>
 &lt;p>&lt;img src="https://github.com/findy-network/findy-wallet-pwa/raw/dev/docs/wallet-login.gif" alt="Demo">&lt;/p>
 &lt;p>&lt;a href="https://findy-network.github.io/">Try it out&lt;/a>&lt;/p>
-&lt;p>???&lt;/p></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>/docs/slides/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>/docs/slides/introduction-to-ssi/</guid><description>
+&lt;p>???&lt;/p></description></item><item><title>Docs: CDK-based Continous Deployment for OSS</title><link>/docs/slides/aws-meetup/</link><pubDate>Tue, 07 Mar 2023 00:00:00 +0000</pubDate><guid>/docs/slides/aws-meetup/</guid><description>
+&lt;p>&lt;a href="/pdf/aws-meetup.pdf">Slides&lt;/a> for &lt;a href="https://www.meetup.com/aws-user-group-tampere/events/289346840/">Tampere AWS User Group Meetup&lt;/a>, March 2023&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;img class="card-img-top" src="/docs/slides/aws-meetup/laura-aws-meetup_huf19d8db366f9ffbd0b15ba9563d963d8_223304_675x675_fit_q75_catmullrom.jpeg" width="675" height="506">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Laura at AWS User Group Meetup (Photo by Harri Lakkala)&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>/docs/slides/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>/docs/slides/introduction-to-ssi/</guid><description>
 &lt;p>&lt;a href="/pdf/Intro2SSI.pdf">Slides&lt;/a> for &lt;a href="https://sites.uwasa.fi/poweredbyblockchain/">Digital Identity Hack 2023 Kick-off&lt;/a>&lt;/p>
 &lt;p>&lt;a href="/docs/videos/introduction-to-ssi/">Presentation&lt;/a>&lt;/p>
 &lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">

@@ -1,0 +1,204 @@
+<!doctype html><html lang=en class=no-js>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=generator content="Hugo 0.91.2"><meta name=ROBOTS content="NOINDEX, NOFOLLOW">
+<link rel="shortcut icon" href=/favicons/favicon.ico>
+<link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
+<link rel=icon type=image/png href=/favicons/favicon-16x16.png sizes=16x16>
+<link rel=icon type=image/png href=/favicons/favicon-32x32.png sizes=32x32>
+<link rel=icon type=image/png href=/favicons/android-36x36.png sizes=36x36>
+<link rel=icon type=image/png href=/favicons/android-48x48.png sizes=48x48>
+<link rel=icon type=image/png href=/favicons/android-72x72.png sizes=72x72>
+<link rel=icon type=image/png href=/favicons/android-96x96.png sizes=96x96>
+<link rel=icon type=image/png href=/favicons/android-144x144.png sizes=144x144>
+<link rel=icon type=image/png href=/favicons/android-192x192.png sizes=192x192>
+<title>CDK-based Continous Deployment for OSS | Findy Agency</title>
+<meta name=description content="Findy Agency documentation"><meta property="og:title" content="CDK-based Continous Deployment for OSS">
+<meta property="og:description" content="CDK-based Continous Deployment for OSS">
+<meta property="og:type" content="article">
+<meta property="og:url" content="/docs/slides/aws-meetup/"><meta property="article:section" content="docs">
+<meta property="article:published_time" content="2023-03-07T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-03-07T00:00:00+00:00"><meta property="og:site_name" content="Findy Agency">
+<meta itemprop=name content="CDK-based Continous Deployment for OSS">
+<meta itemprop=description content="CDK-based Continous Deployment for OSS"><meta itemprop=datePublished content="2023-03-07T00:00:00+00:00">
+<meta itemprop=dateModified content="2023-03-07T00:00:00+00:00">
+<meta itemprop=wordCount content="19">
+<meta itemprop=keywords content><meta name=twitter:card content="summary">
+<meta name=twitter:title content="CDK-based Continous Deployment for OSS">
+<meta name=twitter:description content="CDK-based Continous Deployment for OSS">
+<link rel=preload href=/scss/main.min.957d988e396d495afa3156d4640b99742d961f39c79e92f8d152969969aa9ece.css as=style>
+<link href=/scss/main.min.957d988e396d495afa3156d4640b99742d961f39c79e92f8d152969969aa9ece.css rel=stylesheet integrity>
+<script src=https://code.jquery.com/jquery-3.5.1.min.js integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin=anonymous></script>
+</head>
+<body class=td-page>
+<header>
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
+<a class=navbar-brand href=/>
+<span class=navbar-logo></span><span class="text-uppercase font-weight-bold">Findy Agency</span>
+</a>
+<div class="td-navbar-nav-scroll ml-md-auto" id=main_navbar>
+<ul class="navbar-nav mt-2 mt-lg-0">
+<li class="nav-item mr-4 mb-2 mb-lg-0">
+<a class="nav-link active" href=/docs/><span class=active>Documentation</span></a>
+</li>
+<li class="nav-item mr-4 mb-2 mb-lg-0">
+<a class=nav-link href=/blog/><span>Blog</span></a>
+</li>
+</ul>
+</div>
+<div class="navbar-nav d-none d-lg-block">
+</div>
+</nav>
+</header>
+<div class="container-fluid td-outer">
+<div class=td-main>
+<div class="row flex-xl-nowrap">
+<aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
+<div id=td-sidebar-menu class=td-sidebar__inner>
+<form class="td-sidebar__search d-flex align-items-center">
+<button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type=button data-toggle=collapse data-target=#td-section-nav aria-controls=td-docs-nav aria-expanded=false aria-label="Toggle section navigation">
+</button>
+</form>
+<nav class="collapse td-sidebar-nav" id=td-section-nav>
+<ul class="td-sidebar-nav__section pr-md-3 ul-0">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-docs-li>
+<a href=/docs/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-docs><span>Documentation</span></a>
+<ul class=ul-1>
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-docsoverview-li>
+<a href=/docs/overview/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsoverview><span>Overview</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsoverviewarchitecture-li>
+<a href=/docs/overview/architecture/ title="Findy Agency Architecture" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsoverviewarchitecture><span>Architecture</span></a>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-docsgetting-started-li>
+<a href=/docs/getting-started/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsgetting-started><span>Getting Started</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsgetting-startedsetup-agency-li>
+<a href=/docs/getting-started/setup-agency/ title="First Steps with Findy Agency" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsgetting-startedsetup-agency><span>Setup Agency</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsgetting-startedservice-agent-li>
+<a href=/docs/getting-started/service-agent/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsgetting-startedservice-agent><span>Service Agents</span></a>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-docsdeployment-li>
+<a href=/docs/deployment/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsdeployment><span>Agency Deployment</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsdeploymentconfiguration-li>
+<a href=/docs/deployment/configuration/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsdeploymentconfiguration><span>Configuration</span></a>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsdevelopment-li>
+<a href=/docs/development/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsdevelopment><span>Agency Development</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docscontribution-guidelines-li>
+<a href=/docs/contribution-guidelines/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docscontribution-guidelines><span>Contribution guidelines</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-docsslides-li>
+<a href=/docs/slides/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsslides><span>Slides</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id=m-docsslidesaws-meetup-li>
+<a href=/docs/slides/aws-meetup/ class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id=m-docsslidesaws-meetup><span class=td-sidebar-nav-active-item>CDK-based Continous Deployment for OSS</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsslidesintroduction-to-ssi-li>
+<a href=/docs/slides/introduction-to-ssi/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsslidesintroduction-to-ssi><span>Introduction to Self-Sovereign Identity</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsslideshyperledger-forum-2022-li>
+<a href=/docs/slides/hyperledger-forum-2022/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsslideshyperledger-forum-2022><span>Hyperledger Global Forum 2022</span></a>
+</li>
+</ul>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child" id=m-docsvideos-li>
+<a href=/docs/videos/ class="align-left pl-0 td-sidebar-link td-sidebar-link__section" id=m-docsvideos><span>Videos</span></a>
+<ul class="ul-2 foldable">
+<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsvideosintroduction-to-ssi-li>
+<a href=/docs/videos/introduction-to-ssi/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsvideosintroduction-to-ssi><span>Introduction to Self-Sovereign Identity</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsvideoshyperledger-forum-li>
+<a href=/docs/videos/hyperledger-forum/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsvideoshyperledger-forum><span>Hyperledger Global Forum 2022 Presentation</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsvideospresentation-li>
+<a href=/docs/videos/presentation/ title="Findy Agency Presentation" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsvideospresentation><span>Aries WG Call Presentation</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsvideosfaber-acme-demo-li>
+<a href=/docs/videos/faber-acme-demo/ title="Demo: Alice-Faber-Acme" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsvideosfaber-acme-demo><span>Alice-Faber-Acme</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsvideosfindy-bots-li>
+<a href=/docs/videos/findy-bots/ title="Demo: Findy Bots" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsvideosfindy-bots><span>Findy Bots</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsvideosinteroperability-li>
+<a href=/docs/videos/interoperability/ title="Interoperability Testing Demo" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsvideosinteroperability><span>Interoperability Demo</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsvideosoidc-provider-li>
+<a href=/docs/videos/oidc-provider/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsvideosoidc-provider><span>SSI-Empowered Identity Provider</span></a>
+</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-docsvideosftn-service-li>
+<a href=/docs/videos/ftn-service/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-docsvideosftn-service><span>FTN Issuer Demo</span></a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</aside>
+<aside class="d-none d-xl-block col-xl-2 td-sidebar-toc d-print-none">
+<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
+<a id=print href=/docs/slides/_print/><i class="fa fa-print fa-fw"></i> Print entire section</a>
+</div>
+</aside>
+<main class="col-12 col-md-9 col-xl-8 pl-md-5" role=main>
+<nav aria-label=breadcrumb class="d-none d-md-block d-print-none">
+<ol class="breadcrumb spb-1">
+<li class=breadcrumb-item>
+<a href=/docs/>Documentation</a>
+</li>
+<li class=breadcrumb-item>
+<a href=/docs/slides/>Slides</a>
+</li>
+<li class="breadcrumb-item active" aria-current=page>
+<a href=/docs/slides/aws-meetup/>CDK-based Continous Deployment for OSS</a>
+</li>
+</ol>
+</nav>
+<div class=td-content>
+<h1>CDK-based Continous Deployment for OSS</h1>
+<div class=lead>CDK-based Continous Deployment for OSS</div>
+<header class=article-meta>
+</header>
+<p><a href=/pdf/aws-meetup.pdf>Slides</a> for <a href=https://www.meetup.com/aws-user-group-tampere/events/289346840/>Tampere AWS User Group Meetup</a>, March 2023</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:685px>
+<img class=card-img-top src=/docs/slides/aws-meetup/laura-aws-meetup_huf19d8db366f9ffbd0b15ba9563d963d8_223304_675x675_fit_q75_catmullrom.jpeg width=675 height=506>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Laura at AWS User Group Meetup (Photo by Harri Lakkala)</em>
+</p>
+</div>
+</div>
+<div class="text-muted mt-5 pt-3 border-top">
+</div>
+</div>
+</main>
+</div>
+</div>
+<footer class="bg-dark py-5 row d-print-none">
+<div class="container-fluid mx-sm-5">
+<div class=row>
+<div class="col-6 col-sm-4 text-xs-center order-sm-2">
+</div>
+<div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
+<ul class="list-inline mb-0">
+<li class="list-inline-item mx-2 h3" data-toggle=tooltip data-placement=top title=GitHub aria-label=GitHub>
+<a class=text-white target=_blank rel=noopener href=https://github.com/findy-network aria-label=GitHub>
+<i class="fab fa-github"></i>
+</a>
+</li>
+</ul>
+</div>
+<div class="col-12 col-sm-4 text-center py-2 order-sm-2">
+<small class=text-white>&copy; 2023 The Findy Agency Authors All Rights Reserved</small>
+<p class=mt-2><a href=/about/>About Findy Agency</a></p>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js integrity=sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js integrity=sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF crossorigin=anonymous></script>
+<script src=https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js integrity=sha384-uQikAXnCAqsMb3ygtdqBYvcwvHUkzGIpjdGyy9owhURXHUxLC5LgTcSxJQH/RzjK crossorigin=anonymous></script>
+<script src=/js/deflate.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.css integrity=sha384-Cqd8ihRLum0CCg8rz0hYKPoLZ3uw+gES2rXQXycqnL5pgVQIflxAUDS7ZSjITLb5 crossorigin=anonymous>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.js integrity=sha384-1Or6BdeNQb0ezrmtGeqQHFpppNd7a/gw29xeiSikBbsb44xu3uAo8c7FwbF5jhbd crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous onload=renderMathInElement(document.body,null)></script>
+<script src=/js/main.min.758c0b1476eb0de973b63d0030f104f41a6eb3afb9908681605af4a48eb73018.js integrity="sha256-dYwLFHbrDelztj0AMPEE9Bpus6+5kIaBYFr0pI63MBg=" crossorigin=anonymous></script>
+</body>
+</html>
