@@ -5,7 +5,7 @@ linkTitle: "Chatbot Language"
 description: "I implemented a new
 [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI
 chatbots a couble of years ago. It started as an experiment, a technology spike,
-but ended as a new feature of our SSI agency. Since then, we have had capability
+but ended as a new feature to our SSI agency. Since then, we have had capability
 to build multi-tenant agent applications without coding, which is huge if you
 compare to other DID agents. Maybe in the future, we'll able to offer these
 tools to the end-users as well."
@@ -81,13 +81,13 @@ Let's see what the lines are for:
 Did you get what the machine does? You can try it by following the instructions
 in [Findy CLI's readme](https://github.com/findy-agent-cli/README.md) to setup
 your playground/run-environment. After you have setup pairwise connection
-between two agents, execute this to other agents terminal:
+between two agents, execute this to the first agent's terminal:
 
 ```console
 findy-agent-cli bot start <Hello-World.yaml> # or what name you saved above
 ```
 
-For other agent use two terminals and give these commands to them:
+For the second agent use two terminals and give these commands to them:
 ```console
 # terminal 1
 findy-agent-cli bot read # listens and show other end's messages
@@ -126,17 +126,28 @@ are out-scoped.
 **One of the states must be market as `initial`**. Every chatbot conversation
 runs its own state machine instance, and the current implementation of machine
 termination *terminates all running instances* of the machine. **The state
-machine can have multiple termination states.** Note, most of the real-world
-multi-tenant use cases don't need machine termination. Termination is especially
-convenient for the *one time use as in scripts*. But chatbot services *shouldn't
-use termination* because it stops all of the state machine instances. Depending
-of the feedback we get, we might change that later.
+machine can have multiple termination states.**
+
+> **Note**, because the final multi-tenant deployment model is still open, and
+> we haven't decided the persistence model, we recommend to be extra careful
+> with the state machine termination. Even thought, termination is especially
+> convenient for the [*one-time scripts*](#issuing-example). 
 
 Each state can include relations to other states including itself. These
 relations are **state-transitions** which include:
 - **a trigger event**
 - **send events**
 - **a target state**
+
+### Memory
+
+Each state machine instance has one memory register/dictionary/map. All of the
+memory access (read/write) are integrated state-transitions and they
+[rules](#rule). If we will bring some sort of scripting language onboard, the
+memory model integration is the first thing to solve. Also current memory model
+isn't production ready for large-scale service agents because there isn't any
+discarding mechanism. However, this will be fixed next minor release where
+transition to `initial` state frees state machine instance's memory register.
 
 ### Meta-Model
 
@@ -155,7 +166,7 @@ events.
 ## Event
 
 As we previously defined state transitions are input/output entities. Both
-input and output are event-based. An input event is called `trigger:` and
+input and output are also event-based. An input event is called `trigger:` and
 outputs are `sends:`.
 
 The event has important fields which we describe next more detailed.
@@ -163,7 +174,7 @@ The event has important fields which we describe next more detailed.
 should happen when input an event.
 - `protocol:` Defines a protocol to be executed when sending or a protocol event 
 that triggers a state transition.
-- `data:` Defines additional data related to the event in `string` format.
+- `data:` Defines additional data related to the event in a `string` format.
 
 ```YAML
       ...
@@ -181,21 +192,22 @@ that triggers a state transition.
 
 ### Rule
 
-The following table includes all the accepted rules and their meaning.
+The following table includes all the accepted rules and their meaning for an
+event.
 
 | Rule | Meaning |
 |------|---------|
-| "OUR_STATUS" | Monitors our multi-state protocol progress. |
-| "INPUT" | Copies input event data as-is to output event data. Rarely needed, more for tests. |
-| "INPUT_SAVE" | Saves input data to a named register. The`data:` defines the name of the register. |
-| "FORMAT" | Calls `printf` type formatter for send events where format string is in `data:` and value is input `data:` field. |
-| "FORMAT_MEM" | Calls `Go template` type formatter for send events where format string is in the `data:` field, and named values are in memory register. |
-| "GEN_PIN" | A new random 6 digit number is generated and stored into PIN-named register, and FORMAT_MEM is executed according to the `data:` field. |
-| "INPUT_VALIDATE_EQUAL" | Validates that received input is equal to register value. Register name is in `data:` field. |
-| "INPUT_VALIDATE_NOT_EQUAL" | Negative of previous, e.g. allows us to trigger transition if input doesn't match. |
-| "INPUT_EQUAL" | Validates that coming input data is same in the `data:` field machine definition (YAML). |
-| "ACCEPT_AND_INPUT_VALUES" | Accepts and stores a proof presentation and its values. |
-| "NOT_ACCEPT_VALUES" | Declines a proof presentation. |
+| OUR_STATUS | Currently used with `issue_cred` protocol to build *triggers* to know when issuing is ended successfully. |
+| INPUT | Copies input event data as-is to output event data. Rarely needed, more for tests. |
+| INPUT_SAVE | Saves input data to a named register. The`data:` defines the name of the register. |
+| FORMAT | Calls `printf` type formatter for send events where format string is in `data:` and value is in input event's `data` field. |
+| FORMAT_MEM | Calls `Go template` type formatter for send events where format string is in the `data:` field, and named values are in the memory register. |
+| GEN_PIN | A new random 6 digit number is generated and stored into PIN named register, and then FORMAT_MEM is executed according to the `data:` field. |
+| INPUT_VALIDATE_EQUAL | Validates that received input is equal to register value. Register name is in the `data:` field. |
+| INPUT_VALIDATE_NOT_EQUAL | Negative of previous, e.g. allows us to trigger transition if input doesn't match. |
+| INPUT_EQUAL | Validates that coming input data is same in the `data:` field. For these you can implement command keywords which doesn't take arguments. |
+| ACCEPT_AND_INPUT_VALUES | Accepts and stores a proof presentation and its values. Values are stored as key/value pairs to the memory register. |
+| NOT_ACCEPT_VALUES | Declines a proof presentation. |
 
 ### Protocol
 
@@ -249,13 +261,13 @@ decided according the feedback we get from the FSM chatbot feature.
 
 ## Issuing Example
 
-The following chatbot is illustration from our real-world chatbot from our
+The following chatbot is illustration from our chatbot from our
 [Identity Hackathon 2023 repository.](https://github.com/findy-network/identity-hackathon-2023/blob/master/cli/issue-bot.template.yaml)
 It's proven to extremely handy to be able kick these chatbots up during the demo
 or development without forgetting the production in the future.
 
 {{< figure src="/blog/2023/03/13/chatbot-language-part-i/issue-one.svg" >}}
-*Automatic Issuing Chat Bot*
+*Run once - Issuing Chat Bot*
 
 ### Omni-Channel Chatbot
 
@@ -270,7 +282,7 @@ the PIN-code can be properly verified by the state machine.
 *Automatic Email Credential Chat Bot*
 
 It's been rewarding to notice how well chatting and using verifiable credentials
-fit together. As a end-user you don't face annoying context switches but
+fit together. As an end-user you don't face annoying context switches but
 everything happens in the same logical conversation.
 
 ## Future Features
@@ -281,6 +293,7 @@ blog post help us to get it going.
 Something we have thought during the development:
 - transition triggers are currently SSI-only which can be changing in the
   future
+    - transient states
 - extremely simple memory model
     - no persistence model
 - verification/simulation tools: model checker
@@ -288,6 +301,6 @@ Something we have thought during the development:
 - deployment model: cloud, end-user support
 - end-user level tools
 
-Please take it for the test drive and let us know what you think. Until the next
-time, see you!
+Please take it for the test drive and let us know what do you think. Until the
+next time, see you!
 
