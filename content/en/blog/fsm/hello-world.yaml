@@ -1,0 +1,28 @@
+name: hello world machine
+initial:
+  sends:
+  - data: Hello World (initial)!
+    protocol: basic_message
+  target: INITIAL
+states:
+  INITIAL:
+    transitions:
+    - trigger: # New pairwise happens, we response with basic_message
+        protocol: connection
+      sends:
+      - data: |-
+          -------
+          Hello New Connection! I'm Hello-World bot.
+        protocol: basic_message
+      target: INITIAL
+    - trigger: # New basic_message received, we response with message
+        protocol: basic_message
+      sends:
+      - data: |-
+          ---------------------
+          Hello! I'm Hello-World bot.
+        protocol: basic_message
+      target: INITIAL
+
+# TERMINATE:
+#   terminate: true
