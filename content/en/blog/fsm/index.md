@@ -7,8 +7,8 @@ description: "I implemented a new
 chatbots a few years ago. It started as an experiment, a technology spike,
 but ended as a new feature to our SSI agency. Since then, we have been able
 to build multi-tenant agent applications without coding, which is huge compared
-to other DID agents. Maybe in the future, we'll also offer these tools to the
-end-users."
+to other DID agents. We'll also offer these tools to the end-users in the
+future."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
@@ -66,7 +66,7 @@ Let's see what the lines are for:
    have a transition trigger.
 2. **States** are listed next. There are no limits to how many states the machine
    holds.
-3. We have only one **state** named `INITIAL` in this machine. Each state must
+3. This machine has only one **state** named `INITIAL`. Each state must
    have a unique name.
 4. States include **transitions** to the next states (`target`). We have one in
    this machine, but no limit exists to how many transitions a state can have.
@@ -143,12 +143,13 @@ relations are **state-transitions** which include:
 ### Memory
 
 Each state machine instance has one memory register/dictionary/map. All of the
-memory access (read/write) are integrated state-transitions and they
-[rules](#rule). If we will bring some sort of scripting language onboard, the
-memory model integration is the first thing to solve. Also current memory model
-isn't production ready for large-scale service agents because there isn't any
-discarding mechanism. However, this will be fixed next minor release where
-transition to `initial` state frees state machine instance's memory register.
+memory access (read/write) are integrated state-transitions, and they
+[rules](#rule). If we bring some scripting language onboard, the memory model
+integration is the first thing to solve. Also current memory model isn't
+production ready for large-scale service agents because there isn't any
+discarding mechanism. However, this will be fixed in the next minor release,
+where a transition to the `initial` state frees the state machine instance's
+memory register.
 
 ### Meta-Model
 
@@ -206,8 +207,8 @@ event.
 | GEN_PIN | A new random 6-digit number is generated and stored in the PIN-named register, and FORMAT_MEM is executed according to the `data:` field. |
 | INPUT_VALIDATE_EQUAL | Validates that received input is equal to the register value. The variable name is in the `data:` field. |
 | INPUT_VALIDATE_NOT_EQUAL | Negative of previous, e.g., allows us to trigger transition if the input doesn't match. |
-| INPUT_EQUAL | Validates that coming input data is same in the `data:` field. For these you can implement command keywords which doesn't take arguments. |
-| ACCEPT_AND_INPUT_VALUES | Accepts and stores a proof presentation and its values. Values are stored as key/value pairs to the memory register. |
+| INPUT_EQUAL | Validates that the coming input data is the same in the `data:` field. For these, you can implement command keywords that don't take arguments. |
+| ACCEPT_AND_INPUT_VALUES | Accepts and stores a proof presentation and its values. Values are stored as key/value pairs in the memory register. |
 | NOT_ACCEPT_VALUES | Declines a proof presentation. |
 
 ### Protocol
@@ -283,7 +284,7 @@ machine can adequately verify the PIN code.
 *Automatic Email Credential Chat Bot*
 
 It's been rewarding to notice how well chatting and using verifiable credentials
-fit together. As an end-user, you don't face annoying context switches but
+fit together. As an end-user, you won't face annoying context switches, but
 everything happens in the same logical conversation.
 
 ## Future Features
