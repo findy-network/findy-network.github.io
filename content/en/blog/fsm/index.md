@@ -1,14 +1,14 @@
 ---
 date: 2023-03-13
-title: "Chatbot Language - Part I"
-linkTitle: "Chatbot Language"
+title: "No-Code SSI Chatbots - Part I"
+linkTitle: "No-Code SSI Chatbots"
 description: "I implemented a new
 [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI
 chatbots a few years ago. It started as an experiment, a technology spike,
 but ended as a new feature to our SSI agency. Since then, we have been able
-to build multi-tenant agent applications without coding, which is huge compared
-to other DID agents. We'll also offer these tools to the end-users in the
-future."
+to build multi-tenant agent applications without coding, which is so much easier
+compared to other DID agents. We'll also offer these tools to the end-users in
+the future."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
@@ -85,7 +85,7 @@ between two agents, and needed environment variables set like `FCLI_CONNN_ID`,
 execute this to the first agent's terminal:
 
 ```console
-findy-agent-cli bot start <Hello-World.yaml> # or what name you saved above
+findy-agent-cli bot start <Hello-World.yaml> # or whatever name you saved the script above
 ```
 
 For the second agent, use two terminals and give these commands to them:
@@ -104,7 +104,7 @@ findy-agent-cli bot uml <Hello-World.yaml> # name of your FSM
 ```
 The result looks like this:
 
-{{< figure src="/blog/2023/03/13/chatbot-language-part-i/hello1.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/hello1.svg" >}}
 *Hello World Chat Bot FSM*
 
 The UML rendering may help with understanding. It's also an excellent tool for
@@ -143,7 +143,7 @@ relations are **state-transitions** which include:
 ### Memory
 
 Each state machine instance has one memory register/dictionary/map. All of the
-memory access (read/write) are integrated state-transitions, and they
+memory access (read/write) are integrated state-transitions, and their
 [rules](#rule). If we bring some scripting language onboard, the memory model
 integration is the first thing to solve. Also current memory model isn't
 production ready for large-scale service agents because there isn't any
@@ -158,7 +158,7 @@ the following diagram. As you can see, the **Machine** receives and sends
 **Events**. And **States** controls which inputs, i.e., **triggers** are *valid,
 when and how.*
 
-{{< figure src="/blog/2023/03/13/chatbot-language-part-i/Main.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/Main.svg" >}}
 *Conceptual Meta-Model*
 
 Next, we will see how the *Event* is used to run the state machine. After the
@@ -225,12 +225,12 @@ properties.
 | `connection`| In | [0023](https://github.com/hyperledger/aries-rfcs/blob/main/features/0023-did-exchange/README.md) | A new pairwise connection (DID exchange) is finished for the agent |
 
 The following table includes currently *recognized* general protocols and their
-properties. Recognized protocols aren't now thoroughly tested or implemented,
+properties. Recognized protocols aren't yet thoroughly tested or implemented,
 only keywords are reserved and properties listed.
 
 | Protocol | In/Out | Spec | Meaning |
 |----------|--------|-----|---------|
-| `email`| Both | JSON | Send or receive an email message (text) |
+| `email`| Both | JSON | Send or receive an [email message](#omni-channel-chatbot) (text) |
 | `hook`| Both | Internal | Currently reserved only for internal use |
 
 On the design table, we have ideas like REST endpoints, embedded scripting
@@ -268,19 +268,20 @@ The following chatbot is an illustration of our chatbot from our
 It's proven extremely handy to kick these chatbots up during the demo
 or development without forgetting the production in the future.
 
-{{< figure src="/blog/2023/03/13/chatbot-language-part-i/issue-one.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue-one.svg" >}}
 *Run once - Issuing Chat Bot*
 
 ### Omni-Channel Chatbot
 
-The diagram below presents another example of the automatic issuing chatbot for
-verifying an email address. Please read the state transition arrows carefully.
-They define triggers and events to send. There is a transition that sends an
-Aries `basic_message` and an `email` in the same transition. The email message
-built by the machine includes a random PIN code. As you can see, the state
-machine can adequately verify the PIN code.
+The diagram below presents another example of the [automatic issuing
+chatbot](https://github.com/findy-network/findy-agent-cli/blob/master/scripts/test/sa/email-issuer-bot.yaml)
+for verifying an email address. Please read the state transition arrows
+carefully. They define triggers and events to send. There is a transition that
+sends an Aries `basic_message` and an `email` in the same transition. The email
+message built by the machine includes a random PIN code. As you can see, the
+state machine can adequately verify the PIN code.
 
-{{< figure src="/blog/2023/03/13/chatbot-language-part-i/issue.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue.svg" >}}
 *Automatic Email Credential Chat Bot*
 
 It's been rewarding to notice how well chatting and using verifiable credentials
