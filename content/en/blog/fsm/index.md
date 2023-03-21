@@ -24,6 +24,10 @@ theorem proofer for the correctness of the chatbot applications.
 Our team got the idea of chatbots quite early after we started to play with
 verifiable credentials and SSI.
 
+{{< imgproc demo-bot.png Resize "900x" >}}
+<em>Zero UI + No-Code => Fast Delivery</em>
+{{< /imgproc >}}
+
 I think that chatbots and zero UI are some sorts of a lost opportunity for
 SSI/DID. The backbone of the DID network is its peer-to-peer communication
 protocol. Even though the client/server API model is very convenient to use and
