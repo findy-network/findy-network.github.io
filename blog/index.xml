@@ -1,4 +1,356 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 06 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: How to Equip Your App with VC Superpowers</title><link>/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/</link><pubDate>Mon, 06 Feb 2023 00:00:00 +0000</pubDate><guid>/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 13 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: No-Code SSI Chatbots - Part I</title><link>/blog/2023/03/13/no-code-ssi-chatbots-part-i/</link><pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate><guid>/blog/2023/03/13/no-code-ssi-chatbots-part-i/</guid><description>
+&lt;p>In this blog post, I&amp;rsquo;ll explain the syntax of our chatbot language. The good
+news is that the language is simple, and we already offer some development tools
+like UML rendering. There&amp;rsquo;ll be a second post where we&amp;rsquo;ll dive deeply into the
+implementation details. Our ultimate goal is to find a proper model checker and
+theorem proofer for the correctness of the chatbot applications.&lt;/p>
+&lt;p>Our team got the idea of chatbots quite early after we started to play with
+verifiable credentials and SSI.&lt;/p>
+&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 910px">
+&lt;img class="card-img-top" src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/demo-bot_hu4f38f3f43794e7101495702b2681d19a_613249_900x0_resize_catmullrom_3.png" width="900" height="428">
+&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Zero UI + No-Code => Fast Delivery&lt;/em>
+&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;p>I think that chatbots and zero UI are some sorts of a lost opportunity for
+SSI/DID. The backbone of the DID network is its peer-to-peer communication
+protocol. Even though the client/server API model is very convenient to use and
+understand, &lt;a href="https://identity.foundation/didcomm-messaging/spec/">DIDComm&lt;/a> based
+apps need something different &amp;ndash; more conversational. What would be more
+conversational than chatting?&lt;/p>
+&lt;p>Anyhow, we have been positively surprised by how far you can get without NLP but
+just a strict state machine-guided conversation where each party can
+proof facts about themselves when needed. And, of course, you can build perfect
+hybrid, where you fix structural parts of the discussion with the FSM and leave
+unstructured details for the NLP engine.&lt;/p>
+&lt;h2 id="hello-world">Hello World&lt;/h2>
+&lt;p>The chatbot state machines are written in YAML (JSON accepted). Currently, a
+YAML file includes one state machine at a time.&lt;/p>
+&lt;p>As all programming books and manuals start with the hello world app, we do the
+same.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-YAML" data-lang="YAML">&lt;span style="color:#204a87;font-weight:bold">initial&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (1)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">target&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">INITIAL&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">states&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (2)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">INITIAL&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (3)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">transitions&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (4)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">trigger&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (5)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">protocol&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">basic_message &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (6)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">sends&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (7)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">data&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">Hello! I&amp;#39;m Hello-World bot.&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">protocol&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">basic_message &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (8)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">target&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">INITIAL &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># (9)&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The previous machine is as simple as it can be in that it does something.
+Let&amp;rsquo;s see what the lines are for:&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>Initial state transition&lt;/strong> is mandatory. It&amp;rsquo;s executed when the machine is
+started. It&amp;rsquo;s the same as all the state transitions in our syntax but doesn&amp;rsquo;t
+have a transition trigger.&lt;/li>
+&lt;li>&lt;strong>States&lt;/strong> are listed next. There are no limits to how many states the machine
+holds.&lt;/li>
+&lt;li>This machine has only one &lt;strong>state&lt;/strong> named &lt;code>INITIAL&lt;/code>. Each state must
+have a unique name.&lt;/li>
+&lt;li>States include &lt;strong>transitions&lt;/strong> to the next states (&lt;code>target&lt;/code>). We have one in
+this machine, but no limit exists to how many transitions a state can have.&lt;/li>
+&lt;li>Each transition has &lt;strong>a trigger event&lt;/strong>.&lt;/li>
+&lt;li>Triggers have &lt;a href="#protocol">&lt;strong>protocol&lt;/strong>&lt;/a> that is in this case &lt;code>basic_message&lt;/code>.&lt;/li>
+&lt;li>We can &lt;strong>send&lt;/strong> limitless a mount of &lt;code>events&lt;/code> during the state transition.&lt;/li>
+&lt;li>In this machine, we send a &lt;code>basic_message&lt;/code> where the &lt;code>data&lt;/code> is &lt;code>Hello! I'm Hello-World bot.&lt;/code>&lt;/li>
+&lt;li>Our &lt;code>transition&lt;/code> &lt;code>target&lt;/code> is the &lt;code>INITIAL&lt;/code> state. It could be whatever state
+exists in the machine.&lt;/li>
+&lt;/ol>
+&lt;p>Did you get what the machine does? You can try it by following the instructions
+in &lt;a href="https://github.com/findy-agent-cli/README.md">Findy CLI&amp;rsquo;s readme&lt;/a> to setup
+your playground/run environment. After you have set up a pairwise connection
+between two agents, and needed environment variables set like &lt;code>FCLI_CONNN_ID&lt;/code>,
+execute this to the first agent&amp;rsquo;s terminal:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-console" data-lang="console">&lt;span style="color:#000;font-style:italic">findy-agent-cli bot start &amp;lt;Hello-World.yaml&amp;gt; # or whatever name you saved the script above
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>For the second agent, use two terminals and give these commands to them:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-console" data-lang="console">&lt;span style="color:#8f5902"># &lt;/span>terminal &lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>
+&lt;span style="color:#000;font-style:italic">findy-agent-cli bot read # listens and shows other end&amp;#39;s messages
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-console" data-lang="console">&lt;span style="color:#8f5902"># &lt;/span>terminal &lt;span style="color:#0000cf;font-weight:bold">2&lt;/span>
+&lt;span style="color:#000;font-style:italic">findy-agent-cli bot chat # sends basic_message&amp;#39;s to another end thru the pairwise
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>And when you want to render your state machine in UML, give this command:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-console" data-lang="console">&lt;span style="color:#000;font-style:italic">findy-agent-cli bot uml &amp;lt;Hello-World.yaml&amp;gt; # name of your FSM
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The result looks like this:&lt;/p>
+&lt;p>
+&lt;figure>
+&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/hello1.svg"/>
+&lt;/figure>
+&lt;em>Hello World Chat Bot FSM&lt;/em>&lt;/p>
+&lt;p>The UML rendering may help with understanding. It&amp;rsquo;s also an excellent tool for
+manual verification. Automatic model checking is something we are studying in
+the future.&lt;/p>
+&lt;h2 id="the-fsm-language">The FSM Language&lt;/h2>
+&lt;p>The YAML-based state machine definition language is currently as simple as
+possible.&lt;/p>
+&lt;h3 id="state-machine">State Machine&lt;/h3>
+&lt;p>The first level is the &lt;strong>states&lt;/strong>, which are the primary building blocks
+of the machine. A machine has one or more states. During the execution, the
+machine can be in only one state at a time. Sub- or embedded states aren&amp;rsquo;t
+supported because they are only convenient, not mandatory. Also, parallel states
+are out-scoped.&lt;/p>
+&lt;p>&lt;strong>One of the states must be marketed as &lt;code>initial&lt;/code>&lt;/strong>. Every chatbot conversation
+runs its own state machine instance, and the current implementation of machine
+termination &lt;em>terminates all running instances&lt;/em> of the machine. &lt;strong>The state
+machine can have multiple termination states.&lt;/strong>&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Note&lt;/strong>, because the final multi-tenant deployment model is still open, and
+we have yet to decide on the persistence model, we recommend being extra careful
+with the state machine termination. Even though the ending is especially
+convenient for the &lt;a href="#issuing-example">&lt;em>one-time scripts&lt;/em>&lt;/a>.&lt;/p>
+&lt;/blockquote>
+&lt;p>Each state can include relations to other states, including itself. These
+relations are &lt;strong>state-transitions&lt;/strong> which include:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>a trigger event&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>send events&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>a target state&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;h3 id="memory">Memory&lt;/h3>
+&lt;p>Each state machine instance has one memory register/dictionary/map. All of the
+memory access (read/write) are integrated state-transitions, and their
+&lt;a href="#rule">rules&lt;/a>. If we bring some scripting language onboard, the memory model
+integration is the first thing to solve. Also current memory model isn&amp;rsquo;t
+production ready for large-scale service agents because there isn&amp;rsquo;t any
+discarding mechanism. However, this will be fixed in the next minor release,
+where a transition to the &lt;code>initial&lt;/code> state frees the state machine instance&amp;rsquo;s
+memory register.&lt;/p>
+&lt;h3 id="meta-model">Meta-Model&lt;/h3>
+&lt;p>Information about the meta-model behind each state machine can be found in
+the following diagram. As you can see, the &lt;strong>Machine&lt;/strong> receives and sends
+&lt;strong>Events&lt;/strong>. And &lt;strong>States&lt;/strong> controls which inputs, i.e., &lt;strong>triggers&lt;/strong> are &lt;em>valid,
+when and how.&lt;/em>&lt;/p>
+&lt;p>
+&lt;figure>
+&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/Main.svg"/>
+&lt;/figure>
+&lt;em>Conceptual Meta-Model&lt;/em>&lt;/p>
+&lt;p>Next, we will see how the &lt;em>Event&lt;/em> is used to run the state machine. After the
+next chapter, we should learn to declare all supported types of input and output
+events.&lt;/p>
+&lt;h2 id="event">Event&lt;/h2>
+&lt;p>As we previously defined, state transitions are input/output entities. Both
+input and output are also event-based. An input event is called &lt;code>trigger:&lt;/code> and
+outcomes are &lt;code>sends:&lt;/code>.&lt;/p>
+&lt;p>The event has necessary fields, which we describe next in more detail.&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>rule:&lt;/code> Defines an operation to be performed when sending an event or what
+should happen when inputting an event.&lt;/li>
+&lt;li>&lt;code>protocol:&lt;/code> Defines a protocol to be executed when sending or a protocol event
+that triggers a state transition.&lt;/li>
+&lt;li>&lt;code>data:&lt;/code> Defines additional data related to the event in a &lt;code>string&lt;/code> format.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-YAML" data-lang="YAML">&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">...&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">trigger&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># 1&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">data&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">stop &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># 2&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">protocol&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">basic_message &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># 3&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">rule&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">INPUT_EQUAL &lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># 4&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol>
+&lt;li>Simple example of the &lt;em>trigger event&lt;/em>.&lt;/li>
+&lt;li>&lt;code>stop&lt;/code> is a &lt;em>keyword&lt;/em> in this trigger because of the rule (see # 4).&lt;/li>
+&lt;li>The keyword is received thru the &lt;code>basic_message&lt;/code> Aries DIDComm protocol.&lt;/li>
+&lt;li>&lt;code>INPUT_EQUAL&lt;/code> means that if incoming data equals the &lt;code>data:&lt;/code> field, the
+event is accepted, and a state transition is triggered.&lt;/li>
+&lt;/ol>
+&lt;h3 id="rule">Rule&lt;/h3>
+&lt;p>The following table includes all the accepted rules and their meaning for the
+event.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Rule&lt;/th>
+&lt;th>Meaning&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>OUR_STATUS&lt;/td>
+&lt;td>Currently used with &lt;code>issue_cred&lt;/code> protocol to build &lt;em>triggers&lt;/em> to know when issuing is ended successfully.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>INPUT&lt;/td>
+&lt;td>Copies input event data to output event data. Rarely needed, more for tests.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>INPUT_SAVE&lt;/td>
+&lt;td>Saves input data to a named register. The&lt;code>data:&lt;/code> defines the name of the register.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>FORMAT&lt;/td>
+&lt;td>Calls &lt;code>printf&lt;/code> type formatter for send events where the format string is in &lt;code>data:&lt;/code> and value is input &lt;code>data:&lt;/code> field.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>FORMAT_MEM&lt;/td>
+&lt;td>Calls &lt;code>Go template&lt;/code> type formatter for send events where the format string is in the &lt;code>data:&lt;/code> field, and named values are in the memory register.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>GEN_PIN&lt;/td>
+&lt;td>A new random 6-digit number is generated and stored in the PIN-named register, and FORMAT_MEM is executed according to the &lt;code>data:&lt;/code> field.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>INPUT_VALIDATE_EQUAL&lt;/td>
+&lt;td>Validates that received input is equal to the register value. The variable name is in the &lt;code>data:&lt;/code> field.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>INPUT_VALIDATE_NOT_EQUAL&lt;/td>
+&lt;td>Negative of previous, e.g., allows us to trigger transition if the input doesn&amp;rsquo;t match.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>INPUT_EQUAL&lt;/td>
+&lt;td>Validates that the coming input data is the same in the &lt;code>data:&lt;/code> field. For these, you can implement command keywords that don&amp;rsquo;t take arguments.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>ACCEPT_AND_INPUT_VALUES&lt;/td>
+&lt;td>Accepts and stores a proof presentation and its values. Values are stored as key/value pairs in the memory register.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>NOT_ACCEPT_VALUES&lt;/td>
+&lt;td>Declines a proof presentation.&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="protocol">Protocol&lt;/h3>
+&lt;p>The following table includes all the accepted Aries protocols and their
+properties.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Protocol&lt;/th>
+&lt;th>In/Out&lt;/th>
+&lt;th>RFC&lt;/th>
+&lt;th>Meaning&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>basic_message&lt;/code>&lt;/td>
+&lt;td>Both&lt;/td>
+&lt;td>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0095-basic-message/README.md">0095&lt;/a>&lt;/td>
+&lt;td>Send or receive a messaging protocol (text)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>trust_ping&lt;/code>&lt;/td>
+&lt;td>Both&lt;/td>
+&lt;td>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0048-trust-ping/README.md">0048&lt;/a>&lt;/td>
+&lt;td>A ping protocol for a DIDComm connection&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>issue_cred&lt;/code>&lt;/td>
+&lt;td>Out&lt;/td>
+&lt;td>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0036-issue-credential/README.md">0036&lt;/a>&lt;/td>
+&lt;td>Issue a verifiable credential thru DIDComm&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>present_proof&lt;/code>&lt;/td>
+&lt;td>Out&lt;/td>
+&lt;td>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0037-present-proof/README.md">0037&lt;/a>&lt;/td>
+&lt;td>Request a proof presentation thru DIDComm&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>connection&lt;/code>&lt;/td>
+&lt;td>In&lt;/td>
+&lt;td>&lt;a href="https://github.com/hyperledger/aries-rfcs/blob/main/features/0023-did-exchange/README.md">0023&lt;/a>&lt;/td>
+&lt;td>A new pairwise connection (DID exchange) is finished for the agent&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>The following table includes currently &lt;em>recognized&lt;/em> general protocols and their
+properties. Recognized protocols aren&amp;rsquo;t yet thoroughly tested or implemented,
+only keywords are reserved and properties listed.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Protocol&lt;/th>
+&lt;th>In/Out&lt;/th>
+&lt;th>Spec&lt;/th>
+&lt;th>Meaning&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>email&lt;/code>&lt;/td>
+&lt;td>Both&lt;/td>
+&lt;td>JSON&lt;/td>
+&lt;td>Send or receive an &lt;a href="#omni-channel-chatbot">email message&lt;/a> (text)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>hook&lt;/code>&lt;/td>
+&lt;td>Both&lt;/td>
+&lt;td>Internal&lt;/td>
+&lt;td>Currently reserved only for internal use&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>On the design table, we have ideas like REST endpoints, embedded scripting
+language (Lua), file system access, etc.&lt;/p>
+&lt;h3 id="data">Data&lt;/h3>
+&lt;p>The &lt;code>data&lt;/code> field is used to transport the event&amp;rsquo;s data. Its function is determined by
+both &lt;code>rule&lt;/code> and &lt;code>protocol&lt;/code>. Please see the next chapter, &lt;strong>Event Data&lt;/strong>.&lt;/p>
+&lt;h3 id="event-data">Event Data&lt;/h3>
+&lt;p>The &lt;code>event_data&lt;/code> field transports the event&amp;rsquo;s type-checked data. Its &lt;strong>type&lt;/strong>
+is determined by both &lt;code>rule&lt;/code> and &lt;code>protocol&lt;/code>. Currently, it&amp;rsquo;s explicitly used
+only in the &lt;code>issue_cred&lt;/code> protocol:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-YAML" data-lang="YAML">&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">...&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">data&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">event_data&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">issuing&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">AttrsJSON&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#4e9a06">&amp;#39;[{&amp;#34;name&amp;#34;:&amp;#34;foo&amp;#34;,&amp;#34;value&amp;#34;:&amp;#34;bar&amp;#34;}]&amp;#39;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">CredDefID&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">&amp;lt;CRED_DEF_ID&amp;gt;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">protocol&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">issue_cred&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>We are still &lt;em>work-in-progress&lt;/em> to determine what will be the final role of &lt;code>data&lt;/code>
+and &lt;code>event_data&lt;/code>. Are we going to have them both or something else? That will be
+decided according to the feedback from the FSM chatbot feature.&lt;/p>
+&lt;h2 id="issuing-example">Issuing Example&lt;/h2>
+&lt;p>The following chatbot is an illustration of our chatbot from our
+&lt;a href="https://github.com/findy-network/identity-hackathon-2023/blob/master/cli/issue-bot.template.yaml">Identity Hackathon 2023 repository.&lt;/a>
+It&amp;rsquo;s proven extremely handy to kick these chatbots up during the demo
+or development without forgetting the production in the future.&lt;/p>
+&lt;p>
+&lt;figure>
+&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue-one.svg"/>
+&lt;/figure>
+&lt;em>Run once - Issuing Chat Bot&lt;/em>&lt;/p>
+&lt;h3 id="omni-channel-chatbot">Omni-Channel Chatbot&lt;/h3>
+&lt;p>The diagram below presents another example of the &lt;a href="https://github.com/findy-network/findy-agent-cli/blob/master/scripts/test/sa/email-issuer-bot.yaml">automatic issuing
+chatbot&lt;/a>
+for verifying an email address. Please read the state transition arrows
+carefully. They define triggers and events to send. There is a transition that
+sends an Aries &lt;code>basic_message&lt;/code> and an &lt;code>email&lt;/code> in the same transition. The email
+message built by the machine includes a random PIN code. As you can see, the
+state machine can adequately verify the PIN code.&lt;/p>
+&lt;p>
+&lt;figure>
+&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue.svg"/>
+&lt;/figure>
+&lt;em>Automatic Email Credential Chat Bot&lt;/em>&lt;/p>
+&lt;p>It&amp;rsquo;s been rewarding to notice how well chatting and using verifiable credentials
+fit together. As an end-user, you won&amp;rsquo;t face annoying context switches, but
+everything happens in the same logical conversation.&lt;/p>
+&lt;h2 id="future-features">Future Features&lt;/h2>
+&lt;p>The most critical task in the future will be documentation. Hopefully, this
+blog post helps us to get it going.&lt;/p>
+&lt;p>Something we have thought about during the development:&lt;/p>
+&lt;ul>
+&lt;li>transition triggers are currently SSI-only which can be changed in the
+future
+&lt;ul>
+&lt;li>transient states&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>straightforward memory model
+&lt;ul>
+&lt;li>no persistence model&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>verification/simulation tools: a model checker&lt;/li>
+&lt;li>simple scripting language inside the state machine&lt;/li>
+&lt;li>deployment model: cloud, end-user support&lt;/li>
+&lt;li>end-user level tools&lt;/li>
+&lt;/ul>
+&lt;p>Please take it for a test drive and let us know your thoughts. Until the
+next time, see you!&lt;/p></description></item><item><title>Blog: How to Equip Your App with VC Superpowers</title><link>/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/</link><pubDate>Mon, 06 Feb 2023 00:00:00 +0000</pubDate><guid>/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/</guid><description>
 &lt;p>&lt;a href="/blog/2023/01/30/getting-started-with-ssi-service-agent-development/">My previous blog post&lt;/a>
 explained how to get started with SSI service agents using our CLI tool.
 But what about the next step, the integration into your application?&lt;/p>
