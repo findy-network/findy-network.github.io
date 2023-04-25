@@ -43,8 +43,8 @@ The process could have been more efficient and successful in many ways. For exam
 there was just not enough time to figure out everything needed and, in many cases,
 the desired level of automation required to write countless custom scripts.
 
-{{< imgproc yaml Fit "625x625" >}}
-<em>Example of YAML template</em>
+{{< imgproc yaml Fit "525x525" >}}
+<em>Example of a YAML template</em>
 {{< /imgproc >}}
 
 After some time of struggling with the YAML, AWS released the [CDK](https://aws.amazon.com/cdk/)
@@ -62,7 +62,7 @@ There is less need to know the dirty details of each resource.
 * Also, there are other language-specific tools. One can apply dependency management, versioning,
 and even unit testing to the infra code similarly to other software projects.
 
-{{< imgproc cdk Fit "675x675" >}}
+{{< imgproc cdk Fit "675x575" >}}
 <em>Example of CDK code</em>
 {{< /imgproc >}}
 
