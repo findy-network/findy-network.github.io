@@ -67,6 +67,7 @@ This the multi-page printable view of this section.
 </div>
 <h1 class=title>Findy Agency Blog</h1>
 <ul>
+<li><a href=#pg-609196ce9f77fbf233a9cbcaf76e76c0>Agency's IaC Journey</a></li>
 <li><a href=#pg-59cf55107d5b7a75920422ec09797eca>No-Code SSI Chatbots - Part I</a></li>
 <li><a href=#pg-dafd4e931a3bb4c6d4ec80cb0b83189a>How to Equip Your App with VC Superpowers</a></li>
 <li><a href=#pg-9376ea3da0d51324362354349d8897ae>Getting Started with SSI Service Agent Development </a></li>
@@ -87,6 +88,120 @@ This the multi-page printable view of this section.
 </div>
 </div>
 <div class=td-content>
+<h1 id=pg-609196ce9f77fbf233a9cbcaf76e76c0>Agency's IaC Journey</h1>
+<div class=lead>Findy Agency&rsquo;s demo environment in the cloud has a fully automated deployment pipeline. The colorful history of the project&rsquo;s IaC tooling includes different phases, from writing CloudFormation YAML manually to porting the deployment on top of CDK pipelines.</div>
+<div class="td-byline mb-4">
+By <b>Laura Vuorenoja</b> |
+<time datetime=2023-04-25 class=text-muted>Tuesday, April 25, 2023</time>
+</div>
+<p>In the early days of Findy Agency&rsquo;s development project, it became evident that we needed
+a continuously running environment in the cloud to try out different proofs-of-concept (PoCs)
+and demos quickly and easily. As our team is small, we wanted to rely heavily on automation
+and avoid wasting time on manual deployments.</p>
+<h2 id=setup-infra-without-a-hassle>Setup Infra without a Hassle</h2>
+<p>At that time, I was interested in improving my AWS skills, so I took the challenge and
+started working on a continuous PoC environment for our project. As an innovation unit,
+we experiment constantly and want to try different things quickly,
+so the PoC environment also needed to accommodate this agility.</p>
+<p>
+<figure>
+<img src=https://github.com/findy-network/findy-agent-infra/raw/master/aws-ecs/docs/arch.png width=925>
+</figure>
+<em>Overview of the AWS deployment for the demo environment</em></p>
+<p>From the start, it was clear that I wanted to use IaC (infrastructure as code) tools to define
+our infra. My target was to create scripts that anyone could easily take and
+set up the agency without a hassle.</p>
+<p>I had been using <a href=https://www.terraform.io/>Terraform</a> in some of my earlier projects, but using
+a third-party tool typically requires compromises, so I wanted to take the native option for
+a change with the IaC-tooling as well. The initial target was not to find the ultimate DevOps tools
+but more in the experimentation spirit to find tooling and methods suitable for our flexible needs.</p>
+<h2 id=from-manual-yaml-to-cdk>From Manual YAML to CDK</h2>
+<p>Back then, the only AWS-native choice for IaC-tooling was to manually start writing
+the CloudFormation templates. <a href=https://aws.amazon.com/cloudformation/>CloudFormation</a> is
+an AWS service that one can use to provision the infrastructure with
+JSON- or YAML-formatted templates. CloudFormation stack is an entity that holds
+the infrastructure resources. All the resources defined in the stack template are created and
+removed together with the stack. One can manage the infrastructure stacks through the AWS CLI or
+the CloudFormation UI.</p>
+<p>So the first iteration of the agency&rsquo;s AWS infra code was about writing a lot of YAML definitions,
+deploying them from the local laptop using the AWS CLI, fixing errors, and retrying.
+The process could have been more efficient and successful in many ways. For example,
+there was just not enough time to figure out everything needed and, in many cases,
+the desired level of automation required to write countless custom scripts.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:535px>
+<img class=card-img-top src=/blog/2023/04/25/agencys-iac-journey/yaml-example_hu60a7a54e5b215f57e1c6ace31bf7ab89_175789_525x525_fit_catmullrom_3.png width=525 height=447>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Example of a YAML template</em>
+</p>
+</div>
+</div>
+<p>After some time of struggling with the YAML, AWS released the <a href=https://aws.amazon.com/cdk/>CDK</a>
+(Cloud Development Kit). The purpose of the CDK is to allow developers to write
+the CloudFormation templates using familiar programming languages. CDK tooling converts
+the code written by the developer to CloudFormation templates.</p>
+<p>Writing declarative definitions using imperative programming languages felt a bit off for me at first,
+but I decided to try it. There were some evident benefits:</p>
+<ul>
+<li>CDK offers constructs that combine CloudFormation resources with higher-level abstractions.
+There is less need to know the dirty details of each resource.</li>
+<li>Sharing, customizing, and reusing constructs is more straightforward.</li>
+<li>One can use her favorite IDE to write the infra code. Therefore tools like code completion are available.</li>
+<li>Also, there are other language-specific tools. One can apply dependency management, versioning,
+and even unit testing to the infra code similarly to other software projects.</li>
+</ul>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:685px>
+<img class=card-img-top src=/blog/2023/04/25/agencys-iac-journey/cdk-example_hu44f0290caad9bdcd00128acf3a502abc_227494_675x575_fit_catmullrom_3.png width=675 height=333>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Example of CDK code</em>
+</p>
+</div>
+</div>
+<h2 id=the-missing-puzzle-piece>The Missing Puzzle Piece</h2>
+<p>Switching to CDK tooling boosted my performance for the infra work significantly.
+Also, the manual hassle with the YAML templates is something I have not longed for at all.
+Still, it felt like something was missing. I was still running the infra setup scripts
+from my laptop. In my ideal world, the pipeline would create the infra, keeping things
+more reproducible and less error-prone. Also, defining the build pipeline and the deployment
+needed custom steps that made the initial agency setup still complex, which was something that
+I wanted to avoid in the first place.</p>
+<p>Well, time went on, and we were happy with the deployment pipeline: regardless of
+the setup process, it worked as expected. However, in the spring of 2022, I saw
+an <a href="https://op-careers.fi/content/What-is-studying-at-the-Software-Academy-all-about/?locale=en_GB">OP Software Academy</a>
+course about the CDK. The Academy is our internal training organization
+that offers courses around several topics. I decided to join the class and learn more about CDK
+and get some validation if I had done things correctly.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:635px>
+<img class=card-img-top src=/blog/2023/04/25/agencys-iac-journey/pipeline-example_hue440677f79cc822bad704687c5eb5835_157342_625x625_fit_catmullrom_3.png width=625 height=342>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Pipeline creation with CDK code</em>
+</p>
+</div>
+</div>
+<p>In the course, I found the missing piece of my puzzle. As it happened, AWS had just released <a href=https://docs.aws.amazon.com/cdk/v2/guide/migrating-v2.html>CDK v2</a>,
+which introduced a new concept, <a href=https://docs.aws.amazon.com/cdk/v2/guide/cdk_pipeline.html>CDK pipelines</a>.
+CDK pipeline is yet another higher-level abstraction, this time for <em>AWS continuous integration
+and deployment tools</em>. It utilizes AWS CodePipeline to build, test and deploy the application.
+The CDK pipeline&rsquo;s beauty lies in its setup: it is deployed only once from the developer&rsquo;s desktop.
+After the creation, the pipeline handles the infra-deployment and subsequent changes to
+the deployment or the pipeline via version control.</p>
+<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:935px>
+<img class=card-img-top src=/blog/2023/04/25/agencys-iac-journey/cover-iac-journey_hu8ea8cb855c58375c168ced9efb5edf51_74721_925x925_fit_catmullrom_3.png width=925 height=178>
+<div class="card-body px-0 pt-2 pb-0">
+<p class=card-text>
+<em>Evolution of Agency IaC tooling</em>
+</p>
+</div>
+</div>
+<p>After porting our deployment on top of the CDK pipeline, the setup has finally reached my standards.
+However, the future will show us how the Agency deployment will evolve. Perhaps we will introduce
+a more platform-agnostic approach and remove AWS native tooling altogether.</p>
+<p>You can do a deep dive into the anatomy of our CDK pipeline in my next blog post.
+And as always, you can find the codes on <a href=https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs#readme>GitHub</a>!</p>
+</div>
+<div class=td-content style=page-break-before:always>
 <h1 id=pg-59cf55107d5b7a75920422ec09797eca>No-Code SSI Chatbots - Part I</h1>
 <div class=lead>I implemented a new <a href=https://en.wikipedia.org/wiki/Finite-state_machine>FSM</a> language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We&rsquo;ll also offer these tools to the end-users in the future.</div>
 <div class="td-byline mb-4">
