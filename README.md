@@ -42,13 +42,6 @@ Findy Agency technical documentation and blog.
    git fetch origin add-getting-started-blog:add-getting-started-blog
    ```
 
-1. Install dependencies
-
-   ```bash
-   cd findy-network.github.io
-   npm install
-   ```
-
 1. Run hugo
 
    By using a make rule `run` that will start hugo to be visible for the whole
