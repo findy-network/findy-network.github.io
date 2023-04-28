@@ -15,7 +15,9 @@ Findy Agency technical documentation and blog.
    ```sh
    snap install hugo --channel=extended
    ```
+
    - On ARM (Sample, Linux Ubuntu), you can easily build it by your own:
+
    ```console
    wget https://github.com/gohugoio/hugo/archive/refs/tags/v0.93.0.tar.gz
    tar -zxvf v0.93.0.tar.gz 
@@ -27,10 +29,11 @@ Findy Agency technical documentation and blog.
 1. Clone repository:
 
    ```bash
-   git clone --recurse-submodules --depth 1 git@github.com:findy-network/findy-network.github.io.git
+   git clone git@github.com:findy-network/findy-network.github.io.git
    ```
 
    To get, e.g. `dev` branch from the server:
+
    ```bash
    git fetch origin dev:dev
    ```
@@ -38,6 +41,7 @@ Findy Agency technical documentation and blog.
 1. Get PR branch to local examination:
 
    To get PR branch, e.g. `add-getting-started-blog` branch from the server:
+
    ```bash
    git fetch origin add-getting-started-blog:add-getting-started-blog
    ```
@@ -53,12 +57,13 @@ Findy Agency technical documentation and blog.
 
    By using a make rule `run` that will start hugo to be visible for the whole
    LAN or for `ngrok`.
+
    ```bash
    make run
    ```
-   
 
    Naturally you can start it with hugo
+
    ```bash
    hugo server
    ```
@@ -69,13 +74,11 @@ Findy Agency technical documentation and blog.
    hugo server --bind=0.0.0.0 --baseURL=http://0.0.0.0:1313
    ```
 
-1. Open browser at http://localhost:1313 or if from other host use its address
+1. Open browser at <http://localhost:1313> or if from other host use its address
    instead of `localhost`.
 
 1. Problem Solving:
    - use extended version
-   - first `git` cloning or must be used to get submodules (or to use some other
-     methods to get them)
    - use latest version of hugo
    - when writing a blog post's hugo header be aware that the `date:` field tell
      hugo when to publish. If you are currently constructing the post **and want
@@ -85,4 +88,4 @@ Findy Agency technical documentation and blog.
 
 ## Releasing
 
-Releases to GitHub pages https://findy-network.github.io are done via GitHub actions on merge to master.
+Releases to GitHub pages <https://findy-network.github.io> are done via GitHub actions on merge to master.
