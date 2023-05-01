@@ -1,455 +1,154 @@
-<!doctype html><html lang=en class=no-js>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.91.2"><meta name=ROBOTS content="NOINDEX, NOFOLLOW">
-<link rel="shortcut icon" href=/favicons/favicon.ico>
-<link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
-<link rel=icon type=image/png href=/favicons/favicon-16x16.png sizes=16x16>
-<link rel=icon type=image/png href=/favicons/favicon-32x32.png sizes=32x32>
-<link rel=icon type=image/png href=/favicons/android-36x36.png sizes=36x36>
-<link rel=icon type=image/png href=/favicons/android-48x48.png sizes=48x48>
-<link rel=icon type=image/png href=/favicons/android-72x72.png sizes=72x72>
-<link rel=icon type=image/png href=/favicons/android-96x96.png sizes=96x96>
-<link rel=icon type=image/png href=/favicons/android-144x144.png sizes=144x144>
-<link rel=icon type=image/png href=/favicons/android-192x192.png sizes=192x192>
-<title>Travelogue | Findy Agency</title>
-<meta name=description content="Findy Agency documentation"><meta property="og:title" content="Travelogue">
-<meta property="og:description" content="We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also *align modern software and hardware technologies best suited for decentralized identity network*.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="/blog/2021/09/08/travelogue/"><meta property="og:image" content="/blog/2021/09/08/travelogue/cover-tree.png"><meta property="article:section" content="blog">
-<meta property="article:published_time" content="2021-09-08T00:00:00+00:00">
-<meta property="article:modified_time" content="2021-09-08T00:00:00+00:00"><meta property="og:site_name" content="Findy Agency">
-<meta itemprop=name content="Travelogue">
-<meta itemprop=description content="We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also *align modern software and hardware technologies best suited for decentralized identity network*."><meta itemprop=datePublished content="2021-09-08T00:00:00+00:00">
-<meta itemprop=dateModified content="2021-09-08T00:00:00+00:00">
-<meta itemprop=wordCount content="3051"><meta itemprop=image content="/blog/2021/09/08/travelogue/cover-tree.png">
-<meta itemprop=keywords content><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="/blog/2021/09/08/travelogue/cover-tree.png">
-<meta name=twitter:title content="Travelogue">
-<meta name=twitter:description content="We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also *align modern software and hardware technologies best suited for decentralized identity network*.">
-<link rel=preload href=/scss/main.min.957d988e396d495afa3156d4640b99742d961f39c79e92f8d152969969aa9ece.css as=style>
-<link href=/scss/main.min.957d988e396d495afa3156d4640b99742d961f39c79e92f8d152969969aa9ece.css rel=stylesheet integrity>
-<script src=https://code.jquery.com/jquery-3.5.1.min.js integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin=anonymous></script>
-</head>
-<body class="td-page td-blog">
-<header>
-<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
-<a class=navbar-brand href=/>
-<span class=navbar-logo></span><span class="text-uppercase font-weight-bold">Findy Agency</span>
-</a>
-<div class="td-navbar-nav-scroll ml-md-auto" id=main_navbar>
-<ul class="navbar-nav mt-2 mt-lg-0">
-<li class="nav-item mr-4 mb-2 mb-lg-0">
-<a class=nav-link href=/docs/><span>Documentation</span></a>
-</li>
-<li class="nav-item mr-4 mb-2 mb-lg-0">
-<a class="nav-link active" href=/blog/><span class=active>Blog</span></a>
-</li>
-</ul>
-</div>
-<div class="navbar-nav d-none d-lg-block">
-</div>
-</nav>
-</header>
-<div class="container-fluid td-outer">
-<div class=td-main>
-<div class="row flex-xl-nowrap">
-<aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
-<div id=td-sidebar-menu class=td-sidebar__inner>
-<form class="td-sidebar__search d-flex align-items-center">
-<button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type=button data-toggle=collapse data-target=#td-section-nav aria-controls=td-docs-nav aria-expanded=false aria-label="Toggle section navigation">
-</button>
-</form>
-<nav class="collapse td-sidebar-nav" id=td-section-nav>
-<ul class="td-sidebar-nav__section pr-md-3 ul-0">
-<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-blog-li>
-<a href=/blog/ title="Findy Agency Blog" class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-blog><span>Blog</span></a>
-<ul class=ul-1>
-<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230425agencys-iac-journey-li>
-<a href=/blog/2023/04/25/agencys-iac-journey/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230425agencys-iac-journey><span>Agency's IaC Journey</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230313no-code-ssi-chatbots-part-i-li>
-<a href=/blog/2023/03/13/no-code-ssi-chatbots-part-i/ title="No-Code SSI Chatbots - Part I" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230313no-code-ssi-chatbots-part-i><span>No-Code SSI Chatbots</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230206how-to-equip-your-app-with-vc-superpowers-li>
-<a href=/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230206how-to-equip-your-app-with-vc-superpowers><span>How to Equip Your App with VC Superpowers</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230130getting-started-with-ssi-service-agent-development-li>
-<a href=/blog/2023/01/30/getting-started-with-ssi-service-agent-development/ title="Getting Started with SSI Service Agent Development " class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230130getting-started-with-ssi-service-agent-development><span>Getting Started with SSI Service Agent Development</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220930ledger-multiplexer-li>
-<a href=/blog/2022/09/30/ledger-multiplexer/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220930ledger-multiplexer><span>Ledger Multiplexer</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220927the-hyperledger-global-forum-experience-li>
-<a href=/blog/2022/09/27/the-hyperledger-global-forum-experience/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220927the-hyperledger-global-forum-experience><span>The Hyperledger Global Forum Experience</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220829the-findy-agency-api-li>
-<a href=/blog/2022/08/29/the-findy-agency-api/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220829the-findy-agency-api><span>The Findy Agency API</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220427trust-in-your-wallet-li>
-<a href=/blog/2022/04/27/trust-in-your-wallet/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220427trust-in-your-wallet><span>Trust in Your Wallet</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220407ssi-empowered-identity-provider-li>
-<a href=/blog/2022/04/07/ssi-empowered-identity-provider/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220407ssi-empowered-identity-provider><span>SSI-Empowered Identity Provider</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220314replacing-indy-sdk-li>
-<a href=/blog/2022/03/14/replacing-indy-sdk/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220314replacing-indy-sdk><span>Replacing Indy SDK</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220305the-missing-network-layer-model-li>
-<a href=/blog/2022/03/05/the-missing-network-layer-model/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220305the-missing-network-layer-model><span>The Missing Network Layer Model</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220119fostering-interoperability-li>
-<a href=/blog/2022/01/19/fostering-interoperability/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220119fostering-interoperability><span>Fostering Interoperability</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20211109anchoring-chains-of-trust-li>
-<a href=/blog/2021/11/09/anchoring-chains-of-trust/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20211109anchoring-chains-of-trust><span>Anchoring Chains of Trust</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210920the-arm-adventure-on-docker-li>
-<a href=/blog/2021/09/20/the-arm-adventure-on-docker/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210920the-arm-adventure-on-docker><span>The Arm Adventure on Docker</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id=m-blog20210908travelogue-li>
-<a href=/blog/2021/09/08/travelogue/ class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id=m-blog20210908travelogue><span class=td-sidebar-nav-active-item>Travelogue</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210811announcing-findy-agency-li>
-<a href=/blog/2021/08/11/announcing-findy-agency/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210811announcing-findy-agency><span>Announcing Findy Agency</span></a>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</div>
-</aside>
-<aside class="d-none d-xl-block col-xl-2 td-sidebar-toc d-print-none">
-<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
-<a id=print href=/blog/_print/><i class="fa fa-print fa-fw"></i> Print entire section</a>
-</div>
-<div class=td-toc><nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li><a href=#technology-tree>Technology Tree</a></li>
-<li><a href=#trust-triangle>Trust Triangle</a></li>
-<li><a href=#targets-and-goals>Targets and Goals</a></li>
-</ul>
-</li>
-<li><a href=#the-journey>The journey</a>
-<ul>
-<li><a href=#2019h1>2019/H1</a></li>
-<li><a href=#2019h2>2019/H2</a></li>
-<li><a href=#2020h1>2020/H1</a></li>
-<li><a href=#2020h2>2020/H2</a></li>
-<li><a href=#2021h1>2021/H1</a></li>
-</ul>
-</li>
-</ul>
-</nav></div>
-</aside>
-<main class="col-12 col-md-9 col-xl-8 pl-md-5 pr-md-4" role=main>
-<a class="btn btn-lg -bg-orange td-rss-button d-none d-lg-block" href=/blog/index.xml target=_blank>
-RSS <i class="fa fa-rss ml-2"></i>
-</a>
-<div class=td-content>
-<h1>Travelogue</h1>
-<div class=lead>We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also <em>align modern software and hardware technologies best suited for decentralized identity network</em>.</div>
-<div class="td-byline mb-4">
-By <b>Harri Lainio</b> |
-<time datetime=2021-09-08 class=text-muted>Wednesday, September 08, 2021</time>
-</div>
-<header class=article-meta>
-</header>
-<p>The success of our team is measured:</p>
-<ul>
-<li>How well do we understand <em>certain</em> emerging technologies?</li>
-<li>How relevant they are to the business we are in?</li>
-<li>How much potential do they have for our company&rsquo;s business?</li>
-</ul>
-<p>If you are asking yourself if the order of the list is wrong, the answer is, it
-is not.</p>
-<p>We have learned that you will fail if you prioritize technologies by their
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=en class=no-js><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=generator content="Hugo 0.111.3"><meta name=robots content="index, follow"><link rel="shortcut icon" href=/favicons/favicon.ico><link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180><link rel=icon type=image/png href=/favicons/favicon-16x16.png sizes=16x16><link rel=icon type=image/png href=/favicons/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/favicons/android-36x36.png sizes=36x36><link rel=icon type=image/png href=/favicons/android-48x48.png sizes=48x48><link rel=icon type=image/png href=/favicons/android-72x72.png sizes=72x72><link rel=icon type=image/png href=/favicons/android-96x96.png sizes=96x96><link rel=icon type=image/png href=/favicons/android-144x144.png sizes=144x144><link rel=icon type=image/png href=/favicons/android-192x192.png sizes=192x192><title>Travelogue | Findy Agency</title><meta name=description content="We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also *align modern software and hardware technologies best suited for decentralized identity network*."><meta property="og:title" content="Travelogue"><meta property="og:description" content="We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also *align modern software and hardware technologies best suited for decentralized identity network*."><meta property="og:type" content="article"><meta property="og:url" content="/blog/2021/09/08/travelogue/"><meta property="og:image" content="/blog/2021/09/08/travelogue/cover-tree.png"><meta property="article:section" content="blog"><meta property="article:published_time" content="2021-09-08T00:00:00+00:00"><meta property="article:modified_time" content="2021-09-08T00:00:00+00:00"><meta property="og:site_name" content="Findy Agency"><meta itemprop=name content="Travelogue"><meta itemprop=description content="We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also *align modern software and hardware technologies best suited for decentralized identity network*."><meta itemprop=datePublished content="2021-09-08T00:00:00+00:00"><meta itemprop=dateModified content="2021-09-08T00:00:00+00:00"><meta itemprop=wordCount content="3051"><meta itemprop=image content="/blog/2021/09/08/travelogue/cover-tree.png"><meta itemprop=keywords content><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="/blog/2021/09/08/travelogue/cover-tree.png"><meta name=twitter:title content="Travelogue"><meta name=twitter:description content="We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also *align modern software and hardware technologies best suited for decentralized identity network*."><link rel=preload href=/scss/main.min.73bc65c1e18bb0cbd02b071f40b73b018bed23b1835e915c0f4f73a772a6713b.css as=style><link href=/scss/main.min.73bc65c1e18bb0cbd02b071f40b73b018bed23b1835e915c0f4f73a772a6713b.css rel=stylesheet integrity><script src=https://code.jquery.com/jquery-3.6.0.min.js integrity=sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK crossorigin=anonymous></script></head><body class="td-page td-blog"><header><nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar"><a class=navbar-brand href=/><span class="navbar-brand__logo navbar-logo"></span><span class=navbar-brand__name>Findy Agency</span></a><div class="td-navbar-nav-scroll ml-md-auto" id=main_navbar><ul class="navbar-nav mt-2 mt-lg-0"><li class="nav-item mr-4 mb-2 mb-lg-0"><a class=nav-link href=/docs/><span>Documentation</span></a></li><li class="nav-item mr-4 mb-2 mb-lg-0"><a class="nav-link active" href=/blog/><span class=active>Blog</span></a></li></ul></div><div class="navbar-nav d-none d-lg-block"></div></nav></header><div class="container-fluid td-outer"><div class=td-main><div class="row flex-xl-nowrap"><aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none"><div id=td-sidebar-menu class=td-sidebar__inner><form class="td-sidebar__search d-flex align-items-center"><button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type=button data-toggle=collapse data-target=#td-section-nav aria-controls=td-section-nav aria-expanded=false aria-label="Toggle section navigation"></button></form><nav class="collapse td-sidebar-nav" id=td-section-nav><ul class="td-sidebar-nav__section pr-md-3 ul-0"><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-blog-li><a href=/blog/ title="Findy Agency Blog" class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-blog><span>Blog</span></a><ul class=ul-1><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230425agencys-iac-journey-li><a href=/blog/2023/04/25/agencys-iac-journey/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230425agencys-iac-journey><span>Agency's IaC Journey</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230313no-code-ssi-chatbots-part-i-li><a href=/blog/2023/03/13/no-code-ssi-chatbots-part-i/ title="No-Code SSI Chatbots - Part I" class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230313no-code-ssi-chatbots-part-i><span>No-Code SSI Chatbots</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230206how-to-equip-your-app-with-vc-superpowers-li><a href=/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230206how-to-equip-your-app-with-vc-superpowers><span>How to Equip Your App with VC Superpowers</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230130getting-started-with-ssi-service-agent-development-li><a href=/blog/2023/01/30/getting-started-with-ssi-service-agent-development/ title="Getting Started with SSI Service Agent Development " class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230130getting-started-with-ssi-service-agent-development><span>Getting Started with SSI Service Agent Development</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220930ledger-multiplexer-li><a href=/blog/2022/09/30/ledger-multiplexer/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220930ledger-multiplexer><span>Ledger Multiplexer</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220927the-hyperledger-global-forum-experience-li><a href=/blog/2022/09/27/the-hyperledger-global-forum-experience/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220927the-hyperledger-global-forum-experience><span>The Hyperledger Global Forum Experience</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220829the-findy-agency-api-li><a href=/blog/2022/08/29/the-findy-agency-api/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220829the-findy-agency-api><span>The Findy Agency API</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220427trust-in-your-wallet-li><a href=/blog/2022/04/27/trust-in-your-wallet/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220427trust-in-your-wallet><span>Trust in Your Wallet</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220407ssi-empowered-identity-provider-li><a href=/blog/2022/04/07/ssi-empowered-identity-provider/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220407ssi-empowered-identity-provider><span>SSI-Empowered Identity Provider</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220314replacing-indy-sdk-li><a href=/blog/2022/03/14/replacing-indy-sdk/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220314replacing-indy-sdk><span>Replacing Indy SDK</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220305the-missing-network-layer-model-li><a href=/blog/2022/03/05/the-missing-network-layer-model/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220305the-missing-network-layer-model><span>The Missing Network Layer Model</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220119fostering-interoperability-li><a href=/blog/2022/01/19/fostering-interoperability/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220119fostering-interoperability><span>Fostering Interoperability</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20211109anchoring-chains-of-trust-li><a href=/blog/2021/11/09/anchoring-chains-of-trust/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20211109anchoring-chains-of-trust><span>Anchoring Chains of Trust</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210920the-arm-adventure-on-docker-li><a href=/blog/2021/09/20/the-arm-adventure-on-docker/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210920the-arm-adventure-on-docker><span>The Arm Adventure on Docker</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id=m-blog20210908travelogue-li><a href=/blog/2021/09/08/travelogue/ class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id=m-blog20210908travelogue><span class=td-sidebar-nav-active-item>Travelogue</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210811announcing-findy-agency-li><a href=/blog/2021/08/11/announcing-findy-agency/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210811announcing-findy-agency><span>Announcing Findy Agency</span></a></li></ul></li></ul></nav></div></aside><aside class="d-none d-xl-block col-xl-2 td-sidebar-toc d-print-none"><div class="td-page-meta ml-2 pb-1 pt-2 mb-0"><a id=print href=/blog/_print/><i class="fa-solid fa-print fa-fw"></i> Print entire section</a></div><div class=td-toc><nav id=TableOfContents><ul><li><ul><li><a href=#technology-tree>Technology Tree</a></li><li><a href=#trust-triangle>Trust Triangle</a></li><li><a href=#targets-and-goals>Targets and Goals</a></li></ul></li><li><a href=#the-journey>The journey</a><ul><li><a href=#2019h1>2019/H1</a></li><li><a href=#2019h2>2019/H2</a></li><li><a href=#2020h1>2020/H1</a></li><li><a href=#2020h2>2020/H2</a></li><li><a href=#2021h1>2021/H1</a></li></ul></li></ul></nav></div></aside><main class="col-12 col-md-9 col-xl-8 pl-md-5 pr-md-4" role=main><a class=td-rss-button title=RSS href=/blog/index.xml target=_blank rel=noopener><i class="fa-solid fa-rss" aria-hidden=true></i></a><div class=td-content><h1>Travelogue</h1><div class=lead>We have used many different techniques, technologies and architectures to build a modern and high-performance DID agency. During the journey we have not only been able to learn SSI essentials but also <em>align modern software and hardware technologies best suited for decentralized identity network</em>.</div><div class="td-byline mb-4">By <b>Harri Lainio</b> |
+<time datetime=2021-09-08 class=text-muted>Wednesday, September 08, 2021</time></div><header class=article-meta></header><p>The success of our team is measured:</p><ul><li>How well do we understand <em>certain</em> emerging technologies?</li><li>How relevant they are to the business we are in?</li><li>How much potential do they have for our company&rsquo;s business?</li></ul><p>If you are asking yourself if the order of the list is wrong, the answer is, it
+is not.</p><p>We have learned that you will fail if you prioritize technologies by their
 business value too early. There is a catch, though. You must be sure that you
 will not fall in love with the technologies you are studying. Certain scepticism
 is welcomed in our line of work. That attitude may follow thru this post as
-well. You have now been warned, at least.</p>
-<h3 id=technology-tree>Technology Tree</h3>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2001px>
-<img class=card-img-top src=/blog/2021/09/08/travelogue/TechTree_hucb3e947ff7ac3c644fea522c44e98b42_1584631_1991x0_resize_catmullrom_3.png width=1991 height=1120>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>Findy Agency Tech Tree</em>
-</p>
-</div>
-</div>
-<p>Technology roots present the most important <em>background knowledge</em> of our study.
+well. You have now been warned, at least.</p><h3 id=technology-tree>Technology Tree</h3><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2001px><img class=card-img-top src=/blog/2021/09/08/travelogue/TechTree_hucb3e947ff7ac3c644fea522c44e98b42_1584631_1991x0_resize_catmullrom_3.png width=1991 height=1120><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>Findy Agency Tech Tree</em></p></figcaption></figure><p>Technology roots present the most important <em>background knowledge</em> of our study.
 The most fundamental technologies and study subjects are in the trunk. The
 trunk is the backbone of our work. It ties it all together. Branches and leaves
 are outcomes, conclusions, and key learnings. At the top of the tree, some
-future topics are considered but not implemented or even tried yet.</p>
-<p>Even if the technology tree illustrates the relevant technologies for the
+future topics are considered but not implemented or even tried yet.</p><p>Even if the technology tree illustrates the relevant technologies for the
 subject, we will not address them in this post. <strong>We recommend you to study the
 tree for a moment</strong> to get the picture. You will notice that there aren&rsquo;t any
 mention of VC. For us, the concept of VC is an internal feature of
 <a href=https://www.w3.org/TR/vc-data-model/>DID system</a>. Naturally, there are a huge
 amount of enormous study subjects inside VCs like ZKP, etc. But this approach
 has to lead us to concentrate on the network itself and the structure it should
-have.</p>
-<p>The tree has helped us to see how things are bound together and what topics are
-the most relevant for the study area.</p>
-<h3 id=trust-triangle>Trust Triangle</h3>
-<p>The famous SSI trust triangle is an excellent tool to simplify what is
+have.</p><p>The tree has helped us to see how things are bound together and what topics are
+the most relevant for the study area.</p><h3 id=trust-triangle>Trust Triangle</h3><p>The famous SSI trust triangle is an excellent tool to simplify what is
 important and what is not. As we can see, everything builds on peer to peer
 connections, thick arrows. VCs are issued, and proofs are presented thru them.
 The only thing that&rsquo;s not yet solved <em>at the technology level</em> is the trust
 arrow in the triangle. (I know the recursive trust triangle, but I disagree with
 how it&rsquo;s thought to be implemented). But <em>this blog post</em> is not about that
-either.</p>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:605px>
-<img class=card-img-top src=/blog/2021/09/08/travelogue/trust-triangle_hua2e42792a9d20037c5f572b0412e67c1_57626_925x925_fit_catmullrom_3.png width=595 height=392>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>The SSI Trust Triangle</em>
-</p>
-</div>
-</div>
-<h3 id=targets-and-goals>Targets and Goals</h3>
-<p>Every project&rsquo;s objectives and goals change during the execution. The longer the
+either.</p><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:605px><img class=card-img-top src=/blog/2021/09/08/travelogue/trust-triangle_hua2e42792a9d20037c5f572b0412e67c1_57626_925x925_fit_catmullrom_3.png width=595 height=392><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>The SSI Trust Triangle</em></p></figcaption></figure><h3 id=targets-and-goals>Targets and Goals</h3><p>Every project&rsquo;s objectives and goals change during the execution. The longer the
 project, the more pivots it has. (Note that I use the term <em>project</em> quite
 freely in the post). When we started to work with DID/SSI field, the goal was to
 build <strong>a standalone mobile app demo</strong> of the identity wallet based on
 Hyperledger Indy. We started in <em>test drive mode</em> but built a full DID agency
 and published it as OSS. The journey has been inspiring, and we have learned a
-lot.</p>
-<p>In every project, it&rsquo;s important to maintain the scope. Thanks to the nature of
+lot.</p><p>In every project, it&rsquo;s important to maintain the scope. Thanks to the nature of
 our organisation we didn&rsquo;t have changing requirements. The widening of the scope
 came mostly from the fact that the whole area of SSI and DID were evolving. It
-still is.</p>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:935px>
-<img class=card-img-top src=/blog/2021/09/08/travelogue/targets_hu3c26761ab0ee4aee9c5a7a0b4088e778_867526_925x925_fit_catmullrom_3.png width=925 height=520>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>The Journey From Identity Wallet to Identity Ecosystem</em>
-</p>
-</div>
-</div>
-<p>Many project goals changed significantly during the execution, but that was part
+still is.</p><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:935px><img class=card-img-top src=/blog/2021/09/08/travelogue/targets_hu3c26761ab0ee4aee9c5a7a0b4088e778_867526_925x925_fit_catmullrom_3.png width=925 height=520><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>The Journey From Identity Wallet to Identity Ecosystem</em></p></figcaption></figure><p>Many project goals changed significantly during the execution, but that was part
 of the job. And as DID/SSI matured, we matured as well, and goals to our work
 aren&rsquo;t <em>so</em> <em>test-driven</em> mode anymore. We still test other related technologies
 that can be matched to DID/SSI or even replace some parts of it
 but have transited to the state where we have started to build our own related
-core technologies to the field.</p>
-<p>Incubators usually start their trip by testing different hypotheses and trying
+core technologies to the field.</p><p>Incubators usually start their trip by testing different hypotheses and trying
 them out in practice. We did the same but more on the practical side. We didn&rsquo;t
 have a formal hypothesis, but we had some use cases and a vision of how modern
 architecture should work and its scaling requirements. Those kinds of
 principles lead our <em>decision-making process</em> during the project.
 (Maybe some of us write a detailed blog about how our emerging tech process and
-organisation worked.)</p>
-<h2 id=the-journey>The journey</h2>
-<p>We have been building our multi-tenant agency since the beginning of 2019.
+organisation worked.)</p><h2 id=the-journey>The journey</h2><p>We have been building our multi-tenant agency since the beginning of 2019.
 During that time, we have tried many different techniques, technologies and
 architectures, and application metaphors. We think we have succeeded to find
-interesting results.</p>
-<p>In the following chapters, we will report the time period from the beginning of
+interesting results.</p><p>In the following chapters, we will report the time period from the beginning of
 2019 to autumn of 2021 in half of a year intervals. I really recommend that you
-look at the timelines carefully because they include valuable outcomes.</p>
-<h3 id=2019h1>2019/H1</h3>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px>
-<img class=card-img-top src=/blog/2021/09/08/travelogue/spring19_hu29db0a4a24cce1cc4a7a017360286d3b_559718_2000x0_resize_catmullrom_3.png width=2000 height=1125>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>2019/H1</em>
-</p>
-</div>
-</div>
-<h5 id=the-start>The Start</h5>
-<p>Me:</p>
-<blockquote>
-<p>&ldquo;I&rsquo;m interested in studying new tech by programming with it.&rdquo;</p>
-</blockquote>
-<p>Some block-chain experts in the emerging technologies team:</p>
-<blockquote>
-<p>&ldquo;We need an identity wallet to be able to continue with our other projects.
-Have you ever heard of Hyperledger Indy..&rdquo;</p>
-</blockquote>
-<p>In one week, I have been smoke-tested indy SDK on iOS and Linux. During the
+look at the timelines carefully because they include valuable outcomes.</p><h3 id=2019h1>2019/H1</h3><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px><img class=card-img-top src=/blog/2021/09/08/travelogue/spring19_hu29db0a4a24cce1cc4a7a017360286d3b_559718_2000x0_resize_catmullrom_3.png width=2000 height=1125><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>2019/H1</em></p></figcaption></figure><h5 id=the-start>The Start</h5><p>Me:</p><blockquote><p>&ldquo;I&rsquo;m interested in studying new tech by programming with it.&rdquo;</p></blockquote><p>Some block-chain experts in the emerging technologies team:</p><blockquote><p>&ldquo;We need an identity wallet to be able to continue with our other projects.
+Have you ever heard of Hyperledger Indy..&rdquo;</p></blockquote><p>In one week, I have been smoke-tested indy SDK on iOS and Linux. During the
 spring, we ended up following the Indy&rsquo;s proprietary agent to agent
-protocol, <strong>but</strong> we didn&rsquo;t use <em>libcvx</em> for that because:</p>
-<blockquote>
-<p>This library is currently in an <strong>experimental</strong> state and is not part of
-official releases. - [indy SDK GitHub pages]</p>
-</blockquote>
-<p>To be honest, that was the most important reason because we have had so much
+protocol, <strong>but</strong> we didn&rsquo;t use <em>libcvx</em> for that because:</p><blockquote><p>This library is currently in an <strong>experimental</strong> state and is not part of
+official releases. - [indy SDK GitHub pages]</p></blockquote><p>To be honest, that was the most important reason because we have had so much
 extra work with other Indy libs, and of course, we would need a wrapper at least for
 Go. It was an easy decision. Afterwards, it was the right because the DIDComm
 protocol is the backbone of everything with SSI/DID. And now, when it&rsquo;s in our
 own (capable) hands, it&rsquo;s made many such things possible which weren&rsquo;t otherwise.
 We will publish a whole new technical blog series of our multi-tenant DIDComm
-protocol engine.</p>
-<p>All of the modern, native mobile apps end up been written from two parts: the mobile
+protocol engine.</p><p>All of the modern, native mobile apps end up been written from two parts: the mobile
 app component running on the device and the server part doing everything it can
 to make the mobile app&rsquo;s life easier. Early stages, DIDComm&rsquo;s edge and cloud agent
 roles weren&rsquo;t that straightforward. From every point of view, it seemed overly
-complicated. But still, we stuck to it.</p>
-<h5 id=first-results>First Results</h5>
-<p>At the end of spring 2019, we had a quick and dirty demo of the system, which had
+complicated. But still, we stuck to it.</p><h5 id=first-results>First Results</h5><p>At the end of spring 2019, we had a quick and dirty demo of the system, which had
 <strong>multi-tenant</strong> agency to serve cloud agents and iOS mobile app to run edge
 agents. An EA onboarded itself to the agency with the same DID Connect
 protocol, which was used everywhere. Actually, an EA and a CA
-used Web Sockets as a transport mechanism for indy&rsquo;s DIDComm messages.</p>
-<p>We hated the protocol. It was insane. But it was DID protocol, wasn&rsquo;t it?</p>
-<p>The system was end to end encrypted, but the indy protocol had its flaws, like
+used Web Sockets as a transport mechanism for indy&rsquo;s DIDComm messages.</p><p>We hated the protocol. It was insane. But it was DID protocol, wasn&rsquo;t it?</p><p>The system was end to end encrypted, but the indy protocol had its flaws, like
 being synchronous. We didn&rsquo;t yet have any persistent state machine or the other
 basics of the communication protocol systems. Also, the whole thing felted
-overly complicated and old &ndash; it wasn&rsquo;t modern cloud protocol.</p>
-<h5 id=third-party-integration-demo>Third party integration demo</h5>
-<p>In early summer ended up building a demo that didn&rsquo;t follow totally the current
+overly complicated and old &ndash; it wasn&rsquo;t modern cloud protocol.</p><h5 id=third-party-integration-demo>Third party integration demo</h5><p>In early summer ended up building a demo that didn&rsquo;t follow totally the current
 architecture, because the mobile app&rsquo;s edge agent was communicating directly to
 the third party agent. This gave us a lot of experience, and for me, it gave
 needed time to spec what kind of protocol the DIDComm should be and what kind of
-protocol engine should run it.</p>
-<p>It was a weird time because indy&rsquo;s legacy agent to agent protocol didn&rsquo;t have a
-public, structured and formal specification of its protocol.</p>
-<p>Those who are interested in history can read more from
-<a href=https://hyperledger-indy.readthedocs.io/projects/hipe/en/latest/text/0002-agents/README.html>here</a>.</p>
-<p>The integration project made it pretty clear for us what kind of protocol was
-needed.</p>
-<blockquote>
-<p><strong>Async with explicit state machine</strong></p>
-</blockquote>
-<p>DIDComm must be async and message-driven simple because it&rsquo;s deliberative in
-its nature. Two agents are negotiating for issuing, proofing, etc.</p>
-<h5 id=aries-news>Aries news</h5>
-<p>Hyperledger Aries was set up during the summer, which was good because it showed
-the same we learned. We were on the right path.</p>
-<h5 id=code-delivery-for-a-business-partner>Code Delivery For a Business Partner</h5>
-<p>For this mail-stone, we ended up producing some documentation, mostly to
+protocol engine should run it.</p><p>It was a weird time because indy&rsquo;s legacy agent to agent protocol didn&rsquo;t have a
+public, structured and formal specification of its protocol.</p><p>Those who are interested in history can read more from
+<a href=https://hyperledger-indy.readthedocs.io/projects/hipe/en/latest/text/0002-agents/README.html>here</a>.</p><p>The integration project made it pretty clear for us what kind of protocol was
+needed.</p><blockquote><p><strong>Async with explicit state machine</strong></p></blockquote><p>DIDComm must be async and message-driven simple because it&rsquo;s deliberative in
+its nature. Two agents are negotiating for issuing, proofing, etc.</p><h5 id=aries-news>Aries news</h5><p>Hyperledger Aries was set up during the summer, which was good because it showed
+the same we learned. We were on the right path.</p><h5 id=code-delivery-for-a-business-partner>Code Delivery For a Business Partner</h5><p>For this mail-stone, we ended up producing some documentation, mostly to
 explain the architecture. During the whole project, we have had a comprehensive
-unit and integration test harness.</p>
-<p>At this point, we had all of the important features covered: issuing, holding,
-present and verify proofs in a quick and dirty way. Now we knew the potential.</p>
-<h5 id=results-2019-summer>Results 2019 Summer</h5>
-<p>We had managed to implement pre-Aries DIDComm over HTTP and WebSocket. We had
+unit and integration test harness.</p><p>At this point, we had all of the important features covered: issuing, holding,
+present and verify proofs in a quick and dirty way. Now we knew the potential.</p><h5 id=results-2019-summer>Results 2019 Summer</h5><p>We had managed to implement pre-Aries DIDComm over HTTP and WebSocket. We had
 a multi-tenant agency running cloud agents even though it was far from
 production readiness. Everything was end to end encrypted. The current agency
 supported indy&rsquo;s ledger transactions, and first, we had taken some tests from
 issuing and proofing protocols. We started to understand what kind of beast was
-tearing at us from another end of the road.</p>
-<h3 id=2019h2>2019/H2</h3>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px>
-<img class=card-img-top src=/blog/2021/09/08/travelogue/autumn19_hu29db0a4a24cce1cc4a7a017360286d3b_515478_2000x0_resize_catmullrom_3.png width=2000 height=1125>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>2019/H2</em>
-</p>
-</div>
-</div>
-<h5 id=start-of-the-async-protocol-development>Start Of The Async Protocol Development</h5>
-<p>When we started architecture redesign after the summer break,
+tearing at us from another end of the road.</p><h3 id=2019h2>2019/H2</h3><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px><img class=card-img-top src=/blog/2021/09/08/travelogue/autumn19_hu29db0a4a24cce1cc4a7a017360286d3b_515478_2000x0_resize_catmullrom_3.png width=2000 height=1125><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>2019/H2</em></p></figcaption></figure><h5 id=start-of-the-async-protocol-development>Start Of The Async Protocol Development</h5><p>When we started architecture redesign after the summer break,
 we had a clear idea of what kind of direction we should take and what to leave for
-later:</p>
-<ul>
-<li><strong>Cloud-first</strong> and we have newer wanted to step back on that.</li>
-<li><strong>Modern micro-service architecture</strong> targeting continuous delivery and
+later:</p><ul><li><strong>Cloud-first</strong> and we have newer wanted to step back on that.</li><li><strong>Modern micro-service architecture</strong> targeting continuous delivery and
 scalability. That leads to a certain type of technology stack which consists of
 techs like Go, gRPC, Docker (or other containerization technology), container
 orchestration like K8s, etc. One key requirement was that hardware utilization
-must be perfect, i.e. tiny servers are enough.</li>
-<li><strong>No support for offline</strong> use cases <em>for now</em>.</li>
-<li><strong>No revocation</strong> until there is a working solution. Credit card revocation has
-taught us a lot. Scalable and fast revocation is a hard problem to solve.</li>
-<li>Message routing should not be part of the protocol&rsquo;s explicit &lsquo;headers&rsquo;, i.e.
+must be perfect, i.e. tiny servers are enough.</li><li><strong>No support for offline</strong> use cases <em>for now</em>.</li><li><strong>No revocation</strong> until there is a working solution. Credit card revocation has
+taught us a lot. Scalable and fast revocation is a hard problem to solve.</li><li>Message routing should not be part of the protocol&rsquo;s explicit &lsquo;headers&rsquo;, i.e.
 there is <strong>only one service endpoint for a DID</strong>. We should naturally handle the
 service endpoint so that privacy is maintained as it is in our agency. By
 leaving routing out, it has been making everything so much simple. Some
 technologies can do that for us for free, like Tor. We have tested Tor, and it
-works pretty well for setting service endpoints and also connecting to them.</li>
-<li><strong>Use push notifications along with the WebSockets</strong>, i.e. lent APNS to trigger
-edge agents when they were not connected to the server.</li>
-</ul>
-<h5 id=multi-ledger-architecture>Multi-ledger Architecture</h5>
-<p>Because everything goes through our Go wrapper to the Plenum ledger, I made a
+works pretty well for setting service endpoints and also connecting to them.</li><li><strong>Use push notifications along with the WebSockets</strong>, i.e. lent APNS to trigger
+edge agents when they were not connected to the server.</li></ul><h5 id=multi-ledger-architecture>Multi-ledger Architecture</h5><p>Because everything goes through our Go wrapper to the Plenum ledger, I made a
 version that used memory or plain file instead of the ledger as a hobby project.
 It was meant to be used only for tests and development. Later the plug-in
 architecture has allowed us to have other persistent saving media as well. But
-more importantly, it has helped development and automatic testing a lot.</p>
-<p>Technically the <em>hack</em> is to use <code>pool handle</code> to tell if the system is
+more importantly, it has helped development and automatic testing a lot.</p><p>Technically the <em>hack</em> is to use <code>pool handle</code> to tell if the system is
 connected to a ledger or some other predefined media. <code>indy</code> API has only two
 functions that take <code>pool handle</code> as an argument but doesn&rsquo;t use it at all <em>or</em>
-a handle is an option.</p>
-<h5 id=server-side-secure-enclaves>Server Side Secure Enclaves</h5>
-<p>During the server-side development, we wanted to have at least post-compromised
+a handle is an option.</p><h5 id=server-side-secure-enclaves>Server Side Secure Enclaves</h5><p>During the server-side development, we wanted to have at least post-compromised
 secured key storage for cloud servers. Cloud environments like AWS give you
 managed storage for master secrets, but we needed more when developing OSS
-solutions with high performance and scalability requirements.</p>
-<p>Now we store our most important keys for LMDB-based fast key-value storage
+solutions with high performance and scalability requirements.</p><p>Now we store our most important keys for LMDB-based fast key-value storage
 fully encrypted. Master keys for installation are in a managed cloud environments
-like AWS, Google, Azure, etc.</p>
-<h5 id=first-multi-tenant-chat-bot>First Multi-tenant Chat Bot</h5>
-<p>The first running version of the chatbot used a semi-hard-coded version.
+like AWS, Google, Azure, etc.</p><h5 id=first-multi-tenant-chat-bot>First Multi-tenant Chat Bot</h5><p>The first running version of the chatbot used a semi-hard-coded version.
 It supported only sequential steps: a single line in a text file,
 <code>CredDefIds</code> in its own file, and finally text messages in its own files. The
-result was just a few lines of Go code, thanks to its concurrent model.</p>
-<p>The result was so good that I made a backlog issue to start studying to
+result was just a few lines of Go code, thanks to its concurrent model.</p><p>The result was so good that I made a backlog issue to start studying to
 use SCXML or some other exciting language for chatbot state machines later.
 About a year later, I implemented a state machine on my own with a proprietary YAML
-format.</p>
-<p>But that search isn&rsquo;t totally over. Before that, I considered many different
+format.</p><p>But that search isn&rsquo;t totally over. Before that, I considered many different
 options, but there wasn&rsquo;t much of an OSS alternative. One option could be to
 embed Lua combined with the current state machine engine and replace the memory
-model with Lua. We shall see what the real use case needs are.</p>
-<p>I personally think that an even more important approach would be <strong>a state machine
+model with Lua. We shall see what the real use case needs are.</p><p>I personally think that an even more important approach would be <strong>a state machine
 verifier</strong>. Keeping that as a goal sets strict limits to the computation
 model we could use. What we have learned now is you don&rsquo;t need the full power of
 general programming language but
 <a href=https://en.wikipedia.org/wiki/Automata_theory>finite state machine (automata theory)</a>
-could just be enough.</p>
-<h4 id=2019h2-results>2019/H2 Results</h4>
-<p>We had implemented all the most important use cases with our new protocol
+could just be enough.</p><h4 id=2019h2-results>2019/H2 Results</h4><p>We had implemented all the most important use cases with our new protocol
 engine. We had an symmetric agent which could be in all of the needed roles of SSI:
 a holder, an issuer, and a verifier. Also, the API seemed to be OK at a high
-level of abstraction. The individual messages were shit.</p>
-<p>At the end of the year, we also had a decent toolbox both on command-line and
-especially on the web.</p>
-<h3 id=2020h1>2020/H1</h3>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px>
-<img class=card-img-top src=/blog/2021/09/08/travelogue/spring20_hu29db0a4a24cce1cc4a7a017360286d3b_486983_2000x0_resize_catmullrom_3.png width=2000 height=1125>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>2020/H1</em>
-</p>
-</div>
-</div>
-<h5 id=findy-consortium-level-oss-publication>Findy-consortium Level OSS Publication</h5>
-<p>At the beginning of 2020, we decided to publish all the produced
+level of abstraction. The individual messages were shit.</p><p>At the end of the year, we also had a decent toolbox both on command-line and
+especially on the web.</p><h3 id=2020h1>2020/H1</h3><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px><img class=card-img-top src=/blog/2021/09/08/travelogue/spring20_hu29db0a4a24cce1cc4a7a017360286d3b_486983_2000x0_resize_catmullrom_3.png width=2000 height=1125><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>2020/H1</em></p></figcaption></figure><h5 id=findy-consortium-level-oss-publication>Findy-consortium Level OSS Publication</h5><p>At the beginning of 2020, we decided to publish all the produced
 code inside the Findy consortium. We produced the new GitHub account, and code
-without history moved from original repos to new ones.</p>
-<p>Even the decision brought a lot of routine work for that moment, it also brought
-many good things:</p>
-<ul>
-<li>refactoring,</li>
-<li>interface cleanups,</li>
-<li>documentation updates.</li>
-</ul>
-<h5 id=aca-py-interoperability-tests>ACA-Py Interoperability Tests</h5>
-<p>We implemented the first version of the new async protocol engine with existing
+without history moved from original repos to new ones.</p><p>Even the decision brought a lot of routine work for that moment, it also brought
+many good things:</p><ul><li>refactoring,</li><li>interface cleanups,</li><li>documentation updates.</li></ul><h5 id=aca-py-interoperability-tests>ACA-Py Interoperability Tests</h5><p>We implemented the first version of the new async protocol engine with existing
 JSON messages came from legacy indy a2a protocols. It&rsquo;s mostly because I
-wanted to build it in small steps, and it worked pretty well.</p>
-<p>Most of the extra work did come from the legacy API we had. JSON messages over
+wanted to build it in small steps, and it worked pretty well.</p><p>Most of the extra work did come from the legacy API we had. JSON messages over
 indy&rsquo;s proprietary DIDComm. As always, some bad but some good: because we had to
 keep both DIDComm message formats, I managed to integrate a clever way to
-separate different formats and still generalise with Go&rsquo;s interfaces.</p>
-<h5 id=new-cli>New CLI</h5>
-<p>We noticed that Agency&rsquo;s command-line UI started to be too complicated. Go has
+separate different formats and still generalise with Go&rsquo;s interfaces.</p><h5 id=new-cli>New CLI</h5><p>We noticed that Agency&rsquo;s command-line UI started to be too complicated. Go has
 a clever idea of how you can do services without environmental variables. I&rsquo;m
 still the guy who would stick with that, but it was a good idea to widen the
-scope to make our tools comfortable for all new users.</p>
-<p>Our design idea was to build CLI, which follows subcommands like git and docker
+scope to make our tools comfortable for all new users.</p><p>Our design idea was to build CLI, which follows subcommands like git and docker
 nowadays. The latest version we have now is quite good already, but the road was
 rocky. It is not easy to find the right structure the first time. The more you
 use your CLI by yourself, the more you start to notice what is intuitive and
-what is not.</p>
-<p>We decided to separate CLI commands from Agency to own tool and git repo. It was
+what is not.</p><p>We decided to separate CLI commands from Agency to own tool and git repo. It was
 good to move for that time, and when we managed to make it right, we were able to
 move those same commands pack to the agency one year later because we needed CLI
 tool without any <em>libindy</em> dependencies. That is a good example of successful
 software architecture work. You cannot predict the future, but you can prepare
-yourself for change.</p>
-<h3 id=2020h2>2020/H2</h3>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px>
-<img class=card-img-top src=/blog/2021/09/08/travelogue/autumn20_hu29db0a4a24cce1cc4a7a017360286d3b_544015_2000x0_resize_catmullrom_3.png width=2000 height=1125>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>2020/H2</em>
-</p>
-</div>
-</div>
-<h5 id=architecture-planning>Architecture Planning</h5>
-<p>I had had quite a long time the idea of using gRPC for the Cloud Agent
+yourself for change.</p><h3 id=2020h2>2020/H2</h3><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px><img class=card-img-top src=/blog/2021/09/08/travelogue/autumn20_hu29db0a4a24cce1cc4a7a017360286d3b_544015_2000x0_resize_catmullrom_3.png width=2000 height=1125><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>2020/H2</em></p></figcaption></figure><h5 id=architecture-planning>Architecture Planning</h5><p>I had had quite a long time the idea of using gRPC for the Cloud Agent
 controller. My core idea was to get rid of the EA because, currently, it was
 just an onboarding tool. The wallet had, included only the pairwise DID to its
 cloud agent, nothing else. The actual wallet (we called it worker edge agent
@@ -457,8 +156,7 @@ wallet) was the real wallet, where the VCs were. I went thru
 many similar protocols until I found FIDO UAF. The protocol is similar to
 DIDComm&rsquo;s pairwise protocol, but it&rsquo;s not symmetric. Another end is the server,
 and the other has the authenticator &ndash; the cryptographical root of
-trust.</p>
-<p>When I presented an internal demo of the gRPC with the JWT authorization and
+trust.</p><p>When I presented an internal demo of the gRPC with the JWT authorization and
 explained that authentications would be FIDO2 WebAuthn, we were ready to start
 the architecture transition. Everything was still good when I implemented the
 first FIDO server with the help of Duo Labs Go packages. Our FIDO2 server was
@@ -468,92 +166,19 @@ headless WebAuthn/UAF authenticator for those issuers/verifiers running as
 service agents. How to onboard them, and how they would access the agency&rsquo;s
 resources with the same JWT authorization? To allow us to proceed, we added
 support to get JWT by our old API. It&rsquo;s was only intermediated solution but
-served its purpose.</p>
-<h5 id=learnings-when-implementing-the-new-architecture>Learnings when implementing the new architecture</h5>
-<ul>
-<li>implicit JWT authorization helps gRPC usage a lot and simplifies it too.</li>
-<li>gRPC streams and Go&rsquo;s channel is just excellent together.</li>
-<li>You should use pre-generated wallet keys for indy wallets.</li>
-<li>We can integrate performance and scalability tests into CI.</li>
-<li>gRPC integration and unit testing could be done in the same way as with HTTP
-stack in Go, i.e. inside a single process that can play both client and server.</li>
-</ul>
-<h5 id=highlights-of-the-end-of-the-year-2020>Highlights of the end of the year 2020</h5>
-<p>We started to build for new SA architecture and allowed both our APIs to
+served its purpose.</p><h5 id=learnings-when-implementing-the-new-architecture>Learnings when implementing the new architecture</h5><ul><li>implicit JWT authorization helps gRPC usage a lot and simplifies it too.</li><li>gRPC streams and Go&rsquo;s channel is just excellent together.</li><li>You should use pre-generated wallet keys for indy wallets.</li><li>We can integrate performance and scalability tests into CI.</li><li>gRPC integration and unit testing could be done in the same way as with HTTP
+stack in Go, i.e. inside a single process that can play both client and server.</li></ul><h5 id=highlights-of-the-end-of-the-year-2020>Highlights of the end of the year 2020</h5><p>We started to build for new SA architecture and allowed both our APIs to
 existing. WebAuth server, headless authenticator, and Vault first versions were
 now ready. Also, I did the first version of a state machine for service agent
-implementation. We had an option to use immuDB instead of Plenum ledger.</p>
-<h3 id=2021h1>2021/H1</h3>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px>
-<img class=card-img-top src=/blog/2021/09/08/travelogue/spring21_hu29db0a4a24cce1cc4a7a017360286d3b_511190_2000x0_resize_catmullrom_3.png width=2000 height=1125>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>2021/H1</em>
-</p>
-</div>
-</div>
-<p>Now we have an architecture that we can live with. All the important elements
-are in place. Now we just clean it up.</p>
-<h5 id=summary-of-spring-2021-results>Summary of Spring 2021 Results</h5>
-<p>Until the summer, the most important results have been:</p>
-<ul>
-<li>Headless WebAuthn authenticator</li>
-<li>React-based Web Wallet</li>
-<li>Lots of documentation and examples</li>
-<li>Agency&rsquo;s gRPC API v1</li>
-<li>Polyglot implementations gRPC: TypeScript, Go, JavaScript</li>
-<li>New toolbox both Web and Command-line</li>
-<li>The full OSS release</li>
-</ul>
-<p>As said, all of the important elements are in place. However, our solution is
+implementation. We had an option to use immuDB instead of Plenum ledger.</p><h3 id=2021h1>2021/H1</h3><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:2010px><img class=card-img-top src=/blog/2021/09/08/travelogue/spring21_hu29db0a4a24cce1cc4a7a017360286d3b_511190_2000x0_resize_catmullrom_3.png width=2000 height=1125><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>2021/H1</em></p></figcaption></figure><p>Now we have an architecture that we can live with. All the important elements
+are in place. Now we just clean it up.</p><h5 id=summary-of-spring-2021-results>Summary of Spring 2021 Results</h5><p>Until the summer, the most important results have been:</p><ul><li>Headless WebAuthn authenticator</li><li>React-based Web Wallet</li><li>Lots of documentation and examples</li><li>Agency&rsquo;s gRPC API v1</li><li>Polyglot implementations gRPC: TypeScript, Go, JavaScript</li><li>New toolbox both Web and Command-line</li><li>The full OSS release</li></ul><p>As said, all of the important elements are in place. However, our solution is
 based on <code>libindy</code>, which will be interesting because the Aries group moves to
 shared libraries, whereas the original contributor continues with it. We haven&rsquo;t
 made the decision yet on which direction we will go. Or do we even need to
 choose? At least in the meantime, we could add some new solutions and run them
 both. Thanks to our own architecture and interfaces, those are plausible options
-for our agency.</p>
-<p>There are many interesting study subjects we are continuing to work on within
-SSI/DID. We will report them in upcoming blog posts. Stay tuned, folks!</p>
-<ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 pt-5">
-<li>
-<a href=/blog/2021/08/11/announcing-findy-agency/ aria-label="Previous - Announcing Findy Agency" class="btn btn-primary"><span class=mr-1>←</span> Previous</a>
-</li>
-<a href=/blog/2021/09/20/the-arm-adventure-on-docker/ aria-label="Next - The Arm Adventure on Docker" class="btn btn-primary">Next <span class=ml-1>→</span></a>
-</li>
-</ul>
-</div>
-</main>
-</div>
-</div>
-<footer class="bg-dark py-5 row d-print-none">
-<div class="container-fluid mx-sm-5">
-<div class=row>
-<div class="col-6 col-sm-4 text-xs-center order-sm-2">
-</div>
-<div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
-<ul class="list-inline mb-0">
-<li class="list-inline-item mx-2 h3" data-toggle=tooltip data-placement=top title=GitHub aria-label=GitHub>
-<a class=text-white target=_blank rel=noopener href=https://github.com/findy-network aria-label=GitHub>
-<i class="fab fa-github"></i>
-</a>
-</li>
-</ul>
-</div>
-<div class="col-12 col-sm-4 text-center py-2 order-sm-2">
-<small class=text-white>&copy; 2023 The Findy Agency Authors All Rights Reserved</small>
-<p class=mt-2><a href=/about/>About Findy Agency</a></p>
-</div>
-</div>
-</div>
-</footer>
-</div>
-<script src=https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js integrity=sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN crossorigin=anonymous></script>
-<script src=https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js integrity=sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF crossorigin=anonymous></script>
-<script src=https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js integrity=sha384-uQikAXnCAqsMb3ygtdqBYvcwvHUkzGIpjdGyy9owhURXHUxLC5LgTcSxJQH/RzjK crossorigin=anonymous></script>
-<script src=/js/deflate.js></script>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.css integrity=sha384-Cqd8ihRLum0CCg8rz0hYKPoLZ3uw+gES2rXQXycqnL5pgVQIflxAUDS7ZSjITLb5 crossorigin=anonymous>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.js integrity=sha384-1Or6BdeNQb0ezrmtGeqQHFpppNd7a/gw29xeiSikBbsb44xu3uAo8c7FwbF5jhbd crossorigin=anonymous></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous onload=renderMathInElement(document.body,null)></script>
-<script src=/js/main.min.758c0b1476eb0de973b63d0030f104f41a6eb3afb9908681605af4a48eb73018.js integrity="sha256-dYwLFHbrDelztj0AMPEE9Bpus6+5kIaBYFr0pI63MBg=" crossorigin=anonymous></script>
-</body>
-</html>
+for our agency.</p><p>There are many interesting study subjects we are continuing to work on within
+SSI/DID. We will report them in upcoming blog posts. Stay tuned, folks!</p><ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 pt-5"><li><a href=/blog/2021/08/11/announcing-findy-agency/ aria-label="Previous - Announcing Findy Agency" class="btn btn-primary"><span class=mr-1>←</span>Previous</a></li><li><a href=/blog/2021/09/20/the-arm-adventure-on-docker/ aria-label="Next - The Arm Adventure on Docker" class="btn btn-primary">Next<span class=ml-1>→</span></a></li></ul></div></main></div></div><footer class="bg-dark py-5 row d-print-none"><div class="container-fluid mx-sm-5"><div class=row><div class="col-6 col-sm-4 text-xs-center order-sm-2"></div><div class="col-6 col-sm-4 text-right text-xs-center order-sm-3"><ul class="list-inline mb-0"><li class="list-inline-item mx-2 h3" data-toggle=tooltip data-placement=top title=GitHub aria-label=GitHub><a class=text-white target=_blank rel=noopener href=https://github.com/findy-network aria-label=GitHub><i class="fab fa-github"></i></a></li></ul></div><div class="col-12 col-sm-4 text-center py-2 order-sm-2"><small class=text-white>&copy; 2023 The Findy Agency Authors All Rights Reserved</small><p class=mt-2><a href=/about/>About Findy Agency</a></p></div></div></div></footer></div><script src=/js/deflate.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css integrity="sha512-6VMVcy7XQNyarhVuiL50FzpgCFKsyTd6YO93aaQEyET+BNaWvj0IgKR86Bf6+AmWczxAcSnL+JGjo+iStgO1gQ==" crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.js integrity="sha512-b9IKj4LCNrtCPBhceRcoYOHWW/S2q9fpl7iAJlyxYpykRj1SKM7FE9+E0NEnJ8g8ni47LBr2GuX9qzg/xeuwzQ==" crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin=anonymous onload=renderMathInElement(document.body,null)></script><script src=https://cdn.jsdelivr.net/npm/mermaid@9.2.2/dist/mermaid.min.js integrity="sha512-IX+bU+wShHqfqaMHLMrtwi4nK6W/Z+QdZoL4kPNtRxI2wCLyHPMAdl3a43Fv1Foqv4AP+aiW6hg1dcrTt3xc+Q==" crossorigin=anonymous></script>
+<script src=/js/main.min.5f9fb113d757687f050fa88e558cf3550134dff65d578b2a707553d35161ea6a.js integrity="sha256-X5+xE9dXaH8FD6iOVYzzVQE03/ZdV4sqcHVT01Fh6mo=" crossorigin=anonymous></script>
+<script src=/js/tabpane-persist.js></script></body></html>

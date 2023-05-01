@@ -1,27 +1,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Overview</title><link>/docs/overview/</link><description>Recent content in Overview on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 20 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/docs/overview/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Findy Agency Architecture</title><link>/docs/overview/architecture/</link><pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/overview/architecture/</guid><description>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/overview/architecture/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_675x675_fit_catmullrom_3.png" width="675" height="589">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Overview of Findy Agency. See more detailed description in &lt;a href="https://github.com/findy-network/findy-agent#agency-architecture">findy-agent documentation&lt;/a>.&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div>
+&lt;/figcaption>
+&lt;/figure>
 &lt;p>The backend server of Findy Agency consists of three services:&lt;/p>
 &lt;ul>
 &lt;li>core/&lt;a href="https://github.com/findy-network/findy-agent">findy-agent&lt;/a> that handles all agent functionality including credential handling and Aries protocols&lt;/li>
-&lt;li>vault/&lt;a href="https://github.com/findy-network/findy-agent-vault">findy-agent-vault&lt;/a> that maintains a database of agents' data. Currently vault has only GraphQL-interface for data queries, that is intended mainly for browser web wallet use.&lt;/li>
+&lt;li>vault/&lt;a href="https://github.com/findy-network/findy-agent-vault">findy-agent-vault&lt;/a> that maintains a database of agents&amp;rsquo; data. Currently vault has only GraphQL-interface for data queries, that is intended mainly for browser web wallet use.&lt;/li>
 &lt;li>auth/&lt;a href="https://github.com/findy-network/findy-agent-auth">findy-agent-auth&lt;/a> that registers and authenticates all agency users.&lt;/li>
 &lt;/ul>
 &lt;p>&lt;a href="https://github.com/findy-network/findy-wallet-pwa">Reference web wallet&lt;/a> implementation is a React app that utilizes standard WebAuthn protocol and browser capabilities to authenticate to backend. Web wallet uses GraphQL to fetch and update agency data.&lt;/p>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 391px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 391px">
 &lt;img class="card-img-top" src="/docs/overview/architecture/wallet-screenshot_hu6176385a109af25480dcf9343df0e1eb_63896_675x675_fit_catmullrom_3.png" width="381" height="675">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Wallet login screen.&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div>
+&lt;/figcaption>
+&lt;/figure>
 &lt;p>Service agents are applications that handle verified data on behalf of organizations.
 Service agents utilize Findy Agency through headless authentication and
 &lt;a href="https://github.com/findy-network/findy-agent-api">gRPC API&lt;/a>. Samples and reference implementations

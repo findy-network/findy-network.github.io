@@ -5,29 +5,29 @@
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
 &lt;iframe src="https://www.youtube.com/embed/dlWWMeiSUfE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
 &lt;/div></description></item><item><title>Docs: Findy Agency Architecture</title><link>/docs/overview/architecture/</link><pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/overview/architecture/</guid><description>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/overview/architecture/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_675x675_fit_catmullrom_3.png" width="675" height="589">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Overview of Findy Agency. See more detailed description in &lt;a href="https://github.com/findy-network/findy-agent#agency-architecture">findy-agent documentation&lt;/a>.&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div>
+&lt;/figcaption>
+&lt;/figure>
 &lt;p>The backend server of Findy Agency consists of three services:&lt;/p>
 &lt;ul>
 &lt;li>core/&lt;a href="https://github.com/findy-network/findy-agent">findy-agent&lt;/a> that handles all agent functionality including credential handling and Aries protocols&lt;/li>
-&lt;li>vault/&lt;a href="https://github.com/findy-network/findy-agent-vault">findy-agent-vault&lt;/a> that maintains a database of agents' data. Currently vault has only GraphQL-interface for data queries, that is intended mainly for browser web wallet use.&lt;/li>
+&lt;li>vault/&lt;a href="https://github.com/findy-network/findy-agent-vault">findy-agent-vault&lt;/a> that maintains a database of agents&amp;rsquo; data. Currently vault has only GraphQL-interface for data queries, that is intended mainly for browser web wallet use.&lt;/li>
 &lt;li>auth/&lt;a href="https://github.com/findy-network/findy-agent-auth">findy-agent-auth&lt;/a> that registers and authenticates all agency users.&lt;/li>
 &lt;/ul>
 &lt;p>&lt;a href="https://github.com/findy-network/findy-wallet-pwa">Reference web wallet&lt;/a> implementation is a React app that utilizes standard WebAuthn protocol and browser capabilities to authenticate to backend. Web wallet uses GraphQL to fetch and update agency data.&lt;/p>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 391px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 391px">
 &lt;img class="card-img-top" src="/docs/overview/architecture/wallet-screenshot_hu6176385a109af25480dcf9343df0e1eb_63896_675x675_fit_catmullrom_3.png" width="381" height="675">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Wallet login screen.&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div>
+&lt;/figcaption>
+&lt;/figure>
 &lt;p>Service agents are applications that handle verified data on behalf of organizations.
 Service agents utilize Findy Agency through headless authentication and
 &lt;a href="https://github.com/findy-network/findy-agent-api">gRPC API&lt;/a>. Samples and reference implementations
@@ -70,29 +70,33 @@ UI tool &lt;a href="#ui-tool">findy-issuer-tool&lt;/a>&lt;/li>
 &lt;/li>
 &lt;li>operate agency&lt;/li>
 &lt;/ul>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">Findy agent cli tool
-Usage:
-findy-agent-cli &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>command&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span>
-Available Commands:
-agency Manage Agency
-agent Work with the Cloud Agent
-authn WebAuthn commands
-bot Manage Bot
-completion Generate shell completion scripts
-connection Manage connections
-&lt;span style="color:#204a87">help&lt;/span> Help about any &lt;span style="color:#204a87">command&lt;/span>
-new-key Create a new key &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> the authenticator
-tree Prints the findy-agent-cli &lt;span style="color:#204a87">command&lt;/span> structure
-Flags:
---config string configuration file, FCLI_CONFIG
--n, --dry-run perform a trial run with no changes made, FCLI_DRY_RUN
--h, --help &lt;span style="color:#204a87">help&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
---logging string logging startup arguments, FCLI_LOGGING &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;-logtostderr=true -v=0&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
---server string gRPC server addr:port, FCLI_SERVER &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;localhost:50051&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
---tls-path string TLS cert path, FCLI_TLS_PATH
--v, --version version &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
-Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp;#34;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> more information about a command.
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Check out &lt;a href="https://github.com/findy-network/findy-agent-cli/tree/master/scripts/fullstack#steps">the dedicated guide&lt;/a> for CLI commands to get familiar with the usage.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>Findy agent cli tool
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Usage:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> findy-agent-cli &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>command&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Available Commands:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> agency Manage Agency
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> agent Work with the Cloud Agent
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> authn WebAuthn commands
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> bot Manage Bot
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> completion Generate shell completion scripts
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> connection Manage connections
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87">help&lt;/span> Help about any &lt;span style="color:#204a87">command&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> new-key Create a new key &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> the authenticator
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tree Prints the findy-agent-cli &lt;span style="color:#204a87">command&lt;/span> structure
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Flags:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> --config string configuration file, FCLI_CONFIG
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -n, --dry-run perform a trial run with no changes made, FCLI_DRY_RUN
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -h, --help &lt;span style="color:#204a87">help&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> --logging string logging startup arguments, FCLI_LOGGING &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;-logtostderr=true -v=0&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> --server string gRPC server addr:port, FCLI_SERVER &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;localhost:50051&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> --tls-path string TLS cert path, FCLI_TLS_PATH
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -v, --version version &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp;#34;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> more information about a command.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Check out &lt;a href="https://github.com/findy-network/findy-agent-cli/tree/master/scripts/fullstack#steps">the dedicated guide&lt;/a> for CLI commands to get familiar with the usage.&lt;/p>
 &lt;p>&lt;em>Note:&lt;/em>&lt;/p>
 &lt;ul>
 &lt;li>before CLI usage, you need to have a working Findy Agency installation&lt;/li>
@@ -116,51 +120,51 @@ Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp
 &lt;li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.&lt;/li>
 &lt;/ul></description></item><item><title>Docs: CDK-based Continous Deployment for OSS</title><link>/docs/slides/aws-meetup/</link><pubDate>Tue, 07 Mar 2023 00:00:00 +0000</pubDate><guid>/docs/slides/aws-meetup/</guid><description>
 &lt;p>&lt;a href="/pdf/aws-meetup.pdf">Slides&lt;/a> for &lt;a href="https://www.meetup.com/aws-user-group-tampere/events/289346840/">Tampere AWS User Group Meetup&lt;/a>, March 2023&lt;/p>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/slides/aws-meetup/laura-aws-meetup_huf19d8db366f9ffbd0b15ba9563d963d8_223304_675x675_fit_q75_catmullrom.jpeg" width="675" height="506">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Laura at AWS User Group Meetup (Photo by Harri Lakkala)&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>/docs/slides/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>/docs/slides/introduction-to-ssi/</guid><description>
+&lt;/figcaption>
+&lt;/figure></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>/docs/slides/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>/docs/slides/introduction-to-ssi/</guid><description>
 &lt;p>&lt;a href="/pdf/Intro2SSI.pdf">Slides&lt;/a> for &lt;a href="https://sites.uwasa.fi/poweredbyblockchain/">Digital Identity Hack 2023 Kick-off&lt;/a>&lt;/p>
 &lt;p>&lt;a href="/docs/videos/introduction-to-ssi/">Presentation&lt;/a>&lt;/p>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/slides/introduction-to-ssi/harri_hue0854f62c0200f8b9e71514cad06fad8_1488441_675x675_fit_q75_catmullrom.jpg" width="675" height="431">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Harri Lainio introducing SSI&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div></description></item><item><title>Docs: Hyperledger Global Forum 2022</title><link>/docs/slides/hyperledger-forum-2022/</link><pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate><guid>/docs/slides/hyperledger-forum-2022/</guid><description>
+&lt;/figcaption>
+&lt;/figure></description></item><item><title>Docs: Hyperledger Global Forum 2022</title><link>/docs/slides/hyperledger-forum-2022/</link><pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate><guid>/docs/slides/hyperledger-forum-2022/</guid><description>
 &lt;p>&lt;a href="/pdf/findy-ssi-agency.pdf">Slides&lt;/a> for &lt;a href="https://www.hyperledger.org/event/hyperledger-global-forum-2022-dublin-ireland">Hyperledger Global Forum 2022&lt;/a> breakout session&lt;/p>
 &lt;p>&lt;a href="/docs/videos/hyperledger-forum/">Presentation&lt;/a>&lt;/p>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/slides/hyperledger-forum-2022/harri_hu2cab6ca73704e1ee3bd023cf0ed509ec_598479_675x675_fit_catmullrom_3.png" width="675" height="353">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
+&lt;/figcaption>
+&lt;/figure>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/slides/hyperledger-forum-2022/laura_hu2cab6ca73704e1ee3bd023cf0ed509ec_613243_675x675_fit_catmullrom_3.png" width="675" height="353">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;/p>
-&lt;/div>
-&lt;/div></description></item><item><title>Docs: Findy Agency Presentation</title><link>/docs/videos/presentation/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>/docs/videos/presentation/</guid><description>
+&lt;/figcaption>
+&lt;/figure></description></item><item><title>Docs: Findy Agency Presentation</title><link>/docs/videos/presentation/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>/docs/videos/presentation/</guid><description>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
 &lt;iframe src="https://www.youtube.com/embed/kzmCbX-z7NA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
 &lt;/div></description></item><item><title>Docs: Configuration</title><link>/docs/deployment/configuration/</link><pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate><guid>/docs/deployment/configuration/</guid><description>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 629px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 629px">
 &lt;img class="card-img-top" src="/docs/deployment/configuration/deployment_hu67f415b8019b0c239da86fb80f917bcf_403739_675x675_fit_catmullrom_3.png" width="619" height="675">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Overall Findy Agency Deployment Architecture&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div>
+&lt;/figcaption>
+&lt;/figure>
 &lt;h2 id="internet-facing-reverse-proxy">Internet-facing reverse proxy&lt;/h2>
 &lt;p>Nginx, AWS load balancer etc. can work as a reverse proxy. It is recommended to use single domain for request routing to avoid hassle with FIDO2 origin requirements and CORS.&lt;/p>
 &lt;h3 id="port-443">Port 443&lt;/h3>
@@ -631,14 +635,14 @@ to implement an agent of your own:&lt;/p>
 &lt;li>JavaScript: &lt;a href="https://github.com/findy-network/findy-issuer-tool">findy-issuer-tool&lt;/a>, specifically &lt;a href="https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js">api/src/agent/index.js&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h2 id="sample-flow-connecting-to-another-agent">Sample flow: connecting to another agent&lt;/h2>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 591px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 591px">
 &lt;img class="card-img-top" src="/docs/getting-started/service-agent/service-agent_hua21be9aae7ff35f4d15c00a03487f315_97837_675x675_fit_catmullrom_3.png" width="581" height="675">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Service Agent onboarding and connecting to another agent by creating a connection invitation.&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div>
+&lt;/figcaption>
+&lt;/figure>
 &lt;ol>
 &lt;li>Service Agent (SA) registers with acator tool/library to agency. SA should use a unique user name and the selected authenticator key should be kept secret. &lt;em>Note: the registration needs to be done only once. After the first registration, authentication is done using the same user name and authenticator key.&lt;/em>&lt;/li>
 &lt;li>SA does login with acator tool/library. After successful login, a JWT token is returned to SA.&lt;/li>

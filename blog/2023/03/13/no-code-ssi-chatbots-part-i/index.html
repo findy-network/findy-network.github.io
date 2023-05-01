@@ -1,546 +1,116 @@
-<!doctype html><html lang=en class=no-js>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
-<meta name=generator content="Hugo 0.91.2"><meta name=ROBOTS content="NOINDEX, NOFOLLOW">
-<link rel="shortcut icon" href=/favicons/favicon.ico>
-<link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180>
-<link rel=icon type=image/png href=/favicons/favicon-16x16.png sizes=16x16>
-<link rel=icon type=image/png href=/favicons/favicon-32x32.png sizes=32x32>
-<link rel=icon type=image/png href=/favicons/android-36x36.png sizes=36x36>
-<link rel=icon type=image/png href=/favicons/android-48x48.png sizes=48x48>
-<link rel=icon type=image/png href=/favicons/android-72x72.png sizes=72x72>
-<link rel=icon type=image/png href=/favicons/android-96x96.png sizes=96x96>
-<link rel=icon type=image/png href=/favicons/android-144x144.png sizes=144x144>
-<link rel=icon type=image/png href=/favicons/android-192x192.png sizes=192x192>
-<title>No-Code SSI Chatbots - Part I | Findy Agency</title>
-<meta name=description content="Findy Agency documentation"><meta property="og:title" content="No-Code SSI Chatbots - Part I">
-<meta property="og:description" content="I implemented a new [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We'll also offer these tools to the end-users in the future.">
-<meta property="og:type" content="article">
-<meta property="og:url" content="/blog/2023/03/13/no-code-ssi-chatbots-part-i/"><meta property="og:image" content="/blog/2023/03/13/no-code-ssi-chatbots-part-i/cover-classes.png"><meta property="article:section" content="blog">
-<meta property="article:published_time" content="2023-03-13T00:00:00+00:00">
-<meta property="article:modified_time" content="2023-03-13T00:00:00+00:00"><meta property="og:site_name" content="Findy Agency">
-<meta itemprop=name content="No-Code SSI Chatbots - Part I">
-<meta itemprop=description content="I implemented a new [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We'll also offer these tools to the end-users in the future."><meta itemprop=datePublished content="2023-03-13T00:00:00+00:00">
-<meta itemprop=dateModified content="2023-03-13T00:00:00+00:00">
-<meta itemprop=wordCount content="1747"><meta itemprop=image content="/blog/2023/03/13/no-code-ssi-chatbots-part-i/cover-classes.png">
-<meta itemprop=keywords content><meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="/blog/2023/03/13/no-code-ssi-chatbots-part-i/cover-classes.png">
-<meta name=twitter:title content="No-Code SSI Chatbots - Part I">
-<meta name=twitter:description content="I implemented a new [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We'll also offer these tools to the end-users in the future.">
-<link rel=preload href=/scss/main.min.957d988e396d495afa3156d4640b99742d961f39c79e92f8d152969969aa9ece.css as=style>
-<link href=/scss/main.min.957d988e396d495afa3156d4640b99742d961f39c79e92f8d152969969aa9ece.css rel=stylesheet integrity>
-<script src=https://code.jquery.com/jquery-3.5.1.min.js integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin=anonymous></script>
-</head>
-<body class="td-page td-blog">
-<header>
-<nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar">
-<a class=navbar-brand href=/>
-<span class=navbar-logo></span><span class="text-uppercase font-weight-bold">Findy Agency</span>
-</a>
-<div class="td-navbar-nav-scroll ml-md-auto" id=main_navbar>
-<ul class="navbar-nav mt-2 mt-lg-0">
-<li class="nav-item mr-4 mb-2 mb-lg-0">
-<a class=nav-link href=/docs/><span>Documentation</span></a>
-</li>
-<li class="nav-item mr-4 mb-2 mb-lg-0">
-<a class="nav-link active" href=/blog/><span class=active>Blog</span></a>
-</li>
-</ul>
-</div>
-<div class="navbar-nav d-none d-lg-block">
-</div>
-</nav>
-</header>
-<div class="container-fluid td-outer">
-<div class=td-main>
-<div class="row flex-xl-nowrap">
-<aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
-<div id=td-sidebar-menu class=td-sidebar__inner>
-<form class="td-sidebar__search d-flex align-items-center">
-<button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type=button data-toggle=collapse data-target=#td-section-nav aria-controls=td-docs-nav aria-expanded=false aria-label="Toggle section navigation">
-</button>
-</form>
-<nav class="collapse td-sidebar-nav" id=td-section-nav>
-<ul class="td-sidebar-nav__section pr-md-3 ul-0">
-<li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-blog-li>
-<a href=/blog/ title="Findy Agency Blog" class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-blog><span>Blog</span></a>
-<ul class=ul-1>
-<li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230425agencys-iac-journey-li>
-<a href=/blog/2023/04/25/agencys-iac-journey/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230425agencys-iac-journey><span>Agency's IaC Journey</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id=m-blog20230313no-code-ssi-chatbots-part-i-li>
-<a href=/blog/2023/03/13/no-code-ssi-chatbots-part-i/ title="No-Code SSI Chatbots - Part I" class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id=m-blog20230313no-code-ssi-chatbots-part-i><span class=td-sidebar-nav-active-item>No-Code SSI Chatbots</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230206how-to-equip-your-app-with-vc-superpowers-li>
-<a href=/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230206how-to-equip-your-app-with-vc-superpowers><span>How to Equip Your App with VC Superpowers</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230130getting-started-with-ssi-service-agent-development-li>
-<a href=/blog/2023/01/30/getting-started-with-ssi-service-agent-development/ title="Getting Started with SSI Service Agent Development " class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230130getting-started-with-ssi-service-agent-development><span>Getting Started with SSI Service Agent Development</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220930ledger-multiplexer-li>
-<a href=/blog/2022/09/30/ledger-multiplexer/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220930ledger-multiplexer><span>Ledger Multiplexer</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220927the-hyperledger-global-forum-experience-li>
-<a href=/blog/2022/09/27/the-hyperledger-global-forum-experience/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220927the-hyperledger-global-forum-experience><span>The Hyperledger Global Forum Experience</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220829the-findy-agency-api-li>
-<a href=/blog/2022/08/29/the-findy-agency-api/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220829the-findy-agency-api><span>The Findy Agency API</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220427trust-in-your-wallet-li>
-<a href=/blog/2022/04/27/trust-in-your-wallet/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220427trust-in-your-wallet><span>Trust in Your Wallet</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220407ssi-empowered-identity-provider-li>
-<a href=/blog/2022/04/07/ssi-empowered-identity-provider/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220407ssi-empowered-identity-provider><span>SSI-Empowered Identity Provider</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220314replacing-indy-sdk-li>
-<a href=/blog/2022/03/14/replacing-indy-sdk/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220314replacing-indy-sdk><span>Replacing Indy SDK</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220305the-missing-network-layer-model-li>
-<a href=/blog/2022/03/05/the-missing-network-layer-model/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220305the-missing-network-layer-model><span>The Missing Network Layer Model</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220119fostering-interoperability-li>
-<a href=/blog/2022/01/19/fostering-interoperability/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220119fostering-interoperability><span>Fostering Interoperability</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20211109anchoring-chains-of-trust-li>
-<a href=/blog/2021/11/09/anchoring-chains-of-trust/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20211109anchoring-chains-of-trust><span>Anchoring Chains of Trust</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210920the-arm-adventure-on-docker-li>
-<a href=/blog/2021/09/20/the-arm-adventure-on-docker/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210920the-arm-adventure-on-docker><span>The Arm Adventure on Docker</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210908travelogue-li>
-<a href=/blog/2021/09/08/travelogue/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210908travelogue><span>Travelogue</span></a>
-</li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210811announcing-findy-agency-li>
-<a href=/blog/2021/08/11/announcing-findy-agency/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210811announcing-findy-agency><span>Announcing Findy Agency</span></a>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</div>
-</aside>
-<aside class="d-none d-xl-block col-xl-2 td-sidebar-toc d-print-none">
-<div class="td-page-meta ml-2 pb-1 pt-2 mb-0">
-<a id=print href=/blog/_print/><i class="fa fa-print fa-fw"></i> Print entire section</a>
-</div>
-<div class=td-toc><nav id=TableOfContents>
-<ul>
-<li><a href=#hello-world>Hello World</a></li>
-<li><a href=#the-fsm-language>The FSM Language</a>
-<ul>
-<li><a href=#state-machine>State Machine</a></li>
-<li><a href=#memory>Memory</a></li>
-<li><a href=#meta-model>Meta-Model</a></li>
-</ul>
-</li>
-<li><a href=#event>Event</a>
-<ul>
-<li><a href=#rule>Rule</a></li>
-<li><a href=#protocol>Protocol</a></li>
-<li><a href=#data>Data</a></li>
-<li><a href=#event-data>Event Data</a></li>
-</ul>
-</li>
-<li><a href=#issuing-example>Issuing Example</a>
-<ul>
-<li><a href=#omni-channel-chatbot>Omni-Channel Chatbot</a></li>
-</ul>
-</li>
-<li><a href=#future-features>Future Features</a></li>
-</ul>
-</nav></div>
-</aside>
-<main class="col-12 col-md-9 col-xl-8 pl-md-5 pr-md-4" role=main>
-<a class="btn btn-lg -bg-orange td-rss-button d-none d-lg-block" href=/blog/index.xml target=_blank>
-RSS <i class="fa fa-rss ml-2"></i>
-</a>
-<div class=td-content>
-<h1>No-Code SSI Chatbots - Part I</h1>
-<div class=lead>I implemented a new <a href=https://en.wikipedia.org/wiki/Finite-state_machine>FSM</a> language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We&rsquo;ll also offer these tools to the end-users in the future.</div>
-<div class="td-byline mb-4">
-By <b>Harri Lainio</b> |
-<time datetime=2023-03-13 class=text-muted>Monday, March 13, 2023</time>
-</div>
-<header class=article-meta>
-</header>
-<p>In this blog post, I&rsquo;ll explain the syntax of our chatbot language. The good
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=en class=no-js><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=generator content="Hugo 0.111.3"><meta name=robots content="index, follow"><link rel="shortcut icon" href=/favicons/favicon.ico><link rel=apple-touch-icon href=/favicons/apple-touch-icon-180x180.png sizes=180x180><link rel=icon type=image/png href=/favicons/favicon-16x16.png sizes=16x16><link rel=icon type=image/png href=/favicons/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/favicons/android-36x36.png sizes=36x36><link rel=icon type=image/png href=/favicons/android-48x48.png sizes=48x48><link rel=icon type=image/png href=/favicons/android-72x72.png sizes=72x72><link rel=icon type=image/png href=/favicons/android-96x96.png sizes=96x96><link rel=icon type=image/png href=/favicons/android-144x144.png sizes=144x144><link rel=icon type=image/png href=/favicons/android-192x192.png sizes=192x192><title>No-Code SSI Chatbots - Part I | Findy Agency</title><meta name=description content="I implemented a new [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We'll also offer these tools to the end-users in the future."><meta property="og:title" content="No-Code SSI Chatbots - Part I"><meta property="og:description" content="I implemented a new [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We'll also offer these tools to the end-users in the future."><meta property="og:type" content="article"><meta property="og:url" content="/blog/2023/03/13/no-code-ssi-chatbots-part-i/"><meta property="og:image" content="/blog/2023/03/13/no-code-ssi-chatbots-part-i/cover-classes.png"><meta property="article:section" content="blog"><meta property="article:published_time" content="2023-03-13T00:00:00+00:00"><meta property="article:modified_time" content="2023-03-13T00:00:00+00:00"><meta property="og:site_name" content="Findy Agency"><meta itemprop=name content="No-Code SSI Chatbots - Part I"><meta itemprop=description content="I implemented a new [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We'll also offer these tools to the end-users in the future."><meta itemprop=datePublished content="2023-03-13T00:00:00+00:00"><meta itemprop=dateModified content="2023-03-13T00:00:00+00:00"><meta itemprop=wordCount content="1787"><meta itemprop=image content="/blog/2023/03/13/no-code-ssi-chatbots-part-i/cover-classes.png"><meta itemprop=keywords content><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="/blog/2023/03/13/no-code-ssi-chatbots-part-i/cover-classes.png"><meta name=twitter:title content="No-Code SSI Chatbots - Part I"><meta name=twitter:description content="I implemented a new [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We'll also offer these tools to the end-users in the future."><link rel=preload href=/scss/main.min.73bc65c1e18bb0cbd02b071f40b73b018bed23b1835e915c0f4f73a772a6713b.css as=style><link href=/scss/main.min.73bc65c1e18bb0cbd02b071f40b73b018bed23b1835e915c0f4f73a772a6713b.css rel=stylesheet integrity><script src=https://code.jquery.com/jquery-3.6.0.min.js integrity=sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK crossorigin=anonymous></script></head><body class="td-page td-blog"><header><nav class="js-navbar-scroll navbar navbar-expand navbar-dark flex-column flex-md-row td-navbar"><a class=navbar-brand href=/><span class="navbar-brand__logo navbar-logo"></span><span class=navbar-brand__name>Findy Agency</span></a><div class="td-navbar-nav-scroll ml-md-auto" id=main_navbar><ul class="navbar-nav mt-2 mt-lg-0"><li class="nav-item mr-4 mb-2 mb-lg-0"><a class=nav-link href=/docs/><span>Documentation</span></a></li><li class="nav-item mr-4 mb-2 mb-lg-0"><a class="nav-link active" href=/blog/><span class=active>Blog</span></a></li></ul></div><div class="navbar-nav d-none d-lg-block"></div></nav></header><div class="container-fluid td-outer"><div class=td-main><div class="row flex-xl-nowrap"><aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none"><div id=td-sidebar-menu class=td-sidebar__inner><form class="td-sidebar__search d-flex align-items-center"><button class="btn btn-link td-sidebar__toggle d-md-none p-0 ml-3 fas fa-bars" type=button data-toggle=collapse data-target=#td-section-nav aria-controls=td-section-nav aria-expanded=false aria-label="Toggle section navigation"></button></form><nav class="collapse td-sidebar-nav" id=td-section-nav><ul class="td-sidebar-nav__section pr-md-3 ul-0"><li class="td-sidebar-nav__section-title td-sidebar-nav__section with-child active-path" id=m-blog-li><a href=/blog/ title="Findy Agency Blog" class="align-left pl-0 td-sidebar-link td-sidebar-link__section tree-root" id=m-blog><span>Blog</span></a><ul class=ul-1><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230425agencys-iac-journey-li><a href=/blog/2023/04/25/agencys-iac-journey/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230425agencys-iac-journey><span>Agency's IaC Journey</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child active-path" id=m-blog20230313no-code-ssi-chatbots-part-i-li><a href=/blog/2023/03/13/no-code-ssi-chatbots-part-i/ title="No-Code SSI Chatbots - Part I" class="align-left pl-0 active td-sidebar-link td-sidebar-link__page" id=m-blog20230313no-code-ssi-chatbots-part-i><span class=td-sidebar-nav-active-item>No-Code SSI Chatbots</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230206how-to-equip-your-app-with-vc-superpowers-li><a href=/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230206how-to-equip-your-app-with-vc-superpowers><span>How to Equip Your App with VC Superpowers</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20230130getting-started-with-ssi-service-agent-development-li><a href=/blog/2023/01/30/getting-started-with-ssi-service-agent-development/ title="Getting Started with SSI Service Agent Development " class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20230130getting-started-with-ssi-service-agent-development><span>Getting Started with SSI Service Agent Development</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220930ledger-multiplexer-li><a href=/blog/2022/09/30/ledger-multiplexer/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220930ledger-multiplexer><span>Ledger Multiplexer</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220927the-hyperledger-global-forum-experience-li><a href=/blog/2022/09/27/the-hyperledger-global-forum-experience/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220927the-hyperledger-global-forum-experience><span>The Hyperledger Global Forum Experience</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220829the-findy-agency-api-li><a href=/blog/2022/08/29/the-findy-agency-api/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220829the-findy-agency-api><span>The Findy Agency API</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220427trust-in-your-wallet-li><a href=/blog/2022/04/27/trust-in-your-wallet/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220427trust-in-your-wallet><span>Trust in Your Wallet</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220407ssi-empowered-identity-provider-li><a href=/blog/2022/04/07/ssi-empowered-identity-provider/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220407ssi-empowered-identity-provider><span>SSI-Empowered Identity Provider</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220314replacing-indy-sdk-li><a href=/blog/2022/03/14/replacing-indy-sdk/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220314replacing-indy-sdk><span>Replacing Indy SDK</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220305the-missing-network-layer-model-li><a href=/blog/2022/03/05/the-missing-network-layer-model/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220305the-missing-network-layer-model><span>The Missing Network Layer Model</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20220119fostering-interoperability-li><a href=/blog/2022/01/19/fostering-interoperability/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20220119fostering-interoperability><span>Fostering Interoperability</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20211109anchoring-chains-of-trust-li><a href=/blog/2021/11/09/anchoring-chains-of-trust/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20211109anchoring-chains-of-trust><span>Anchoring Chains of Trust</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210920the-arm-adventure-on-docker-li><a href=/blog/2021/09/20/the-arm-adventure-on-docker/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210920the-arm-adventure-on-docker><span>The Arm Adventure on Docker</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210908travelogue-li><a href=/blog/2021/09/08/travelogue/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210908travelogue><span>Travelogue</span></a></li><li class="td-sidebar-nav__section-title td-sidebar-nav__section without-child" id=m-blog20210811announcing-findy-agency-li><a href=/blog/2021/08/11/announcing-findy-agency/ class="align-left pl-0 td-sidebar-link td-sidebar-link__page" id=m-blog20210811announcing-findy-agency><span>Announcing Findy Agency</span></a></li></ul></li></ul></nav></div></aside><aside class="d-none d-xl-block col-xl-2 td-sidebar-toc d-print-none"><div class="td-page-meta ml-2 pb-1 pt-2 mb-0"><a id=print href=/blog/_print/><i class="fa-solid fa-print fa-fw"></i> Print entire section</a></div><div class=td-toc><nav id=TableOfContents><ul><li><a href=#hello-world>Hello World</a></li><li><a href=#the-fsm-language>The FSM Language</a><ul><li><a href=#state-machine>State Machine</a></li><li><a href=#memory>Memory</a></li><li><a href=#meta-model>Meta-Model</a></li></ul></li><li><a href=#event>Event</a><ul><li><a href=#rule>Rule</a></li><li><a href=#protocol>Protocol</a></li><li><a href=#data>Data</a></li><li><a href=#event-data>Event Data</a></li></ul></li><li><a href=#issuing-example>Issuing Example</a><ul><li><a href=#omni-channel-chatbot>Omni-Channel Chatbot</a></li></ul></li><li><a href=#future-features>Future Features</a></li></ul></nav></div></aside><main class="col-12 col-md-9 col-xl-8 pl-md-5 pr-md-4" role=main><a class=td-rss-button title=RSS href=/blog/index.xml target=_blank rel=noopener><i class="fa-solid fa-rss" aria-hidden=true></i></a><div class=td-content><h1>No-Code SSI Chatbots - Part I</h1><div class=lead>I implemented a new <a href=https://en.wikipedia.org/wiki/Finite-state_machine>FSM</a> language for our SSI chatbots a few years ago. It started as an experiment, a technology spike, but ended as a new feature to our SSI agency. Since then, we have been able to build multi-tenant agent applications without coding, which is so much easier compared to other DID agents. We&rsquo;ll also offer these tools to the end-users in the future.</div><div class="td-byline mb-4">By <b>Harri Lainio</b> |
+<time datetime=2023-03-13 class=text-muted>Monday, March 13, 2023</time></div><header class=article-meta></header><p>In this blog post, I&rsquo;ll explain the syntax of our chatbot language. The good
 news is that the language is simple, and we already offer some development tools
 like UML rendering. There&rsquo;ll be a second post where we&rsquo;ll dive deeply into the
 implementation details. Our ultimate goal is to find a proper model checker and
-theorem proofer for the correctness of the chatbot applications.</p>
-<p>Our team got the idea of chatbots quite early after we started to play with
-verifiable credentials and SSI.</p>
-<div class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:910px>
-<img class=card-img-top src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/demo-bot_hu4f38f3f43794e7101495702b2681d19a_613249_900x0_resize_catmullrom_3.png width=900 height=428>
-<div class="card-body px-0 pt-2 pb-0">
-<p class=card-text>
-<em>Zero UI + No-Code => Fast Delivery</em>
-</p>
-</div>
-</div>
-<p>I think that chatbots and zero UI are some sorts of a lost opportunity for
+theorem proofer for the correctness of the chatbot applications.</p><p>Our team got the idea of chatbots quite early after we started to play with
+verifiable credentials and SSI.</p><figure class="card rounded p-2 td-post-card mb-4 mt-4" style=max-width:910px><img class=card-img-top src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/demo-bot_hu4f38f3f43794e7101495702b2681d19a_613249_900x0_resize_catmullrom_3.png width=900 height=428><figcaption class="card-body px-0 pt-2 pb-0"><p class=card-text><em>Zero UI + No-Code => Fast Delivery</em></p></figcaption></figure><p>I think that chatbots and zero UI are some sorts of a lost opportunity for
 SSI/DID. The backbone of the DID network is its peer-to-peer communication
 protocol. Even though the client/server API model is very convenient to use and
 understand, <a href=https://identity.foundation/didcomm-messaging/spec/>DIDComm</a> based
 apps need something different &ndash; more conversational. What would be more
-conversational than chatting?</p>
-<p>Anyhow, we have been positively surprised by how far you can get without NLP but
+conversational than chatting?</p><p>Anyhow, we have been positively surprised by how far you can get without NLP but
 just a strict state machine-guided conversation where each party can
 proof facts about themselves when needed. And, of course, you can build perfect
 hybrid, where you fix structural parts of the discussion with the FSM and leave
-unstructured details for the NLP engine.</p>
-<h2 id=hello-world>Hello World</h2>
-<p>The chatbot state machines are written in YAML (JSON accepted). Currently, a
-YAML file includes one state machine at a time.</p>
-<p>As all programming books and manuals start with the hello world app, we do the
-same.</p>
-<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-YAML data-lang=YAML><span style=color:#204a87;font-weight:700>initial</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                             </span><span style=color:#8f5902;font-style:italic># (1)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>target</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>INITIAL</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline></span><span style=color:#204a87;font-weight:700>states</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                              </span><span style=color:#8f5902;font-style:italic># (2)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>INITIAL</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                           </span><span style=color:#8f5902;font-style:italic># (3)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>    </span><span style=color:#204a87;font-weight:700>transitions</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                     </span><span style=color:#8f5902;font-style:italic># (4)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>    </span>- <span style=color:#204a87;font-weight:700>trigger</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                       </span><span style=color:#8f5902;font-style:italic># (5)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>protocol</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>basic_message                     </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># (6)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>sends</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                         </span><span style=color:#8f5902;font-style:italic># (7)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#204a87;font-weight:700>data</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>Hello! I&#39;m Hello-World bot.</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>protocol</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>basic_message                     </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># (8)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>target</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>INITIAL                               </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># (9)</span><span style=color:#f8f8f8;text-decoration:underline>
-</span></code></pre></div><p>The previous machine is as simple as it can be in that it does something.
-Let&rsquo;s see what the lines are for:</p>
-<ol>
-<li><strong>Initial state transition</strong> is mandatory. It&rsquo;s executed when the machine is
+unstructured details for the NLP engine.</p><h2 id=hello-world>Hello World</h2><p>The chatbot state machines are written in YAML (JSON accepted). Currently, a
+YAML file includes one state machine at a time.</p><p>As all programming books and manuals start with the hello world app, we do the
+same.</p><div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-YAML data-lang=YAML><span style=display:flex><span><span style=color:#204a87;font-weight:700>initial</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                             </span><span style=color:#8f5902;font-style:italic># (1)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>target</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>INITIAL</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline></span><span style=color:#204a87;font-weight:700>states</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                              </span><span style=color:#8f5902;font-style:italic># (2)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>INITIAL</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                           </span><span style=color:#8f5902;font-style:italic># (3)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>    </span><span style=color:#204a87;font-weight:700>transitions</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                     </span><span style=color:#8f5902;font-style:italic># (4)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>    </span>- <span style=color:#204a87;font-weight:700>trigger</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                       </span><span style=color:#8f5902;font-style:italic># (5)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>protocol</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>basic_message                     </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># (6)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>sends</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                         </span><span style=color:#8f5902;font-style:italic># (7)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>      </span>- <span style=color:#204a87;font-weight:700>data</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>Hello! I&#39;m Hello-World bot.</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>protocol</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>basic_message                     </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># (8)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>target</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>INITIAL                               </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># (9)</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span></code></pre></div><p>The previous machine is as simple as it can be in that it does something.
+Let&rsquo;s see what the lines are for:</p><ol><li><strong>Initial state transition</strong> is mandatory. It&rsquo;s executed when the machine is
 started. It&rsquo;s the same as all the state transitions in our syntax but doesn&rsquo;t
-have a transition trigger.</li>
-<li><strong>States</strong> are listed next. There are no limits to how many states the machine
-holds.</li>
-<li>This machine has only one <strong>state</strong> named <code>INITIAL</code>. Each state must
-have a unique name.</li>
-<li>States include <strong>transitions</strong> to the next states (<code>target</code>). We have one in
-this machine, but no limit exists to how many transitions a state can have.</li>
-<li>Each transition has <strong>a trigger event</strong>.</li>
-<li>Triggers have <a href=#protocol><strong>protocol</strong></a> that is in this case <code>basic_message</code>.</li>
-<li>We can <strong>send</strong> limitless a mount of <code>events</code> during the state transition.</li>
-<li>In this machine, we send a <code>basic_message</code> where the <code>data</code> is <code>Hello! I'm Hello-World bot.</code></li>
-<li>Our <code>transition</code> <code>target</code> is the <code>INITIAL</code> state. It could be whatever state
-exists in the machine.</li>
-</ol>
-<p>Did you get what the machine does? You can try it by following the instructions
+have a transition trigger.</li><li><strong>States</strong> are listed next. There are no limits to how many states the machine
+holds.</li><li>This machine has only one <strong>state</strong> named <code>INITIAL</code>. Each state must
+have a unique name.</li><li>States include <strong>transitions</strong> to the next states (<code>target</code>). We have one in
+this machine, but no limit exists to how many transitions a state can have.</li><li>Each transition has <strong>a trigger event</strong>.</li><li>Triggers have <a href=#protocol><strong>protocol</strong></a> that is in this case <code>basic_message</code>.</li><li>We can <strong>send</strong> limitless a mount of <code>events</code> during the state transition.</li><li>In this machine, we send a <code>basic_message</code> where the <code>data</code> is <code>Hello! I'm Hello-World bot.</code></li><li>Our <code>transition</code> <code>target</code> is the <code>INITIAL</code> state. It could be whatever state
+exists in the machine.</li></ol><p>Did you get what the machine does? You can try it by following the instructions
 in <a href=https://github.com/findy-agent-cli/README.md>Findy CLI&rsquo;s readme</a> to setup
 your playground/run environment. After you have set up a pairwise connection
 between two agents, and needed environment variables set like <code>FCLI_CONNN_ID</code>,
-execute this to the first agent&rsquo;s terminal:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=color:#000;font-style:italic>findy-agent-cli bot start &lt;Hello-World.yaml&gt; # or whatever name you saved the script above
-</span></code></pre></div><p>For the second agent, use two terminals and give these commands to them:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=color:#8f5902># </span>terminal <span style=color:#0000cf;font-weight:700>1</span>
-<span style=color:#000;font-style:italic>findy-agent-cli bot read # listens and shows other end&#39;s messages
-</span></code></pre></div><div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=color:#8f5902># </span>terminal <span style=color:#0000cf;font-weight:700>2</span>
-<span style=color:#000;font-style:italic>findy-agent-cli bot chat # sends basic_message&#39;s to another end thru the pairwise
-</span></code></pre></div><p>And when you want to render your state machine in UML, give this command:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=color:#000;font-style:italic>findy-agent-cli bot uml &lt;Hello-World.yaml&gt; # name of your FSM
-</span></code></pre></div><p>The result looks like this:</p>
-<p>
-<figure>
-<img src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/hello1.svg>
-</figure>
-<em>Hello World Chat Bot FSM</em></p>
-<p>The UML rendering may help with understanding. It&rsquo;s also an excellent tool for
+execute this to the first agent&rsquo;s terminal:</p><div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=display:flex><span><span style=color:#000;font-style:italic>findy-agent-cli bot start &lt;Hello-World.yaml&gt; # or whatever name you saved the script above
+</span></span></span></code></pre></div><p>For the second agent, use two terminals and give these commands to them:</p><div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=display:flex><span><span style=color:#8f5902>#</span> terminal <span style=color:#0000cf;font-weight:700>1</span>
+</span></span><span style=display:flex><span><span style=color:#000;font-style:italic>findy-agent-cli bot read # listens and shows other end&#39;s messages
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=display:flex><span><span style=color:#8f5902>#</span> terminal <span style=color:#0000cf;font-weight:700>2</span>
+</span></span><span style=display:flex><span><span style=color:#000;font-style:italic>findy-agent-cli bot chat # sends basic_message&#39;s to another end thru the pairwise
+</span></span></span></code></pre></div><p>And when you want to render your state machine in UML, give this command:</p><div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=display:flex><span><span style=color:#000;font-style:italic>findy-agent-cli bot uml &lt;Hello-World.yaml&gt; # name of your FSM
+</span></span></span></code></pre></div><p>The result looks like this:</p><p><figure><img src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/hello1.svg></figure><em>Hello World Chat Bot FSM</em></p><p>The UML rendering may help with understanding. It&rsquo;s also an excellent tool for
 manual verification. Automatic model checking is something we are studying in
-the future.</p>
-<h2 id=the-fsm-language>The FSM Language</h2>
-<p>The YAML-based state machine definition language is currently as simple as
-possible.</p>
-<h3 id=state-machine>State Machine</h3>
-<p>The first level is the <strong>states</strong>, which are the primary building blocks
+the future.</p><h2 id=the-fsm-language>The FSM Language</h2><p>The YAML-based state machine definition language is currently as simple as
+possible.</p><h3 id=state-machine>State Machine</h3><p>The first level is the <strong>states</strong>, which are the primary building blocks
 of the machine. A machine has one or more states. During the execution, the
 machine can be in only one state at a time. Sub- or embedded states aren&rsquo;t
 supported because they are only convenient, not mandatory. Also, parallel states
-are out-scoped.</p>
-<p><strong>One of the states must be marketed as <code>initial</code></strong>. Every chatbot conversation
+are out-scoped.</p><p><strong>One of the states must be marketed as <code>initial</code></strong>. Every chatbot conversation
 runs its own state machine instance, and the current implementation of machine
 termination <em>terminates all running instances</em> of the machine. <strong>The state
-machine can have multiple termination states.</strong></p>
-<blockquote>
-<p><strong>Note</strong>, because the final multi-tenant deployment model is still open, and
+machine can have multiple termination states.</strong></p><blockquote><p><strong>Note</strong>, because the final multi-tenant deployment model is still open, and
 we have yet to decide on the persistence model, we recommend being extra careful
 with the state machine termination. Even though the ending is especially
-convenient for the <a href=#issuing-example><em>one-time scripts</em></a>.</p>
-</blockquote>
-<p>Each state can include relations to other states, including itself. These
-relations are <strong>state-transitions</strong> which include:</p>
-<ul>
-<li><strong>a trigger event</strong></li>
-<li><strong>send events</strong></li>
-<li><strong>a target state</strong></li>
-</ul>
-<h3 id=memory>Memory</h3>
-<p>Each state machine instance has one memory register/dictionary/map. All of the
+convenient for the <a href=#issuing-example><em>one-time scripts</em></a>.</p></blockquote><p>Each state can include relations to other states, including itself. These
+relations are <strong>state-transitions</strong> which include:</p><ul><li><strong>a trigger event</strong></li><li><strong>send events</strong></li><li><strong>a target state</strong></li></ul><h3 id=memory>Memory</h3><p>Each state machine instance has one memory register/dictionary/map. All of the
 memory access (read/write) are integrated state-transitions, and their
 <a href=#rule>rules</a>. If we bring some scripting language onboard, the memory model
 integration is the first thing to solve. Also current memory model isn&rsquo;t
 production ready for large-scale service agents because there isn&rsquo;t any
 discarding mechanism. However, this will be fixed in the next minor release,
 where a transition to the <code>initial</code> state frees the state machine instance&rsquo;s
-memory register.</p>
-<h3 id=meta-model>Meta-Model</h3>
-<p>Information about the meta-model behind each state machine can be found in
+memory register.</p><h3 id=meta-model>Meta-Model</h3><p>Information about the meta-model behind each state machine can be found in
 the following diagram. As you can see, the <strong>Machine</strong> receives and sends
 <strong>Events</strong>. And <strong>States</strong> controls which inputs, i.e., <strong>triggers</strong> are <em>valid,
-when and how.</em></p>
-<p>
-<figure>
-<img src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/Main.svg>
-</figure>
-<em>Conceptual Meta-Model</em></p>
-<p>Next, we will see how the <em>Event</em> is used to run the state machine. After the
+when and how.</em></p><p><figure><img src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/Main.svg></figure><em>Conceptual Meta-Model</em></p><p>Next, we will see how the <em>Event</em> is used to run the state machine. After the
 next chapter, we should learn to declare all supported types of input and output
-events.</p>
-<h2 id=event>Event</h2>
-<p>As we previously defined, state transitions are input/output entities. Both
+events.</p><h2 id=event>Event</h2><p>As we previously defined, state transitions are input/output entities. Both
 input and output are also event-based. An input event is called <code>trigger:</code> and
-outcomes are <code>sends:</code>.</p>
-<p>The event has necessary fields, which we describe next in more detail.</p>
-<ul>
-<li><code>rule:</code> Defines an operation to be performed when sending an event or what
-should happen when inputting an event.</li>
-<li><code>protocol:</code> Defines a protocol to be executed when sending or a protocol event
-that triggers a state transition.</li>
-<li><code>data:</code> Defines additional data related to the event in a <code>string</code> format.</li>
-</ul>
-<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-YAML data-lang=YAML><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#000>...</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>trigger</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                             </span><span style=color:#8f5902;font-style:italic># 1</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>data</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>stop                                        </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># 2</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>protocol</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>basic_message                           </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># 3</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>rule</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>INPUT_EQUAL                                 </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># 4</span><span style=color:#f8f8f8;text-decoration:underline>
-</span></code></pre></div><ol>
-<li>Simple example of the <em>trigger event</em>.</li>
-<li><code>stop</code> is a <em>keyword</em> in this trigger because of the rule (see # 4).</li>
-<li>The keyword is received thru the <code>basic_message</code> Aries DIDComm protocol.</li>
-<li><code>INPUT_EQUAL</code> means that if incoming data equals the <code>data:</code> field, the
-event is accepted, and a state transition is triggered.</li>
-</ol>
-<h3 id=rule>Rule</h3>
-<p>The following table includes all the accepted rules and their meaning for the
-event.</p>
-<table>
-<thead>
-<tr>
-<th>Rule</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OUR_STATUS</td>
-<td>Currently used with <code>issue_cred</code> protocol to build <em>triggers</em> to know when issuing is ended successfully.</td>
-</tr>
-<tr>
-<td>INPUT</td>
-<td>Copies input event data to output event data. Rarely needed, more for tests.</td>
-</tr>
-<tr>
-<td>INPUT_SAVE</td>
-<td>Saves input data to a named register. The<code>data:</code> defines the name of the register.</td>
-</tr>
-<tr>
-<td>FORMAT</td>
-<td>Calls <code>printf</code> type formatter for send events where the format string is in <code>data:</code> and value is input <code>data:</code> field.</td>
-</tr>
-<tr>
-<td>FORMAT_MEM</td>
-<td>Calls <code>Go template</code> type formatter for send events where the format string is in the <code>data:</code> field, and named values are in the memory register.</td>
-</tr>
-<tr>
-<td>GEN_PIN</td>
-<td>A new random 6-digit number is generated and stored in the PIN-named register, and FORMAT_MEM is executed according to the <code>data:</code> field.</td>
-</tr>
-<tr>
-<td>INPUT_VALIDATE_EQUAL</td>
-<td>Validates that received input is equal to the register value. The variable name is in the <code>data:</code> field.</td>
-</tr>
-<tr>
-<td>INPUT_VALIDATE_NOT_EQUAL</td>
-<td>Negative of previous, e.g., allows us to trigger transition if the input doesn&rsquo;t match.</td>
-</tr>
-<tr>
-<td>INPUT_EQUAL</td>
-<td>Validates that the coming input data is the same in the <code>data:</code> field. For these, you can implement command keywords that don&rsquo;t take arguments.</td>
-</tr>
-<tr>
-<td>ACCEPT_AND_INPUT_VALUES</td>
-<td>Accepts and stores a proof presentation and its values. Values are stored as key/value pairs in the memory register.</td>
-</tr>
-<tr>
-<td>NOT_ACCEPT_VALUES</td>
-<td>Declines a proof presentation.</td>
-</tr>
-</tbody>
-</table>
-<h3 id=protocol>Protocol</h3>
-<p>The following table includes all the accepted Aries protocols and their
-properties.</p>
-<table>
-<thead>
-<tr>
-<th>Protocol</th>
-<th>In/Out</th>
-<th>RFC</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>basic_message</code></td>
-<td>Both</td>
-<td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0095-basic-message/README.md>0095</a></td>
-<td>Send or receive a messaging protocol (text)</td>
-</tr>
-<tr>
-<td><code>trust_ping</code></td>
-<td>Both</td>
-<td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0048-trust-ping/README.md>0048</a></td>
-<td>A ping protocol for a DIDComm connection</td>
-</tr>
-<tr>
-<td><code>issue_cred</code></td>
-<td>Out</td>
-<td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0036-issue-credential/README.md>0036</a></td>
-<td>Issue a verifiable credential thru DIDComm</td>
-</tr>
-<tr>
-<td><code>present_proof</code></td>
-<td>Out</td>
-<td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0037-present-proof/README.md>0037</a></td>
-<td>Request a proof presentation thru DIDComm</td>
-</tr>
-<tr>
-<td><code>connection</code></td>
-<td>In</td>
-<td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0023-did-exchange/README.md>0023</a></td>
-<td>A new pairwise connection (DID exchange) is finished for the agent</td>
-</tr>
-</tbody>
-</table>
-<p>The following table includes currently <em>recognized</em> general protocols and their
+outcomes are <code>sends:</code>.</p><p>The event has necessary fields, which we describe next in more detail.</p><ul><li><code>rule:</code> Defines an operation to be performed when sending an event or what
+should happen when inputting an event.</li><li><code>protocol:</code> Defines a protocol to be executed when sending or a protocol event
+that triggers a state transition.</li><li><code>data:</code> Defines additional data related to the event in a <code>string</code> format.</li></ul><div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-YAML data-lang=YAML><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#000>...</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>trigger</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>                                             </span><span style=color:#8f5902;font-style:italic># 1</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>data</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>stop                                        </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># 2</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>protocol</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>basic_message                           </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># 3</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>        </span><span style=color:#204a87;font-weight:700>rule</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>INPUT_EQUAL                                 </span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#8f5902;font-style:italic># 4</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span></code></pre></div><ol><li>Simple example of the <em>trigger event</em>.</li><li><code>stop</code> is a <em>keyword</em> in this trigger because of the rule (see # 4).</li><li>The keyword is received thru the <code>basic_message</code> Aries DIDComm protocol.</li><li><code>INPUT_EQUAL</code> means that if incoming data equals the <code>data:</code> field, the
+event is accepted, and a state transition is triggered.</li></ol><h3 id=rule>Rule</h3><p>The following table includes all the accepted rules and their meaning for the
+event.</p><table><thead><tr><th>Rule</th><th>Meaning</th></tr></thead><tbody><tr><td>OUR_STATUS</td><td>Currently used with <code>issue_cred</code> protocol to build <em>triggers</em> to know when issuing is ended successfully.</td></tr><tr><td>INPUT</td><td>Copies input event data to output event data. Rarely needed, more for tests.</td></tr><tr><td>INPUT_SAVE</td><td>Saves input data to a named register. The<code>data:</code> defines the name of the register.</td></tr><tr><td>FORMAT</td><td>Calls <code>printf</code> type formatter for send events where the format string is in <code>data:</code> and value is input <code>data:</code> field.</td></tr><tr><td>FORMAT_MEM</td><td>Calls <code>Go template</code> type formatter for send events where the format string is in the <code>data:</code> field, and named values are in the memory register.</td></tr><tr><td>GEN_PIN</td><td>A new random 6-digit number is generated and stored in the PIN-named register, and FORMAT_MEM is executed according to the <code>data:</code> field.</td></tr><tr><td>INPUT_VALIDATE_EQUAL</td><td>Validates that received input is equal to the register value. The variable name is in the <code>data:</code> field.</td></tr><tr><td>INPUT_VALIDATE_NOT_EQUAL</td><td>Negative of previous, e.g., allows us to trigger transition if the input doesn&rsquo;t match.</td></tr><tr><td>INPUT_EQUAL</td><td>Validates that the coming input data is the same in the <code>data:</code> field. For these, you can implement command keywords that don&rsquo;t take arguments.</td></tr><tr><td>ACCEPT_AND_INPUT_VALUES</td><td>Accepts and stores a proof presentation and its values. Values are stored as key/value pairs in the memory register.</td></tr><tr><td>NOT_ACCEPT_VALUES</td><td>Declines a proof presentation.</td></tr></tbody></table><h3 id=protocol>Protocol</h3><p>The following table includes all the accepted Aries protocols and their
+properties.</p><table><thead><tr><th>Protocol</th><th>In/Out</th><th>RFC</th><th>Meaning</th></tr></thead><tbody><tr><td><code>basic_message</code></td><td>Both</td><td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0095-basic-message/README.md>0095</a></td><td>Send or receive a messaging protocol (text)</td></tr><tr><td><code>trust_ping</code></td><td>Both</td><td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0048-trust-ping/README.md>0048</a></td><td>A ping protocol for a DIDComm connection</td></tr><tr><td><code>issue_cred</code></td><td>Out</td><td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0036-issue-credential/README.md>0036</a></td><td>Issue a verifiable credential thru DIDComm</td></tr><tr><td><code>present_proof</code></td><td>Out</td><td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0037-present-proof/README.md>0037</a></td><td>Request a proof presentation thru DIDComm</td></tr><tr><td><code>connection</code></td><td>In</td><td><a href=https://github.com/hyperledger/aries-rfcs/blob/main/features/0023-did-exchange/README.md>0023</a></td><td>A new pairwise connection (DID exchange) is finished for the agent</td></tr></tbody></table><p>The following table includes currently <em>recognized</em> general protocols and their
 properties. Recognized protocols aren&rsquo;t yet thoroughly tested or implemented,
-only keywords are reserved and properties listed.</p>
-<table>
-<thead>
-<tr>
-<th>Protocol</th>
-<th>In/Out</th>
-<th>Spec</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>email</code></td>
-<td>Both</td>
-<td>JSON</td>
-<td>Send or receive an <a href=#omni-channel-chatbot>email message</a> (text)</td>
-</tr>
-<tr>
-<td><code>hook</code></td>
-<td>Both</td>
-<td>Internal</td>
-<td>Currently reserved only for internal use</td>
-</tr>
-</tbody>
-</table>
-<p>On the design table, we have ideas like REST endpoints, embedded scripting
-language (Lua), file system access, etc.</p>
-<h3 id=data>Data</h3>
-<p>The <code>data</code> field is used to transport the event&rsquo;s data. Its function is determined by
-both <code>rule</code> and <code>protocol</code>. Please see the next chapter, <strong>Event Data</strong>.</p>
-<h3 id=event-data>Event Data</h3>
-<p>The <code>event_data</code> field transports the event&rsquo;s type-checked data. Its <strong>type</strong>
+only keywords are reserved and properties listed.</p><table><thead><tr><th>Protocol</th><th>In/Out</th><th>Spec</th><th>Meaning</th></tr></thead><tbody><tr><td><code>email</code></td><td>Both</td><td>JSON</td><td>Send or receive an <a href=#omni-channel-chatbot>email message</a> (text)</td></tr><tr><td><code>hook</code></td><td>Both</td><td>Internal</td><td>Currently reserved only for internal use</td></tr></tbody></table><p>On the design table, we have ideas like REST endpoints, embedded scripting
+language (Lua), file system access, etc.</p><h3 id=data>Data</h3><p>The <code>data</code> field is used to transport the event&rsquo;s data. Its function is determined by
+both <code>rule</code> and <code>protocol</code>. Please see the next chapter, <strong>Event Data</strong>.</p><h3 id=event-data>Event Data</h3><p>The <code>event_data</code> field transports the event&rsquo;s type-checked data. Its <strong>type</strong>
 is determined by both <code>rule</code> and <code>protocol</code>. Currently, it&rsquo;s explicitly used
-only in the <code>issue_cred</code> protocol:</p>
-<div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-YAML data-lang=YAML><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#000>...</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>data</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>event_data</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>    </span><span style=color:#204a87;font-weight:700>issuing</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>AttrsJSON</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#4e9a06>&#39;[{&#34;name&#34;:&#34;foo&#34;,&#34;value&#34;:&#34;bar&#34;}]&#39;</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>CredDefID</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>&lt;CRED_DEF_ID&gt;</span><span style=color:#f8f8f8;text-decoration:underline>
-</span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>protocol</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>issue_cred</span><span style=color:#f8f8f8;text-decoration:underline>
-</span></code></pre></div><p>We are still <em>work-in-progress</em> to determine what will be the final role of <code>data</code>
+only in the <code>issue_cred</code> protocol:</p><div class=highlight><pre tabindex=0 style=background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-YAML data-lang=YAML><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#000>...</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>data</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>event_data</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>    </span><span style=color:#204a87;font-weight:700>issuing</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>AttrsJSON</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#4e9a06>&#39;[{&#34;name&#34;:&#34;foo&#34;,&#34;value&#34;:&#34;bar&#34;}]&#39;</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>      </span><span style=color:#204a87;font-weight:700>CredDefID</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>&lt;CRED_DEF_ID&gt;</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span><span style=display:flex><span><span style=color:#f8f8f8;text-decoration:underline>  </span><span style=color:#204a87;font-weight:700>protocol</span><span style=color:#000;font-weight:700>:</span><span style=color:#f8f8f8;text-decoration:underline> </span><span style=color:#000>issue_cred</span><span style=color:#f8f8f8;text-decoration:underline>
+</span></span></span></code></pre></div><p>We are still <em>work-in-progress</em> to determine what will be the final role of <code>data</code>
 and <code>event_data</code>. Are we going to have them both or something else? That will be
-decided according to the feedback from the FSM chatbot feature.</p>
-<h2 id=issuing-example>Issuing Example</h2>
-<p>The following chatbot is an illustration of our chatbot from our
+decided according to the feedback from the FSM chatbot feature.</p><h2 id=issuing-example>Issuing Example</h2><p>The following chatbot is an illustration of our chatbot from our
 <a href=https://github.com/findy-network/identity-hackathon-2023/blob/master/cli/issue-bot.template.yaml>Identity Hackathon 2023 repository.</a>
 It&rsquo;s proven extremely handy to kick these chatbots up during the demo
-or development without forgetting the production in the future.</p>
-<p>
-<figure>
-<img src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue-one.svg>
-</figure>
-<em>Run once - Issuing Chat Bot</em></p>
-<h3 id=omni-channel-chatbot>Omni-Channel Chatbot</h3>
-<p>The diagram below presents another example of the <a href=https://github.com/findy-network/findy-agent-cli/blob/master/scripts/test/sa/email-issuer-bot.yaml>automatic issuing
+or development without forgetting the production in the future.</p><p><figure><img src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue-one.svg></figure><em>Run once - Issuing Chat Bot</em></p><h3 id=omni-channel-chatbot>Omni-Channel Chatbot</h3><p>The diagram below presents another example of the <a href=https://github.com/findy-network/findy-agent-cli/blob/master/scripts/test/sa/email-issuer-bot.yaml>automatic issuing
 chatbot</a>
 for verifying an email address. Please read the state transition arrows
 carefully. They define triggers and events to send. There is a transition that
 sends an Aries <code>basic_message</code> and an <code>email</code> in the same transition. The email
 message built by the machine includes a random PIN code. As you can see, the
-state machine can adequately verify the PIN code.</p>
-<p>
-<figure>
-<img src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue.svg>
-</figure>
-<em>Automatic Email Credential Chat Bot</em></p>
-<p>It&rsquo;s been rewarding to notice how well chatting and using verifiable credentials
+state machine can adequately verify the PIN code.</p><p><figure><img src=/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue.svg></figure><em>Automatic Email Credential Chat Bot</em></p><p>It&rsquo;s been rewarding to notice how well chatting and using verifiable credentials
 fit together. As an end-user, you won&rsquo;t face annoying context switches, but
-everything happens in the same logical conversation.</p>
-<h2 id=future-features>Future Features</h2>
-<p>The most critical task in the future will be documentation. Hopefully, this
-blog post helps us to get it going.</p>
-<p>Something we have thought about during the development:</p>
-<ul>
-<li>transition triggers are currently SSI-only which can be changed in the
-future
-<ul>
-<li>transient states</li>
-</ul>
-</li>
-<li>straightforward memory model
-<ul>
-<li>no persistence model</li>
-</ul>
-</li>
-<li>verification/simulation tools: a model checker</li>
-<li>simple scripting language inside the state machine</li>
-<li>deployment model: cloud, end-user support</li>
-<li>end-user level tools</li>
-</ul>
-<p>Please take it for a test drive and let us know your thoughts. Until the
-next time, see you!</p>
-<ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 pt-5">
-<li>
-<a href=/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/ aria-label="Previous - How to Equip Your App with VC Superpowers" class="btn btn-primary"><span class=mr-1>←</span> Previous</a>
-</li>
-<a href=/blog/2023/04/25/agencys-iac-journey/ aria-label="Next - Agency's IaC Journey" class="btn btn-primary">Next <span class=ml-1>→</span></a>
-</li>
-</ul>
-</div>
-</main>
-</div>
-</div>
-<footer class="bg-dark py-5 row d-print-none">
-<div class="container-fluid mx-sm-5">
-<div class=row>
-<div class="col-6 col-sm-4 text-xs-center order-sm-2">
-</div>
-<div class="col-6 col-sm-4 text-right text-xs-center order-sm-3">
-<ul class="list-inline mb-0">
-<li class="list-inline-item mx-2 h3" data-toggle=tooltip data-placement=top title=GitHub aria-label=GitHub>
-<a class=text-white target=_blank rel=noopener href=https://github.com/findy-network aria-label=GitHub>
-<i class="fab fa-github"></i>
-</a>
-</li>
-</ul>
-</div>
-<div class="col-12 col-sm-4 text-center py-2 order-sm-2">
-<small class=text-white>&copy; 2023 The Findy Agency Authors All Rights Reserved</small>
-<p class=mt-2><a href=/about/>About Findy Agency</a></p>
-</div>
-</div>
-</div>
-</footer>
-</div>
-<script src=https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js integrity=sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN crossorigin=anonymous></script>
-<script src=https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js integrity=sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF crossorigin=anonymous></script>
-<script src=https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js integrity=sha384-uQikAXnCAqsMb3ygtdqBYvcwvHUkzGIpjdGyy9owhURXHUxLC5LgTcSxJQH/RzjK crossorigin=anonymous></script>
-<script src=/js/deflate.js></script>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.css integrity=sha384-Cqd8ihRLum0CCg8rz0hYKPoLZ3uw+gES2rXQXycqnL5pgVQIflxAUDS7ZSjITLb5 crossorigin=anonymous>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/katex.min.js integrity=sha384-1Or6BdeNQb0ezrmtGeqQHFpppNd7a/gw29xeiSikBbsb44xu3uAo8c7FwbF5jhbd crossorigin=anonymous></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.13.2/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous onload=renderMathInElement(document.body,null)></script>
-<script src=/js/main.min.758c0b1476eb0de973b63d0030f104f41a6eb3afb9908681605af4a48eb73018.js integrity="sha256-dYwLFHbrDelztj0AMPEE9Bpus6+5kIaBYFr0pI63MBg=" crossorigin=anonymous></script>
-</body>
-</html>
+everything happens in the same logical conversation.</p><h2 id=future-features>Future Features</h2><p>The most critical task in the future will be documentation. Hopefully, this
+blog post helps us to get it going.</p><p>Something we have thought about during the development:</p><ul><li>transition triggers are currently SSI-only which can be changed in the
+future<ul><li>transient states</li></ul></li><li>straightforward memory model<ul><li>no persistence model</li></ul></li><li>verification/simulation tools: a model checker</li><li>simple scripting language inside the state machine</li><li>deployment model: cloud, end-user support</li><li>end-user level tools</li></ul><p>Please take it for a test drive and let us know your thoughts. Until the
+next time, see you!</p><ul class="list-unstyled d-flex justify-content-between align-items-center mb-0 pt-5"><li><a href=/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/ aria-label="Previous - How to Equip Your App with VC Superpowers" class="btn btn-primary"><span class=mr-1>←</span>Previous</a></li><li><a href=/blog/2023/04/25/agencys-iac-journey/ aria-label="Next - Agency's IaC Journey" class="btn btn-primary">Next<span class=ml-1>→</span></a></li></ul></div></main></div></div><footer class="bg-dark py-5 row d-print-none"><div class="container-fluid mx-sm-5"><div class=row><div class="col-6 col-sm-4 text-xs-center order-sm-2"></div><div class="col-6 col-sm-4 text-right text-xs-center order-sm-3"><ul class="list-inline mb-0"><li class="list-inline-item mx-2 h3" data-toggle=tooltip data-placement=top title=GitHub aria-label=GitHub><a class=text-white target=_blank rel=noopener href=https://github.com/findy-network aria-label=GitHub><i class="fab fa-github"></i></a></li></ul></div><div class="col-12 col-sm-4 text-center py-2 order-sm-2"><small class=text-white>&copy; 2023 The Findy Agency Authors All Rights Reserved</small><p class=mt-2><a href=/about/>About Findy Agency</a></p></div></div></div></footer></div><script src=/js/deflate.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css integrity="sha512-6VMVcy7XQNyarhVuiL50FzpgCFKsyTd6YO93aaQEyET+BNaWvj0IgKR86Bf6+AmWczxAcSnL+JGjo+iStgO1gQ==" crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.js integrity="sha512-b9IKj4LCNrtCPBhceRcoYOHWW/S2q9fpl7iAJlyxYpykRj1SKM7FE9+E0NEnJ8g8ni47LBr2GuX9qzg/xeuwzQ==" crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin=anonymous onload=renderMathInElement(document.body,null)></script><script src=https://cdn.jsdelivr.net/npm/mermaid@9.2.2/dist/mermaid.min.js integrity="sha512-IX+bU+wShHqfqaMHLMrtwi4nK6W/Z+QdZoL4kPNtRxI2wCLyHPMAdl3a43Fv1Foqv4AP+aiW6hg1dcrTt3xc+Q==" crossorigin=anonymous></script>
+<script src=/js/main.min.5f9fb113d757687f050fa88e558cf3550134dff65d578b2a707553d35161ea6a.js integrity="sha256-X5+xE9dXaH8FD6iOVYzzVQE03/ZdV4sqcHVT01Fh6mo=" crossorigin=anonymous></script>
+<script src=/js/tabpane-persist.js></script></body></html>

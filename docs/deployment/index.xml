@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Agency Deployment</title><link>/docs/deployment/</link><description>Recent content in Agency Deployment on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 10 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/docs/deployment/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Configuration</title><link>/docs/deployment/configuration/</link><pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate><guid>/docs/deployment/configuration/</guid><description>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 629px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 629px">
 &lt;img class="card-img-top" src="/docs/deployment/configuration/deployment_hu67f415b8019b0c239da86fb80f917bcf_403739_675x675_fit_catmullrom_3.png" width="619" height="675">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Overall Findy Agency Deployment Architecture&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div>
+&lt;/figcaption>
+&lt;/figure>
 &lt;h2 id="internet-facing-reverse-proxy">Internet-facing reverse proxy&lt;/h2>
 &lt;p>Nginx, AWS load balancer etc. can work as a reverse proxy. It is recommended to use single domain for request routing to avoid hassle with FIDO2 origin requirements and CORS.&lt;/p>
 &lt;h3 id="port-443">Port 443&lt;/h3>

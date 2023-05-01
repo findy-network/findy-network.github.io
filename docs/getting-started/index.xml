@@ -34,29 +34,33 @@ UI tool &lt;a href="#ui-tool">findy-issuer-tool&lt;/a>&lt;/li>
 &lt;/li>
 &lt;li>operate agency&lt;/li>
 &lt;/ul>
-&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">Findy agent cli tool
-Usage:
-findy-agent-cli &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>command&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span>
-Available Commands:
-agency Manage Agency
-agent Work with the Cloud Agent
-authn WebAuthn commands
-bot Manage Bot
-completion Generate shell completion scripts
-connection Manage connections
-&lt;span style="color:#204a87">help&lt;/span> Help about any &lt;span style="color:#204a87">command&lt;/span>
-new-key Create a new key &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> the authenticator
-tree Prints the findy-agent-cli &lt;span style="color:#204a87">command&lt;/span> structure
-Flags:
---config string configuration file, FCLI_CONFIG
--n, --dry-run perform a trial run with no changes made, FCLI_DRY_RUN
--h, --help &lt;span style="color:#204a87">help&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
---logging string logging startup arguments, FCLI_LOGGING &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;-logtostderr=true -v=0&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
---server string gRPC server addr:port, FCLI_SERVER &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;localhost:50051&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
---tls-path string TLS cert path, FCLI_TLS_PATH
--v, --version version &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
-Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp;#34;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> more information about a command.
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Check out &lt;a href="https://github.com/findy-network/findy-agent-cli/tree/master/scripts/fullstack#steps">the dedicated guide&lt;/a> for CLI commands to get familiar with the usage.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>Findy agent cli tool
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Usage:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> findy-agent-cli &lt;span style="color:#ce5c00;font-weight:bold">[&lt;/span>command&lt;span style="color:#ce5c00;font-weight:bold">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Available Commands:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> agency Manage Agency
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> agent Work with the Cloud Agent
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> authn WebAuthn commands
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> bot Manage Bot
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> completion Generate shell completion scripts
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> connection Manage connections
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87">help&lt;/span> Help about any &lt;span style="color:#204a87">command&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> new-key Create a new key &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> the authenticator
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> tree Prints the findy-agent-cli &lt;span style="color:#204a87">command&lt;/span> structure
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Flags:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> --config string configuration file, FCLI_CONFIG
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -n, --dry-run perform a trial run with no changes made, FCLI_DRY_RUN
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -h, --help &lt;span style="color:#204a87">help&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> --logging string logging startup arguments, FCLI_LOGGING &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;-logtostderr=true -v=0&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> --server string gRPC server addr:port, FCLI_SERVER &lt;span style="color:#ce5c00;font-weight:bold">(&lt;/span>default &lt;span style="color:#4e9a06">&amp;#34;localhost:50051&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> --tls-path string TLS cert path, FCLI_TLS_PATH
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> -v, --version version &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> findy-agent-cli
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Use &lt;span style="color:#4e9a06">&amp;#34;findy-agent-cli [command] --help&amp;#34;&lt;/span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> more information about a command.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Check out &lt;a href="https://github.com/findy-network/findy-agent-cli/tree/master/scripts/fullstack#steps">the dedicated guide&lt;/a> for CLI commands to get familiar with the usage.&lt;/p>
 &lt;p>&lt;em>Note:&lt;/em>&lt;/p>
 &lt;ul>
 &lt;li>before CLI usage, you need to have a working Findy Agency installation&lt;/li>
@@ -101,14 +105,14 @@ to implement an agent of your own:&lt;/p>
 &lt;li>JavaScript: &lt;a href="https://github.com/findy-network/findy-issuer-tool">findy-issuer-tool&lt;/a>, specifically &lt;a href="https://github.com/findy-network/findy-issuer-tool/blob/master/api/src/agent/index.js">api/src/agent/index.js&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;h2 id="sample-flow-connecting-to-another-agent">Sample flow: connecting to another agent&lt;/h2>
-&lt;div class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 591px">
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 591px">
 &lt;img class="card-img-top" src="/docs/getting-started/service-agent/service-agent_hua21be9aae7ff35f4d15c00a03487f315_97837_675x675_fit_catmullrom_3.png" width="581" height="675">
-&lt;div class="card-body px-0 pt-2 pb-0">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Service Agent onboarding and connecting to another agent by creating a connection invitation.&lt;/em>
 &lt;/p>
-&lt;/div>
-&lt;/div>
+&lt;/figcaption>
+&lt;/figure>
 &lt;ol>
 &lt;li>Service Agent (SA) registers with acator tool/library to agency. SA should use a unique user name and the selected authenticator key should be kept secret. &lt;em>Note: the registration needs to be done only once. After the first registration, authentication is done using the same user name and authenticator key.&lt;/em>&lt;/li>
 &lt;li>SA does login with acator tool/library. After successful login, a JWT token is returned to SA.&lt;/li>
