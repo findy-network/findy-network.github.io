@@ -120,7 +120,7 @@ in a dedicated folder. The phase when CDK tooling converts the CDK code to
 the CloudFormation templates is called synthesizing.
 
 With the agency, we have some custom magic in place here as
-we are fetching the CDK context from the parameter store for the synthing.
+we are fetching the CDK context from the parameter store for the synthesizing.
 The recommendation is to store the context information in the CDK application repository,
 but we don't want to do it as it is open-source.
 
@@ -169,7 +169,7 @@ Pipeline creation in
     });
 ```
 
-The building of assets happens automatically as part of the synthing.
+The building of assets happens automatically as part of the synthesizing.
 The pipeline orchestrates it based on the instructions that one defines for the deployment assets.
 
 ### 3/5 UpdatePipeline
