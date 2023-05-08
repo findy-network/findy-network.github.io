@@ -1,8 +1,8 @@
 ---
-date: 2023-04-27
+date: 2023-05-08
 title: "Deploying with CDK Pipeline"
 linkTitle: "Deploying with CDK Pipeline"
-description: "CDK Pipeline offers a streamlined process for building, testing, and deploying a new version of CDK applications. It tries to simplify the developer's life by hiding the dirty details of multiple services needed to build working pipelines in AWS."
+description: "CDK Pipeline offers a streamlined process for building, testing, and deploying a new version of CDK applications. It tries to simplify the developer's life by hiding the dirty details of multiple services needed to build a working pipeline in AWS."
 author: Laura Vuorenoja
 resources:
 - src: "**.{png,jpg}"
@@ -14,6 +14,9 @@ the native AWS IaC tools for defining and updating
 our PoC environment infrastructure. The story ended with taking AWS CDK v2 in use and switching the
 deployment process on top of CDK pipelines. In this article, I will describe the anatomy of our CDK
 pipeline in more detail.
+
+{{< youtube Dj_Z5ReqCwc >}}
+*Watch my "CDK-based Continuous Deployment for OSS" talk on AWS Community Day on YouTube.*
 
 ## Self-Mutating Pipelines
 
@@ -27,15 +30,32 @@ integration and deployment products.
 {{< imgproc cover Fit "925x925" >}}
 {{< /imgproc >}}
 
-The main idea of the pipeline is that instead of the developer creating the application deployment
-from her computer, a process implemented through [AWS CodePipelines](https://aws.amazon.com/codepipeline/)
-handles the creation and any subsequent changes to the deployment
-(or even in the pipeline process itself). After the pipeline
-creation, developers modify the CDK deployment only through version control.
+The main idea of the pipeline is that instead of the developer deploying the application from
+her local computer, a process implemented through
+[AWS CodePipelines](https://aws.amazon.com/codepipeline/) (CDK pipeline) handles the deployment.
+Thus, in the agency case, instead of me running the script locally to create all needed
+AWS resources for our AWS deployment, I create locally only the CDK pipeline, which, in turn,
+handles the resource creation for me.
+
+The CDK pipeline also handles any subsequent changes to the deployment
+(or even in the pipeline process itself). Therefore, developers modify the CDK deployment
+only through *version control* after the pipeline creation. This feature makes it *self-mutating*,
+i.e., self-updating, as the pipeline can automatically reconfigure itself.
 
 This model reduces the need for running the tools from the developer's local machine and enforces
 a behavior where all the deployment state information is available in the cloud.
 Using CDK pipelines also reduces the need to write custom scripts when setting up the pipeline.
+
+| | CDK v1 |  CDK v2 Pipelines |
+|---|---|---|
+| Pipeline creation  | Developer deploys from local  | Developer deploys from local  |
+| Changes to pipeline configuration  |  Developer deploys from local | Developer commits to version control. CDK Pipeline deploys automatically.  |
+| Agency creation  | Developer deploys from local  | Developer commits to version control. CDK Pipeline deploys automatically.  |
+| Changes to Agency resources  | Developer deploys from local  | Developer commits to version control. CDK Pipeline deploys automatically.  |
+| Need for custom scripts  | Storing of Agency deployment secrets and parameters. Pipeline creation with Agency deployment resource references.  | Storing all needed secrets and parameters in pipeline creation phase.  |
+
+*The use of CDK Pipelines converted the Agency deployment model to a direction where the pipeline
+does most of the work in the cloud, and the developer only commits the changes to the version control.*
 
 ## Agency Deployment
 
@@ -46,7 +66,7 @@ deployment pipeline for each microservice. However, having the resources in the 
 is handy for the time being as we occasionally need to set the agency fully up and tear it down rapidly.
 
 If one wishes to deploy the agency to AWS using the CDK application, there are some
-[pre-requirements](https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs#prerequisities):
+[prerequisities](https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs#prerequisities):
 
 * The needed tools for Typescript CDK applications
 * AWS Codestar connection to GitHub via AWS Console
@@ -76,13 +96,18 @@ building and deploying assets unsuitable.
 
 The source stage fetches the code from the source code repositories. In the agency case,
 we have five different source repositories in GitHub. Whenever we push something
-to the master branch of these repositories, i.e., make a release, our pipeline will run as
-we have configured it to trigger when updating the master branch. We don't need the code
+to the master branch of these repositories, i.e., make a release, our pipeline will run as we have
+configured the master branch as the pipeline trigger.
+
+We don't need the code
 for the backend services for anything but triggering the pipeline. We use only the
 [front-end](https://github.com/findy-network/findy-wallet-pwa)
 and [infra](https://github.com/findy-network/findy-agent-infra)
 repositories code to build the static front-end application and update
-the CDK application. GitHub packages handle building the backend Docker containers for us.
+the CDK application, i.e., the application containing the CDK code for the agency infrastructure
+and pipeline. [GitHub actions](https://github.com/features/actions) handle building
+the backend Docker containers for us and
+the images are stored publicly in [GitHub Packages](https://github.com/features/packages).
 
 ### 2/5 Build
 
@@ -90,8 +115,11 @@ The build stage has two roles: it converts the CDK code to CloudFormation templa
 any assets that end up in S3 buckets.
 
 The developer can define this workflow, but the steps must produce
-[the CDK synthing output](https://docs.aws.amazon.com/cdk/api/v1/docs/pipelines-readme.html#synth-and-sources)
-in a dedicated folder. With the agency, we have some custom magic in place here as
+[the CDK synthesizing output](https://docs.aws.amazon.com/cdk/api/v1/docs/pipelines-readme.html#synth-and-sources)
+in a dedicated folder. The phase when CDK tooling converts the CDK code to
+the CloudFormation templates is called synthesizing.
+
+With the agency, we have some custom magic in place here as
 we are fetching the CDK context from the parameter store for the synthing.
 The recommendation is to store the context information in the CDK application repository,
 but we don't want to do it as it is open-source.
@@ -203,11 +231,12 @@ testing and other needed scripts.
 {{< imgproc deploy Fit "925x925" >}}
 {{< /imgproc >}}
 
-For the agency, we are using the post-deployment steps for three purposes.
-Firstly we have a custom script for updating the ECS service. This script is in place
-to tweak some service parameters missing from CDK constructs. Secondly, we do
-the configuration of the agency administrator account. And last, we are running
-an e2e test round to ensure the deployment was successful.
+For the agency, we are using the post-deployment steps for three purposes:
+
+1. We have a custom script for updating the ECS service. This script is in place
+to tweak some service parameters missing from CDK constructs.
+2. We do the configuration of the agency administrator account.
+3. We are running an e2e test round to ensure the deployment was successful.
 
 ## Conclusions
 
@@ -223,10 +252,11 @@ the learning curve for the CDK pipelines more gentle. They state that CDK pipeli
 "opinionated," but users should know better what that opinion is.
 
 However, the CDK pipeline model pleases me in many ways. I especially value
-the approach that has minimized the steps needed to run in the developer's local environment.
+the approach that has reduced the steps needed to run in the developer's
+local environment compared to how we used the previous versions of AWS IaC tools.
 Furthermore, the strategy enables multiple developers working with the same pipeline
 as the state needs to be available in the cloud. Finally, I am happy with the current state of our
 deployment pipeline, and it works well for our purposes.
 
 If interested, you can find all our CDK application codes in [GitHub](https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs)
-and take an even deeper dive!
+and even try to deploy the agency yourself!
