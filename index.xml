@@ -1,4 +1,263 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 25 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Agency's IaC Journey</title><link>/blog/2023/04/25/agencys-iac-journey/</link><pubDate>Tue, 25 Apr 2023 00:00:00 +0000</pubDate><guid>/blog/2023/04/25/agencys-iac-journey/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 08 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Deploying with CDK Pipeline</title><link>/blog/2023/05/08/deploying-with-cdk-pipeline/</link><pubDate>Mon, 08 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/08/deploying-with-cdk-pipeline/</guid><description>
+&lt;p>&lt;a href="/blog/2023/04/25/agencys-iac-journey/">My previous post&lt;/a> described how we have been using
+the native AWS IaC tools for defining and updating
+our PoC environment infrastructure. The story ended with taking AWS CDK v2 in use and switching the
+deployment process on top of CDK pipelines. In this article, I will describe the anatomy of our CDK
+pipeline in more detail.&lt;/p>
+&lt;p>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/Dj_Z5ReqCwc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;em>Watch my &amp;ldquo;CDK-based Continuous Deployment for OSS&amp;rdquo; talk on AWS Community Day on YouTube.&lt;/em>&lt;/p>
+&lt;h2 id="self-mutating-pipelines">Self-Mutating Pipelines&lt;/h2>
+&lt;p>&lt;a href="https://docs.aws.amazon.com/cdk/v2/guide/cdk_pipeline.html">CDK Pipeline&lt;/a> offers
+a streamlined process for building, testing, and deploying a new version of
+CDK applications. It tries to simplify the developer&amp;rsquo;s life by hiding the dirty details of
+multiple services needed to build working pipelines in AWS. As usual with CDK tools, it provides
+no new AWS services but is a convenient abstraction layer on top of the existing AWS continuous
+integration and deployment products.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="/blog/2023/05/08/deploying-with-cdk-pipeline/cover-stages_hue9fd40faf9482e977e2df5aaad971cca_144291_925x925_fit_catmullrom_3.png" width="925" height="386">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The main idea of the pipeline is that instead of the developer deploying the application from
+her local computer, a process implemented through
+&lt;a href="https://aws.amazon.com/codepipeline/">AWS CodePipelines&lt;/a> (CDK pipeline) handles the deployment.
+Thus, in the agency case, instead of me running the script locally to create all needed
+AWS resources for our AWS deployment, I create locally only the CDK pipeline, which, in turn,
+handles the resource creation for me.&lt;/p>
+&lt;p>The CDK pipeline also handles any subsequent changes to the deployment
+(or even in the pipeline process itself). Therefore, developers modify the CDK deployment
+only through &lt;em>version control&lt;/em> after the pipeline creation. This feature makes it &lt;em>self-mutating&lt;/em>,
+i.e., self-updating, as the pipeline can automatically reconfigure itself.&lt;/p>
+&lt;p>This model reduces the need for running the tools from the developer&amp;rsquo;s local machine and enforces
+a behavior where all the deployment state information is available in the cloud.
+Using CDK pipelines also reduces the need to write custom scripts when setting up the pipeline.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th>CDK v1&lt;/th>
+&lt;th>CDK v2 Pipelines&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Pipeline creation&lt;/td>
+&lt;td>Developer deploys from local&lt;/td>
+&lt;td>Developer deploys from local&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Changes to pipeline configuration&lt;/td>
+&lt;td>Developer deploys from local&lt;/td>
+&lt;td>Developer commits to version control. CDK Pipeline deploys automatically.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Agency creation&lt;/td>
+&lt;td>Developer deploys from local&lt;/td>
+&lt;td>Developer commits to version control. CDK Pipeline deploys automatically.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Changes to Agency resources&lt;/td>
+&lt;td>Developer deploys from local&lt;/td>
+&lt;td>Developer commits to version control. CDK Pipeline deploys automatically.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Need for custom scripts&lt;/td>
+&lt;td>Storing of Agency deployment secrets and parameters. Pipeline creation with Agency deployment resource references.&lt;/td>
+&lt;td>Storing all needed secrets and parameters in pipeline creation phase.&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>&lt;em>The use of CDK Pipelines converted the Agency deployment model to a direction where the pipeline
+does most of the work in the cloud, and the developer only commits the changes to the version control.&lt;/em>&lt;/p>
+&lt;h2 id="agency-deployment">Agency Deployment&lt;/h2>
+&lt;p>Regarding the agency deployment, we have &lt;a href="https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs#readme">a single CDK application&lt;/a>
+that sets up the whole agency platform to AWS.
+A more production-like approach would be to have a dedicated
+deployment pipeline for each microservice. However, having the resources in the same application
+is handy for the time being as we occasionally need to set the agency fully up and tear it down rapidly.&lt;/p>
+&lt;p>If one wishes to deploy the agency to AWS using the CDK application, there are some
+&lt;a href="https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs#prerequisities">prerequisities&lt;/a>:&lt;/p>
+&lt;ul>
+&lt;li>The needed tools for Typescript CDK applications&lt;/li>
+&lt;li>AWS Codestar connection to GitHub via AWS Console&lt;/li>
+&lt;li>A hosted zone for Route53 for the desired domain&lt;/li>
+&lt;li>Agency configuration as environment variables.&lt;/li>
+&lt;/ul>
+&lt;p>The setup process itself consists of two phases. Firstly, one must store the required configuration
+to parameter store and secrets manager. Secondly, one should deploy the pipeline using CDK tooling.
+I have written bash scripts and &lt;a href="https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs#steps">detailed instructions&lt;/a>
+to simplify the job.&lt;/p>
+&lt;h2 id="pipeline-stages">Pipeline Stages&lt;/h2>
+&lt;p>Each CDK pipeline consists of 5 different stages. It is essential to have a basic understanding
+of these stages when figuring out what is happening in the pipeline. CDK pipeline creates
+these stages automatically when one deploys the pipeline constructs for the first time.
+The developer can modify and add logic to some stages, but mainly the system has
+a hard-coded way of defining the pipeline stages. This functionality is also why AWS calls
+the CDK pipelines &lt;a href="https://docs.aws.amazon.com/cdk/api/v1/docs/pipelines-readme.html#cdk-pipelines">&amp;ldquo;opinionated.&amp;rdquo;&lt;/a>
+Therefore some projects will find the CDK pipeline philosophy for
+building and deploying assets unsuitable.&lt;/p>
+&lt;h3 id="15-source">1/5 Source&lt;/h3>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 852px">
+&lt;img class="card-img-top" src="/blog/2023/05/08/deploying-with-cdk-pipeline/source_hu95baa4c50505e5a1f56db84f360d081a_76333_925x925_fit_catmullrom_3.png" width="842" height="347">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The source stage fetches the code from the source code repositories. In the agency case,
+we have five different source repositories in GitHub. Whenever we push something
+to the master branch of these repositories, i.e., make a release, our pipeline will run as we have
+configured the master branch as the pipeline trigger.&lt;/p>
+&lt;p>We don&amp;rsquo;t need the code
+for the backend services for anything but triggering the pipeline. We use only the
+&lt;a href="https://github.com/findy-network/findy-wallet-pwa">front-end&lt;/a>
+and &lt;a href="https://github.com/findy-network/findy-agent-infra">infra&lt;/a>
+repositories code to build the static front-end application and update
+the CDK application, i.e., the application containing the CDK code for the agency infrastructure
+and pipeline. &lt;a href="https://github.com/features/actions">GitHub actions&lt;/a> handle building
+the backend Docker containers for us and
+the images are stored publicly in &lt;a href="https://github.com/features/packages">GitHub Packages&lt;/a>.&lt;/p>
+&lt;h3 id="25-build">2/5 Build&lt;/h3>
+&lt;p>The build stage has two roles: it converts the CDK code to CloudFormation templates and builds
+any assets that end up in S3 buckets.&lt;/p>
+&lt;p>The developer can define this workflow, but the steps must produce
+&lt;a href="https://docs.aws.amazon.com/cdk/api/v1/docs/pipelines-readme.html#synth-and-sources">the CDK synthesizing output&lt;/a>
+in a dedicated folder. The phase when CDK tooling converts the CDK code to
+the CloudFormation templates is called synthesizing.&lt;/p>
+&lt;p>With the agency, we have some custom magic in place here as
+we are fetching the CDK context from the parameter store for the synthesizing.
+The recommendation is to store the context information in the CDK application repository,
+but we don&amp;rsquo;t want to do it as it is open-source.&lt;/p>
+&lt;p>Pipeline creation in
+&lt;a href="https://github.com/findy-network/findy-agent-infra/blob/master/aws-ecs/lib/pipeline-stack.ts#L139">the CDK application code&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-ts" data-lang="ts">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">const&lt;/span> &lt;span style="color:#000">pipeline&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">new&lt;/span> &lt;span style="color:#000">CodePipeline&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#204a87;font-weight:bold">this&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;Pipeline&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">pipelineName&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;FindyAgencyPipeline&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">dockerEnabledForSynth&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">true&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8f5902;font-style:italic">// Override synth step with custom commands
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">synth&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">new&lt;/span> &lt;span style="color:#000">CodeBuildStep&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;SynthStep&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">input&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">infraInput&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">additionalInputs&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;../findy-agent&amp;#34;&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#000">CodePipelineSource&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">connection&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;findy-network/findy-agent&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;master&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">connectionArn&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">ghArn&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// Created using the AWS console
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">installCommands&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;npm install -g aws-cdk&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8f5902;font-style:italic">// Custom steps
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">commands&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;cd aws-ecs&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8f5902;font-style:italic">// Prepare frontend build env
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;cp ./tools/create-set-env.sh ../../findy-wallet-pwa/create-set-env.sh&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8f5902;font-style:italic">// Do cdk synth with context stored in params
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#4e9a06">`echo &amp;#34;$CDK_CONTEXT_JSON&amp;#34; &amp;gt; cdk.context.json`&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;cat cdk.context.json&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;npm ci&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;npm run build&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;npx cdk synth&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;npm run pipeline:context&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8f5902;font-style:italic">// The output of the synthing process
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">primaryOutputDirectory&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;aws-ecs/cdk.out&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">});&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The building of assets happens automatically as part of the synthesizing.
+The pipeline orchestrates it based on the instructions that one defines for the deployment assets.&lt;/p>
+&lt;h3 id="35-updatepipeline">3/5 UpdatePipeline&lt;/h3>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 855px">
+&lt;img class="card-img-top" src="/blog/2023/05/08/deploying-with-cdk-pipeline/update_hub90a33393a48a69bfad632b741084aca_65879_925x925_fit_catmullrom_3.png" width="845" height="365">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>UpdatePipeline makes any changes to the pipeline, i.e., modifies it with new stages and assets
+if necessary. The developer cannot alter this stage. One thing to notice is that
+the pipeline process is always initially run with the currently saved version.
+If a change in the version control introduces changes to the pipeline,
+the pipeline execution is canceled in this stage and restarted with the new version.&lt;/p>
+&lt;h3 id="45-assets">4/5 Assets&lt;/h3>
+&lt;p>In &lt;a href="https://docs.aws.amazon.com/cdk/v2/guide/assets.html">the assets&lt;/a>
+stage, the pipeline analyzes the application stack and publishes all files to
+S3 and Docker images to ECR that the application needs for deployment. CDK Pipelines stores
+these assets using its buckets and ECR registries. By default, they have no lifecycle policies,
+so the CDK developer should ensure that the assets will not increase their AWS bill unexpectedly.&lt;/p>
+&lt;p>&lt;a href="https://github.com/findy-network/findy-agent-infra/blob/master/aws-ecs/lib/frontend.ts#L47">Assets building&lt;/a>
+utilizes &lt;code>aws-s3-deployment&lt;/code> module for the frontend application:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-ts" data-lang="ts">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8f5902;font-style:italic">// Source bundle
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">const&lt;/span> &lt;span style="color:#000">srcBundle&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span> &lt;span style="color:#000">s3deploy&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Source&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">asset&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#39;../../findy-wallet-pwa&amp;#39;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">bundling&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">command&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#39;sh&amp;#39;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#4e9a06">&amp;#39;-c&amp;#39;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#39;npm ci &amp;amp;&amp;amp; npm run build &amp;amp;&amp;amp; &amp;#39;&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">+&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#39;apk add bash &amp;amp;&amp;amp; &amp;#39;&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">+&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">`./create-set-env.sh &amp;#34;./tools/env-docker/set-env.sh&amp;#34; &amp;#34;&lt;/span>&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">bucketName&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>&lt;span style="color:#4e9a06">&amp;#34; &amp;#34;&lt;/span>&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">process&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">env&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">API_SUB_DOMAIN_NAME&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>&lt;span style="color:#4e9a06">.&lt;/span>&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">process&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">env&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">DOMAIN_NAME&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>&lt;span style="color:#4e9a06">&amp;#34; &amp;#34;&lt;/span>&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">GRPCPortNumber&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>&lt;span style="color:#4e9a06">&amp;#34; &amp;amp;&amp;amp; `&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">+&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#39;cp -R ./build/. /asset-output/&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">image&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">DockerImage.fromRegistry&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#39;public.ecr.aws/docker/library/node:18.12-alpine3.17&amp;#39;&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">environment&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">REACT_APP_GQL_HOST&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">bucketName&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">REACT_APP_AUTH_HOST&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">bucketName&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">REACT_APP_HTTP_SCHEME&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#39;https&amp;#39;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">REACT_APP_WS_SCHEME&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#39;wss&amp;#39;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">new&lt;/span> &lt;span style="color:#000">s3deploy&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BucketDeployment&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#204a87;font-weight:bold">this&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#4e9a06">`&lt;/span>&lt;span style="color:#4e9a06">${&lt;/span>&lt;span style="color:#000">id&lt;/span>&lt;span style="color:#4e9a06">}&lt;/span>&lt;span style="color:#4e9a06">-deployment`&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">sources&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#000">srcBundle&lt;/span>&lt;span style="color:#000;font-weight:bold">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">destinationBucket&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">bucket&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">logRetention&lt;/span>: &lt;span style="color:#204a87;font-weight:bold">RetentionDays.ONE_MONTH&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">});&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="55-deploy">5/5 Deploy&lt;/h3>
+&lt;p>Finally, the Deploy stage creates and updates the application infrastructure resources.
+There is also a chance to add post steps to this stage, which can run the post-deployment
+testing and other needed scripts.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="/blog/2023/05/08/deploying-with-cdk-pipeline/deploy_hu9a28268de189767b8103db6c169ccba0_99362_925x925_fit_catmullrom_3.png" width="925" height="524">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>For the agency, we are using the post-deployment steps for three purposes:&lt;/p>
+&lt;ol>
+&lt;li>We have a custom script for updating the ECS service. This script is in place
+to tweak some service parameters missing from CDK constructs.&lt;/li>
+&lt;li>We do the configuration of the agency administrator account.&lt;/li>
+&lt;li>We are running an e2e test round to ensure the deployment was successful.&lt;/li>
+&lt;/ol>
+&lt;h2 id="conclusions">Conclusions&lt;/h2>
+&lt;p>The CDK pipeline is initially a bit complex to get your head around. For simple applications,
+the use is easy, and there isn&amp;rsquo;t even a need to deeply understand how it works.
+However, when the deployment has multiple moving parts, it is beneficial to understand
+the different stages.&lt;/p>
+&lt;p>There are still some details that I would like to see improvement in.
+The documentation and examples need additions, especially on how to use the assets correctly.
+There have been improvements already, but complete example applications would make
+the learning curve for the CDK pipelines more gentle. They state that CDK pipelines are
+&amp;ldquo;opinionated,&amp;rdquo; but users should know better what that opinion is.&lt;/p>
+&lt;p>However, the CDK pipeline model pleases me in many ways. I especially value
+the approach that has reduced the steps needed to run in the developer&amp;rsquo;s
+local environment compared to how we used the previous versions of AWS IaC tools.
+Furthermore, the strategy enables multiple developers working with the same pipeline
+as the state needs to be available in the cloud. Finally, I am happy with the current state of our
+deployment pipeline, and it works well for our purposes.&lt;/p>
+&lt;p>If interested, you can find all our CDK application codes in &lt;a href="https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs">GitHub&lt;/a>
+and even try to deploy the agency yourself!&lt;/p></description></item><item><title>Blog: Agency's IaC Journey</title><link>/blog/2023/04/25/agencys-iac-journey/</link><pubDate>Tue, 25 Apr 2023 00:00:00 +0000</pubDate><guid>/blog/2023/04/25/agencys-iac-journey/</guid><description>
 &lt;p>In the early days of Findy Agency&amp;rsquo;s development project, it became evident that we needed
 a continuously running environment in the cloud to try out different proofs-of-concept (PoCs)
 and demos quickly and easily. As our team is small, we wanted to rely heavily on automation
