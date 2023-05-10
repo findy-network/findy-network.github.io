@@ -7,7 +7,6 @@ author: Pekka Kaipio
 resources:
   - src: "**.{png,jpg}"
     title: "Image #:counter"
-draft: true
 ---
 
 The emergence of **self-sovereign identity** (SSI) technologies has the potential to revolutionize the digital landscape of the financial world, presenting unparalleled opportunities for innovation and growth. As SSI gains momentum, it can transform how we interact with digital financial services, streamline transactions, and enable seamless interactions between users and services. By embracing these cutting-edge technologies, we have the unique chance to actively shape the future of the global financial ecosystem, fostering a **more secure, inclusive, and efficient digital environment** for individuals and businesses alike.  
