@@ -2,20 +2,72 @@
 date: 2024-03-19
 title: "FSM Implementation - Part II"
 linkTitle: "FSM Implementation"
-description: "I implemented a new FSM language for our SSI chatbots a couble of
-years ago. It started as an experiment, a technology spike, but ended as a new key 
-feature of our SSI agency. One of my design princimples has
-always been that never create a new language. Always use something existing. I
-studied SCXML which still is an obtion for the future. It's standard and there
-are good tools for it. Unfortunately, open-source tools were missing. So, our
-decicion was to build as simple language with tools that exist in Unix and build
-it as fast as possible. The end result is better than we could have guessed --
-and, of course, it prooved our hypothesis."
+description: "Before I implemented a new FSM language for our SSI chatbots, I
+did a study what's available. Few things did pop up, and I explain them more
+detailed in this post. None of those existing solutions wasn't good enough for
+the purposes we needed. I also explain our needs in the post more detailed."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
   title: "Image #:counter"
 ---
+
+FSM chatbots started as an experiment, a technology spike, but ended as a new
+key feature of our SSI agency. As I said my [previous
+post](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/)
+chatbots came quite naturally for our team.
+
+When I started to play with Go's
+channels and the CSP programming model, it did notice that even a multi-tenant
+chatbot "language", i.e. just text file's lines were echoed back to other end,
+was just a few lines of code. The technical idea was ready: we needed a
+transcript language that would guide a chatbot take simple steps according other
+end's inputs (Aries protocol events). And because Aries protocols 'hide' the
+complex stuff like presenting a proof or issuing a credential' (we used as a
+receipt since the first bot).
+
+<picture from our slides?>
+
+# State-Of-The-Art
+
+One of my own design principles has always been that never create a new
+language, but always use existing. I tried to search proper candidates and I did
+find a few. The most promising and interesting was
+[SCXML](https://www.w3.org/TR/scxml/), but I didn't find a suitable embedded
+engine to run these machine. Also the XML based format isn't so human friendly
+as we now all know.
+
+During these searches I found out that there was [Go-native implementation of Lua](link)
+which was open-source. And Lua is now included as and embedded scripting
+language *for the FSM*. I can be used to implement custom triggers (LINK-to-part1)
+as well as custom output events.
+
+I saw during the studies that all-in for the *embedded* Lua would had brought at least following
+challenges:
+1. Whole new API and bridge to Aries protocols. Note that simple C/S API
+   wouldn't be enough but notifications as well.
+2. Lua is turing-complete language
+
+I studied
+ which still is an option for the future.
+It's standard and there are good tools for it. Unfortunately, proper open-source
+tools were missing. So, our decision was to build as simple language with tools
+that exist in Unix and build it as fast as possible. The end result is better
+than we could have guessed -- and, of course, it proved our hypothesis.
+
+# The Requirements
+
+The original idea for pairing SSI with FSM came from the fact that agent-based
+DIDComm is also message driven. And that's very suitable for states and their
+triggers, events.
+
+## Encapsulation
+
+Our FSM follows the exact same principle as SCXML processor does:
+
+> An SCXML processor is a pure event processor. The only way to get data into an
+> SCXML state machine is to send external events to it. The only way to get data
+> out is to receive events from it.
 
 In this blog post, I'll explain the syntax of our chatbot language. Before the
 design, and implementation I made a comprehensive study of what was available
