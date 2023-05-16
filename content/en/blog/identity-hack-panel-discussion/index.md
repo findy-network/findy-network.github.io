@@ -1,21 +1,21 @@
 ---
 date: 2023-05-16
-title: "Digital Identity Hack – Panel Discussion on Blockchain Projects"
-linkTitle: "Digital Identity Hack – Panel Discussion on Blockchain Projects"
+title: "Digital Identity Hack Part 2 – Panel Discussion on Blockchain Projects"
+linkTitle: "Digital Identity Hack Part 2 – Panel Discussion on Blockchain Projects"
 description: "In this blog, we discuss about the Digital Identity Hack event's panel discussion, which focused on exploring development of blockchain projects in various companies."
 author: Pekka Kaipio
 resources:
   - src: "**.{png,jpg}"
     title: "Image #:counter"
 ---
-The emergence of self-sovereign identity (SSI) offers a revolutionary
+The emergence of **self-sovereign identity** (SSI) offers a revolutionary
 opportunity for innovation and growth in the financial world, with the potential
 to transform digital financial services, streamline transactions, and enable
 seamless interactions. To harness this potential, OP Lab and the EU-funded
 Powered by Blockchain project recently held a seminar day and online hackathon
 to investigate the disruptive capabilities of SSI technologies and institutional
-decentralized finance, paving the way for a more secure, inclusive, and
-efficient global financial ecosystem. 
+decentralized finance, paving the way for **a more secure, inclusive, and
+efficient global financial ecosystem.** 
 
 During the seminar event, attendees participated in a panel discussion focused
 on blockchain projects and a presentation exploring self-sovereign identity. The
@@ -24,7 +24,8 @@ from the panel discussion.
 
 ## Panel Discussion on Blockchain Projects 
 
-{{< youtube-wrapper nygxmT3dN-g 939px 649px >}} <br />
+{{< youtube-wrapper nygxmT3dN-g 939px 649px >}}
+<em>Panel discussion on blockchain projects</em>
 
 On the event day, a panel of experts, Pekka Kaipio from [OP
 Lab](https://op-lab.fi/), Jani Partanen from [Joisto Oy](https://joisto.com/),
