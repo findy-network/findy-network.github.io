@@ -1,7 +1,7 @@
 ---
 date: 2023-05-19
-title: "Digital Identity Hack – Introduction to SSI presentation"
-linkTitle: "Digital Identity Hack –Introduction to SSI presentation"
+title: "Digital Identity Hack Part 3 – Introduction to SSI presentation"
+linkTitle: "Digital Identity Hack Part 3 – Introduction to SSI presentation"
 description: "In this blog, we discuss about the Digital Identity Hack event, which focused on unlocking the potential of self-sovereign identity technologies in revolutionizing the financial landscape."
 author: Pekka Kaipio
 resources:
@@ -25,7 +25,7 @@ that emerged from the SSI presentation.
 
 ## Introduction to Self-Sovereign Identity
 
-{{< youtube-wrapper utNq_IsH_Y4 939px 649px >}} <em>Harri Lainio presentation:
+{{< youtube-wrapper utNq_IsH_Y4 939px 649px >}} <em>Harri Lainio's presentation:
 Introduction to Self-Sovereign Identity</em>
 
 In the event day presentation on Self-Sovereign Identity, **Harri Lainio from OP
