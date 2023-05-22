@@ -20,7 +20,7 @@ efficient global financial ecosystem.**
 During the seminar, attendees participated in a panel discussion on blockchain
 projects and a presentation exploring self-sovereign identity. The following
 section will delve into the key insights and highlights from the panel
-discussion
+discussion.
 
 ## Panel Discussion on Blockchain Projects 
 
