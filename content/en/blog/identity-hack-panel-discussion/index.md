@@ -1,5 +1,5 @@
 ---
-date: 2023-05-16
+date: 2023-05-23
 title: "Digital Identity Hack Part 2 – Panel Discussion on Blockchain Projects"
 linkTitle: "Digital Identity Hack Part 2 – Panel Discussion on Blockchain Projects"
 description: "In this blog, we discuss about the Digital Identity Hack event's panel discussion, which focused on exploring development of blockchain projects in various companies."
