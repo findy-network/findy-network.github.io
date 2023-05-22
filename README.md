@@ -85,6 +85,13 @@ Findy Agency technical documentation and blog.
      to see the rendering result use current or previous date**.
    - read error messages carefully, any of the blog posts can cause whole
      subtree unable to be rendered.
+   - If you face following error:
+
+      ```sh
+      Error: from config: failed to resolve output format "print" from site config
+      ```
+
+      Remove Hugo cache (`sudo rm -rf $TMPDIR/hugo_cache`) and try again
 
 ## Releasing
 
