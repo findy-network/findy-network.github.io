@@ -1,4 +1,93 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 11 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Digital Identity Hack – Unlocking the Potential of SSI</title><link>/blog/2023/05/11/digital-identity-hack-unlocking-the-potential-of-ssi/</link><pubDate>Thu, 11 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/11/digital-identity-hack-unlocking-the-potential-of-ssi/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 23 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Digital Identity Hack Part 2 – Panel Discussion on Blockchain Projects</title><link>/blog/2023/05/23/digital-identity-hack-part-2-panel-discussion-on-blockchain-projects/</link><pubDate>Tue, 23 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/23/digital-identity-hack-part-2-panel-discussion-on-blockchain-projects/</guid><description>
+&lt;p>The emergence of &lt;strong>self-sovereign identity&lt;/strong> (SSI) offers a revolutionary
+opportunity for innovation and growth in the financial world, potentially
+transforming digital financial services, streamlining transactions, and enabling
+seamless interaction. To harness this potential, OP Lab and the EU-funded
+Powered by Blockchain project recently held a seminar day and online hackathon
+to investigate the disruptive capabilities of SSI technologies and institutional
+decentralized finance, paving the way for &lt;strong>a more secure, inclusive, and
+efficient global financial ecosystem.&lt;/strong>&lt;/p>
+&lt;p>During the seminar, attendees participated in a panel discussion on blockchain
+projects and a presentation exploring self-sovereign identity. The following
+section will delve into the key insights and highlights from the panel
+discussion.&lt;/p>
+&lt;h2 id="panel-discussion-on-blockchain-projects">Panel Discussion on Blockchain Projects&lt;/h2>
+&lt;p>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/nygxmT3dN-g" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;em>Panel discussion on blockchain projects&lt;/em>&lt;/p>
+&lt;p>On the event day, a panel of experts, Pekka Kaipio from &lt;a href="https://op-lab.fi/">OP
+Lab&lt;/a>, Jani Partanen from &lt;a href="https://joisto.com/">Joisto Oy&lt;/a>,
+Sandun Dasanayake from &lt;a href="https://q4us.dev/">Q4US&lt;/a>, and Rainer Koirikivi from
+&lt;a href="https://interjektio.fi/">Interjektio&lt;/a>, shared their insights into the world of
+blockchain. The panel was moderated by Laura Vuorenoja from OP Lab, and the
+discussion centered on the &lt;strong>challenges of blockchain projects&lt;/strong>, the lessons
+learned, and the potential of blockchain technology for digital identity.&lt;/p>
+&lt;p>Blockchain projects present unique challenges, with the panelists highlighting
+issues such as the &lt;strong>complexity of the technology, regulatory hurdles, and the
+difficulty of building consortia&lt;/strong>. To overcome these challenges, the experts
+emphasized the importance of educating stakeholders about blockchain&amp;rsquo;s potential
+beyond cryptocurrencies and selecting the right use cases for blockchain
+technology.&lt;/p>
+&lt;p>The panelists also touched on their experiences with blockchain projects in
+various industries. Topics covered included the &lt;strong>digitization of real estate
+trading, the facilitation of parcel information sharing across European
+entities, and the secure storage of document integrity and provenance&lt;/strong>. These
+examples demonstrated the versatility and growing importance of blockchain
+solutions in the modern tech and business landscape.&lt;/p>
+&lt;h3 id="exploring-identity-management">Exploring Identity Management&lt;/h3>
+&lt;p>One of the focal points of the discussion was digital identity management on
+blockchain. The panelists explored the &lt;strong>need for decentralized identity
+systems&lt;/strong> to improve the scalability of blockchain networks. However, they noted
+that many current projects still rely on centralized identity systems or
+traditional public key infrastructure.&lt;/p>
+&lt;h3 id="regulatory-challenges-in-the-blockchain-sphere">Regulatory Challenges in the Blockchain Sphere&lt;/h3>
+&lt;p>Panelists agreed that the &lt;strong>General Data Protection Regulation (GDPR)&lt;/strong> has been
+one of the most significant regulatory challenges they have faced. While the
+GDPR aims to protect users&amp;rsquo; privacy, it sometimes limits how blockchain can be
+utilized, even necessitating the removal of certain platform functionalities. In
+the financial sector, &lt;strong>KYC (Know Your Customer)&lt;/strong> and &lt;strong>AML (Anti Money
+Laundering)&lt;/strong> are the most obvious challenges that need to be implemented
+properly.&lt;/p>
+&lt;h3 id="the-importance-of-open-source">The Importance of Open Source&lt;/h3>
+&lt;p>Many blockchain projects are built upon open-source technologies like
+Hyperledger Fabric. Panelists highlighted the importance of open-source
+contributions in &lt;strong>advancing blockchain technology and fostering a spirit of
+collaboration&lt;/strong> within the community. While not all panelists&amp;rsquo; companies have
+made code contributions, they have shared knowledge and participated in meetups
+and user groups.&lt;/p>
+&lt;h3 id="effective-talent-sourcing">Effective Talent Sourcing&lt;/h3>
+&lt;p>Sourcing skilled blockchain talent has proven to be complicated. Panelists
+revealed that &lt;strong>growing their own talent through training and education has been
+the most effective strategy&lt;/strong>. Some have also turned to partnerships with
+startups, consultants, or other companies to fill talent gaps.&lt;/p>
+&lt;h3 id="future-prospects-of-blockchain-technology">Future Prospects of Blockchain Technology&lt;/h3>
+&lt;p>The panelists agreed that &lt;strong>blockchain technology shows promise for the
+future&lt;/strong>, as it matures and becomes more widely adopted. Blockchain&amp;rsquo;s potential
+as an infrastructure solution for industries like finance and the emerging
+metaverse was also noted. However, the panelists acknowledged that regulatory
+challenges and the rise of artificial intelligence (AI) could impact the
+technology&amp;rsquo;s trajectory.&lt;/p>
+&lt;h3 id="one-wish-for-blockchain">One Wish for Blockchain&lt;/h3>
+&lt;p>When asked about their one wish for blockchain, panelists expressed a desire for
+&lt;strong>more streamlined regulations, increased adoption, and a broader talent pool&lt;/strong>.
+They hope these changes will lead to a more decentralized, fair, and
+trusted way for people to exchange value and information.&lt;/p>
+&lt;p>In conclusion, the panelists emphasized that despite its challenges,
+&lt;strong>blockchain has the potential to revolutionize various industries&lt;/strong>, including
+finance, real estate, logistics, and digital identity management. By sharing
+their experiences and lessons learned, the panelists provided valuable insights
+to help others navigate the complex world of blockchain technology.&lt;/p>
+&lt;h2 id="project-and-event-information">Project and Event Information&lt;/h2>
+&lt;p>&lt;strong>OP Lab&lt;/strong> arranged the seminar day in Oulu, Finland, and the two-week online
+hackathon in collaboration with the Powered by Blockchain project during
+February. &lt;strong>Powered by Blockchain&lt;/strong> project is a collaboration project between
+University of Vaasa, University of Oulu, University of Lapland and Kajaani
+University of Applied Sciences. The project is funded by the European Social
+Fund.&lt;/p>
+&lt;p>Find more information about the project
+&lt;a href="https://www.uwasa.fi/en/tutkimus/hankkeet/tehoa-lohkoketjuista-koulutushanke">here&lt;/a>.&lt;/p></description></item><item><title>Blog: Digital Identity Hack – Unlocking the Potential of SSI</title><link>/blog/2023/05/11/digital-identity-hack-unlocking-the-potential-of-ssi/</link><pubDate>Thu, 11 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/11/digital-identity-hack-unlocking-the-potential-of-ssi/</guid><description>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 949px">
 &lt;img class="card-img-top" src="/blog/2023/05/11/digital-identity-hack-unlocking-the-potential-of-ssi/cover-identity-hack_hua878d50f8972cd57ad3a871ec33f0efc_718985_939x649_fit_catmullrom_3.png" width="939" height="389">
 &lt;/figure>
