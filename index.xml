@@ -1,4 +1,80 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 23 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Digital Identity Hack Part 2 – Panel Discussion on Blockchain Projects</title><link>/blog/2023/05/23/digital-identity-hack-part-2-panel-discussion-on-blockchain-projects/</link><pubDate>Tue, 23 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/23/digital-identity-hack-part-2-panel-discussion-on-blockchain-projects/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 25 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Digital Identity Hack Part 3 – Introduction to SSI Presentation</title><link>/blog/2023/05/25/digital-identity-hack-part-3-introduction-to-ssi-presentation/</link><pubDate>Thu, 25 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/25/digital-identity-hack-part-3-introduction-to-ssi-presentation/</guid><description>
+&lt;p>The rise of &lt;strong>self-sovereign identity&lt;/strong> (SSI) presents a groundbreaking
+opportunity for progress and expansion in the financial sector, with the
+capacity to reshape digital financial services, simplify transactions, and
+facilitate seamless interactions. To capitalize on this potential, OP Lab and
+the EU funded Powered by Blockchain project organized a seminar day and online
+hackathon, exploring the innovative power of SSI technologies and institutional
+decentralized finance, setting the stage for &lt;strong>a safer, more inclusive, and more
+efficient worldwide financial ecosystem.&lt;/strong>&lt;/p>
+&lt;p>At the seminar, participants engaged in a panel discussion on blockchain
+projects and &lt;strong>a presentation delving into self-sovereign identity&lt;/strong>. The
+following section will examine the essential insights and highlights that
+emerged from the SSI presentation.&lt;/p>
+&lt;h2 id="introduction-to-self-sovereign-identity">Introduction to Self-Sovereign Identity&lt;/h2>
+&lt;p>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/utNq_IsH_Y4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;em>Harri Lainio&amp;rsquo;s presentation:
+Introduction to Self-Sovereign Identity&lt;/em>&lt;/p>
+&lt;p>In the event day presentation on Self-Sovereign Identity, &lt;strong>Harri Lainio from OP
+Lab&lt;/strong> introduced SSI, its potential impact on the world, and Findy Agency&amp;rsquo;s
+open-source solution for implementing it. The speaker highlighted the power
+dynamics of the current digital identity model, which has centralized power in
+the hands of a few online platforms. In the next evolution of the internet,
+&lt;strong>Web 3 aims to shift power back to individuals&lt;/strong> and things, thus empowering
+users to take control of their digital identities.&lt;/p>
+&lt;p>Learn more about Findy Agency &lt;a href="https://findy-network.github.io/">here&lt;/a>.&lt;/p>
+&lt;h3 id="take-control-of-your-identity">Take Control of Your Identity&lt;/h3>
+&lt;p>&lt;strong>SSI offers the promise of an internet where individuals are sovereign,
+building their own networks, and serving as the roots of these networks.&lt;/strong> By
+examining the incentives for SSI, the speaker noted that humans are cooperative
+but inherently distrustful, making the exchange of value challenging.
+Institutions like banks and governments have historically reduced uncertainty,
+but the speaker questioned whether there are alternative ways to achieve this.
+He acknowledged that blockchain technology had solved some issues, such as
+double spending, but still has a long way to go.&lt;/p>
+&lt;p>The speaker emphasized that SSI is about putting the user at the center of their
+digital identity: &lt;em>&lt;strong>&amp;ldquo;I want to be in the center. And that&amp;rsquo;s something that SSI
+promises to handle.&amp;rdquo;&lt;/strong>&lt;/em> By empowering individuals to take control of their
+digital selves, SSI can reshape the internet and transform how people interact
+and exchange value online.&lt;/p>
+&lt;h3 id="root-of-trust">Root of Trust&lt;/h3>
+&lt;p>As the presentation progressed, the speaker highlighted that new digital
+identities could be represented by leveraging real-world entities while
+maintaining clarity and trustworthiness. He touched on the idea of using &lt;strong>FIDO2
+authenticators as a &amp;ldquo;root of trust&amp;rdquo;&lt;/strong> and the importance of flawless one-on-one
+mapping between the digital and real worlds.&lt;/p>
+&lt;p>Find more information about the FIDO2 &lt;a href="https://fidoalliance.org/">here&lt;/a>.&lt;/p>
+&lt;h3 id="placing-the-user-at-the-heart-of-trust">Placing the User at the Heart of Trust&lt;/h3>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 949px">
+&lt;img class="card-img-top" src="/blog/2023/05/25/digital-identity-hack-part-3-introduction-to-ssi-presentation/trust-triangle_hua85a9975a917418fb63cec0ce4cbf277_385020_939x649_fit_catmullrom_3.png" width="939" height="512">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text"> &lt;em>The trust triangle&lt;/em> &lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The speaker introduced the concept of verifiable credentials and decentralized
+identifiers based on secure communication protocols, as well as the trust triangle,
+which consists of an issuer, holder, and verifier. He explained that the
+verifier&amp;rsquo;s trust in the issuer is crucial and that the current technology
+should be able to handle it. The presenter mentioned the Findy Agency they have
+been working on and encouraged the audience to explore and improve upon their
+open-source solutions.&lt;/p>
+&lt;p>In a memorable quote from the presentation, Harri said, &lt;em>&lt;strong>&amp;ldquo;And with the help of
+cryptography, we can build a better or at least more interesting world, digital
+world.&amp;rdquo;&lt;/strong>&lt;/em> By pushing the boundaries of SSI and digital identity, the speaker
+envisions a future where individuals have greater control over their digital
+selves and the information they share.&lt;/p>
+&lt;h2 id="project-and-event-information">Project and Event Information&lt;/h2>
+&lt;p>&lt;strong>OP Lab&lt;/strong> arranged the seminar day in Oulu, Finland, and the two-week online
+hackathon in collaboration with the Powered by Blockchain project during
+February. &lt;strong>Powered by Blockchain&lt;/strong> project is a collaboration project between
+University of Vaasa, University of Oulu, University of Lapland and Kajaani
+University of Applied Sciences. The project is funded by the European Social
+Fund.&lt;/p>
+&lt;p>Find more information about the project
+&lt;a href="https://www.uwasa.fi/en/tutkimus/hankkeet/tehoa-lohkoketjuista-koulutushanke">here&lt;/a>.&lt;/p></description></item><item><title>Blog: Digital Identity Hack Part 2 – Panel Discussion on Blockchain Projects</title><link>/blog/2023/05/23/digital-identity-hack-part-2-panel-discussion-on-blockchain-projects/</link><pubDate>Tue, 23 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/23/digital-identity-hack-part-2-panel-discussion-on-blockchain-projects/</guid><description>
 &lt;p>The emergence of &lt;strong>self-sovereign identity&lt;/strong> (SSI) offers a revolutionary
 opportunity for innovation and growth in the financial world, potentially
 transforming digital financial services, streamlining transactions, and enabling
