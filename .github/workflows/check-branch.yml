@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Check branch
         run: |
-          if [ ${{ github.base_ref }} == "dev" ]; then
+          if [ ${{ github.base_ref }} != "dev" ]; then
             echo "Pull requests are only allowed to dev branch."
             exit 1
           fi
