@@ -1,5 +1,5 @@
 ---
-date: 2023-06-09
+date: 2023-06-13
 title: "The Agency Workshop"
 linkTitle: "The Agency Workshop"
 description: "The Findy Agency workshop contains guided tracks for developers on how to build clients for Findy Agency. Students learn how to use the agency CLI tool to operate their identity agent in the cloud, run simple CLI chatbots, and build web applications with the programming language of their choice (Go, Typescript, or Kotlin)."
@@ -68,7 +68,7 @@ and they had a chance to advance with the tasks at their own pace. The developer
 shared agency installation in the cloud, so, in principle, setting up the development environment
 was relatively effortless.
 
-However, during the first session, we encountered challenges with the shared cloud agency
+Unfortunately, during the first session, we encountered challenges with the shared cloud agency
 and observed a few inconsistencies in the instructions for configuring the development environment.
 We addressed these findings before the second session was held, which proved highly successful.
 In fact, the second workshop was so seamless that the instructors found it almost uneventful,
@@ -91,7 +91,7 @@ The tasks require no special skills and have detailed instructions on how to pro
 to the next step. Even non-technical people have been able to do the workshop successfully.
 
 We are happy to take any feedback on how to make the material even better!
-You can also reach us via SoMe channels:
+You can reach us via SoMe channels:
 
 <div style="display: flex">
 <span>

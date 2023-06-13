@@ -9,12 +9,12 @@ resources:
     title: "Image #:counter"
 ---
 
-During corridor discussions with various teams and organizations in recent months, I have been
+During hallway discussions with various teams and organizations in recent months, I have been
 surprised by the emphasis on the underlying technology in SSI implementations. Even non-technical
 folks are wondering, e.g., which credential format will overcome them all. Don't get me wrong;
 it's not that I don't see the importance of choosing the most interoperable, best performant,
-and privacy-preserving cryptography. It's the fact we are hiding a more critical problem when
-concentrating only on technical details.
+and privacy-preserving cryptography. I am afraid more critical problems keep hiding when
+we concentrate only on technical issues.
 
 ## Focus on the Use Cases
 
@@ -31,8 +31,8 @@ to bring the technology further. And if use case implementors are waiting for th
 to become ready, we have a severe chicken-egg problem.
 
 Instead of overthinking the low-level crypto operations, etc., the teams should concentrate
-on the high-level building blocks of SSI. The starting point should be clarifying
-the issuer's, holder's, and verifier's roles. What exactly happens when data is
+on the high-level building blocks of SSI. The starting point should clarify
+the roles of the issuer, holder, and verifier. What exactly happens when data is
 issued and verified? And how can the team apply the verifiable data in the use case
 in question: who are the issuer, holder, and verifier? Furthermore, what data does
 the issuer sign, and which part is available to the verifier?
@@ -40,14 +40,14 @@ the issuer sign, and which part is available to the verifier?
 ## It Is All About Communication
 
 After figuring out answers to these questions, the selection of the technical stack
-becomes more relevant. However, even then, I would put less weight on the credential
+becomes more relevant. However, even then, I wouldn't emphasize the credential
 format selection. What is even more important is the used credential exchange protocol.
 
 For instance, if your primary use case is user identification and authentication,
 and you wish to create an architecture that suits well and fast in the legacy world,
 the most straightforward choice is a protocol offering strict client-server roles
 and HTTP-request-response style API. In this style, the issuer, holder, and
-verifier roles are hard-coded, and one party cannot simultaneously play multiple parts.
+verifier roles are hard-coded, and one party cannot simultaneously play multiple roles.
 
 {{< imgproc cover Fit "925x925" >}}
 <em>DIDComm and Hyperledger Aries are examples of a symmetric protocols. Findy Agency
@@ -60,17 +60,23 @@ So, for example, in the user authentication scenario, in addition to the service
 authenticating the user (client) based on verified data, the individual could
 also get a verification from the service-operating organization of its authenticity.
 
+*For more information, I recommend to familiarize with Daniel Hardman's publications,
+for example [the summary](https://daniel-hardman.medium.com/sentries-confessionals-vaults-and-envelopes-4a58cf4f8a5a)
+about the overlaps of different SSI technologies.*
+
 ## Integrate Carefully
 
 Whichever stack you choose, there are two things to keep in mind
 
 1. Implement the integration to the library or service providing SSI functionality following
 well-known modular principles so that it is easy to replace with a different library or service.
-1. Do not let the underlying technology details pollute your application code.
+1. Do not let the underlying technology details contaminate your application code.
 Thus, ensure the SSI tooling you use hides the implementation details related
 to credentials formats and protocol messages from your application.
 This approach ensures that changes, for example, to the credential data format,
 have a manageable effect on your application.
+
+The importance of layered architecture has been discussed also before [in our blog](https://findy-network.github.io/blog/2022/03/05/the-missing-network-layer-model/).
 
 <br><img src="https://github.com/findy-network/agency-demo/raw/master/client/public/seo-logo.jpg?raw=truef" width="800px" /><br>
 
@@ -85,7 +91,7 @@ The best option is to pick open-source tooling so that if some functionality is 
 you can roll up your sleeves and implement it yourself. If this is not an option,
 select a product that ensures compatibility with multiple flavors of SSI credentials
 and data exchange protocols so that interoperability with other parties is possible.
-After all, if there is no interoperability, there is no decentralization.
+After all, interoperability is one of the decentralization enablers.
 
 ## The Time Is Now
 
@@ -96,5 +102,6 @@ should prepare for this paradigm shift. Is your organization ready when this tra
 
 In conclusion, now is the time to plan, experiment and build SSI capabilities. Begin
 by understanding the high-level building blocks and experimenting with the technology
-that best aligns with your use case. The technology will mature in time, and
-the application layer will be unaffected if implemented correctly.
+that best aligns with your use case. Opt for tools that support a layered architecture design,
+like Findy Agency. This approach prevents the need for significant alterations
+to the application layer as the technology evolves.
