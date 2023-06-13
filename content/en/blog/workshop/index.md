@@ -74,7 +74,7 @@ We addressed these findings before the second session was held, which proved hig
 In fact, the second workshop was so seamless that the instructors found it almost uneventful,
 as nearly no participants needed assistance.
 
-{{< imgproc workshop Fit "825x825" >}}
+{{< imgproc cover Fit "825x825" >}}
 <em>The happy bunch at Helsinki event.</em>
 {{< /imgproc >}}
 
