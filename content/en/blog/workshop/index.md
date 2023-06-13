@@ -2,14 +2,15 @@
 date: 2023-06-09
 title: "The Agency Workshop"
 linkTitle: "The Agency Workshop"
-description: "The Findy Agency workshop contains guided tracks for developers on how to build clients for Findy Agency. The students learn how to use the agency CLI tool to operate their identity agent in the cloud, run simple CLI chatbots, and build full-blown web applications with the programming language of their choice (Go, Typescript, or Kotlin)."
+description: "The Findy Agency workshop contains guided tracks for developers on how to build clients for Findy Agency. Students learn how to use the agency CLI tool to operate their identity agent in the cloud, run simple CLI chatbots, and build web applications with the programming language of their choice (Go, Typescript, or Kotlin)."
 author: Laura Vuorenoja
 resources:
   - src: "**.{png,jpg}"
     title: "Image #:counter"
 ---
-During the Findy Agency project, when regarding documentation, our development team put first greater
-weight on running and deploying the agency. Due to this prioritization, instructions on building agency
+During the Findy Agency project, our development team initially placed greater emphasis on running
+and deploying the agency in terms of documentation.
+Due to this prioritization, instructions on building agency
 clients have gotten less attention. We have now fixed this shortcoming by publishing [the agency workshop](https://github.com/findy-network/agency-workshop)
 to educate developers on using, building, and testing agency clients.
 
@@ -27,7 +28,7 @@ and [web wallet](https://github.com/findy-network/findy-wallet-pwa)) and start
 the development using the API. The workshop participant can choose from two tracks, the CLI track,
 which demonstrates the agent operations with the CLI tool, and the code track, which
 concentrates on the API calls and testing them with the web wallet. Both workshop branches
-teach how SSI's basic building blocks work hands-on. Consequently, the participant learns
+teach hands-on how SSI's basic building blocks work. Consequently, the participant learns
 how to issue, receive and verify credentials utilizing the Findy Agency platform.
 
 <img src="https://github.com/findy-network/agency-workshop/raw/master/track2.1-ts/docs/app-overview.png" /><br>
@@ -37,7 +38,7 @@ how to issue, receive and verify credentials utilizing the Findy Agency platform
 {{< figure src="/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/cover-issue.png" >}}
 *Testing for the code track can be done using the web wallet application.*
 
-The workshop material is suitable for self-studying. In this case, if the developer
+**The workshop material is suitable for self-studying.** In this case, if the developer
 does not have an instance of the agency running in the cloud, using a localhost deployment
 with Docker containers is straightforward. The material is available in [a public
 GitHub repository](https://github.com/findy-network/agency-workshop),
@@ -49,7 +50,10 @@ from native localhost setting to VS Code dev container or [GitHub Codespaces](ht
 
 The Findy Agency team has organized the workshop also in a live setting.
 We invited developers from our company interested in future technologies
-to technical sessions for learning together. The events started with Harri explaining
+to technical sessions for learning together. These sessions took place in both Helsinki and Oulu
+during Spring 2023.
+
+The events started with Harri explaining
 [the basic SSI principles](/docs/slides/introduction-to-ssi/)
 and then Laura presenting [demos of agency client applications](https://www.youtube.com/@optechlab9732/videos)
 that the team has built in the past. The introductory presentations generated
@@ -64,10 +68,10 @@ and they had a chance to advance with the tasks at their own pace. The developer
 shared agency installation in the cloud, so, in principle, setting up the development environment
 was relatively effortless.
 
-However, during the initial session, we encountered challenges with the shared cloud agency
+However, during the first session, we encountered challenges with the shared cloud agency
 and observed a few inconsistencies in the instructions for configuring the development environment.
-We addressed these findings before the second session, which proved highly successful.
-The second session was so seamless that the instructors found it almost uneventful,
+We addressed these findings before the second session was held, which proved highly successful.
+In fact, the second workshop was so seamless that the instructors found it almost uneventful,
 as nearly no participants needed assistance.
 
 {{< imgproc workshop Fit "825x825" >}}
@@ -80,7 +84,7 @@ any application. The participants also thought these workshops were an inspiring
 to learn new things. Future ideas were to organize a hackathon-style event where
 the teams could concentrate more on the actual use cases now that they understand the basic tooling.
 
-## Are you ready to take the challenge?
+## Are You Ready to Take the Challenge?
 
 We recommend the workshop for all developers who are interested in decentralized identity.
 The tasks require no special skills and have detailed instructions on how to proceed
