@@ -1,4 +1,182 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 25 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Digital Identity Hack Part 3 – Introduction to SSI Presentation</title><link>/blog/2023/05/25/digital-identity-hack-part-3-introduction-to-ssi-presentation/</link><pubDate>Thu, 25 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/25/digital-identity-hack-part-3-introduction-to-ssi-presentation/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 13 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: The Agency Workshop</title><link>/blog/2023/06/13/the-agency-workshop/</link><pubDate>Tue, 13 Jun 2023 00:00:00 +0000</pubDate><guid>/blog/2023/06/13/the-agency-workshop/</guid><description>
+&lt;p>During the Findy Agency project, our development team initially placed greater emphasis on running
+and deploying the agency in terms of documentation.
+Due to this prioritization, instructions on building agency
+clients have gotten less attention. We have now fixed this shortcoming by publishing &lt;a href="https://github.com/findy-network/agency-workshop">the agency workshop&lt;/a>
+to educate developers on using, building, and testing agency clients.&lt;/p>
+&lt;h2 id="agency-clients">Agency Clients&lt;/h2>
+&lt;p>What exactly is an agency client? A client is a piece of software operated by an entity with
+an identity (individual, organization, or thing). In the agency context, we have three types of clients:&lt;/p>
+&lt;ol>
+&lt;li>CLI: a tool for managing the identity agent in the cloud using the command line interface.&lt;/li>
+&lt;li>Web Wallet: a web-based user interface for holding and proving credentials through a web browser.&lt;/li>
+&lt;li>API client: any application that manages the identity agent with Findy Agency API.&lt;/li>
+&lt;/ol>
+&lt;p>The workshop shows how to use the ready-built clients (&lt;a href="https://github.com/findy-network/findy-agent-cli">CLI tool&lt;/a>
+and &lt;a href="https://github.com/findy-network/findy-wallet-pwa">web wallet&lt;/a>) and start
+the development using the API. The workshop participant can choose from two tracks, the CLI track,
+which demonstrates the agent operations with the CLI tool, and the code track, which
+concentrates on the API calls and testing them with the web wallet. Both workshop branches
+teach hands-on how SSI&amp;rsquo;s basic building blocks work. Consequently, the participant learns
+how to issue, receive and verify credentials utilizing the Findy Agency platform.&lt;/p>
+&lt;p>&lt;img src="https://github.com/findy-network/agency-workshop/raw/master/track2.1-ts/docs/app-overview.png" />&lt;br>&lt;/p>
+&lt;p>&lt;em>The code track instructs on building a simple web application that issues and verifies credentials.&lt;/em>&lt;/p>
+&lt;p>
+&lt;figure>
+&lt;img src="/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/cover-issue.png"/>
+&lt;/figure>
+&lt;em>Testing for the code track can be done using the web wallet application.&lt;/em>&lt;/p>
+&lt;p>&lt;strong>The workshop material is suitable for self-studying.&lt;/strong> In this case, if the developer
+does not have an instance of the agency running in the cloud, using a localhost deployment
+with Docker containers is straightforward. The material is available in &lt;a href="https://github.com/findy-network/agency-workshop">a public
+GitHub repository&lt;/a>,
+containing step-by-step instructions that are easy to follow.
+Developers can choose the development environment according to their preferences,
+from native localhost setting to VS Code dev container or &lt;a href="https://github.com/findy-network/agency-workshop-codespace">GitHub Codespaces&lt;/a>.&lt;/p>
+&lt;h2 id="live-workshops">Live Workshops&lt;/h2>
+&lt;p>The Findy Agency team has organized the workshop also in a live setting.
+We invited developers from our company interested in future technologies
+to technical sessions for learning together. These sessions took place in both Helsinki and Oulu
+during Spring 2023.&lt;/p>
+&lt;p>The events started with Harri explaining
+&lt;a href="/docs/slides/introduction-to-ssi/">the basic SSI principles&lt;/a>
+and then Laura presenting &lt;a href="https://www.youtube.com/@optechlab9732/videos">demos of agency client applications&lt;/a>
+that the team has built in the past. The introductory presentations generated
+many exciting questions and discussions that helped the participants better understand the concept.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="/blog/2023/06/13/the-agency-workshop/harri_hu20b97f8b579ec42214538420dae58f7c_1929473_825x825_fit_q75_catmullrom.jpeg" width="825" height="619">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Harri introducing SSI principles.&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>After the introduction part, the participants could pick the track they were going to work on,
+and they had a chance to advance with the tasks at their own pace. The developers could use a
+shared agency installation in the cloud, so, in principle, setting up the development environment
+was relatively effortless.&lt;/p>
+&lt;p>Unfortunately, during the first session, we encountered challenges with the shared cloud agency
+and observed a few inconsistencies in the instructions for configuring the development environment.
+We addressed these findings before the second session was held, which proved highly successful.
+In fact, the second workshop was so seamless that the instructors found it almost uneventful,
+as nearly no participants needed assistance.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="/blog/2023/06/13/the-agency-workshop/cover-workshop_hufffe575bc6bc80784834aaeb7d2cddf8_209278_825x825_fit_q75_catmullrom.jpeg" width="825" height="619">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>The happy bunch at Helsinki event.&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>Both events received good feedback, as working hands-on helped the participants understand
+more deeply the idea behind the technology and how one can integrate the tooling into
+any application. The participants also thought these workshops were an inspiring way
+to learn new things. Future ideas were to organize a hackathon-style event where
+the teams could concentrate more on the actual use cases now that they understand the basic tooling.&lt;/p>
+&lt;h2 id="are-you-ready-to-take-the-challenge">Are You Ready to Take the Challenge?&lt;/h2>
+&lt;p>We recommend the workshop for all developers who are interested in decentralized identity.
+The tasks require no special skills and have detailed instructions on how to proceed
+to the next step. Even non-technical people have been able to do the workshop successfully.&lt;/p>
+&lt;p>We are happy to take any feedback on how to make the material even better!
+You can reach us via SoMe channels:&lt;/p>
+&lt;div style="display: flex">
+&lt;span>
+&lt;img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width="100"/>
+&lt;div>Laura&lt;/div>
+&lt;div>&lt;a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://fosstodon.org/@lauravuo" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-mastodon ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;span style="padding-left: 2em">
+&lt;img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
+&lt;div>Harri&lt;/div>
+&lt;div>&lt;a href="https://github.com/lainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/harrilainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/harrilainio" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;/div>&lt;br>&lt;br></description></item><item><title>Blog: The Time to Build SSI Capabilities Is Now</title><link>/blog/2023/06/09/the-time-to-build-ssi-capabilities-is-now/</link><pubDate>Fri, 09 Jun 2023 00:00:00 +0000</pubDate><guid>/blog/2023/06/09/the-time-to-build-ssi-capabilities-is-now/</guid><description>
+&lt;p>During hallway discussions with various teams and organizations in recent months, I have been
+surprised by the emphasis on the underlying technology in SSI implementations. Even non-technical
+folks are wondering, e.g., which credential format will overcome them all. Don&amp;rsquo;t get me wrong;
+it&amp;rsquo;s not that I don&amp;rsquo;t see the importance of choosing the most interoperable, best performant,
+and privacy-preserving cryptography. I am afraid more critical problems keep hiding when
+we concentrate only on technical issues.&lt;/p>
+&lt;h2 id="focus-on-the-use-cases">Focus on the Use Cases&lt;/h2>
+&lt;p>Teams implementing flows utilizing SSI capabilities should focus primarily on the use case and,
+more importantly, the user experience. If the flow requires an individual to use a wallet application
+and several different web services, many users have a steep learning curve ahead of them.
+It can even be too steep. Furthermore, we should also think outside of &amp;ldquo;the individual-user-box.&amp;rdquo;
+How can we utilize this technology in a broader range of use cases, for instance,
+inter-organizational transactions?&lt;/p>
+&lt;p>Therefore, we need more real-world use cases implemented with SSI technology to develop it correctly.
+After all, the use cases should ultimately be the source of the requirements, the drivers of how
+to bring the technology further. And if use case implementors are waiting for the technology
+to become ready, we have a severe chicken-egg problem.&lt;/p>
+&lt;p>Instead of overthinking the low-level crypto operations, etc., the teams should concentrate
+on the high-level building blocks of SSI. The starting point should clarify
+the roles of the issuer, holder, and verifier. What exactly happens when data is
+issued and verified? And how can the team apply the verifiable data in the use case
+in question: who are the issuer, holder, and verifier? Furthermore, what data does
+the issuer sign, and which part is available to the verifier?&lt;/p>
+&lt;h2 id="it-is-all-about-communication">It Is All About Communication&lt;/h2>
+&lt;p>After figuring out answers to these questions, the selection of the technical stack
+becomes more relevant. However, even then, I wouldn&amp;rsquo;t emphasize the credential
+format selection. What is even more important is the used credential exchange protocol.&lt;/p>
+&lt;p>For instance, if your primary use case is user identification and authentication,
+and you wish to create an architecture that suits well and fast in the legacy world,
+the most straightforward choice is a protocol offering strict client-server roles
+and HTTP-request-response style API. In this style, the issuer, holder, and
+verifier roles are hard-coded, and one party cannot simultaneously play multiple roles.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="/blog/2023/06/09/the-time-to-build-ssi-capabilities-is-now/cover-trust-triangle-protocols_hud4c9f163dd94c7a00cb0385dd911a622_424603_925x925_fit_catmullrom_3.png" width="925" height="485">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>DIDComm and Hyperledger Aries are examples of a symmetric protocols. Findy Agency
+supports currently both.&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>However, choosing a symmetric protocol may widen the spectrum of your use cases.
+Participants can execute different functions during the interaction in a symmetric protocol.
+So, for example, in the user authentication scenario, in addition to the service (server)
+authenticating the user (client) based on verified data, the individual could
+also get a verification from the service-operating organization of its authenticity.&lt;/p>
+&lt;p>&lt;em>For more information, I recommend to familiarize with Daniel Hardman&amp;rsquo;s publications,
+for example &lt;a href="https://daniel-hardman.medium.com/sentries-confessionals-vaults-and-envelopes-4a58cf4f8a5a">the summary&lt;/a>
+about the overlaps of different SSI technologies.&lt;/em>&lt;/p>
+&lt;h2 id="integrate-carefully">Integrate Carefully&lt;/h2>
+&lt;p>Whichever stack you choose, there are two things to keep in mind&lt;/p>
+&lt;ol>
+&lt;li>Implement the integration to the library or service providing SSI functionality following
+well-known modular principles so that it is easy to replace with a different library or service.&lt;/li>
+&lt;li>Do not let the underlying technology details contaminate your application code.
+Thus, ensure the SSI tooling you use hides the implementation details related
+to credentials formats and protocol messages from your application.
+This approach ensures that changes, for example, to the credential data format,
+have a manageable effect on your application.&lt;/li>
+&lt;/ol>
+&lt;p>The importance of layered architecture has been discussed also before &lt;a href="https://findy-network.github.io/blog/2022/03/05/the-missing-network-layer-model/">in our blog&lt;/a>.&lt;/p>
+&lt;p>&lt;br>&lt;img src="https://github.com/findy-network/agency-demo/raw/master/client/public/seo-logo.jpg?raw=truef" width="800px" />&lt;br>&lt;/p>
+&lt;p>&lt;em>Decentralized Identity Demo is a cool SSI simulation. Its original developer is &lt;a href="https://animo.id/">Animo&lt;/a>,
+and the SSI functionality was done using &lt;a href="https://github.com/hyperledger/aries-framework-javascript">aries-framework-javascript&lt;/a>.
+As an experiment for SSI technology portability, I took
+the open-sourced codes and converted the application to use &lt;a href="https://findy-network.github.io/">Findy Agency&lt;/a>
+instead of AFJ. You can find both &lt;a href="https://github.com/animo/animo-demo">the original codes&lt;/a>
+and &lt;a href="https://github.com/findy-network/agency-demo">my version&lt;/a> in GitHub.&lt;/em>&lt;/p>
+&lt;p>The best option is to pick open-source tooling so that if some functionality is missing,
+you can roll up your sleeves and implement it yourself. If this is not an option,
+select a product that ensures compatibility with multiple flavors of SSI credentials
+and data exchange protocols so that interoperability with other parties is possible.
+After all, interoperability is one of the decentralization enablers.&lt;/p>
+&lt;h2 id="the-time-is-now">The Time Is Now&lt;/h2>
+&lt;p>The recent advancements in LLM technology and ChatGPT offer a glimpse of what&amp;rsquo;s possible
+when large audiences can suddenly access new technology that provides them added value.
+SSI can potentially revolutionize digital services similarly, and organizations
+should prepare for this paradigm shift. Is your organization ready when this transformation takes place?&lt;/p>
+&lt;p>In conclusion, now is the time to plan, experiment and build SSI capabilities. Begin
+by understanding the high-level building blocks and experimenting with the technology
+that best aligns with your use case. Opt for tools that support a layered architecture design,
+like Findy Agency. This approach prevents the need for significant alterations
+to the application layer as the technology evolves.&lt;/p></description></item><item><title>Blog: Digital Identity Hack Part 3 – Introduction to SSI Presentation</title><link>/blog/2023/05/25/digital-identity-hack-part-3-introduction-to-ssi-presentation/</link><pubDate>Thu, 25 May 2023 00:00:00 +0000</pubDate><guid>/blog/2023/05/25/digital-identity-hack-part-3-introduction-to-ssi-presentation/</guid><description>
 &lt;p>The rise of &lt;strong>self-sovereign identity&lt;/strong> (SSI) presents a groundbreaking
 opportunity for progress and expansion in the financial sector, with the
 capacity to reshape digital financial services, simplify transactions, and
