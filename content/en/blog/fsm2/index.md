@@ -30,7 +30,7 @@ over DID-shit.
  importantly, thru the use cases. My upcoming blog post will be all about
  that.*)
 
-{{< imgproc cover-layers.png Resize "2553x" >}}
+{{< imgproc layers.png Resize "2553x" >}}
 <em>Network Layers For SSI Are Clarifying Them Selves</em>
 {{< /imgproc >}}
 
@@ -156,7 +156,7 @@ are conversation instances that hold the state of each pairwise connection
 status. The larger one is *the service state machine*, which isn’t needed on all
 chatbot applications.
 
-{{< imgproc logical.png Resize "1630x" >}}
+{{< imgproc cover-logical.png Resize "1630x" >}}
 <em>Two Tier Multi-tenancy</em>
 {{< /imgproc >}}
 
