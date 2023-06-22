@@ -30,7 +30,7 @@ over DID-shit.
  importantly, thru the use cases. My upcoming blog post will be all about
  that.*)
 
-{{< imgproc layers.png Resize "2553x" >}}
+{{< imgproc cover-layers.png Resize "2553x" >}}
 <em>Network Layers For SSI Are Clarifying Them Selves</em>
 {{< /imgproc >}}
 
