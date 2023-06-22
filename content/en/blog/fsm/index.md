@@ -109,7 +109,7 @@ findy-agent-cli bot uml <Hello-World.yaml> # name of your FSM
 ```
 The result looks like this:
 
-{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/hello1.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/hello1.svg" >}}
 *Hello World Chat Bot FSM*
 
 The UML rendering may help with understanding. It's also an excellent tool for
@@ -163,7 +163,7 @@ the following diagram. As you can see, the **Machine** receives and sends
 **Events**. And **States** controls which inputs, i.e., **triggers** are *valid,
 when and how.*
 
-{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/Main.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/Main.svg" >}}
 *Conceptual Meta-Model*
 
 Next, we will see how the *Event* is used to run the state machine. After the
@@ -273,7 +273,7 @@ The following chatbot is an illustration of our chatbot from our
 It's proven extremely handy to kick these chatbots up during the demo
 or development without forgetting the production in the future.
 
-{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue-one.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/issue-one.svg" >}}
 *Run once - Issuing Chat Bot*
 
 ### Omni-Channel Chatbot
@@ -286,7 +286,7 @@ sends an Aries `basic_message` and an `email` in the same transition. The email
 message built by the machine includes a random PIN code. As you can see, the
 state machine can adequately verify the PIN code.
 
-{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/issue.svg" >}}
 *Automatic Email Credential Chat Bot*
 
 It's been rewarding to notice how well chatting and using verifiable credentials
