@@ -1,6 +1,7 @@
 ---
 date: 2023-03-13
-title: "No-Code SSI Chatbots - Part I"
+lastmod: 2023-05-13
+title: "No-Code SSI Chatbots - FSM Part I"
 linkTitle: "No-Code SSI Chatbots"
 description: "I implemented a new
 [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI
@@ -153,7 +154,7 @@ integration is the first thing to solve. Also current memory model isn't
 production ready for large-scale service agents because there isn't any
 discarding mechanism. However, this will be fixed in the next minor release,
 where a transition to the `initial` state frees the state machine instance's
-memory register.
+memory register. *Edit:* memory cleanup is implemented, and Lua is onboard.
 
 ### Meta-Model
 
@@ -238,7 +239,7 @@ only keywords are reserved and properties listed.
 | `hook`| Both | Internal | Currently reserved only for internal use |
 
 On the design table, we have ideas like REST endpoints, embedded scripting
-language (Lua), file system access, etc.
+language (Lua, now implemented), file system access, etc.
 
 ### Data
 
@@ -301,10 +302,13 @@ Something we have thought about during the development:
 - transition triggers are currently SSI-only which can be changed in the
   future
     - transient states
+    - *Edit*: Now embedded Lua that solves limitless trigger types and make need
+    for transient states obsolete
 - straightforward memory model
     - no persistence model
 - verification/simulation tools: a model checker
-- simple scripting language inside the state machine
+- simple scripting language inside the state machine, *Edit:* Lua is now
+implemented
 - deployment model: cloud, end-user support
 - end-user level tools
 
