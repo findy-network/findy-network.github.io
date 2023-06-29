@@ -1,207 +1,414 @@
 ---
-date: 2024-03-19
-title: "FSM Implementation - Part II"
-linkTitle: "FSM Implementation"
-description: "I implemented a new FSM language for our SSI chatbots a couble of
-years ago. It started as an experiment, a technology spike, but ended as a new key 
-feature of our SSI agency. One of my design princimples has
-always been that never create a new language. Always use something existing. I
-studied SCXML which still is an obtion for the future. It's standard and there
-are good tools for it. Unfortunately, open-source tools were missing. So, our
-decicion was to build as simple language with tools that exist in Unix and build
-it as fast as possible. The end result is better than we could have guessed --
-and, of course, it prooved our hypothesis."
+date: 2023-06-22
+title: "Beautiful State-Machines - FSM Part II"
+linkTitle: "Beautiful State-Machines"
+description: "In today’s software development landscape, efficient and robust
+state management systems are more critical than ever. Finite state machines
+(FSMs), together with Go’s Communicating Sequential Processes (CSP) concurrency
+mechanism, we can provide a robust and elegant approach to modeling and
+controlling complex systems with discrete states and transitions."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
   title: "Image #:counter"
 ---
 
-In this blog post, I'll explain the syntax of our chatbot language. Before the
-design, and implementation I made a comprehensive study of what was available
-(state of the art) and thought what our actual needs would be. For a short
-period of time I even considered to use some touring complete language, but
-understood that it wouldn't have been a good idea when proofing the correctness
-of such a chatbot.
+As I explained in [my previous blog
+post](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/),
+the idea of chatbots came quite naturally for our SSI development team. Think
+tanks or research labs are outstanding workplaces when you have something to chew.
+And how juicy topic the SSI has been, oh boy.
 
-There'll be a second post where we'll make a deep dive what happens under the
-hood. Good news is that the language itself is simple and we already offer some
-development tools like UML rendering.
+FSM chatbots started as a thought experiment, but now, when I think of the
+invention, it has been quite clever in foreseeing genuine user needs. It has
+lead us towards the following layer model.
 
-Our team got an idea of chatbots quite early after we started to play with
-verifiable credentials and SSI. I still think that chatbots and zero UI is some
-sort of lost opportunity for SSI/DID.
+{{< imgproc layers.png Resize "2553x" >}}
+<em>Network Layers For SSI Are Clarifying Themselves</em>
+{{< /imgproc >}}
 
-Even the client/server API model is very convenient to use and understand,
-self-sovereignty needs something different -- more conversational. What would be
-more conversational than chatting? (Show me yours and I show mine)
+The preceding drawing presents our ongoing layer architecture. It's (still)
+based on DIDComm, but because our protocol engine implements a
+technology-agnostic API, we can change the implementation to something better
+without disturbing the above layers. The subject of this blog post is **our FSM
+engine's** (*3rd layer from bottom*) CSP implementation that offers even more
+abstraction and helps the application development with [no-code chatbot
+language](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/#the-fsm-language).
 
-Anyhow, we have been positively surprised how far you can get without NLP but
-just a strict state machine guided conversation where each party is able to
-proof needed facts about them selves when needed.
+## Abstraction Layers
 
-## FSM Syntax
+Implementing the FSM chatbots with our protocol-agnostic API has been
+eye-opening. With our API, we have solved most of the complexity problems and
+brought in an elegant communication layer that hides most of the horror of DID
+system, which, by to way, is not application development ready.
 
-The chatbot state machines are written in YAML (or JSON). Currently, a YAML
-file includes only one state machine.
+The objective of this blog post is to present a comprehensive exploration of my
+Go-based finite state-machine implementation that leverages Go's CSP concurrency
+mechanism. This post will showcase the practical applications and benefits of
+using Go and CSP in building reliable and concurrent state management systems.
 
-As all programming books and manuals start with the hello world app, we do the
-same.
+## Concurrency \\(\ne\\) Parallelism
 
-```YAML
-initial:                                             # (1)
-  target: INITIAL
-states:                                              # (2)
-  INITIAL:                                           # (3)
-    transitions:                                     # (4)
-    - trigger:                                       # (5)
-        protocol: basic_message                      # (6)
-      sends:                                         # (7)
-      - data: Hello! I'm Hello-World bot.
-        protocol: basic_message                      # (8)
-      target: INITIAL                                # (9)
+I have been using multithreading programming all my career and closely
+monitoring paradigms of multithreading programming since the 90s. When I started
+playing with Go’s channels and [CSP programming
+model](https://en.wikipedia.org/wiki/Communicating_sequential_processes), I
+learned how easy it was compared to other asynchronous or multithreading
+programming models.
+
+{{< imgproc interrupt.jpg Resize "463x" >}}
+<em>Interrupt Based Scheduling -- Mark Siegesmund, in Embedded C Programming, 2014</em>
+{{< /imgproc >}}
+
+If I look at the phases I have gone thru, they follow these steps harshly:
+1. Using interrupts to achieve concurrency. (*MS-DOS drivers and
+   [TSRs](https://en.wikipedia.org/wiki/Terminate-and-stay-resident_program),
+   modem-based distributed systems, games, etc.*)
+1. Using the event-driven system to achieve concurrency. (*Game development, GUI
+   OS Win&Mac, transport-agnostic, i.e., modems, [proprietary protocols for
+   interconnection](https://people.ece.ubc.ca/gillies/pages/9802net.html),
+   [Winsocks](https://tangentsoft.com/wskfaq/articles/history.html) file
+   transport framework, etc.*)
+1. Using OS and HW threads to achieve concurrency. (*Unix daemon and Win
+   NT service programming, C/S transport framework implementations, telehealth
+   system implementation, etc.*)
+1. Sharing workloads between CPU and GPU to achieve maximum parallel execution.
+   (*The front/back-buffer synchronization, i.e., [culling
+    algorithms](https://algorithm-wiki.csail.mit.edu/wiki/Culling) and
+    [LOD](https://en.wikipedia.org/wiki/Level_of_detail_(computer_graphics)) are
+    running simultaneously in a CPU during the GPU is rendering the polygons of
+    the previous frame, etc.*)
+1. Using libraries and frameworks
+   ([tasks](https://developer.apple.com/documentation/swift/task), work queues,
+    [actor model](https://en.wikipedia.org/wiki/Actor_model), etc.) to
+   achieve parallel execution for performance reasons. (*Using
+   [TPL](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/task-parallel-library-tpl)
+   to instantiation (i.e., common transformation matrix) pipeline for tessellated
+   graphic units, etc.*)
+1. Using frameworks to bring parallel execution to the application level,
+   wondering why the industry starts taking steps back and prefers asynchronous
+   programming models over, for example, worker threads. One answer: keep
+   everything in the main thread. (*iOS [recommended] network programming, Dart
+   language, node.js, etc.*)
+1. Using CSP to hide HW details and still achieve a speedup of parallel execution,
+   but only if it's used correctly. (*Example: Input routine -> Processing -> Output
+   routine -pattern to remove blocking IO waits, etc.*)
+
+As you can see, distributed computing goes hand in hand with concurrency. And
+now distributed systems are more critical than ever.
+
+And what goes around comes around. Now we're using a [hybrid
+model](https://github.com/golang/go/issues/51071#issuecomment-1033108591) where
+the scheduler combines OS threads (preemptive multitasking) and cooperative
+event handling. But like everything in performance optimization, this model
+isn't the fastest or [doesn't give you the best possible
+parallelization](https://go.dev/blog/waza-talk) results for every algorithm. But
+it seems to provide enough, and it offers a simple and elegant programming model
+that almost all developers can reason with.
+
+> Note. Go offers [`runtime.LockOSThread`
+> function](https://pkg.go.dev/runtime#LockOSThread) if you want to maximize
+> parallelization by allocating an OS thread for a job. 
+
+## FSM -- State-Of-The-Art
+
+Previous technology spikes have proven that state machines would be the right
+way to go, but I would need to try it with, should I say, complete state
+machines. And that was our hypothesis: *FSM perfectly matches SSI and
+DIDComm-based chatbots*.
+
+One of my design principles has always been that never create a new language,
+always use an existing one. So, I tried to search for proper candidates, and I
+did find a few.
+
+### SCXML
+
+The most promising and exciting one was
+[SCXML](https://www.w3.org/TR/scxml/), but I didn't find a suitable embedded
+engine to run these machines, especially as an open-source. Nevertheless, very
+interesting [commercial high-end
+tools](https://blogs.itemis.com/en/how-to-create-robust-system-models-with-yakindu-statechart-tools-and-verification-tools)
+supported
+[correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))
+verification using [proving theorems](https://en.wikipedia.org/wiki/Proof_theory).
+
+### Lua
+
+During these state-machine language searches, I discovered [a Go-native
+implementation of Lua](https://github.com/Shopify/go-lua), which was
+open-source. Naturally, I considered using embedded Lua's model of
+states. But I realized that some event engine would be needed, and it
+would have brought at least the following challenges:
+
+1. Whole new API and bridge to Aries protocols would be needed. A simple C/S API
+   wouldn't be enough, but a notification system would also be required.
+1. Lua is a Turing-complete language (correctness guarantees, the halting
+   problem, etc.)
+1. And final question: what extra would we be brought in when compared to
+   offering Lua stubs to our current gRPC API, i.e., Lua would be treated the
+   same as all the other languages that gRPC supports?
+
+### YAML
+
+I soon discovered that YAML might be an excellent language for FSM because it’s
+proven to work for [declarative
+solutions](https://en.wikipedia.org/wiki/Declarative_programming) like container
+orchestration and many cloud frameworks.
+
+Naturally, I tried to search OSS solution that would be based on YAML and would
+offer a way to implement a state-machines event processor. Unfortunately, I
+didn’t find a match, so we made our hybrid by offering two languages, YAML and
+Lua.
+
+Lua is now included as an embedded scripting language *for
+our FSM*. It can be used to [implement custom
+triggers](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/#event)
+and custom output events.
+
+You can write Lua directly to YAML files or include a file link and write Lua
+scripts to external files. (*Depending on the deployment model, that could be
+a security problem, but we are in an early stage of the technology. Our
+deployment model is closed. The final step to solve all security problems
+related to deployment and injection is when we have an integrated correctness
+tool.*)
+
+## The Event Processor 
+
+Our FSM engine follows the exact same principle as [the SCXML processor](https://en.wikipedia.org/wiki/SCXML) does:
+
+> An SCXML processor is a pure event processor. The only way to get data into an
+> SCXML state machine is to send external events to it. The only way to get data
+> out is to receive events from it.
+
+In the software industry, there are some other similar systems, like, for example,
+[eBPF](https://ebpf.io/), where correctness is provided without formal language.
+eBPF automatically **rejects programs without strong exit guarantees**, i.e.,
+for/while loops without exit conditions. That's achieved with static code
+analysis, which allows using conventional programming languages.
+
+Now that *we have brought Lua-scripting into our FSMs*, we should also get
+*code analysis for the exit guarantees*, but let's first figure out how
+good a fit it is. My first impressions have been excellent.
+
+
+## Services and Conversations
+
+The drawing below includes our multi-tenant model. FSM instances and their
+memory containers are on the right-hand side of the diagram. The smaller ones
+are conversation instances that hold the state of each pairwise connection
+status. The larger one is *the service state machine*.
+
+{{< imgproc cover-logical.png Resize "1630x" >}}
+<em>Two Tier Multi-tenancy</em>
+{{< /imgproc >}}
+
+The service FSM is needed if the SSI agent implements a chatbot that needs to keep
+track of all of the conversations like polling, voting, **chat rooms** (used as
+an example), etc.
+
+```plantuml
+title Chat Room Example
+
+actor "Dude" as Dude
+participant "Dude" as ChatUI  <<chat UI>>
+collections "Dudes" as ReadUI  <<read UI>>
+collections "Conversation Bots" as PWBot <<pairwise FSM>>
+control "Chat Room Service Bot" as Backend
+
+== A Dude writes line ==
+Dude -> ChatUI: Yo!
+
+ChatUI -> PWBot: BasicMessage{"Yo!"}
+|||
+== Conversation FSM forwards msg to service FSM ==
+PWBot -> Backend: BackendMsg{"Yo!"}
+loop conversation count
+   Backend -> PWBot: BackendMsg{"Yo!"}
+== transport message thru pairwise connection ==
+   PWBot -> ReadUI: BasicMessage{"Yo!"}
+end
+|||
 ```
 
-The previous machine is almost as simple as it can be that it does something.
-Let's see what the lines are for:
-1. **Initial state transition** is mandatory. It's executed when machine is
-   started. It's same as all the state transitions in our syntax but it doesn't
-   have transition trigger.
-2. **States** are listed next. There are no limits how many states the machine
-   holds.
-3. We have only one **state** named `INITIAL`. Each state must have an unique
-   name.
-4. States include **transitions** to next states (`target`). We have one in this
-   machine, but there is no limit how many transitions a state can have.
-5. Each transition has **a trigger event**.
-6. Triggers have **protocol** that is in this case `basic_message`. It could be
-   any of the these Aries protocols:
-   - `basic_message`: send or receive messaging protocol
-   - `issue_cred`: we issue a verifiable credential
-   - `trust_ping`: we initiate ping protocol
-   - `present_proof`: we request a proof presentation 
-   - `connection`: new pairwise is created
-   - or other protocols like email, http, etc. which are in design table
-7. We can **send** limitless a mount of `events` during the state transition.
-8. In this machine we send a `basic_message` where the `data` is `Hello! I'm
-   Hello-World bot.`
-9. Our `transition` `target` is the `INTIAL` state. It could be what ever state
-   that exist in the machine.
+As the sequence diagram above shows, the service FSM conceptually presents a
+chat room and works as a mediator between chat room participants.
 
-Did you get what the machine does? You can try it by following the instructions
-in [Findy CLI's readme](https://github.com/findy-agent-cli/README.md) to setup
-your playground/run-environment. After you have setup pairwise connection
-between two agents, execute this to other agents terminal:
+The next Go code block shows how the above FSM instances are declared at the
+programming level. Note that `ServiceFSM` is optional and seldom needed. The
+rest of the data is pretty obvious: 
+- gRPC connection, `conn`
+- conversation FSM, `md`
+- and interrupt channel is given as a startup argument, `intCh`, because here,
+the machine is started from the CLI tool
 
-```console
-findy-agent-cli bot start <Hello-World.yaml> # or what name you saved above
+```go 
+	intCh := make(chan os.Signal, 1)
+	signal.Notify(intCh, syscall.SIGTERM, syscall.SIGINT)
+
+	chat.Bot{
+		Conn:        conn,      // gRPC connection including JWT, etc.
+		MachineData: md,        // primary FSM data, i.e. pairwise lvl
+		ServiceFSM:  mdService, // optional backend/service lvl FSM
+	}.Run(intCh)                // let machine to know when it's time to quit
 ```
 
-For other agent use two terminals and give these commands to them:
-```console
-# terminal 1
-findy-agent-cli bot read # listens and show other end's messages
-# terminal 2
-findy-agent-cli bot chat # sends basic_message's to other end thru the pairwise
+
+By utilizing the CSP model, we embrace a paradigm that emphasizes the
+coordination and communication between independently executing components, known
+as goroutines, in a safe and efficient manner. This combination of Go's
+built-in concurrency primitives empowers us developers to create highly
+concurrent systems while maintaining clarity and simplicity in their code.
+
+## CSP & Go Code
+
+The app logic is in the state machines written in YAML and Lua. But
+surprising is how elegant the Go implementation can be when CSP is
+used for the state-machine processor. And all of that without a single mutex or
+other synchronization object.
+
+The code block below is the crucial component of the FSM engine solution. It is
+presented as it currently is in the code repo, because I want to show honestly
+how simple the implementation is. Even the all lines aren't relevant for
+this post. They are left for you to study and understand how powerful the CSP
+model for concurrency is.
+
+```go
+func Multiplexer(info MultiplexerInfo) {
+	glog.V(3).Infoln("starting multiplexer", info.ConversationMachine.FType)
+	termChan := make(fsm.TerminateChan, 1)
+
+	var backendChan fsm.BackendInChan
+	if info.BackendMachine.IsValid() {
+		b := newBackendService()
+		backendChan = b.BackendChan
+		b.machine = fsm.NewMachine(*info.BackendMachine)
+		try.To(b.machine.Initialize())
+		b.machine.InitLua()
+
+		glog.V(1).Infoln("starting and send first step:", info.BackendMachine.FType)
+		b.send(b.machine.Start(fsm.TerminateOutChan(b.TerminateChan)))
+		glog.V(1).Infoln("going to for loop:", info.BackendMachine.FType)
+	}
+
+	for {
+		select {
+		// NOTE. It's OK to listen nil channel in select.
+		case bd := <-backendChan:
+			backendMachine.backendReceived(bd)
+
+		case d := <-ConversationBackendChan:
+			c, alreadyExists := conversations[d.ToConnID]
+			assert.That(alreadyExists, "backend msgs to existing conversations only")
+			c.BackendChan <- d
+		case t := <-Status:
+			connID := t.Notification.ConnectionID
+			c, alreadyExists := conversations[connID]
+			if !alreadyExists {
+				c = newConversation(info, connID, termChan)
+			}
+			c.StatusChan <- t
+		case question := <-Question:
+			connID := question.Status.Notification.ConnectionID
+			c, alreadyExists := conversations[connID]
+			if !alreadyExists {
+				c = newConversation(info, connID, termChan)
+			}
+			c.QuestionChan <- question
+		case <-termChan:
+			// One machine has reached its terminate state. Let's signal
+			// outside that the whole system is ready to stop.
+			info.InterruptCh <- syscall.SIGTERM
+		}
+	}
+}
 ```
 
-And when you want to render your state machine in UML, give this command:
-```console
-findy-agent-cli bot uml <Hello-World.yaml> # or name of your FSM
+It runs in its goroutine and serves all the input and output at the process
+level. For those who come from traditional multi-thread programming, this might
+look weird. You might ask why a lock doesn't make `conversations` map thread-safe.
+That's the beauty of the CSP. Only this goroutine modifies `conversations`
+data—no one else.
+
+You might ask if there's a performance penalty in this specific solution, but
+there is not. The `Multiplexer` function doesn't do anything that's
+computationally extensive. It listens to several Go channels and delegates the
+work to other goroutines.
+
+This model has proven to be easy to understand and implement.
+
+
+### Discrete State Transitions
+
+As we saw, the `Multiplexer` function calls a function below, `backendReceived`,
+when `data` arrives from `backendChan`.
+
+```go
+func (b *Backend) backendReceived(data *fsm.BackendData) {
+	if transition := b.machine.TriggersByBackendData(data); transition != nil {
+		b.send(transition.BuildSendEventsFromBackendData(data))
+		b.machine.Step(transition)
+	}
+}
 ```
-The result looks like this. Maybe the UML rendering helps understanding.
 
+Both state-machine types (conversation/service level) follow typical transition
+logic:
+1. Do we have a trigger in the current state of the machine?
+1. If the trigger exists, we'll get a transition object for that.
+1. Ask the `transition` to build all send events according to input data.
+1. Send all output events.
+1. If previous steps did succeed, make a state transition step explicit.
 
-## The FSM Language
+### "Channels orchestrate; mutexes serialize"
 
-The YAML-based state-machine definition language is currently as simple as
-possible. First level is the **states**, which are the primary building blocks
-of the machine. A machine has one or more states. During the execution the
-machine can be only one state at the time. Sub- or embedded states aren't
-supported because they are only convenient, not mandatory. Also parallel states
-are out-scoped.
+I'm not a massive fan of the [idiomatic
+Go](https://dave.cheney.net/2020/02/23/the-zen-of-go) or [Go
+proverbs](https://go-proverbs.github.io/). My point is that you shouldn't
+need them. The underlying semantics should be strong enough.
 
-**One of the states must be market as `initial`**. Every chatbot
-conversation runs its own state-machine, and the current implementation of
-machine termination *terminates all running instances* of the machine. **The state
-machine can have multiple termination states.** Note, most of the real-world
-multi-tenant use cases don't need machine termination. Termination is especially
-convenient for the one time script use as we can see later.
+Luckily the world isn't black and white. So, let's use one proverb to state
+something quite obvious.
 
-Each state can include relations to other states including itself. These
-relations are **state-transitions**. Each state-transition has **a trigger
-event**, **send events**, and **a target state**.
+> "Channels orchestrate; mutexes serialize"
 
-### Conceptual Meta-Model
+That includes excellent wisdom because it isn't prohibiting you from using the
+mutexes. It clearly states that we need both, but they are used differently.
+That said, the below code block shows the *elegance* you can achieve with Go
+channels.
 
-More information about meta-model behind each state machine can be found from
-the following diagram. As you can see the **Machine** receives and sends
-**Events**. And **States** controls which inputs, i.e., **triggers** are *valid,
-when and how.*
+```go
+func (c *Conversation) Run(data fsm.MachineData) {
+	c.machine = fsm.NewMachine(data)
+	try.To(c.machine.Initialize())
+	c.machine.InitLua()
+	c.send(c.machine.Start(fsm.TerminateOutChan(c.TerminateChan)), nil)
 
-{{< figure src="/blog/2023/03/13/finite-state-machine-language-part-i/Main.svg" >}}
-*Conceptual Meta-Model*
+	for {
+		select {
+		case t := <-c.StatusChan:
+			c.statusReceived(t)
+		case q := <-c.QuestionChan:
+			c.questionReceived(q)
+		case hookData := <-c.HookChan:
+			c.hookReceived(hookData)
+		case backendData := <-c.BackendChan:
+			c.backendReceived(backendData)
+		}
+	}
+}
+```
 
-## Event
+If you have never seen a code mess where a programmer has tried to solve a
+concurrence task by only having common control flow statements like if-else,
+attempt to envision an amateur cook that tries to make at least four dishes
+simultaneously with poor multitasking capabilities. He has to follow recipes
+literally for every dish from several cookbooks. I think then you get the
+picture.
 
-### Rule
+## Conclusion
 
-| Rule | Meaning |
-|------|---------|
-| "OUR_STATUS" | Monitors our multi-state protocol progress. |
-| "INPUT" | Copies input event data as-is to output event data. Rarely needed, more for tests. |
-| "INPUT_SAVE" | Saves input data to a named register. The`data:` defines the name of the register. |
-| "FORMAT" | Calls `printf` type formatter for send events where format string is in `data:` and value is input `data:` field. |
-| "FORMAT_MEM" | Calls `Go template` type formatter for send events where format string is in the `data:` field, and named values are in memory register. |
-| "GEN_PIN" | A new random 6 digit number is generated and stored into PIN-named register, and FORMAT_MEM is executed according to the `data:` field. |
-| "INPUT_VALIDATE_EQUAL" | Validates that received input is equal to register value. Register name is in `data:` field. |
-| "INPUT_VALIDATE_NOT_EQUAL" | Negative of previous, e.g. allows us to trigger transition if input doesn't match. |
-| "INPUT_EQUAL" | Validates that coming input data is same in the `data:` field machine definition (YAML). |
-| "ACCEPT_AND_INPUT_VALUES" | Accepts and stores a proof presentation and its values. |
-| "NOT_ACCEPT_VALUES" | Declines a proof presentation. |
-
-### Protocol
-
-| Protocol | In/Out | Meaning |
-|----------|--------|---------|
-| `basic_message`| Both | Send or receive messaging protocol |
-| `trust_ping`| Both | we initiate ping protocol |
-| `issue_cred`| Out | we issue a verifiable credential |
-| `present_proof`| Out | we request a proof presentation |
-| `connection`| In | new pairwise is created |
-
-
-### Data
-
-## Issuing Example
-
-The diagram below presents a real-world example of the automatic issuing chat
-bot for verified an email address. Please read carefully the state transition
-arrows. They define triggers and events to send. There is a transition that
-sends an Aries `basic_message` and an `email` in same transition. The email
-message that's built by the machine, includes a random PIN code. As you can see
-the PIN-code can be properly verified in the machine.
-
-{{< figure src="/blog/2023/03/13/finite-state-machine-language-part-i/issue.svg" >}}
-*Automatic Email Credential Chat Bot*
-
-It's been rewarding to notice how well chatting and using verifiable credentials
-fit together. As a end-user you don't face annoying context switches but
-everything is some logical conversation.
-
-## Future Features
-
-- transition triggers are currently SSI-centric which can be changin in future.
-- extremely simple memory model
-    - no persistence model
-- verification/simulation tools
-- simple scriptin language inside the state machine
-- deployment model
-- end-user level tools
-
-
-The state machines are written in YAML (or it accepts JSON as well).
-
-NOTE. Memory leaks: we could offer some sort of the verification tool for this.
-NOTE. Run initialize for FSM file before start if possible? To check syntax.
-
+I hope I have shown you how well FSM and CSP fit together. Maybe I even
+encouraged you to agree that SSI needs [better abstraction
+layers](http://findy-network.github.io/blog/2022/03/05/the-missing-network-layer-model/)
+before we can start full-scale application development. If you agree we're 
+on the right path, please join and start coding with us!

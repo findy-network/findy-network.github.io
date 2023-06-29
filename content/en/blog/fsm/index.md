@@ -1,6 +1,7 @@
 ---
 date: 2023-03-13
-title: "No-Code SSI Chatbots - Part I"
+lastmod: 2023-05-13
+title: "No-Code SSI Chatbots - FSM Part I"
 linkTitle: "No-Code SSI Chatbots"
 description: "I implemented a new
 [FSM](https://en.wikipedia.org/wiki/Finite-state_machine) language for our SSI
@@ -108,7 +109,7 @@ findy-agent-cli bot uml <Hello-World.yaml> # name of your FSM
 ```
 The result looks like this:
 
-{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/hello1.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/hello1.svg" >}}
 *Hello World Chat Bot FSM*
 
 The UML rendering may help with understanding. It's also an excellent tool for
@@ -153,7 +154,7 @@ integration is the first thing to solve. Also current memory model isn't
 production ready for large-scale service agents because there isn't any
 discarding mechanism. However, this will be fixed in the next minor release,
 where a transition to the `initial` state frees the state machine instance's
-memory register.
+memory register. *Edit:* memory cleanup is implemented, and Lua is onboard.
 
 ### Meta-Model
 
@@ -162,7 +163,7 @@ the following diagram. As you can see, the **Machine** receives and sends
 **Events**. And **States** controls which inputs, i.e., **triggers** are *valid,
 when and how.*
 
-{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/Main.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/Main.svg" >}}
 *Conceptual Meta-Model*
 
 Next, we will see how the *Event* is used to run the state machine. After the
@@ -238,7 +239,7 @@ only keywords are reserved and properties listed.
 | `hook`| Both | Internal | Currently reserved only for internal use |
 
 On the design table, we have ideas like REST endpoints, embedded scripting
-language (Lua), file system access, etc.
+language (Lua, now implemented), file system access, etc.
 
 ### Data
 
@@ -272,7 +273,7 @@ The following chatbot is an illustration of our chatbot from our
 It's proven extremely handy to kick these chatbots up during the demo
 or development without forgetting the production in the future.
 
-{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue-one.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/issue-one.svg" >}}
 *Run once - Issuing Chat Bot*
 
 ### Omni-Channel Chatbot
@@ -285,7 +286,7 @@ sends an Aries `basic_message` and an `email` in the same transition. The email
 message built by the machine includes a random PIN code. As you can see, the
 state machine can adequately verify the PIN code.
 
-{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue.svg" >}}
+{{< figure src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/issue.svg" >}}
 *Automatic Email Credential Chat Bot*
 
 It's been rewarding to notice how well chatting and using verifiable credentials
@@ -301,10 +302,13 @@ Something we have thought about during the development:
 - transition triggers are currently SSI-only which can be changed in the
   future
     - transient states
+    - *Edit*: Now embedded Lua that solves limitless trigger types and make need
+    for transient states obsolete
 - straightforward memory model
     - no persistence model
 - verification/simulation tools: a model checker
-- simple scripting language inside the state machine
+- simple scripting language inside the state machine, *Edit:* Lua is now
+implemented
 - deployment model: cloud, end-user support
 - end-user level tools
 

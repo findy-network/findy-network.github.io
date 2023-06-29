@@ -136,10 +136,9 @@ have a layer model similar to the OSI network model to handle complexity.
 Unfortunately, the famous trust-over-IP picture below isn't the one that is
 missing:
 
-![SSI Layers](https://blockchain.tno.nl/media/18029/figure_1_the_toip_technology_stack_and_its_four_layers_20042021_1200_675.png?anchor=center&mode=crop&quality=90&width=1200&slimmage=true&rnd=132633967270000000)
-<p align = "center"> The ToIP technology stack and its four layers - <a
-href="https://blockchain.tno.nl/blog/self-sovereign-communication/">SSI
-Communication</a></p>
+{{< imgproc toip-stack.png Resize "1200x" >}}
+<em>ToIP Stacks</em>
+{{< /imgproc >}}
 
 Even though the ToIP has a layer model, it doesn't help us build technical
 solutions. It's even more unfortunate that *many in the industry think that 
