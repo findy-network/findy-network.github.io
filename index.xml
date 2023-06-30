@@ -1,4 +1,356 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 13 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: The Agency Workshop</title><link>/blog/2023/06/13/the-agency-workshop/</link><pubDate>Tue, 13 Jun 2023 00:00:00 +0000</pubDate><guid>/blog/2023/06/13/the-agency-workshop/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 22 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Beautiful State-Machines - FSM Part II</title><link>/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/</link><pubDate>Thu, 22 Jun 2023 00:00:00 +0000</pubDate><guid>/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/</guid><description>
+&lt;p>As I explained in &lt;a href="https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/">my previous blog
+post&lt;/a>,
+the idea of chatbots came quite naturally for our SSI development team. Think
+tanks or research labs are outstanding workplaces when you have something to chew.
+And how juicy topic the SSI has been, oh boy.&lt;/p>
+&lt;p>FSM chatbots started as a thought experiment, but now, when I think of the
+invention, it has been quite clever in foreseeing genuine user needs. It has
+lead us towards the following layer model.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 2563px">
+&lt;img class="card-img-top" src="/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/layers_huc401822c3d0db0f1b03a6299777b88f3_2353012_2553x0_resize_catmullrom_3.png" width="2553" height="1377">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Network Layers For SSI Are Clarifying Themselves&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The preceding drawing presents our ongoing layer architecture. It&amp;rsquo;s (still)
+based on DIDComm, but because our protocol engine implements a
+technology-agnostic API, we can change the implementation to something better
+without disturbing the above layers. The subject of this blog post is &lt;strong>our FSM
+engine&amp;rsquo;s&lt;/strong> (&lt;em>3rd layer from bottom&lt;/em>) CSP implementation that offers even more
+abstraction and helps the application development with &lt;a href="https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/#the-fsm-language">no-code chatbot
+language&lt;/a>.&lt;/p>
+&lt;h2 id="abstraction-layers">Abstraction Layers&lt;/h2>
+&lt;p>Implementing the FSM chatbots with our protocol-agnostic API has been
+eye-opening. With our API, we have solved most of the complexity problems and
+brought in an elegant communication layer that hides most of the horror of DID
+system, which, by to way, is not application development ready.&lt;/p>
+&lt;p>The objective of this blog post is to present a comprehensive exploration of my
+Go-based finite state-machine implementation that leverages Go&amp;rsquo;s CSP concurrency
+mechanism. This post will showcase the practical applications and benefits of
+using Go and CSP in building reliable and concurrent state management systems.&lt;/p>
+&lt;h2 id="concurrency-ne-parallelism">Concurrency \(\ne\) Parallelism&lt;/h2>
+&lt;p>I have been using multithreading programming all my career and closely
+monitoring paradigms of multithreading programming since the 90s. When I started
+playing with Go’s channels and &lt;a href="https://en.wikipedia.org/wiki/Communicating_sequential_processes">CSP programming
+model&lt;/a>, I
+learned how easy it was compared to other asynchronous or multithreading
+programming models.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 473px">
+&lt;img class="card-img-top" src="/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/interrupt_hu136a998f0a715f31af0676e8582771a1_34484_463x0_resize_q75_catmullrom.jpg" width="463" height="410">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Interrupt Based Scheduling -- Mark Siegesmund, in Embedded C Programming, 2014&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>If I look at the phases I have gone thru, they follow these steps harshly:&lt;/p>
+&lt;ol>
+&lt;li>Using interrupts to achieve concurrency. (&lt;em>MS-DOS drivers and
+&lt;a href="https://en.wikipedia.org/wiki/Terminate-and-stay-resident_program">TSRs&lt;/a>,
+modem-based distributed systems, games, etc.&lt;/em>)&lt;/li>
+&lt;li>Using the event-driven system to achieve concurrency. (&lt;em>Game development, GUI
+OS Win&amp;amp;Mac, transport-agnostic, i.e., modems, &lt;a href="https://people.ece.ubc.ca/gillies/pages/9802net.html">proprietary protocols for
+interconnection&lt;/a>,
+&lt;a href="https://tangentsoft.com/wskfaq/articles/history.html">Winsocks&lt;/a> file
+transport framework, etc.&lt;/em>)&lt;/li>
+&lt;li>Using OS and HW threads to achieve concurrency. (&lt;em>Unix daemon and Win
+NT service programming, C/S transport framework implementations, telehealth
+system implementation, etc.&lt;/em>)&lt;/li>
+&lt;li>Sharing workloads between CPU and GPU to achieve maximum parallel execution.
+(&lt;em>The front/back-buffer synchronization, i.e., &lt;a href="https://algorithm-wiki.csail.mit.edu/wiki/Culling">culling
+algorithms&lt;/a> and
+&lt;a href="https://en.wikipedia.org/wiki/Level_of_detail_(computer_graphics)">LOD&lt;/a> are
+running simultaneously in a CPU during the GPU is rendering the polygons of
+the previous frame, etc.&lt;/em>)&lt;/li>
+&lt;li>Using libraries and frameworks
+(&lt;a href="https://developer.apple.com/documentation/swift/task">tasks&lt;/a>, work queues,
+&lt;a href="https://en.wikipedia.org/wiki/Actor_model">actor model&lt;/a>, etc.) to
+achieve parallel execution for performance reasons. (&lt;em>Using
+&lt;a href="https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/task-parallel-library-tpl">TPL&lt;/a>
+to instantiation (i.e., common transformation matrix) pipeline for tessellated
+graphic units, etc.&lt;/em>)&lt;/li>
+&lt;li>Using frameworks to bring parallel execution to the application level,
+wondering why the industry starts taking steps back and prefers asynchronous
+programming models over, for example, worker threads. One answer: keep
+everything in the main thread. (&lt;em>iOS [recommended] network programming, Dart
+language, node.js, etc.&lt;/em>)&lt;/li>
+&lt;li>Using CSP to hide HW details and still achieve a speedup of parallel execution,
+but only if it&amp;rsquo;s used correctly. (&lt;em>Example: Input routine -&amp;gt; Processing -&amp;gt; Output
+routine -pattern to remove blocking IO waits, etc.&lt;/em>)&lt;/li>
+&lt;/ol>
+&lt;p>As you can see, distributed computing goes hand in hand with concurrency. And
+now distributed systems are more critical than ever.&lt;/p>
+&lt;p>And what goes around comes around. Now we&amp;rsquo;re using a &lt;a href="https://github.com/golang/go/issues/51071#issuecomment-1033108591">hybrid
+model&lt;/a> where
+the scheduler combines OS threads (preemptive multitasking) and cooperative
+event handling. But like everything in performance optimization, this model
+isn&amp;rsquo;t the fastest or &lt;a href="https://go.dev/blog/waza-talk">doesn&amp;rsquo;t give you the best possible
+parallelization&lt;/a> results for every algorithm. But
+it seems to provide enough, and it offers a simple and elegant programming model
+that almost all developers can reason with.&lt;/p>
+&lt;blockquote>
+&lt;p>Note. Go offers &lt;a href="https://pkg.go.dev/runtime#LockOSThread">&lt;code>runtime.LockOSThread&lt;/code>
+function&lt;/a> if you want to maximize
+parallelization by allocating an OS thread for a job.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="fsm----state-of-the-art">FSM &amp;ndash; State-Of-The-Art&lt;/h2>
+&lt;p>Previous technology spikes have proven that state machines would be the right
+way to go, but I would need to try it with, should I say, complete state
+machines. And that was our hypothesis: &lt;em>FSM perfectly matches SSI and
+DIDComm-based chatbots&lt;/em>.&lt;/p>
+&lt;p>One of my design principles has always been that never create a new language,
+always use an existing one. So, I tried to search for proper candidates, and I
+did find a few.&lt;/p>
+&lt;h3 id="scxml">SCXML&lt;/h3>
+&lt;p>The most promising and exciting one was
+&lt;a href="https://www.w3.org/TR/scxml/">SCXML&lt;/a>, but I didn&amp;rsquo;t find a suitable embedded
+engine to run these machines, especially as an open-source. Nevertheless, very
+interesting &lt;a href="https://blogs.itemis.com/en/how-to-create-robust-system-models-with-yakindu-statechart-tools-and-verification-tools">commercial high-end
+tools&lt;/a>
+supported
+&lt;a href="https://en.wikipedia.org/wiki/Correctness_(computer_science)">correctness&lt;/a>
+verification using &lt;a href="https://en.wikipedia.org/wiki/Proof_theory">proving theorems&lt;/a>.&lt;/p>
+&lt;h3 id="lua">Lua&lt;/h3>
+&lt;p>During these state-machine language searches, I discovered &lt;a href="https://github.com/Shopify/go-lua">a Go-native
+implementation of Lua&lt;/a>, which was
+open-source. Naturally, I considered using embedded Lua&amp;rsquo;s model of
+states. But I realized that some event engine would be needed, and it
+would have brought at least the following challenges:&lt;/p>
+&lt;ol>
+&lt;li>Whole new API and bridge to Aries protocols would be needed. A simple C/S API
+wouldn&amp;rsquo;t be enough, but a notification system would also be required.&lt;/li>
+&lt;li>Lua is a Turing-complete language (correctness guarantees, the halting
+problem, etc.)&lt;/li>
+&lt;li>And final question: what extra would we be brought in when compared to
+offering Lua stubs to our current gRPC API, i.e., Lua would be treated the
+same as all the other languages that gRPC supports?&lt;/li>
+&lt;/ol>
+&lt;h3 id="yaml">YAML&lt;/h3>
+&lt;p>I soon discovered that YAML might be an excellent language for FSM because it’s
+proven to work for &lt;a href="https://en.wikipedia.org/wiki/Declarative_programming">declarative
+solutions&lt;/a> like container
+orchestration and many cloud frameworks.&lt;/p>
+&lt;p>Naturally, I tried to search OSS solution that would be based on YAML and would
+offer a way to implement a state-machines event processor. Unfortunately, I
+didn’t find a match, so we made our hybrid by offering two languages, YAML and
+Lua.&lt;/p>
+&lt;p>Lua is now included as an embedded scripting language &lt;em>for
+our FSM&lt;/em>. It can be used to &lt;a href="https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/#event">implement custom
+triggers&lt;/a>
+and custom output events.&lt;/p>
+&lt;p>You can write Lua directly to YAML files or include a file link and write Lua
+scripts to external files. (&lt;em>Depending on the deployment model, that could be
+a security problem, but we are in an early stage of the technology. Our
+deployment model is closed. The final step to solve all security problems
+related to deployment and injection is when we have an integrated correctness
+tool.&lt;/em>)&lt;/p>
+&lt;h2 id="the-event-processor">The Event Processor&lt;/h2>
+&lt;p>Our FSM engine follows the exact same principle as &lt;a href="https://en.wikipedia.org/wiki/SCXML">the SCXML processor&lt;/a> does:&lt;/p>
+&lt;blockquote>
+&lt;p>An SCXML processor is a pure event processor. The only way to get data into an
+SCXML state machine is to send external events to it. The only way to get data
+out is to receive events from it.&lt;/p>
+&lt;/blockquote>
+&lt;p>In the software industry, there are some other similar systems, like, for example,
+&lt;a href="https://ebpf.io/">eBPF&lt;/a>, where correctness is provided without formal language.
+eBPF automatically &lt;strong>rejects programs without strong exit guarantees&lt;/strong>, i.e.,
+for/while loops without exit conditions. That&amp;rsquo;s achieved with static code
+analysis, which allows using conventional programming languages.&lt;/p>
+&lt;p>Now that &lt;em>we have brought Lua-scripting into our FSMs&lt;/em>, we should also get
+&lt;em>code analysis for the exit guarantees&lt;/em>, but let&amp;rsquo;s first figure out how
+good a fit it is. My first impressions have been excellent.&lt;/p>
+&lt;h2 id="services-and-conversations">Services and Conversations&lt;/h2>
+&lt;p>The drawing below includes our multi-tenant model. FSM instances and their
+memory containers are on the right-hand side of the diagram. The smaller ones
+are conversation instances that hold the state of each pairwise connection
+status. The larger one is &lt;em>the service state machine&lt;/em>.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1640px">
+&lt;img class="card-img-top" src="/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/cover-logical_hu3cc2cb8ee146ca056e4d93ad4b3d07f3_957927_1630x0_resize_catmullrom_3.png" width="1630" height="1111">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Two Tier Multi-tenancy&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The service FSM is needed if the SSI agent implements a chatbot that needs to keep
+track of all of the conversations like polling, voting, &lt;strong>chat rooms&lt;/strong> (used as
+an example), etc.&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-plantuml" data-lang="plantuml">title Chat Room Example
+actor &amp;#34;Dude&amp;#34; as Dude
+participant &amp;#34;Dude&amp;#34; as ChatUI &amp;lt;&amp;lt;chat UI&amp;gt;&amp;gt;
+collections &amp;#34;Dudes&amp;#34; as ReadUI &amp;lt;&amp;lt;read UI&amp;gt;&amp;gt;
+collections &amp;#34;Conversation Bots&amp;#34; as PWBot &amp;lt;&amp;lt;pairwise FSM&amp;gt;&amp;gt;
+control &amp;#34;Chat Room Service Bot&amp;#34; as Backend
+== A Dude writes line ==
+Dude -&amp;gt; ChatUI: Yo!
+ChatUI -&amp;gt; PWBot: BasicMessage{&amp;#34;Yo!&amp;#34;}
+|||
+== Conversation FSM forwards msg to service FSM ==
+PWBot -&amp;gt; Backend: BackendMsg{&amp;#34;Yo!&amp;#34;}
+loop conversation count
+Backend -&amp;gt; PWBot: BackendMsg{&amp;#34;Yo!&amp;#34;}
+== transport message thru pairwise connection ==
+PWBot -&amp;gt; ReadUI: BasicMessage{&amp;#34;Yo!&amp;#34;}
+end
+|||
+&lt;/code>&lt;/pre>&lt;p>As the sequence diagram above shows, the service FSM conceptually presents a
+chat room and works as a mediator between chat room participants.&lt;/p>
+&lt;p>The next Go code block shows how the above FSM instances are declared at the
+programming level. Note that &lt;code>ServiceFSM&lt;/code> is optional and seldom needed. The
+rest of the data is pretty obvious:&lt;/p>
+&lt;ul>
+&lt;li>gRPC connection, &lt;code>conn&lt;/code>&lt;/li>
+&lt;li>conversation FSM, &lt;code>md&lt;/code>&lt;/li>
+&lt;li>and interrupt channel is given as a startup argument, &lt;code>intCh&lt;/code>, because here,
+the machine is started from the CLI tool&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">intCh&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#204a87">make&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#204a87;font-weight:bold">chan&lt;/span> &lt;span style="color:#000">os&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Signal&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">signal&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Notify&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">intCh&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">syscall&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SIGTERM&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">syscall&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SIGINT&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">chat&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Bot&lt;/span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">Conn&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">conn&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// gRPC connection including JWT, etc.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">MachineData&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">md&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// primary FSM data, i.e. pairwise lvl
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">ServiceFSM&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000">mdService&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// optional backend/service lvl FSM
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000;font-weight:bold">}.&lt;/span>&lt;span style="color:#000">Run&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">intCh&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// let machine to know when it&amp;#39;s time to quit
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>By utilizing the CSP model, we embrace a paradigm that emphasizes the
+coordination and communication between independently executing components, known
+as goroutines, in a safe and efficient manner. This combination of Go&amp;rsquo;s
+built-in concurrency primitives empowers us developers to create highly
+concurrent systems while maintaining clarity and simplicity in their code.&lt;/p>
+&lt;h2 id="csp--go-code">CSP &amp;amp; Go Code&lt;/h2>
+&lt;p>The app logic is in the state machines written in YAML and Lua. But
+surprising is how elegant the Go implementation can be when CSP is
+used for the state-machine processor. And all of that without a single mutex or
+other synchronization object.&lt;/p>
+&lt;p>The code block below is the crucial component of the FSM engine solution. It is
+presented as it currently is in the code repo, because I want to show honestly
+how simple the implementation is. Even the all lines aren&amp;rsquo;t relevant for
+this post. They are left for you to study and understand how powerful the CSP
+model for concurrency is.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000">Multiplexer&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">info&lt;/span> &lt;span style="color:#000">MultiplexerInfo&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">V&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">3&lt;/span>&lt;span style="color:#000;font-weight:bold">).&lt;/span>&lt;span style="color:#000">Infoln&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;starting multiplexer&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ConversationMachine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">FType&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">termChan&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#204a87">make&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">fsm&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TerminateChan&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">var&lt;/span> &lt;span style="color:#000">backendChan&lt;/span> &lt;span style="color:#000">fsm&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendInChan&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendMachine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">IsValid&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">b&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">newBackendService&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">backendChan&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendChan&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">fsm&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">NewMachine&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendMachine&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Initialize&lt;/span>&lt;span style="color:#000;font-weight:bold">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">InitLua&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">V&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">).&lt;/span>&lt;span style="color:#000">Infoln&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;starting and send first step:&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendMachine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">FType&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">send&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Start&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">fsm&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TerminateOutChan&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TerminateChan&lt;/span>&lt;span style="color:#000;font-weight:bold">)))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">glog&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">V&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>&lt;span style="color:#000;font-weight:bold">).&lt;/span>&lt;span style="color:#000">Infoln&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;going to for loop:&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendMachine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">FType&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">select&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8f5902;font-style:italic">// NOTE. It&amp;#39;s OK to listen nil channel in select.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">bd&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">backendChan&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">backendMachine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">backendReceived&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">bd&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">d&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">ConversationBackendChan&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">alreadyExists&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">conversations&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#000">d&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ToConnID&lt;/span>&lt;span style="color:#000;font-weight:bold">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">assert&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">That&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">alreadyExists&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;backend msgs to existing conversations only&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendChan&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span> &lt;span style="color:#000">d&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">t&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">Status&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">connID&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">t&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Notification&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ConnectionID&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">alreadyExists&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">conversations&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#000">connID&lt;/span>&lt;span style="color:#000;font-weight:bold">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000;font-weight:bold">!&lt;/span>&lt;span style="color:#000">alreadyExists&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">newConversation&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">connID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">termChan&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">StatusChan&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span> &lt;span style="color:#000">t&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">question&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">Question&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">connID&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">question&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Status&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Notification&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">ConnectionID&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">alreadyExists&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">conversations&lt;/span>&lt;span style="color:#000;font-weight:bold">[&lt;/span>&lt;span style="color:#000">connID&lt;/span>&lt;span style="color:#000;font-weight:bold">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000;font-weight:bold">!&lt;/span>&lt;span style="color:#000">alreadyExists&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">newConversation&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">connID&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">termChan&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">QuestionChan&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span> &lt;span style="color:#000">question&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">termChan&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8f5902;font-style:italic">// One machine has reached its terminate state. Let&amp;#39;s signal
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#8f5902;font-style:italic">// outside that the whole system is ready to stop.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic">&lt;/span> &lt;span style="color:#000">info&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">InterruptCh&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span> &lt;span style="color:#000">syscall&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SIGTERM&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>It runs in its goroutine and serves all the input and output at the process
+level. For those who come from traditional multi-thread programming, this might
+look weird. You might ask why a lock doesn&amp;rsquo;t make &lt;code>conversations&lt;/code> map thread-safe.
+That&amp;rsquo;s the beauty of the CSP. Only this goroutine modifies &lt;code>conversations&lt;/code>
+data—no one else.&lt;/p>
+&lt;p>You might ask if there&amp;rsquo;s a performance penalty in this specific solution, but
+there is not. The &lt;code>Multiplexer&lt;/code> function doesn&amp;rsquo;t do anything that&amp;rsquo;s
+computationally extensive. It listens to several Go channels and delegates the
+work to other goroutines.&lt;/p>
+&lt;p>This model has proven to be easy to understand and implement.&lt;/p>
+&lt;h3 id="discrete-state-transitions">Discrete State Transitions&lt;/h3>
+&lt;p>As we saw, the &lt;code>Multiplexer&lt;/code> function calls a function below, &lt;code>backendReceived&lt;/code>,
+when &lt;code>data&lt;/code> arrives from &lt;code>backendChan&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">b&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">Backend&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000">backendReceived&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">data&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">fsm&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendData&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">transition&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TriggersByBackendData&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">data&lt;/span>&lt;span style="color:#000;font-weight:bold">);&lt;/span> &lt;span style="color:#000">transition&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">!=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">nil&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">send&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">transition&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BuildSendEventsFromBackendData&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">data&lt;/span>&lt;span style="color:#000;font-weight:bold">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Step&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">transition&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Both state-machine types (conversation/service level) follow typical transition
+logic:&lt;/p>
+&lt;ol>
+&lt;li>Do we have a trigger in the current state of the machine?&lt;/li>
+&lt;li>If the trigger exists, we&amp;rsquo;ll get a transition object for that.&lt;/li>
+&lt;li>Ask the &lt;code>transition&lt;/code> to build all send events according to input data.&lt;/li>
+&lt;li>Send all output events.&lt;/li>
+&lt;li>If previous steps did succeed, make a state transition step explicit.&lt;/li>
+&lt;/ol>
+&lt;h3 id="channels-orchestrate-mutexes-serialize">&amp;ldquo;Channels orchestrate; mutexes serialize&amp;rdquo;&lt;/h3>
+&lt;p>I&amp;rsquo;m not a massive fan of the &lt;a href="https://dave.cheney.net/2020/02/23/the-zen-of-go">idiomatic
+Go&lt;/a> or &lt;a href="https://go-proverbs.github.io/">Go
+proverbs&lt;/a>. My point is that you shouldn&amp;rsquo;t
+need them. The underlying semantics should be strong enough.&lt;/p>
+&lt;p>Luckily the world isn&amp;rsquo;t black and white. So, let&amp;rsquo;s use one proverb to state
+something quite obvious.&lt;/p>
+&lt;blockquote>
+&lt;p>&amp;ldquo;Channels orchestrate; mutexes serialize&amp;rdquo;&lt;/p>
+&lt;/blockquote>
+&lt;p>That includes excellent wisdom because it isn&amp;rsquo;t prohibiting you from using the
+mutexes. It clearly states that we need both, but they are used differently.
+That said, the below code block shows the &lt;em>elegance&lt;/em> you can achieve with Go
+channels.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">c&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">Conversation&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000">Run&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">data&lt;/span> &lt;span style="color:#000">fsm&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">MachineData&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span> &lt;span style="color:#000;font-weight:bold">=&lt;/span> &lt;span style="color:#000">fsm&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">NewMachine&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">data&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">try&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">To&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Initialize&lt;/span>&lt;span style="color:#000;font-weight:bold">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">InitLua&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">send&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">machine&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Start&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">fsm&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TerminateOutChan&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">TerminateChan&lt;/span>&lt;span style="color:#000;font-weight:bold">)),&lt;/span> &lt;span style="color:#204a87;font-weight:bold">nil&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">select&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">t&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">StatusChan&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">statusReceived&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">t&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">q&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">QuestionChan&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">questionReceived&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">q&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">hookData&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">HookChan&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">hookReceived&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">hookData&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">case&lt;/span> &lt;span style="color:#000">backendData&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">BackendChan&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">c&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">backendReceived&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">backendData&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If you have never seen a code mess where a programmer has tried to solve a
+concurrence task by only having common control flow statements like if-else,
+attempt to envision an amateur cook that tries to make at least four dishes
+simultaneously with poor multitasking capabilities. He has to follow recipes
+literally for every dish from several cookbooks. I think then you get the
+picture.&lt;/p>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>I hope I have shown you how well FSM and CSP fit together. Maybe I even
+encouraged you to agree that SSI needs &lt;a href="http://findy-network.github.io/blog/2022/03/05/the-missing-network-layer-model/">better abstraction
+layers&lt;/a>
+before we can start full-scale application development. If you agree we&amp;rsquo;re
+on the right path, please join and start coding with us!&lt;/p></description></item><item><title>Blog: The Agency Workshop</title><link>/blog/2023/06/13/the-agency-workshop/</link><pubDate>Tue, 13 Jun 2023 00:00:00 +0000</pubDate><guid>/blog/2023/06/13/the-agency-workshop/</guid><description>
 &lt;p>During the Findy Agency project, our development team initially placed greater emphasis on running
 and deploying the agency in terms of documentation.
 Due to this prioritization, instructions on building agency
@@ -745,7 +1097,7 @@ the deployment or the pipeline via version control.&lt;/p>
 However, the future will show us how the Agency deployment will evolve. Perhaps we will introduce
 a more platform-agnostic approach and remove AWS native tooling altogether.&lt;/p>
 &lt;p>You can do a deep dive into the anatomy of our CDK pipeline in my next blog post.
-And as always, you can find the codes on &lt;a href="https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs#readme">GitHub&lt;/a>!&lt;/p></description></item><item><title>Blog: No-Code SSI Chatbots - Part I</title><link>/blog/2023/03/13/no-code-ssi-chatbots-part-i/</link><pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate><guid>/blog/2023/03/13/no-code-ssi-chatbots-part-i/</guid><description>
+And as always, you can find the codes on &lt;a href="https://github.com/findy-network/findy-agent-infra/tree/master/aws-ecs#readme">GitHub&lt;/a>!&lt;/p></description></item><item><title>Blog: No-Code SSI Chatbots - FSM Part I</title><link>/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/</link><pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate><guid>/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/</guid><description>
 &lt;p>In this blog post, I&amp;rsquo;ll explain the syntax of our chatbot language. The good
 news is that the language is simple, and we already offer some development tools
 like UML rendering. There&amp;rsquo;ll be a second post where we&amp;rsquo;ll dive deeply into the
@@ -754,7 +1106,7 @@ theorem proofer for the correctness of the chatbot applications.&lt;/p>
 &lt;p>Our team got the idea of chatbots quite early after we started to play with
 verifiable credentials and SSI.&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 910px">
-&lt;img class="card-img-top" src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/demo-bot_hu4f38f3f43794e7101495702b2681d19a_613249_900x0_resize_catmullrom_3.png" width="900" height="428">
+&lt;img class="card-img-top" src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/demo-bot_hu4f38f3f43794e7101495702b2681d19a_613249_900x0_resize_catmullrom_3.png" width="900" height="428">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Zero UI + No-Code => Fast Delivery&lt;/em>
@@ -823,7 +1175,7 @@ execute this to the first agent&amp;rsquo;s terminal:&lt;/p>
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The result looks like this:&lt;/p>
 &lt;p>
 &lt;figure>
-&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/hello1.svg"/>
+&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/hello1.svg"/>
 &lt;/figure>
 &lt;em>Hello World Chat Bot FSM&lt;/em>&lt;/p>
 &lt;p>The UML rendering may help with understanding. It&amp;rsquo;s also an excellent tool for
@@ -863,7 +1215,7 @@ integration is the first thing to solve. Also current memory model isn&amp;rsquo
 production ready for large-scale service agents because there isn&amp;rsquo;t any
 discarding mechanism. However, this will be fixed in the next minor release,
 where a transition to the &lt;code>initial&lt;/code> state frees the state machine instance&amp;rsquo;s
-memory register.&lt;/p>
+memory register. &lt;em>Edit:&lt;/em> memory cleanup is implemented, and Lua is onboard.&lt;/p>
 &lt;h3 id="meta-model">Meta-Model&lt;/h3>
 &lt;p>Information about the meta-model behind each state machine can be found in
 the following diagram. As you can see, the &lt;strong>Machine&lt;/strong> receives and sends
@@ -871,7 +1223,7 @@ the following diagram. As you can see, the &lt;strong>Machine&lt;/strong> receiv
 when and how.&lt;/em>&lt;/p>
 &lt;p>
 &lt;figure>
-&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/Main.svg"/>
+&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/Main.svg"/>
 &lt;/figure>
 &lt;em>Conceptual Meta-Model&lt;/em>&lt;/p>
 &lt;p>Next, we will see how the &lt;em>Event&lt;/em> is used to run the state machine. After the
@@ -1031,7 +1383,7 @@ only keywords are reserved and properties listed.&lt;/p>
 &lt;/tbody>
 &lt;/table>
 &lt;p>On the design table, we have ideas like REST endpoints, embedded scripting
-language (Lua), file system access, etc.&lt;/p>
+language (Lua, now implemented), file system access, etc.&lt;/p>
 &lt;h3 id="data">Data&lt;/h3>
 &lt;p>The &lt;code>data&lt;/code> field is used to transport the event&amp;rsquo;s data. Its function is determined by
 both &lt;code>rule&lt;/code> and &lt;code>protocol&lt;/code>. Please see the next chapter, &lt;strong>Event Data&lt;/strong>.&lt;/p>
@@ -1056,7 +1408,7 @@ It&amp;rsquo;s proven extremely handy to kick these chatbots up during the demo
 or development without forgetting the production in the future.&lt;/p>
 &lt;p>
 &lt;figure>
-&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue-one.svg"/>
+&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/issue-one.svg"/>
 &lt;/figure>
 &lt;em>Run once - Issuing Chat Bot&lt;/em>&lt;/p>
 &lt;h3 id="omni-channel-chatbot">Omni-Channel Chatbot&lt;/h3>
@@ -1069,7 +1421,7 @@ message built by the machine includes a random PIN code. As you can see, the
 state machine can adequately verify the PIN code.&lt;/p>
 &lt;p>
 &lt;figure>
-&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-part-i/issue.svg"/>
+&lt;img src="/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/issue.svg"/>
 &lt;/figure>
 &lt;em>Automatic Email Credential Chat Bot&lt;/em>&lt;/p>
 &lt;p>It&amp;rsquo;s been rewarding to notice how well chatting and using verifiable credentials
@@ -1084,6 +1436,8 @@ blog post helps us to get it going.&lt;/p>
 future
 &lt;ul>
 &lt;li>transient states&lt;/li>
+&lt;li>&lt;em>Edit&lt;/em>: Now embedded Lua that solves limitless trigger types and make need
+for transient states obsolete&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>straightforward memory model
@@ -1092,7 +1446,8 @@ future
 &lt;/ul>
 &lt;/li>
 &lt;li>verification/simulation tools: a model checker&lt;/li>
-&lt;li>simple scripting language inside the state machine&lt;/li>
+&lt;li>simple scripting language inside the state machine, &lt;em>Edit:&lt;/em> Lua is now
+implemented&lt;/li>
 &lt;li>deployment model: cloud, end-user support&lt;/li>
 &lt;li>end-user level tools&lt;/li>
 &lt;/ul>
@@ -2838,10 +3193,14 @@ specifications&lt;/em>? We have thought that for a long time, over three years f
 have a layer model similar to the OSI network model to handle complexity.
 Unfortunately, the famous trust-over-IP picture below isn&amp;rsquo;t the one that is
 missing:&lt;/p>
-&lt;p>&lt;img src="https://blockchain.tno.nl/media/18029/figure_1_the_toip_technology_stack_and_its_four_layers_20042021_1200_675.png?anchor=center&amp;amp;mode=crop&amp;amp;quality=90&amp;amp;width=1200&amp;amp;slimmage=true&amp;amp;rnd=132633967270000000" alt="SSI Layers">&lt;/p>
-&lt;p align = "center"> The ToIP technology stack and its four layers - &lt;a
-href="https://blockchain.tno.nl/blog/self-sovereign-communication/">SSI
-Communication&lt;/a>&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1210px">
+&lt;img class="card-img-top" src="/blog/2022/03/05/the-missing-network-layer-model/toip-stack_hue7e4f66bde09e85903cc24abf2b16ca3_676033_1200x0_resize_catmullrom_3.png" width="1200" height="774">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>ToIP Stacks&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
 &lt;p>Even though the ToIP has a layer model, it doesn&amp;rsquo;t help us build technical
 solutions. It&amp;rsquo;s even more unfortunate that &lt;em>many in the industry think that
 it&amp;rsquo;s the network layer model when it&amp;rsquo;s not&lt;/em>. It&amp;rsquo;s been making communication between
