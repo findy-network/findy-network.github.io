@@ -46,7 +46,8 @@ Balahan stated that improving the onboarding of new developers is still one of t
 
 ## Automated Testing and Test Coverage
 
-The topic of my talk was "Boosting Test Coverage for Microservices." I described in the presentation
+The topic of my talk was ["Boosting Test Coverage for Microservices."](/pdf/gophercon-uk.pdf)
+I described in the presentation
 how vital automated testing has become for our small team. Automated testing is usually the part you
 skip when time is running out, but I tried to convince the audience that this might not be
 the best approach – missing tests may bite you back in the end.
