@@ -10,4 +10,7 @@ resources:
 
 [Slides](/pdf/gophercon-uk.pdf) for [GopherCon UK 2023](https://www.gophercon.co.uk/), August 2023
 
-{{< figure src="/blog/2023/08/23/gophercon-uk-2023/laura.jpeg" title="" width="925" >}}
+{{< imgproc laura Fit "925x925" >}}
+<em>Laura presenting at GopherCon UK 2023. Photo by GopherCon UK.
+</em>
+{{< /imgproc >}}

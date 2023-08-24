@@ -53,7 +53,7 @@ skip when time is running out, but I tried to convince the audience that this mi
 the best approach – missing tests may bite you back in the end.
 
 {{< imgproc laura Fit "925x925" >}}
-<em>On the stage
+<em>On the stage. Photo by Tapan Avasthi
 </em>
 {{< /imgproc >}}
 
