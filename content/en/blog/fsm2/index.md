@@ -14,7 +14,7 @@ resources:
 ---
 
 As I explained in [my previous blog
-post](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/),
+post](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/),
 the idea of chatbots came quite naturally for our SSI development team. Think
 tanks or research labs are outstanding workplaces when you have something to chew.
 And how juicy topic the SSI has been, oh boy.
@@ -33,7 +33,7 @@ technology-agnostic API, we can change the implementation to something better
 without disturbing the above layers. The subject of this blog post is **our FSM
 engine's** (*3rd layer from bottom*) CSP implementation that offers even more
 abstraction and helps the application development with [no-code chatbot
-language](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/#the-fsm-language).
+language](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/#the-fsm-language).
 
 ## Abstraction Layers
 
@@ -162,7 +162,7 @@ Lua.
 
 Lua is now included as an embedded scripting language *for
 our FSM*. It can be used to [implement custom
-triggers](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-part-i/#event)
+triggers](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/#event)
 and custom output events.
 
 You can write Lua directly to YAML files or include a file link and write Lua
