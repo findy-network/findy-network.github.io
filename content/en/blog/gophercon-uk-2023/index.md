@@ -2,7 +2,7 @@
 date: 2023-08-23
 title: "GopherCon UK 2023"
 linkTitle: "GopherCon UK 2023"
-description: "Go is gaining more and more popularity among developers. The GopherCon UK conference is a great place to meet fellow Gophers, share and learn about the latest developments in the Go world."
+description: "Go is gaining more and more popularity among developers. The GopherCon UK conference is a great place to meet fellow Gophers, and share and learn about the latest developments in the Go community."
 author: Laura Vuorenoja
 resources:
 - src: "**.{png,jpg}"
@@ -28,16 +28,19 @@ be an excellent topic to share with the community. I was lucky to get my speech 
 {{< /imgproc >}}
 
 The conference was held in the Brewery, a relaxed event venue in London City. The word on the conference
-halls was that the number of event sponsors had decreased from the previous year, and therefore it
-had been challenging to organize the event. Luckily the organizers were able to pull things still together.
+halls was that the number of event sponsors had decreased from the previous year, and therefore, it
+had been challenging to organize the event. Luckily, the organizers were able to pull things still together.
 
 Apart from the recession, the times are now interesting for Gophers. Many good things are happening
 in the Go world. As Cameron Balahan pointed out in his talk "State of the Go Nation,"
-Go is more popular than ever. More and more programmers have been adding Go to their tool pack in
+[Go is more popular than ever](https://thenewstack.io/developers-most-likely-to-learn-go-and-rust-in-2023-survey-says/).
+More and more programmers have been adding Go to their tool pack in
 recent years, pushing language developers to add new and better features. Moreover, Go is not only
 a programming language anymore; it is a whole ecosystem with support for many kinds of tooling.
 Newcomers have a way easier job to start with development than, for example, I had seven years ago.
 Balahan stated that improving the onboarding of new developers is still one of the Go team's top priorities.
+He mentioned that they are working on the libraries, documentation, and error messages to help newcomers
+and all Go developers be more productive.
 
 {{< imgproc cameron Fit "925x925" >}}
 <em>Cameron Balahan is the product lead for Go.
@@ -86,25 +89,35 @@ The ability to debug each request separately is essential.
 Jonathan Amsterdam from Google gave an inspiring presentation on [the slog package](https://go.dev/blog/slog),
 the newest addition
 to the standard library regarding logging. Go's default logging capabilities have always lacked
-features. Now, the slog package fixes these shortcomings, with the ability to handle and merge
+features. The missing log levels have been the greatest pain point in my daily developer life.
+More importantly, the ability to send structured data to analysis tools is crucial for
+production systems. Until now, teams have had to use different kinds of 3rd party libraries
+for this to happen.
+
+Now, the slog package fixes these shortcomings, with the ability to handle and merge
 the data from existing structured logging tools. The presentation revealed how the team refined
 the requirements for the new package together with the developer community. Also, it was fascinating
 to hear which kind of memory management tricks the team used, as the performance requirements
-for logging are pretty demanding.
+for logging are demanding.
+
+Another exciting presentation handled also the capability of solving problems quickly, but instead
+of logs, the emphasis was on tracing. Tracing provides a more detailed view of the program's data
+flow than logs and is especially useful when detecting performance bottlenecks.
+Konstantin Ostrovsky described how their team is using
+[OpenTelemetry](https://opentelemetry.io/docs/instrumentation/go/getting-started/)
+to add traceability to incoming requests. Using this approach, they do not need
+other logs in their codebase (excluding errors).
 
 {{< imgproc konstantin Fit "925x925" >}}
 <em>Konstantin Ostrovsky presenting OpenTelemetry usage with Go.
 </em>
 {{< /imgproc >}}
 
-Another exciting presentation handled also the capability of solving problems quickly, but instead
-of logs, the emphasis was on tracing. Konstantin Ostrovsky described how their team is using
-[OpenTelemetry](https://opentelemetry.io/docs/instrumentation/go/getting-started/)
-to add traceability to incoming requests. Using this approach, they do not need
-other logs in their codebase (excluding errors). Tracing uses the concept of spans in the code.
+OpenTelemetry tracing uses [the concept of spans](https://opentelemetry.io/docs/concepts/signals/traces/#spans)
+in the code.
 One can utilize the spans to store the request data parameters and call relationships. Different
 analysis tools can then visualize this data for a single request. According to Konstantin, these
-visualizations help developers to solve problems faster than searching and filtering ordinary logs.
+visualizations help developers solve problems faster than searching and filtering ordinary logs.
 However, in the presentation Q&A, he reminded us that one should use the spans sparingly
 for performance reasons.
 
@@ -122,10 +135,13 @@ I participated in [a workshop](https://github.com/serviceweaver/workshops) that 
 to try the Service Weaver hands-on.
 The target was to build a full-blown web application with a web UI and a backend service from
 which the UI could request data. Other sections described testing the weaver components, routing
-from one service to another, and even calling external 3rd party services. The workshop suited me well;
+from one service to another, and even calling external 3rd party services.
+
+The workshop suited me well;
 I could learn more than just listening to a presentation. Furthermore, the topic interested me, and
-I will dig into it more in the coming days. The workshop organizer promised that Google would invest
-in the product also in the future. They are searching for collaborators to get more feedback
+I will dig into it more in the coming days to better understand which kind of projects would benefit
+from this kind of development model the most. The workshop organizer promises that Google will not
+stop investing in the product. They are searching for collaborators to get more feedback
 to develop the product further.
 
 ## UI development with Go
@@ -135,30 +151,32 @@ Andrew Williams hosted this discussion and presented a project called [Fyne](htt
 Gophers to write applications with graphical user interfaces for several platforms. UI development
 is not my favorite thing to spend my time on; therefore, I am always curious to find better,
 more fun ways to implement the mandatory user-clickable parts. Using Go would undoubtedly click
-the fun box. So I added another technology experiment to my TODO list.
+the fun box. So, I added another technology experiment to my TODO list.
+
+In addition to these three themes, one session that handled JWT security was also memorable.
+Patrycja Wegrzynowicz hacked the audience live with the help of a small sample application
+she had built for this purpose. It demonstrated which kind of vulnerabilities we Go developers
+might have in our JWT implementations.
 
 {{< imgproc patrycja Fit "925x925" >}}
 <em>Patrycja hacking the audience with JWTs.
 </em>
 {{< /imgproc >}}
 
-In addition to these three themes, one session that handled JWT security was also memorable.
-Patrycja Wegrzynowicz hacked the audience live with the help of a small sample application
-she had built for this purpose. It demonstrated which kind of vulnerabilities our JWT implementations
-may have. The presentation was informative and entertaining with the live hacking, and the audience
-understood the problems well due to the hands-on examples. The session proved that there is
-no well-known battle-tested documentation on handling the JWTs. We have (too) many different
+The presentation was informative and entertaining with the live hacking, and the audience
+understood the problems well due to the hands-on examples. The session proved that no well-known
+battle-tested documentation exists on handling the JWTs. We have (too) many different
 libraries with different qualities, and it is easy to make mistakes with the token generation
 and validation. No wonder the audience asked for a book on the subject from Patrycja – we need
 better resources for a topic as important as this.
 
 ## See you in Florence
 
-Overall the event was well-organized, had a great atmosphere, and was fun to visit.
+Overall, the event was well-organized, had a great atmosphere, and was fun to visit.
 Meeting fellow Gophers, especially [the Women Who Go](https://www.womenwhogo.org/) members,
 was a unique treat. Let's set up our
 chapter in Finland soon. (If you are a Finland-based woman who writes Go code, please reach out!)
-I also got the chance to spend some free time in London and even share the World Cup final atmosphere
+I also got to spend some free time in London and share the World Cup final atmosphere
 with the English supporters cheering for their team.
 
 {{< imgproc football Fit "925x925" >}}
