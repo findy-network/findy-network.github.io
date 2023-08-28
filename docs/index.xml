@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Documentation</title><link>/docs/</link><description>Recent content in Documentation on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 08 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: CDK-based Continuous Deployment for OSS</title><link>/docs/videos/aws-community-day/</link><pubDate>Mon, 08 May 2023 00:00:00 +0000</pubDate><guid>/docs/videos/aws-community-day/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Documentation</title><link>/docs/</link><description>Recent content in Documentation on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 24 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: CDK-based Continuous Deployment for OSS</title><link>/docs/videos/aws-community-day/</link><pubDate>Mon, 08 May 2023 00:00:00 +0000</pubDate><guid>/docs/videos/aws-community-day/</guid><description>
 &lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
 &lt;iframe src="https://www.youtube.com/embed/Dj_Z5ReqCwc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
 &lt;/div></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>/docs/videos/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>/docs/videos/introduction-to-ssi/</guid><description>
@@ -121,7 +121,17 @@ UI tool &lt;a href="#ui-tool">findy-issuer-tool&lt;/a>&lt;/li>
 &lt;ul>
 &lt;li>before UI-tool usage, you need to have a working Findy Agency installation&lt;/li>
 &lt;li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.&lt;/li>
-&lt;/ul></description></item><item><title>Docs: CDK-based Continous Deployment for OSS</title><link>/docs/slides/aws-meetup/</link><pubDate>Tue, 07 Mar 2023 00:00:00 +0000</pubDate><guid>/docs/slides/aws-meetup/</guid><description>
+&lt;/ul></description></item><item><title>Docs: GopherCon UK 2023</title><link>/docs/slides/gophercon-uk-2023/</link><pubDate>Thu, 24 Aug 2023 00:00:00 +0000</pubDate><guid>/docs/slides/gophercon-uk-2023/</guid><description>
+&lt;p>&lt;a href="/pdf/gophercon-uk.pdf">Slides&lt;/a> for &lt;a href="https://www.gophercon.co.uk/">GopherCon UK 2023&lt;/a>, August 2023&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="/docs/slides/gophercon-uk-2023/laura-gophercon-uk_hua5fb63a8fd0ce5b633a9f4f9d1947e1a_454913_925x925_fit_q75_catmullrom.jpeg" width="925" height="617">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Laura presenting at GopherCon UK 2023. Photo by GopherCon UK.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure></description></item><item><title>Docs: CDK-based Continous Deployment for OSS</title><link>/docs/slides/aws-meetup/</link><pubDate>Tue, 07 Mar 2023 00:00:00 +0000</pubDate><guid>/docs/slides/aws-meetup/</guid><description>
 &lt;p>&lt;a href="/pdf/aws-meetup.pdf">Slides&lt;/a> for &lt;a href="https://www.meetup.com/aws-user-group-tampere/events/289346840/">Tampere AWS User Group Meetup&lt;/a>, March 2023&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
 &lt;img class="card-img-top" src="/docs/slides/aws-meetup/laura-aws-meetup_huf19d8db366f9ffbd0b15ba9563d963d8_223304_675x675_fit_q75_catmullrom.jpeg" width="675" height="506">
