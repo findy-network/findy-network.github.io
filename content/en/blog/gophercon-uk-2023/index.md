@@ -64,6 +64,9 @@ Furthermore, I discussed test coverage in the presentation along with how one ca
 test coverage for unit tests and now even - with the Go new tooling – for application tests, i.e.,
 tests you run with the compiled application binary instead of unit testing tooling.
 
+{{< youtube EwCFRVkqHic >}}
+*My presentation is available on YouTube.*
+
 The audience received the talk well, and I got many interesting questions. People are struggling
 with similar issues when it comes to testing. It is tough to decide which functionality to simulate
 in the CI pipeline. Also, we discussed problems when moving on to automated testing with
