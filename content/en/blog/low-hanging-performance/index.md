@@ -2,17 +2,18 @@
 date: 2023-08-26
 title: "How To Write Readable & Performant Go Code"
 linkTitle: "Performant Go Code"
-description: "The Go programming language has an excellent concurrency model
-that offers great potential to utilize the power of all CPU cores. For the
+description: "The Go programming language has an excellent [concurrency 
+model](https://findy-network.github.io/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/)
+that offers great potential to utilize the power of multiple CPU cores. For the
 overall software performance, we need to understand the basics of the single
 core of the modern CPU. The common knowledge says that you shouldn't think
 performance before other [software architecture quality
 attributes](https://en.wikipedia.org/wiki/List_of_system_quality_attributes).
 You shouldn't sacrifice, for instance, readability or maintainability for the
-sake of the performance. I complain that you can write even more readable code
-when you know how compilers work. In this post I'll go thru
-some basics of the Go's tooling and triks that you need to know to achive best
-possible execution speed of your (Go) software."
+sake of the performance. I complain that you can write more readable code
+when you know how compilers and underlaying HW work. In this post I'll go thru
+some basics of the Go's tooling and triks that you should know if you want to
+achive decent execution speed of your (Go) software."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
@@ -21,15 +22,20 @@ resources:
 
 Since jumping the OSS wagon I have started to learn new things about software
 development or get proof for certain ways of doing thins. Two of my favorite
-ones are **readability** and **modifiability**. The later has been named to
-property of SW architecture, which is natural, but it is not well aligned with
-the current practises and tools -- everything is text-centric.
+ones are **readability** and **modifiability**. The later is an old friend 
+form SW architecture's quality attributes, which is natural, but it is not well aligned with
+the current practises and tools -- everything is text-centric. Software
+architecture is something that must be expressed wide variety of notations which
+most are graphical their nature. So, it's easy to forget software quality
+attributes during the programming when we are using tools only manage sequential
+text, i.e. code.
 
 However, since my studies of SW architecture's quality attributes I have
 understood that modifiability is a lot of more than modularity, reusability,
+architecture styles like pipe&filter, 
 etc. For instance, now we understand the importance of
-[TTD](https://en.wikipedia.org/wiki/Test-driven_development), continuous
-deployment, DevOps, etc. Any of mentioned practises doesn't work only on one
+[TTD](https://en.wikipedia.org/wiki/Test-driven_development), [continuous
+deployment](TODO), [DevOps](TODO), etc. Any of mentioned practises doesn't work only on one
 engineering domain. The best results are achieved **cross engineering domain
 practise**. 
 
@@ -37,14 +43,18 @@ practise**.
 
 I suppose all of us programmers has heard of premature optimization:
 
-> “The real problem is that programmers have spent far too much time worrying
+> *The real problem is that programmers have spent far too much time worrying
 > about efficiency in the wrong places and at the wrong times; premature
-> optimization is the root of all evil (or at least most of it) in programming.”
+> optimization is the root of all evil (or at least most of it) in programming.*
 
-That's the full quote from The Art of Computer Programming, Donald Knuth. Like
-so many wisdoms they are child of their own time, and more importantly taken
+That's the full quote from *The Art of Computer Programming, Donald Knuth*. Like
+so many wisdoms they are child of their own time, and more importantly separated
 from their context, which, by the way, time and its current tools are part of.
-For example, if you are writing assembler don't optimize everything first
+For example, usually the infamous quote is: 
+
+> *premature optimization is the root of all evil in programming.*
+
+if you are writing assembler don't optimize everything first
 iteration. However, if you learn to **think performance as your second nature
 it'll not ruin other quality attributes of your code, but opposite**.
 
