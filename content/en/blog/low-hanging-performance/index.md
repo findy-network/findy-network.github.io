@@ -4,40 +4,39 @@ title: "How To Write Readable & Performant Go Code"
 linkTitle: "Performant Go Code"
 description: "The Go programming language has an excellent [concurrency 
 model](https://findy-network.github.io/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/)
-that offers great potential to utilize the power of multi-core CPUs. But for the
-overall software performance, we need to understand the basics of the single
-CPU core. Folkway says that you shouldn't prioritize
-performance over other [software architecture quality
+that offers great potential to utilize the power of multi-core CPUs. However, we
+need to understand the basics of the single CPU core for the overall software
+performance. Common programming wisdom says you shouldn't prioritize performance
+over other [software architecture quality
 attributes](https://en.wikipedia.org/wiki/List_of_system_quality_attributes)
-during programming.
-They say that you shouldn't sacrifice, for instance, readability or maintainability for the
-sake of the performance. I complain that you can write more readable code
-when you know how compilers and underlaying hardware work, and you execute
-**multi-disibline engineering practise**."
+during programming. They say you shouldn't sacrifice, for instance, readability
+or maintainability for performance. You can write more readable code when you
+know how compilers and underlying hardware work and execute **multi-discipline
+engineering practices**."
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
   title: "Image #:counter"
 ---
 
-Since jumping the OSS (Open Source Software) wagon I have been learning
-new things about software development and get more proofs to do things in
-certain ways. At *code level* two of my favorite 'things' are **readability**
-and **modifiability**. The latter is a very old friend from SW architecture's
-quality attributes ([Software Architecture in Practice, Len Bass et
-al](https://www.oreilly.com/library/view/software-architecture-in/9780132942799/)),
-but it is not well aligned with the current *practises and tools* in OSS scene
-because everything is so text-centric.
+Since jumping on the OSS (Open Source Software) wagon, I have been learning
+new things about software development and getting more proof to do something in
+specific ways. Two of my favorite 'things' At the *code level* are **readability**
+and **modifiability**. The latter is a very old friend of SW architecture's
+quality attributes ([Software Architecture in Practice, Len Bass, et
+al.](https://www.oreilly.com/library/view/software-architecture-in/9780132942799/)).
+Still, it is not well aligned with the current *practices and tools* in the OSS scene
+because everything is so text-centric. So, let's make it as readable as we can.
 
 > [*"A picture is worth a thousand words"*](https://en.wikipedia.org/wiki/A_picture_is_worth_a_thousand_words)
 
-Practise has taught that software architecture is something that must be
-expressed wide variety of notations which most are visual their nature. For
-example, most of us can reason well-grafted state-machine diagram must faster
-than a code written our favorite programming language. For instance, the next
-state-machine diagram's protocol implementation is constructed thousands of
-lines of code structured multiple files which have dependencies to external
-modules and libraries. We need abstraction layers to manage all that complexity.
+Practise has taught that software architecture must be expressed in various
+notations; most are visual. For example, most of us can reason that a
+well-grafted state-machine diagram must be faster than a code written our
+favorite programming language. For instance, the next state-machine diagram’s
+protocol implementation is constructed of thousands of lines of code structured
+in multiple files that depend on external modules and libraries. We need
+abstraction layers to manage all that complexity.
 
 ```plantuml
 @startuml
@@ -82,62 +81,65 @@ PSM --> [*]
 ```
 
 Expressing things with the control-flow structures of imperative (or functional)
-programming languages is harder -- especially when the correctness of the design
-should be verified. It seems that it's easy to forget software quality
-attributes during the fast-phasing programming if we are using tools only manage
-sequential text, i.e. code. At code level we should use functions that give us
-abstraction hierarchy and help us to maintain readability.
+programming languages is more challenging – especially when the correctness of
+the design should be verified. It seems that it’s easy to forget software
+quality attributes during fast-phasing programming if we use tools that only
+manage sequential text, i.e., code. At the code level, we should use functions
+that give us an abstraction hierarchy and help us to maintain readability.
 
-Moreover, since my studies of SW architecture's quality attributes I have
-understood that modifiability is a lot of more than modularity, re-usability,
-or use of correct architecture style like pipe&filter.
-Now we understand the importance of
+Moreover, since my studies of SW architecture’s quality attributes, I have
+understood that modifiability is more than modularity, re-usability, or using
+correct architectural styles like pipe and filter. Now we understand the importance of
 [TTD](https://en.wikipedia.org/wiki/Test-driven_development), [continuous
 deployment](https://en.wikipedia.org/wiki/Continuous_deployment),
-[DevOps](https://en.wikipedia.org/wiki/DevOps), etc. Aforementioned practises
+[DevOps](https://en.wikipedia.org/wiki/DevOps), etc. The practices above
 don't work only on *one* of the engineering domains. The best results are
-achieved **cross-domain engineering practises**. 
+achieved **cross-domain engineering practices**. 
 
-In this post I'll go thru some very basics of the Go's tooling and tricks that
-you could use to achieve *decent execution speed of your (Go) software and
-maintain or increase its readability.*
+In this post, I'll go through some fundamental Go tools and tricks you could use
+to achieve *decent execution speed of your (Go) software and maintain or
+increase its readability.*
 
 # Perfect Code?
 
-I suppose all of us programmers have heard of infamous *premature optimization*:
+I suppose all of us programmers have heard of the infamous *premature optimization*:
 
 > *The real problem is that programmers have spent far too much time worrying
 > about efficiency in the wrong places and at the wrong times; premature
 > optimization is the root of all evil (or at least most of it) in programming.*
 
-That's the full quote from must-read *The Art of Computer Programming, Donald
-Knuth*. Like so many wisdoms they are child of their own time, and quite usually
-dangerously separated from their context to underline the message the next
-author want to place great emphasis to their message. I believe most of us have
-read the quotation in its shortened format:
+
+That’s the full quote from the must-read *The Art of Computer Programming by
+Donald Knuth*. Like so many pearls of wisdom, they are a child of their own time.
+They are usually dangerously separated from their context to underline the
+message the next author wants to emphasize their statement. I believe most of us
+have read the quotation in its shortened format:
 
 > *Premature optimization is the root of all evil in programming.*
 
 Really? I don't think so.
 
-I complain that if **keeping performance is your second nature, it'll not ruin
-the other quality attributes of your code, but opposite**. All you need to
-do is to follow are some basic rules with your muscle memory.
+I claim that if **keeping performance is your second nature, it’ll not ruin the
+other quality attributes of your code, but the opposite**. All you need to do is
+to follow some basic rules with your muscle memory.
 
-In this post I concentrate only these two:
+## Performance Rules
 
-1. Heap allocations are computationally expensive. (We out-scope garbage
-   collection because it's so large topic that even one book is not enough)
-1. A function call is computationally expensive if compiler cannot [inline
+In this post, I concentrate only on these three:
+
+1. **Heap allocations are computationally expensive**. (We out-scope garbage
+   collection because it's such a significant topic that even one book is insufficient.)
+1. **A function call is computationally expensive** if the compiler cannot [inline
    expanse](https://en.wikipedia.org/wiki/Inline_expansion) it.
-1. Minimize need of variables, i.e. especially in inner loops think what parts
-   of inputs are really variable and what parts are constant. For example, think
-   twice do you need regexp inside of your program.
+1. **Minimize the problem space at every level of abstraction** and the need
+   for variables, i.e. especially in inner loops. Consider what parts of
+   inputs are really varying and what parts are constant. For example, think
+   twice if you need regexp inside of your program.
 
-## Performance Rules And Readability
+## Code Readability
 
 We want to maximise our **code's readability**. One of the Go code's problems is
-that it over uses if-statement, which prevents you notice the important 
+that it overuses if-statement, which prevents you to notice the important 
 decision points of the algorithm.
 
 For example, Go's standard library includes quite many of the following code
@@ -163,6 +165,28 @@ It's easy to see that together with Go's if-based error checking these two hides
 the actual happy path and makes difficult to follow the algorithm and skim the
 code. Same thing can be found from Go's unit tests if no 3rd party helper
 package is used:
+
+```go
+     for _, tt := range tests {
+          t.Run(tt.name, func(t *testing.T) {
+               r := <-Open(tt.args.config, tt.args.credentials)
+               if got := r.Err(); !reflect.DeepEqual(got, tt.want) {
+                    t.Errorf("Open() = %v, want %v", got, tt.want)
+               }
+               w := r.Handle()
+               if got := (<-Export(w, tt.args.exportCfg)).Err(); !reflect.DeepEqual(got, tt.want) {
+                    t.Errorf("Export() = %v, want %v", got, tt.want)
+               }
+               if got := (<-Close(w)).Err(); !reflect.DeepEqual(got, tt.want) {
+                    t.Errorf("Close() = %v, want %v", got, tt.want)
+               }
+          })
+     }
+```
+
+The above code block is from different test than block below, but I think you
+get the idea. I'm speaking fast skimming of code where simplicity and form help
+a lot. Very much similarly as syntax highlighting does.
 
 ```go
 func TestNewTimeFieldRFC3339(t *testing.T) {
@@ -429,7 +453,7 @@ string that comes in byte slice type.
 
 > You might ask that did this ruined the *readability*, which is fair question.
 > But no, because the function `asciiWordToInt` is called from `GoroutineID`, which
-> just enough -- trust abstraction layering. (See the rule one.)
+> just enough -- trust abstraction layering. (See the rule #1.)
 
 Next time you are writing something, think twice -- I do ;-)
 
@@ -439,22 +463,3 @@ There are so much more about performance tuning in Go. This piece was just a
 scratch of the surface. If you are interested about topic, please contact our
 project team and we tell you more. We would we extremely happy if you join our
 effort to develop best performing identity agency.
-
----- END ----
-
-
- 
-## Learnings
-
-1. Closure, reference to your variables, how escaping?
-1. Pointer to something, this case to interface, `error`
-1. No side effects, just values in and values out.
-    - can be expensive in some cases, but **surprisings benefits**
-
-
-### How We Can Get More information (cmdline tools of Go for help)
-
-In this paper we concentrate one of the all time high methods of performance
-which one of the easiest ways to make your app fast, and it’s function
-inlining. Others are memory allocation which might be even more important. And
-some others are how memory is used because of cache lines.
