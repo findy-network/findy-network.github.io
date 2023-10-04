@@ -138,11 +138,11 @@ In this post, I concentrate only on these three:
 
 ## Code Readability
 
-We want to maximise our **code's readability**. One of the Go code's problems is
-that it overuses if-statement, which prevents you to notice the important 
-decision points of the algorithm.
+We want to maximize our **code’s readability**. One of the Go code’s problems is
+that it overuses the if-statement, which prevents you from noticing the
+algorithm's critical decision points.
 
-For example, Go's standard library includes quite many of the following code
+For example, Go’s standard library includes quite many of the following code
 blocks:
 
 ```go
@@ -161,10 +161,10 @@ func doSomething(p any, b []byte) {
 }
 ```
 
-It's easy to see that together with Go's if-based error checking these two hides
-the actual happy path and makes difficult to follow the algorithm and skim the
-code. Same thing can be found from Go's unit tests if no 3rd party helper
-package is used:
+It’s easy to see that together with Go’s if-based error checking, these two hide
+the happy path and make it difficult to follow the algorithm and skim the code.
+The same thing can be found from Go’s unit tests if no 3rd party helper package
+is used:
 
 ```go
      for _, tt := range tests {
@@ -184,9 +184,9 @@ package is used:
      }
 ```
 
-The above code block is from different test than block below, but I think you
-get the idea. I'm speaking fast skimming of code where simplicity and form help
-a lot. Very much similarly as syntax highlighting does.
+The above code block is from a different test than the block below, but I think
+you get the idea. I’m speaking fast skimming of code where simplicity and form
+help a lot. Very much similar to syntax highlighting.
 
 ```go
 func TestNewTimeFieldRFC3339(t *testing.T) {
@@ -203,14 +203,14 @@ func TestNewTimeFieldRFC3339(t *testing.T) {
 }
 ```
 
-That's clear and easy to skim. It's also very easy to extend to use table
+That's clear and easy to skim. It's also straightforward to extend to use table
 testing. I left it for the reader to figure out how that code renders without
-assert package.
+an assert package.
 
-### Function Inline Expansion
+## Function Inline Expansion
 
-Let's write our own version of the famous `assert` function to show how function
-inlining can help the readability outside of the tests without sacrificing the
+Let's write our version of the famous `assert` function to show how function
+inlining can help readability outside of the tests without sacrificing
 performance.
 
 ```go
@@ -227,24 +227,24 @@ func doSomething(p any, b []byte) {
     // coninuet with something imporant
 ```
 
-By writing the benchmark function for `assert` with Go's testing capabilities
-you can measure the 'weight' of the function itself. And by writing the
-reference benchmark where you have inline expansed the function manually, i.e.
-by hand, you get the comparison point. However, if you aren't interested the
-actual performance figures but just the information about successful inline
-expansion done by compiler, you can ask:
+By writing the benchmark function for `assert` with Go's testing capabilities,
+you can measure the 'weight' of the function itself. You get the comparison
+point by writing the reference benchmark where you have manually inline-expansed
+the function, i.e. by hand. However, if you aren't interested in the actual
+performance figures but just the information about successful inline expansion
+done by the compiler, you can ask:
 
 ```
 go test -c -gcflags=-m=2 <PKG_NAME> 2>&1 | grep 'inlin'
 ```
 
 The `-gcflags=-m=2` gives lots of information, but we can filter only those
-lines that contains messages inlining. Depending about the size of the packages
-there can be overwhelmingly lot of information where most of them aren't
-related to task in your hand. You can always filter more.
+lines that contain messages inlining. Depending on the size of the packages
+there can be an overwhelming lot of information where most of them aren't
+related to the task in your hand. You can always filter more.
 
 The `-gcflags` will be your programming buddy in the future. To get more
-information about the flags run:
+information about the flags, run:
 
 ```
 go build -gcflags -help
@@ -252,30 +252,28 @@ go build -gcflags -help
 
 ## Memory Allocations
 
-Similarly as function calls the memory allocations from heap are expensive.
-It's good practise to prevent unnecessary allocations even when the programming
-platform has a garbage collector. With the Go it's especially important to
-understand the basics about memory management principles Go uses because of
-[memory locality](https://www.youtube.com/watch?v=bmZNaUcwBt4&t=1626s), i.e. it
-has pointers and value types. Quite many of the other garbage collected
-languages have object references and true memory location is hided from the
-programmer, which leads poor performance e.g. cache misses.
+Similarly, as function calls, the memory allocations from the heap are
+expensive. It’s good practice to prevent unnecessary allocations even when the
+programming platform has a garbage collector. With the Go, it’s essential to
+understand the basics of memory management principles Go uses because of memory
+locality, i.e., it has pointers and value types. Many other garbage-collected
+languages have object references, and the [memory
+locality](https://www.youtube.com/watch?v=bmZNaUcwBt4&t=1626s) is hidden from
+the programmer, leading to poor performance, e.g., cache misses.
 
-But nothing comes for free -- you need to know what you're going. Go's
-compiler analyzes your code and without your direct help can
-decide if a variable is *escaping* from it's scope and it need to be moved from
-a stack to the heap.
+But nothing comes for free – you need to know what you’re doing. Go’s compiler
+analyzes your code and, without your help, can decide if a variable is *escaping*
+from its scope and needs to be moved from a stack to the heap.
 
-Go's tools give you extra information about [escape
-analyzes](https://appliedgo.com/blog/how-to-do-escape-analysis). Just use the
-`-gcflags=-m=2` again, but `grep` *escape* lines from the output. That will
-tell you exactly what's going on with the pointers for every function in the
-current compilation.
+Go’s tools give you extra information about [escape
+analyzes](https://appliedgo.com/blog/how-to-do-escape-analysis). Use the
+`-gcflags=-m=2` again, but `grep` *escape* lines from the output. That will tell
+you exactly what’s going on with the pointers for every function in the current
+compilation.
 
-usually when benchmarking Go code it's good to have overall understanding what's
-going on with heap allocations. Just add the following argument e.g. your test
-benchmark compilation and you get the statistics of allocations in benchmark
-run.
+Usually, when benchmarking Go code, it’s good to understand what’s going on with
+heap allocations. Just add the following argument e.g., your test benchmark
+compilation, and you get the statistics of allocations in the benchmark run.
 
 ```
 go test -benchmem -bench=. <PKG_NAME>
@@ -294,29 +292,27 @@ PASS
 ok      github.com/lainio/err2/internal/str     2.784s
 ```
 
-Please note that there are *now* five (5) columns instead of standard three. The
-extra two (rightmost) are the about memory allocations. `B/op` is the average
-amount of bytes per memory allocations which themselves are in the rightmost
-column `allocs/op`.
+Please note that five (5) columns are now instead of standard three. The extra
+two (rightmost) are the about memory allocations. `B/op` is the average amount of
+bytes per memory allocation in the rightmost column `allocs/op.`
 
-Less allocations is better as well as smaller the size of the allocations.
-Please note that the performance difference between above benchmark results
-aren't because of the allocations only. The most of the difference will be
-explained in the next chapters. But still allocations are something you should
-be aware, especially about the variable escaping if it leads to heap
-allocations.
+Fewer allocations are better and smaller the size of the allocations. Please
+note that the performance difference between the above benchmark results isn’t
+because of the allocations only. Most of the differences will be explained in
+the following chapters. But still, allocations are something you should be aware
+of, especially about the variable escaping if it leads to heap allocations.
 
-## How Dynamic The Inputs Are?
+## How Dynamic Are The Inputs?
 
-How much your variables in your program change, or maybe they are totally
-constant? Naturally, **smaller the actual input set of the function is better**
-change we have to optimize its performance because more deterministic the
-solution will be. Also smaller machine code performs better in modern memory
-bound CPU. The same cache rules apply to instructions as variables. CPU doesn't
-need to access RAM if all of the needed code is all ready in the CPU.
+How much do the variables in your program change, or maybe they are constant?
+Naturally, **the smaller the actual input set of the function, the better chance
+we have to optimize** its performance because the more deterministic the solution
+will be. Also, smaller machine code performs better in modern memory-bound CPUs.
+The same cache rules apply to instructions as variables. CPU doesn’t need to
+access RAM if all the required code is already in the CPU.
 
-The above benchmark results are from two functions that do exactly the same
-thing. This is the regexp version of it (first row in the benchmark results):
+The above benchmark results are from two functions that do the same thing. This
+is the regexp version of it (first row in the benchmark results):
 
 ```go
 var (
@@ -335,19 +331,18 @@ func DecamelRegexp(str string) string {
 }
 ```
 
-Go's regexp implementation is known to be relatively slow, but if you think that
-regexp needs its own compiler and processor it's not so surprisings, isn't it?
+Go’s regexp implementation is known to be relatively slow, but if you think that
+regexp needs its compiler and processor, it’s not so surprising.
 
-The hand optimized version of `Decamel` function is almost 10 times faster. It
-sounds quite much, but it's natural because we don't need all the versatility
-that the full regexp offers. We need just transform inputted CamelCase string to normal
-lower case string. However, in
-this particular case the input strings aren't without some exceptions, because
-they are coming from Go compiler itself. And still the input set is small enough
-that we easily see the difference. And now we can shrink the problem space to
-our specific need.
+The hand-optimized version of the Decamel function is almost ten times faster.
+It sounds pretty much like it’s natural because we don’t need all the
+versatility of the entire regexp. We need to transform the inputted CamelCase
+string to a standard lowercase string. However, in this case, the input strings
+aren’t without some exceptions because they come from the Go compiler itself.
+And still, the input set is small enough that we quickly see the difference. And
+now, we can shrink the problem space to our specific needs.
 
-The faster version of `Decamel` that's still quite readable:
+The faster version of Decamel that’s still quite readable:
 
 ```go
 func Decamel(s string) string {
@@ -396,9 +391,9 @@ func Decamel(s string) string {
 }
 ```
 
-Let's take another example where results are even more drastically faster, but
-the reason is exactly the same. The input set is much smaller for what the first
-implementations function is meant to be used.
+Let’s take another example where results are even more drastically faster, but
+the reason is precisely the same. The input set is much smaller than what the
+first implementation function is meant to be used.
 
 The results:
 
@@ -444,22 +439,22 @@ func asciiWordToInt(b []byte) int {
 }
 ```
 
-These two functions do exactly the same thing, or should I say almost because
-the latter's API is more generic. The converted integer must be the first byte
+These two functions do precisely the same thing, or should I say almost because
+the latter’s API is more generic. The converted integer must be the first byte
 in the slice.
 
-It is much over 100x faster! Why? Because only thing we need is to process ASCII
-string that comes in byte slice type.
+It is much over 100x faster! Why? Because the only thing we need is to process
+the ASCII string that comes in byte slice type.
 
-> You might ask that did this ruined the *readability*, which is fair question.
-> But no, because the function `asciiWordToInt` is called from `GoroutineID`, which
+> You might ask whether this ruined the *readability*, which is fair. But no,
+> because the function `asciiWordToInt` is called from `GoroutineID`, which is
 > just enough -- trust abstraction layering. (See the rule #1.)
 
 Next time you are writing something, think twice -- I do ;-)
 
 # P.S.
 
-There are so much more about performance tuning in Go. This piece was just a
-scratch of the surface. If you are interested about topic, please contact our
-project team and we tell you more. We would we extremely happy if you join our
-effort to develop best performing identity agency.
+There is so much more about performance tuning in Go. This piece was just a
+scratch of the surface. If you are interested in the topic, please get in touch
+with our project team, and we will tell you more. We would be delighted if you
+join our effort to develop the performing identity agency.
