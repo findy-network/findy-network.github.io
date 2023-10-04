@@ -1,5 +1,5 @@
 ---
-date: 2023-08-26
+date: 2023-09-04
 title: "How To Write Readable & Performant Go Code"
 linkTitle: "Performant Go Code"
 description: "The Go programming language has an excellent [concurrency 
