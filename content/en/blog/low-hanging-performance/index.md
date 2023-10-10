@@ -1,5 +1,5 @@
 ---
-date: 2023-09-04
+date: 2023-10-08
 title: "How To Write Readable & Performant Go Code"
 linkTitle: "Performant Go Code"
 description: "The Go programming language has an excellent [concurrency 
@@ -26,7 +26,7 @@ and **modifiability**. The latter is a very old friend of SW architecture's
 quality attributes ([Software Architecture in Practice, Len Bass, et
 al.](https://www.oreilly.com/library/view/software-architecture-in/9780132942799/)).
 Still, it is not well aligned with the current *practices and tools* in the OSS scene
-because everything is so text-centric. So, let's make it as readable as we can.
+because everything is so text-centric.
 
 > [*"A picture is worth a thousand words"*](https://en.wikipedia.org/wiki/A_picture_is_worth_a_thousand_words)
 
@@ -85,7 +85,8 @@ programming languages is more challenging – especially when the correctness of
 the design should be verified. It seems that it’s easy to forget software
 quality attributes during fast-phasing programming if we use tools that only
 manage sequential text, i.e., code. At the code level, we should use functions
-that give us an abstraction hierarchy and help us to maintain readability.
+that give us an abstraction hierarchy and help us to maintain **modifiability**
+and readability.
 
 Moreover, since my studies of SW architecture’s quality attributes, I have
 understood that modifiability is more than modularity, re-usability, or using
@@ -94,7 +95,7 @@ correct architectural styles like pipe and filter. Now we understand the importa
 deployment](https://en.wikipedia.org/wiki/Continuous_deployment),
 [DevOps](https://en.wikipedia.org/wiki/DevOps), etc. The practices above
 don't work only on *one* of the engineering domains. The best results are
-achieved **cross-domain engineering practices**. 
+achieved **through cross-area engineering practices**. 
 
 In this post, I'll go through some fundamental Go tools and tricks you could use
 to achieve *decent execution speed of your (Go) software and maintain or
@@ -248,6 +249,19 @@ information about the flags, run:
 
 ```
 go build -gcflags -help
+```
+
+Naturally, you can use compiler to give you a reference point for your inline
+optimizations.
+
+Disable all optimizations:
+```
+go test -gcflags "-gcflags '-N'" -bench='.' <PKG_NAME>
+```
+
+Disable inlining:
+```
+go test -gcflags "-gcflags '-l'" -bench='.' <PKG_NAME>
 ```
 
 ## Memory Allocations
