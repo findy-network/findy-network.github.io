@@ -127,20 +127,23 @@ Go programming language is the most refactor friendly of them all I have used.
 1. namespace and module integration
 1. orthogonality
 1. interface structure (no implementation declaration needed)
-1. no `self` or `this` reserved words
+1. no `self` or `this` reserved words, you name object instances yourself
 1. real hybrid language combining OOP and need functional programming features
-1. standard library
-1. generics
+   concentrating simplicity
+1. *batteries included* -standard library
+1. type polymorphism, i.e., generics
 
 I don't think that's even all of the features that help refactoring your code
-but this are the fundamentals.
+but this are the fundamentals in the importance order.
 
-Go isn't perfect yet. The current error handling mechanism and strict community
-with their 'idiomatic' language policies restrict some of Go's refactoring
-capabilities. But you can avoid them by using some helper packages.
+Like any other programming language Go isn't perfect yet. The current error
+handling mechanism and strict community with their 'idiomatic' language policies
+restrict some of Go's refactoring capabilities. But you can avoid them by using
+helper packages, and by using your own brains.
 
-And of course, there's two new language release each year. Let's hope that
-upcoming versions help us to keep our Go projects refactor-able.
+And of course, there's two new language release every year. Let's hope that
+upcoming versions help us to keep our Go projects refactor-able and maybe even
+help a little bit more.
 
 ## Code Readability
 
@@ -215,3 +218,14 @@ an assert package.
 
 ## Conclusion
 
+Go is build for hyper large projects. Projects that are large in every
+dimensions: software engineers, code lines, modules, function points, what ever.
+And it does pretty good job.
+
+Unfortunately the Go community and isn't as open and welcoming than for example
+Rust's community. (Not my words directly). Remember, it's your code, and
+your project to maintain. So, keep your head and remember:
+
+> *The whole problem with the world is that fools and fanatics are certain of
+> themselves, while wiser people are full of doubts.* — not entirely Bertrand
+> Russell
