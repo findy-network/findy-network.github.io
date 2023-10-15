@@ -41,17 +41,19 @@ to follow some basic rules with your muscle memory.
 
 In this post, I concentrate only on these three:
 
-1. **A function call is computationally expensive** if the compiler cannot [inline
-   expanse](https://en.wikipedia.org/wiki/Inline_expansion) it, i.e. function
-   inlining, where compiler's result, the machine code, doesn't include real
-   sub-routine call with argument transportation thru stack or registers, and
-   after the call unwinding the stack and copy results to desired memory
-   locations. With function inlining you can think that the compiler copy/paste
-   your function body to all of those places where it's called.
+1. **A function call is computationally expensive** if the compiler cannot
+   [inline expanse](https://en.wikipedia.org/wiki/Inline_expansion) it, i.e. do
+   function inlining. When inlining, the compiler produce machine code, that
+   doesn't include real sub-routine calls with argument transportation either
+   stack or CPU registers, and unwinding the stack and copy results to desired
+   memory locations after the call returns. With function inlining you can think
+   that the compiler copy/paste your function's machine instructions to all of
+   those places where it's called.
 1. **Heap allocations are computationally expensive**. (We out-scope garbage
-   collection because it's such a significant topic that even one book is
-   insufficient. Still it's good to know that heap allocation also gives
-   transitive work for garbage collector. It's called pressure.)
+   collection algorithms because they're such a significant topic that even one
+   book is insufficient. Still it's good to know that heap allocation
+   [pressurize a garbage
+   collector](https://www.jetbrains.com/help/dotmemory/Analysis_Overview_Page.html#high-gc-pressure).)
 1. **Minimize the problem space at every level of abstraction** and the need
    for variables, i.e. especially in inner loops. Consider what *parts of
    inputs are really varying and what parts are constant*. For example, think
@@ -89,9 +91,9 @@ go test -c -gcflags=-m=2 <PKG_NAME> 2>&1 | grep 'inlin'
 ```
 
 The `-gcflags=-m=2` gives lots of information, but we can filter only those
-lines that contain messages inlining. Depending on the size of the packages
-there can be an overwhelming lot of information where most of them aren't
-related to the task in your hand. You can always filter more.
+lines that contain messages considering then inlining. Depending on the size of
+the packages there can be an overwhelming lot of information where most of them
+aren't related to the task in your hand. You can always filter more.
 
 The `-gcflags` will be your programming buddy in the future. To get more
 information about the flags, run:
@@ -105,12 +107,12 @@ optimizations.
 
 Disable all optimizations:
 ```
-go test -gcflags "-gcflags '-N'" -bench='.' <PKG_NAME>
+go test -gcflags='-N' -bench='.' <PKG_NAME>
 ```
 
 Disable inlining:
 ```
-go test -gcflags "-gcflags '-l'" -bench='.' <PKG_NAME>
+go test -gcflags '-l' -bench='.' <PKG_NAME>
 ```
 
 ### Memory Allocations
@@ -281,7 +283,7 @@ func asciiWordToInt(b []byte) int {
           }
           ch -= '0'
           if ch > 9 {
-               panic("cannot get goroutine id")
+               panic("character isn't number")
           }
           n = n*10 + int(ch)
      }
@@ -290,8 +292,8 @@ func asciiWordToInt(b []byte) int {
 ```
 
 These two functions do precisely the same thing, or should I say almost because
-the latter’s API is more generic. The converted integer must be the first byte
-in the slice.
+the latter’s API is more generic. The converted integer must start from the
+first byte in the slice of ASCII bytes.
 
 It is much over 100x faster! Why? Because the only thing we need is to process
 the ASCII string that comes in byte slice type.
