@@ -8,8 +8,8 @@ how compilers and underlying hardware work, you can optimize your code for
 readability without sacrificing performance. Common programming wisdom says
 you shouldn't prioritize performance over other [software architecture quality
 attributes](https://en.wikipedia.org/wiki/List_of_system_quality_attributes)
-during programming. I claim you can and should bring performance metrics onboard
-since the beginning!"
+during programming. I claim you can and should bring a performance metrics board
+from the beginning!"
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
@@ -101,49 +101,49 @@ achieved **through cross-area systems engineering practices**.
 > handbook](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf)
 
 In this post, I'll explain what multi-disciplinary software development
-practises mean when your development fast-phasing OSS.
+practices mean when your development is fast-phasing OSS.
 
 ## Code Modifiability
 
-Most of the computer software is never ready. During its life-cycle its under
+Most of the computer software is never ready. During its life cycle, it is under
 continuous changes: new features are needed, bugs must be fixed, technical depth
 need to be amortized, etc.
 
-In the modern OSS-based software development modifiability can be thought as
-refactor-ability. Why? 
+In modern OSS-based software development, modifiability can be thought of as
+refactorability. Why? 
 
 Because we want to follow The Boy Scouting Rule:
 
 > *Always leave the code you are working on a little bit better than you found it.*
 
-Excellent example of this rule is that when you find a bug, before fixing it to
-the main stream, implement automatic tests to reproduce it.
+An excellent example of this rule is that when you **find a bug, before fixing
+it to the mainstream, implement automatic tests to reproduce it**.
 
-#### Refactor-ability
+#### Refactorability
 
-Go programming language is the most refactor friendly of them all I have used.
+Go programming language is the most refactor-friendly of them all I have used.
 1. integrated test harness 
 1. benchmark tests
 1. namespace and module integration
 1. orthogonality
 1. interface structure (no implementation declaration needed)
 1. no `self` or `this` reserved words, you name object instances yourself
-1. real hybrid language combining OOP and need functional programming features
-   concentrating simplicity
+1. actual hybrid language combining OOP and needs functional programming features
+   concentrating on simplicity
 1. *batteries included* -standard library
 1. type polymorphism, i.e., generics
 
-I don't think that's even all of the features that help refactoring your code
-but this are the fundamentals in the importance order.
+I don't think that's even all of the features that help refactor your code, but
+these are the fundamentals in the critical order.
 
-Like any other programming language Go isn't perfect yet. The current error
-handling mechanism and strict community with their 'idiomatic' language policies
-restrict some of Go's refactoring capabilities. But you can avoid them by using
-helper packages, and by using your own brains.
+Like any other programming language, Go isn't perfect yet. The current
+error-handling mechanism and strict community with their 'idiomatic' language
+policies restrict some of Go's refactoring capabilities. But you can avoid them
+by using helper packages and your brains.
 
-And of course, there's two new language release every year. Let's hope that
-upcoming versions help us to keep our Go projects refactor-able and maybe even
-help a little bit more.
+And, of course, there are two new language releases every year. Let's hope that
+upcoming versions help us keep our Go projects refactorable and maybe even
+help a little more.
 
 ## Code Readability
 
@@ -218,13 +218,13 @@ an assert package.
 
 ## Conclusion
 
-Go is build for hyper large projects. Projects that are large in every
-dimensions: software engineers, code lines, modules, function points, what ever.
-And it does pretty good job.
+Go is built for hyper-large projects. Significant projects in every dimension:
+software engineers, code lines, modules, function points, whatever. And it does
+a pretty good job.
 
-Unfortunately the Go community and isn't as open and welcoming than for example
-Rust's community. (Not my words directly). Remember, it's your code, and
-your project to maintain. So, keep your head and remember:
+Unfortunately, the Go community isn't as open and welcoming as, for example,
+Rust's community. (Not my words directly, but I share the opinion). Remember,
+it's your code and your project to maintain. So, keep your head and remember:
 
 > *The whole problem with the world is that fools and fanatics are certain of
 > themselves, while wiser people are full of doubts.* — not entirely Bertrand
