@@ -1,5 +1,5 @@
 ---
-date: 2023-10-10
+date: 2023-10-22
 title: "How To Write Modifiable & Readable Go Code"
 linkTitle: "Quality Go Code"
 description: "You can write more **readable and modifiable** code when you
