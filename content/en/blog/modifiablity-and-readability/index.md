@@ -30,7 +30,7 @@ architecture must be expressed in various notations; most are visual.
 
 > [*"A picture is worth a thousand words"*](https://en.wikipedia.org/wiki/A_picture_is_worth_a_thousand_words)
 
-Most of us can reason a well-grafted state-machine diagram must be faster
+Most of us can reason a well-grafted state-machine diagram much faster
 than a code written our favorite programming language. For instance, the next
 state-machine diagram’s protocol implementation is constructed of thousands of
 lines of code structured in multiple files that depend on external modules and
@@ -93,21 +93,23 @@ correct architectural styles like pipe and filter. Now we understand the importa
 deployment](https://en.wikipedia.org/wiki/Continuous_deployment),
 [DevOps](https://en.wikipedia.org/wiki/DevOps), etc. These practices
 don't work only on *one* of the engineering expertise. The best results are
-achieved **through cross-area systems engineering practices**. 
+achieved **through multi-disciplinary systems engineering practices**. 
 
 > At NASA, “systems engineering” is defined as a methodical, multi-disciplinary
 > approach for the design, realization, technical management, operations, and
-> retirement of a system. — [NASA Systems engineering
-> handbook](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf)
+> retirement of a system. — [NASA Systems Engineering
+> Handbook](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf)
 
-In this post, I'll explain what multi-disciplinary software development
-practices mean when your development is fast-phasing OSS.
+In this and [my previous performance
+post](https://findy-network.github.io/blog/2023/10/08/how-to-write-performant-go-code/),
+I'll explain what multi-disciplinary software development practices mean when
+your development is fast-phasing OSS.
 
 ## Code Modifiability
 
 Most of the computer software is never ready. During its life cycle, it is under
-continuous changes: new features are needed, bugs must be fixed, technical depth
-need to be amortized, etc.
+continuous changes: new features are needed, bugs must be fixed, technical debt
+needs to be amortized, etc.
 
 In modern OSS-based software development, modifiability can be thought of as
 refactorability. Why? 
@@ -116,27 +118,27 @@ Because we want to follow The Boy Scouting Rule:
 
 > *Always leave the code you are working on a little bit better than you found it.*
 
-An excellent example of this rule is that when you **find a bug, before fixing
-it to the mainstream, implement automatic tests to reproduce it**.
+An excellent example of this rule is that when you find a bug, before fixing
+it to the mainstream, **implement automatic tests** to reproduce it.
 
-#### Refactorability
+### Refactorability
 
 Go programming language is the most refactor-friendly of them all I have used.
 1. integrated test harness 
 1. benchmark tests
-1. namespace and module integration
+1. package naming
 1. orthogonality
 1. interface structure (no implementation declaration needed)
 1. no `self` or `this` reserved words, you name object instances yourself
-1. actual hybrid language combining OOP and needs functional programming features
+1. actual hybrid language combining OOP and functional programming features
    concentrating on simplicity
 1. *batteries included* -standard library
 1. type polymorphism, i.e., generics
 
-I don't think that's even all of the features that help refactor your code, but
-these are the fundamentals in the critical order.
+I don't think that's even all of the Go's features that help refactor your code,
+but these are the fundamentals in the critical order.
 
-Like any other programming language, Go isn't perfect yet. The current
+Like any other programming language, Go isn't perfect. The current
 error-handling mechanism and strict community with their 'idiomatic' language
 policies restrict some of Go's refactoring capabilities. But you can avoid them
 by using helper packages and your brains.
@@ -194,8 +196,8 @@ is used:
 ```
 
 The above code block is from a different test than the block below, but I think
-you get the idea. I’m speaking fast skimming of code where simplicity and form
-help a lot. Very much similar to syntax highlighting.
+you get the idea. I’m speaking fast skimming of code where simplicity and
+appearance help a lot. Very much similar to syntax highlighting.
 
 ```go
 func TestNewTimeFieldRFC3339(t *testing.T) {

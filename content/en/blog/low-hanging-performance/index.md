@@ -4,7 +4,7 @@ title: "How To Write Performant Go Code"
 linkTitle: "Performant Go Code"
 description: "The Go programming language has an excellent [concurrency
 model](https://findy-network.github.io/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/)
-that offers great potential to utilize the power of multi-core CPUs. However, we
+that offers great potential to utilize the power of multi-core CPUs. First, we
 need to understand the basics of the single CPU core for the overall software
 performance. For instance, you can write readable and more performant code when
 you know how compilers and underlying hardware work and you use
@@ -51,7 +51,7 @@ In this post, I concentrate only on these three:
    those places where it's called.
 1. **Heap allocations are computationally expensive**. (We out-scope garbage
    collection algorithms because they're such a significant topic that even one
-   book is insufficient. Still it's good to know that heap allocation
+   book is insufficient. Still, it's good to know that heap allocation
    [pressurize a garbage
    collector](https://www.jetbrains.com/help/dotmemory/Analysis_Overview_Page.html#high-gc-pressure).)
 1. **Minimize the problem space at every level of abstraction** and the need
@@ -76,22 +76,39 @@ func doSomething(p any, b []byte) {
     assert(p != nil, "interface value cannot be nil")
     assert(len(b) != 0, "byte slice cannot be empty (or nil)")
     ...
-    // coninuet with something imporant
+    // continue with something important
 ```
 
 By writing the benchmark function for `assert` with Go's testing capabilities,
 you can measure the 'weight' of the function itself. You get the comparison
 point by writing the reference benchmark where you have manually inline-expansed
-the function, i.e. by hand. However, if you aren't interested in the actual
-performance figures but just the information about successful inline expansion
-done by the compiler, you can ask:
+the function, i.e. by hand. It would look like this:
+
+```go
+func doSomethingNoAssert(p any, b []byte) { // for benchmarks only
+    if p != nil {
+        panic("interface value cannot be nil")
+    }
+    if len(b) != 0 {
+        panic("byte slice cannot be empty (or nil)")
+    }
+    ...
+    // continue with something important
+```
+
+Note, this would be your reference point only. (I'll show how to disable
+inlining with Go compiler flags, which would work as a good benchmarking
+reference for some cases.)
+
+And, if you aren't interested in the actual performance figures but just the
+information about successful inline expansion done by the compiler, you can ask:
 
 ```
 go test -c -gcflags=-m=2 <PKG_NAME> 2>&1 | grep 'inlin'
 ```
 
 The `-gcflags=-m=2` gives lots of information, but we can filter only those
-lines that contain messages considering then inlining. Depending on the size of
+lines that contain messages considering the inlining. Depending on the size of
 the packages there can be an overwhelming lot of information where most of them
 aren't related to the task in your hand. You can always filter more.
 
@@ -103,7 +120,7 @@ go build -gcflags -help
 ```
 
 Naturally, you can use compiler to give you a reference point for your inline
-optimizations.
+optimizations as I said before.
 
 Disable all optimizations:
 ```
@@ -126,7 +143,7 @@ languages have object references, and the [memory
 locality](https://www.youtube.com/watch?v=bmZNaUcwBt4&t=1626s) is hidden from
 the programmer, leading to poor performance, e.g., cache misses.
 
-But nothing comes for free – you need to know what you’re doing. Go’s compiler
+But nothing comes for free—you need to know what you’re doing. Go’s compiler
 analyzes your code and, without your help, can decide if a variable is *escaping*
 from its scope and needs to be moved from a stack to the heap.
 
@@ -151,10 +168,11 @@ The `-benchmem` flag inserts two columns to benchmarking results:
 {{< /imgproc >}}
 
 Please note that five (5) columns are now instead of standard three. The extra
-two (rightmost) are the about memory allocations. `B/op` is the average amount of
-bytes per memory allocation in the rightmost column `allocs/op.`
+two (rightmost and marked with red rectangle) are the about memory allocations.
+`B/op` is the average amount of bytes per memory allocation in the rightmost
+column `allocs/op.`
 
-Fewer allocations are better and smaller the size of the allocations. Please
+Fewer allocations, and the smaller the size of the allocations, the better. Please
 note that the performance difference between the above benchmark results isn’t
 because of the allocations only. Most of the differences will be explained in
 the following chapters. But still, allocations are something you should be aware
@@ -170,7 +188,7 @@ The same cache rules apply to instructions as variables. CPU doesn’t need to
 access RAM if all the required code is already in the CPU.
 
 The above benchmark results are from two functions that do the same thing. This
-is the regexp version of it (first row in the benchmark results):
+is the regex version of it (first row in the benchmark results):
 
 ```go
 var (
@@ -189,18 +207,19 @@ func DecamelRegexp(str string) string {
 }
 ```
 
-Go’s regexp implementation is known to be relatively slow, but if you think that
-regexp needs its compiler and processor, it’s not so surprising.
+Go’s regex implementation is known to be relatively slow, but if you think that
+regex needs its compiler and processor, it’s not so surprising.
 
 The hand-optimized version of the Decamel function is almost ten times faster.
 It sounds pretty much like it’s natural because we don’t need all the
-versatility of the entire regexp. We need to transform the inputted CamelCase
-string to a standard lowercase string. However, in this case, the input strings
-aren’t without some exceptions because they come from the Go compiler itself.
-And still, the input set is small enough that we quickly see the difference. And
-now, we can shrink the problem space to our specific needs.
+versatility of the entire regex. We need to transform the inputted CamelCase
+string to a standard lowercase string. However the input strings aren’t without
+some exceptions in our use case because they come from the Go compiler itself.
+(The inputs are from Go's stack trace.) And still, the input set is small enough
+that we quickly see the difference. And now, **we can shrink the problem space
+to our specific needs.**
 
-The faster version of Decamel that’s still quite readable:
+The 1000%-faster version of Decamel that’s still quite readable:
 
 ```go
 func Decamel(s string) string {
@@ -292,11 +311,14 @@ func asciiWordToInt(b []byte) int {
 ```
 
 These two functions do precisely the same thing, or should I say almost because
-the latter’s API is more generic. The converted integer must start from the
-first byte in the slice of ASCII bytes.
+the latter’s API is more *generic*. (In a way, we are both narrowing and
+widening the scope simultaneously, huh?) The converted integer must start from
+the first byte in the slice of ASCII bytes.
 
-It is much over 100x faster! Why? Because the only thing we need is to process
-the ASCII string that comes in byte slice type.
+It is much over 100x faster! Ten thousand percent. Why?
+
+Because the only thing we need is to process the ASCII string that comes in as a
+byte slice.
 
 > You might ask whether this ruined the *readability*, which is fair. But no,
 > because the function `asciiWordToInt` is called from `GoroutineID`, which is
@@ -309,4 +331,4 @@ Next time you are writing something, think twice—I do 😉
 There is so much more about performance tuning in Go. This piece was just a
 scratch of the surface. If you are interested in the topic, please get in touch
 with our project team, and we will tell you more. We would be delighted if you
-join our effort to develop the performing identity agency.
+join our effort to develop the fastest identity agency.
