@@ -96,7 +96,7 @@ func doSomethingNoAssert(p any, b []byte) { // for benchmarks only
     // continue with something important
 ```
 
-Note, this would be your reference point only. (I'll show how to disable
+Note, this would be your reference point only. (I'll show how to turn off
 inlining with Go compiler flags, which would work as a good benchmarking
 reference for some cases.)
 
