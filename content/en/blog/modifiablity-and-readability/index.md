@@ -8,8 +8,8 @@ how compilers and underlying hardware work, you can optimize your code for
 readability without sacrificing performance. Common programming wisdom says
 you shouldn't prioritize performance over other [software architecture quality
 attributes](https://en.wikipedia.org/wiki/List_of_system_quality_attributes)
-during programming. I claim you can and should bring a performance metrics board
-from the beginning!"
+during programming. I claim you can and should bring performance metrics on
+board from the beginning!"
 author: Harri Lainio
 resources:
 - src: "**.{png,jpg}**"
@@ -20,7 +20,7 @@ Since jumping on the OSS (Open Source Software) wagon, I have been learning new
 things about software development and getting more evidence to do certain things
 in a specific way.
 
-Two of my favorite 'things' At the *code level* are **readability**
+Two of my favorite 'things' at the *code level* are **readability**
 and **modifiability**. The latter is a very old friend of SW architecture's
 quality attributes ([Software Architecture in Practice, Len Bass, et
 al.](https://www.oreilly.com/library/view/software-architecture-in/9780132942799/)).
@@ -112,7 +112,7 @@ continuous changes: new features are needed, bugs must be fixed, technical debt
 needs to be amortized, etc.
 
 In modern OSS-based software development, modifiability can be thought of as
-refactorability. Why? 
+*refactorability*. Why? 
 
 Because we want to follow The Boy Scouting Rule:
 
@@ -143,9 +143,9 @@ error-handling mechanism and strict community with their 'idiomatic' language
 policies restrict some of Go's refactoring capabilities. But you can avoid them
 by using helper packages and your brains.
 
-And, of course, there are two new language releases every year. Let's hope that
-upcoming versions help us keep our Go projects refactorable and maybe even
-help a little more.
+And, of course, there are two new language (main) releases every year. Let's
+hope that upcoming versions help us keep our Go projects refactorable and maybe
+even help a little more.
 
 ## Code Readability
 
@@ -222,7 +222,7 @@ an assert package.
 
 Go is built for hyper-large projects. Significant projects in every dimension:
 software engineers, code lines, modules, function points, whatever. And it does
-a pretty good job.
+a pretty damn good job on that.
 
 Unfortunately, the Go community isn't as open and welcoming as, for example,
 Rust's community. (Not my words directly, but I share the opinion). Remember,
