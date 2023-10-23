@@ -1,4 +1,173 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 08 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: How To Write Performant Go Code</title><link>/blog/2023/10/08/how-to-write-performant-go-code/</link><pubDate>Sun, 08 Oct 2023 00:00:00 +0000</pubDate><guid>/blog/2023/10/08/how-to-write-performant-go-code/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 22 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: How To Write Modifiable &amp; Readable Go Code</title><link>/blog/2023/10/22/how-to-write-modifiable-readable-go-code/</link><pubDate>Sun, 22 Oct 2023 00:00:00 +0000</pubDate><guid>/blog/2023/10/22/how-to-write-modifiable-readable-go-code/</guid><description>
+&lt;p>Since jumping on the OSS (Open Source Software) wagon, I have been learning new
+things about software development and getting more evidence to do certain things
+in a specific way.&lt;/p>
+&lt;p>Two of my favorite &amp;rsquo;things&amp;rsquo; at the &lt;em>code level&lt;/em> are &lt;strong>readability&lt;/strong>
+and &lt;strong>modifiability&lt;/strong>. The latter is a very old friend of SW architecture&amp;rsquo;s
+quality attributes (&lt;a href="https://www.oreilly.com/library/view/software-architecture-in/9780132942799/">Software Architecture in Practice, Len Bass, et
+al.&lt;/a>).
+Still, it is not well aligned with the current &lt;em>practices and tools&lt;/em> in the OSS scene
+because everything is so text-centric. Practise has taught that software
+architecture must be expressed in various notations; most are visual.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a href="https://en.wikipedia.org/wiki/A_picture_is_worth_a_thousand_words">&lt;em>&amp;ldquo;A picture is worth a thousand words&amp;rdquo;&lt;/em>&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>Most of us can reason a well-grafted state-machine diagram much faster
+than a code written our favorite programming language. For instance, the next
+state-machine diagram’s protocol implementation is constructed of thousands of
+lines of code structured in multiple files that depend on external modules and
+libraries. &lt;strong>We need abstraction layers and modules to manage all that complexity.&lt;/strong>&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-plantuml" data-lang="plantuml">@startuml
+title Protocol State Machine
+state &amp;#34;Waiting Start Cmd/Msg&amp;#34; as wstart
+[*] -&amp;gt; wstart
+wstart --&amp;gt; PSM: InvitationCmd
+wstart --&amp;gt; PSM: ConnReqMsg
+state &amp;#34;ConnectionProtocolRunning&amp;#34; as PSM {
+state &amp;#34;Sending ConnReq&amp;#34; as sreq
+state &amp;#34;Waiting ConnResp&amp;#34; as wresp
+&amp;#39;[*] -left-&amp;gt; sreq: InvitationCmd
+[*] --&amp;gt; sreq: InvitationCmd
+sreq --&amp;gt; wresp : http/200
+sreq: do/send until http/200
+wresp: exit/return http 200
+wresp --&amp;gt; [*]: ConnRespMsg
+||
+state &amp;#34;Sending ConnResp&amp;#34; as sresp
+[*] --&amp;gt; sresp: ConnReqMsg
+sresp: do/send until http 200
+sresp --&amp;gt; [*]: http/200
+}
+PSM --&amp;gt; [*]
+@enduml
+&lt;/code>&lt;/pre>&lt;p>Expressing things with the control-flow structures of imperative (or functional)
+programming languages is more challenging—especially when the correctness of
+the design should be verified. It seems that it’s easy to forget software
+quality attributes during fast-phasing programming if we use tools that only
+manage sequential text, i.e., code. At the code level, we should use functions
+that give us an abstraction hierarchy and help us to maintain &lt;strong>modifiability&lt;/strong>—and
+readability as well, of course.&lt;/p>
+&lt;p>Moreover, since my studies of SW architecture’s quality attributes, I have
+understood that modifiability is more than modularity, re-usability, or using
+correct architectural styles like pipe and filter. Now we understand the importance of
+&lt;a href="https://en.wikipedia.org/wiki/Test-driven_development">TTD&lt;/a>, &lt;a href="https://en.wikipedia.org/wiki/Continuous_deployment">continuous
+deployment&lt;/a>,
+&lt;a href="https://en.wikipedia.org/wiki/DevOps">DevOps&lt;/a>, etc. These practices
+don&amp;rsquo;t work only on &lt;em>one&lt;/em> of the engineering expertise. The best results are
+achieved &lt;strong>through multi-disciplinary systems engineering practices&lt;/strong>.&lt;/p>
+&lt;blockquote>
+&lt;p>At NASA, “systems engineering” is defined as a methodical, multi-disciplinary
+approach for the design, realization, technical management, operations, and
+retirement of a system. — &lt;a href="https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf">NASA Systems Engineering
+Handbook&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>In this and &lt;a href="https://findy-network.github.io/blog/2023/10/08/how-to-write-performant-go-code/">my previous performance
+post&lt;/a>,
+I&amp;rsquo;ll explain what multi-disciplinary software development practices mean when
+your development is fast-phasing OSS.&lt;/p>
+&lt;h2 id="code-modifiability">Code Modifiability&lt;/h2>
+&lt;p>Most of the computer software is never ready. During its life cycle, it is under
+continuous changes: new features are needed, bugs must be fixed, technical debt
+needs to be amortized, etc.&lt;/p>
+&lt;p>In modern OSS-based software development, modifiability can be thought of as
+&lt;em>refactorability&lt;/em>. Why?&lt;/p>
+&lt;p>Because we want to follow The Boy Scouting Rule:&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;em>Always leave the code you are working on a little bit better than you found it.&lt;/em>&lt;/p>
+&lt;/blockquote>
+&lt;p>An excellent example of this rule is that when you find a bug, before fixing
+it to the mainstream, &lt;strong>implement automatic tests&lt;/strong> to reproduce it.&lt;/p>
+&lt;h3 id="refactorability">Refactorability&lt;/h3>
+&lt;p>Go programming language is the most refactor-friendly of them all I have used.&lt;/p>
+&lt;ol>
+&lt;li>integrated test harness&lt;/li>
+&lt;li>benchmark tests&lt;/li>
+&lt;li>package naming&lt;/li>
+&lt;li>orthogonality&lt;/li>
+&lt;li>interface structure (no implementation declaration needed)&lt;/li>
+&lt;li>no &lt;code>self&lt;/code> or &lt;code>this&lt;/code> reserved words, you name object instances yourself&lt;/li>
+&lt;li>actual hybrid language combining OOP and functional programming features
+concentrating on simplicity&lt;/li>
+&lt;li>&lt;em>batteries included&lt;/em> -standard library&lt;/li>
+&lt;li>type polymorphism, i.e., generics&lt;/li>
+&lt;/ol>
+&lt;p>I don&amp;rsquo;t think that&amp;rsquo;s even all of the Go&amp;rsquo;s features that help refactor your code,
+but these are the fundamentals in the critical order.&lt;/p>
+&lt;p>Like any other programming language, Go isn&amp;rsquo;t perfect. The current
+error-handling mechanism and strict community with their &amp;lsquo;idiomatic&amp;rsquo; language
+policies restrict some of Go&amp;rsquo;s refactoring capabilities. But you can avoid them
+by using helper packages and your brains.&lt;/p>
+&lt;p>And, of course, there are two new language (main) releases every year. Let&amp;rsquo;s
+hope that upcoming versions help us keep our Go projects refactorable and maybe
+even help a little more.&lt;/p>
+&lt;h2 id="code-readability">Code Readability&lt;/h2>
+&lt;p>We want to maximize our &lt;strong>code’s readability&lt;/strong>. One of the Go code’s problems is
+that it overuses the if-statement, which prevents you from noticing the
+algorithm&amp;rsquo;s critical decision points.&lt;/p>
+&lt;p>For example, Go’s standard library includes quite many of the following code
+blocks:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000">doSomething&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">p&lt;/span> &lt;span style="color:#000">any&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">b&lt;/span> &lt;span style="color:#000;font-weight:bold">[]&lt;/span>&lt;span style="color:#204a87;font-weight:bold">byte&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">p&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">==&lt;/span> &lt;span style="color:#204a87;font-weight:bold">nil&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87">panic&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;input argument p cannot be nil&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#204a87">len&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">b&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">==&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">0&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87">panic&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;input argument p cannot be nil&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#ce5c00;font-weight:bold">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">err&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">w&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Close&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">err&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">!=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">nil&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">log&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Fatal&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">err&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>It’s easy to see that together with Go’s if-based error checking, these two hide
+the happy path and make it difficult to follow the algorithm and skim the code.
+The same thing can be found from Go’s unit tests if no 3rd party helper package
+is used:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">for&lt;/span> &lt;span style="color:#000">_&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#204a87;font-weight:bold">range&lt;/span> &lt;span style="color:#000">tests&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">t&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Run&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">name&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#204a87;font-weight:bold">func&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">t&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">testing&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">T&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">r&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">Open&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">args&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">config&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">args&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">credentials&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">got&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Err&lt;/span>&lt;span style="color:#000;font-weight:bold">();&lt;/span> &lt;span style="color:#000;font-weight:bold">!&lt;/span>&lt;span style="color:#000">reflect&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">DeepEqual&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">got&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">want&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">t&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Errorf&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;Open() = %v, want %v&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">got&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">want&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">w&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">r&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Handle&lt;/span>&lt;span style="color:#000;font-weight:bold">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">got&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">Export&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">w&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">args&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">exportCfg&lt;/span>&lt;span style="color:#000;font-weight:bold">)).&lt;/span>&lt;span style="color:#000">Err&lt;/span>&lt;span style="color:#000;font-weight:bold">();&lt;/span> &lt;span style="color:#000;font-weight:bold">!&lt;/span>&lt;span style="color:#000">reflect&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">DeepEqual&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">got&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">want&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">t&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Errorf&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;Export() = %v, want %v&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">got&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">want&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">if&lt;/span> &lt;span style="color:#000">got&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">&amp;lt;-&lt;/span>&lt;span style="color:#000">Close&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">w&lt;/span>&lt;span style="color:#000;font-weight:bold">)).&lt;/span>&lt;span style="color:#000">Err&lt;/span>&lt;span style="color:#000;font-weight:bold">();&lt;/span> &lt;span style="color:#000;font-weight:bold">!&lt;/span>&lt;span style="color:#000">reflect&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">DeepEqual&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">got&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">want&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">t&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Errorf&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;Close() = %v, want %v&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">got&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span> &lt;span style="color:#000">tt&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">want&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">})&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The above code block is from a different test than the block below, but I think
+you get the idea. I’m speaking fast skimming of code where simplicity and
+appearance help a lot. Very much similar to syntax highlighting.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">func&lt;/span> &lt;span style="color:#000">TestNewTimeFieldRFC3339&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">t&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">*&lt;/span>&lt;span style="color:#000">testing&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">T&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">defer&lt;/span> &lt;span style="color:#000">assert&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">PushTester&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">t&lt;/span>&lt;span style="color:#000;font-weight:bold">)()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">var&lt;/span> &lt;span style="color:#000">testMsg&lt;/span> &lt;span style="color:#000">Basicmessage&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">dto&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">FromJSON&lt;/span>&lt;span style="color:#000;font-weight:bold">([]&lt;/span>&lt;span style="color:#204a87">byte&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">timeJSONRFC3339&lt;/span>&lt;span style="color:#000;font-weight:bold">),&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">&amp;amp;&lt;/span>&lt;span style="color:#000">testMsg&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">timeValue&lt;/span> &lt;span style="color:#ce5c00;font-weight:bold">:=&lt;/span> &lt;span style="color:#000">testMsg&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">SentTime&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">assert&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">INotNil&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">timeValue&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">assert&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Equal&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">timeValue&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Year&lt;/span>&lt;span style="color:#000;font-weight:bold">(),&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">2022&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">assert&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Equal&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">timeValue&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Month&lt;/span>&lt;span style="color:#000;font-weight:bold">(),&lt;/span> &lt;span style="color:#000">time&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">September&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000">assert&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Equal&lt;/span>&lt;span style="color:#000;font-weight:bold">(&lt;/span>&lt;span style="color:#000">timeValue&lt;/span>&lt;span style="color:#000;font-weight:bold">.&lt;/span>&lt;span style="color:#000">Day&lt;/span>&lt;span style="color:#000;font-weight:bold">(),&lt;/span> &lt;span style="color:#0000cf;font-weight:bold">30&lt;/span>&lt;span style="color:#000;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>That&amp;rsquo;s clear and easy to skim. It&amp;rsquo;s also straightforward to extend to use table
+testing. I left it for the reader to figure out how that code renders without
+an assert package.&lt;/p>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>Go is built for hyper-large projects. Significant projects in every dimension:
+software engineers, code lines, modules, function points, whatever. And it does
+a pretty damn good job on that.&lt;/p>
+&lt;p>Unfortunately, the Go community isn&amp;rsquo;t as open and welcoming as, for example,
+Rust&amp;rsquo;s community. (Not my words directly, but I share the opinion). Remember,
+it&amp;rsquo;s your code and your project to maintain. So, keep your head and remember:&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;em>The whole problem with the world is that fools and fanatics are certain of
+themselves, while wiser people are full of doubts.&lt;/em> — not entirely Bertrand
+Russell&lt;/p>
+&lt;/blockquote></description></item><item><title>Blog: How To Write Performant Go Code</title><link>/blog/2023/10/08/how-to-write-performant-go-code/</link><pubDate>Sun, 08 Oct 2023 00:00:00 +0000</pubDate><guid>/blog/2023/10/08/how-to-write-performant-go-code/</guid><description>
 &lt;p>I suppose all of us programmers have heard of the infamous &lt;em>premature optimization&lt;/em>:&lt;/p>
 &lt;blockquote>
 &lt;p>&lt;em>Premature optimization is the root of all evil in programming.&lt;/em>&lt;/p>
