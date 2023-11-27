@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Slides</title><link>/docs/slides/</link><description>Recent content in Slides on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 24 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/docs/slides/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Findy Agency — Building Highway to Verified Data Networks</title><link>/docs/slides/building-findy-agency/</link><pubDate>Tue, 26 Oct 2021 00:00:00 +0000</pubDate><guid>/docs/slides/building-findy-agency/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Slides</title><link>https://findy-network.github.io/docs/slides/</link><description>Recent content in Slides on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 24 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/docs/slides/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Findy Agency — Building Highway to Verified Data Networks</title><link>https://findy-network.github.io/docs/slides/building-findy-agency/</link><pubDate>Tue, 26 Oct 2021 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/slides/building-findy-agency/</guid><description>
 &lt;p>background-image: url(&lt;a href="https://images.unsplash.com/photo-1581010105267-67447703cfe9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;amp;ixlib=rb-1.2.1&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1471&amp;amp;q=80">https://images.unsplash.com/photo-1581010105267-67447703cfe9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;amp;ixlib=rb-1.2.1&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1471&amp;amp;q=80&lt;/a>)
 background-size: cover
 class: center, middle, dark&lt;/p>
@@ -52,7 +52,7 @@ name: network&lt;/p>
 &lt;hr>
 &lt;p>layout: false&lt;/p>
 &lt;h1 id="verified-data">Verified Data&lt;/h1>
-&lt;p>.img-fill[&lt;img src="/docs/slides/building-findy-agency/trust-triangle.png" alt="Trust Triangle">]&lt;/p>
+&lt;p>.img-fill[&lt;img src="https://findy-network.github.io/docs/slides/building-findy-agency/trust-triangle.png" alt="Trust Triangle">]&lt;/p>
 &lt;p>???&lt;/p>
 &lt;ul>
 &lt;li>The idea of verified data networks is to utilize cryptography so that different identities can hold and prove facts about themselves digitally.&lt;/li>
@@ -78,7 +78,7 @@ class: center padded-slide&lt;/p>
 &lt;hr>
 &lt;p>class: img-fill middle&lt;/p>
 &lt;h3 id="example-dating-service-with-verified-data-1">Example: Dating Service with Verified Data&lt;/h3>
-&lt;p>.img-fill[&lt;img src="/docs/slides/building-findy-agency/trust-triangle-ex1.png" alt="Trust Triangle">]&lt;/p>
+&lt;p>.img-fill[&lt;img src="https://findy-network.github.io/docs/slides/building-findy-agency/trust-triangle-ex1.png" alt="Trust Triangle">]&lt;/p>
 &lt;hr>
 &lt;p>background-image: url(&lt;a href="https://images.unsplash.com/photo-1535191595495-d3222b2eda44?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;amp;ixlib=rb-1.2.1&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1471&amp;amp;q=80">https://images.unsplash.com/photo-1535191595495-d3222b2eda44?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;amp;ixlib=rb-1.2.1&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=1471&amp;amp;q=80&lt;/a>)
 background-size: cover
@@ -94,7 +94,7 @@ class: center padded-slide&lt;/p>
 &lt;hr>
 &lt;p>class: img-fill middle&lt;/p>
 &lt;h3 id="example-car-rental-service-with-verified-data-1">Example: Car Rental Service with Verified Data&lt;/h3>
-&lt;p>&lt;img src="/docs/slides/building-findy-agency/trust-triangle-ex2.png" alt="Trust Triangle">&lt;/p>
+&lt;p>&lt;img src="https://findy-network.github.io/docs/slides/building-findy-agency/trust-triangle-ex2.png" alt="Trust Triangle">&lt;/p>
 &lt;hr>
 &lt;p>background-image: url(&lt;a href="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&amp;amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=2070&amp;amp;q=80">https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-1.2.1&amp;amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;amp;auto=format&amp;amp;fit=crop&amp;amp;w=2070&amp;amp;q=80&lt;/a>)
 background-size: cover
@@ -110,10 +110,10 @@ class: center padded-slide&lt;/p>
 &lt;hr>
 &lt;p>class: img-fill middle&lt;/p>
 &lt;h3 id="example-doctor-reservation-service-with-verified-data-1">Example: Doctor Reservation Service with Verified Data&lt;/h3>
-&lt;p>&lt;img src="/docs/slides/building-findy-agency/trust-triangle-ex3.png" alt="Trust Triangle">&lt;/p>
+&lt;p>&lt;img src="https://findy-network.github.io/docs/slides/building-findy-agency/trust-triangle-ex3.png" alt="Trust Triangle">&lt;/p>
 &lt;hr>
 &lt;p>class: img-fill&lt;/p>
-&lt;p>&lt;img src="/docs/slides/building-findy-agency/findy-homepage.png" alt="Findy Network Homepage">
+&lt;p>&lt;img src="https://findy-network.github.io/docs/slides/building-findy-agency/findy-homepage.png" alt="Findy Network Homepage">
 .center.small[&lt;a href="https://findy.fi">Findy Network&lt;/a>]&lt;/p>
 &lt;p>???&lt;/p>
 &lt;ul>
@@ -165,7 +165,7 @@ class: center padded-slide&lt;/p>
 &lt;hr>
 &lt;p>class: middle&lt;/p>
 &lt;h3 id="used-technologies-1">Used Technologies&lt;/h3>
-&lt;p>.img-fill[&lt;img src="/docs/slides/building-findy-agency/agency-tech.drawio.png" alt="Agency Technologies">]&lt;/p>
+&lt;p>.img-fill[&lt;img src="https://findy-network.github.io/docs/slides/building-findy-agency/agency-tech.drawio.png" alt="Agency Technologies">]&lt;/p>
 &lt;p>???&lt;/p>
 &lt;ul>
 &lt;li>Each identity holder owns an agent that can handle the credentials and the needed communication with other agents.&lt;/li>
@@ -176,7 +176,7 @@ class: center padded-slide&lt;/p>
 &lt;hr>
 &lt;p>class: img-fill middle center&lt;/p>
 &lt;h3 id="architecture-overview">Architecture Overview&lt;/h3>
-&lt;p>&lt;img src="/docs/slides/building-findy-agency/agency-arch.drawio.png" alt="Agency Architecture">&lt;/p>
+&lt;p>&lt;img src="https://findy-network.github.io/docs/slides/building-findy-agency/agency-arch.drawio.png" alt="Agency Architecture">&lt;/p>
 &lt;p>???&lt;/p>
 &lt;ul>
 &lt;li>Multitenant agency serving both individuals and organizations&lt;/li>
@@ -260,11 +260,11 @@ class: center padded-slide&lt;/p>
 &lt;h1 id="demo">Demo&lt;/h1>
 &lt;p>&lt;img src="https://github.com/findy-network/findy-wallet-pwa/raw/dev/docs/wallet-login.gif" alt="Demo">&lt;/p>
 &lt;p>&lt;a href="https://findy-network.github.io/">Try it out&lt;/a>&lt;/p>
-&lt;p>???&lt;/p></description></item><item><title>Docs: Test Coverage</title><link>/docs/slides/test-coverage/</link><pubDate>Thu, 24 Aug 2023 00:00:00 +0000</pubDate><guid>/docs/slides/test-coverage/</guid><description>
+&lt;p>???&lt;/p></description></item><item><title>Docs: Test Coverage</title><link>https://findy-network.github.io/docs/slides/test-coverage/</link><pubDate>Thu, 24 Aug 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/slides/test-coverage/</guid><description>
 &lt;h2 id="gophercon-uk-2023-london">GopherCon UK 2023, London&lt;/h2>
-&lt;p>&lt;a href="/pdf/gophercon-uk.pdf">Slides&lt;/a> for &lt;a href="https://www.gophercon.co.uk/">GopherCon UK 2023&lt;/a>, August 2023&lt;/p>
+&lt;p>&lt;a href="https://findy-network.github.io/pdf/gophercon-uk.pdf">Slides&lt;/a> for &lt;a href="https://www.gophercon.co.uk/">GopherCon UK 2023&lt;/a>, August 2023&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
-&lt;img class="card-img-top" src="/docs/slides/test-coverage/gophercon-uk_hua5fb63a8fd0ce5b633a9f4f9d1947e1a_454913_925x925_fit_q75_catmullrom.jpeg" width="925" height="617">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/slides/test-coverage/gophercon-uk_hua5fb63a8fd0ce5b633a9f4f9d1947e1a_454913_925x925_fit_q75_catmullrom.jpeg" width="925" height="617">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Laura presenting at GopherCon UK 2023. Photo by GopherCon UK.
@@ -273,9 +273,9 @@ class: center padded-slide&lt;/p>
 &lt;/figcaption>
 &lt;/figure>
 &lt;h2 id="fooconf-2023-helsinki">FooConf 2023, Helsinki&lt;/h2>
-&lt;p>&lt;a href="/pdf/fooconf-fi.pdf">Slides&lt;/a> for &lt;a href="https://www.fooconf.fi/">FooConf 2023&lt;/a>, November 2023&lt;/p>
+&lt;p>&lt;a href="https://findy-network.github.io/pdf/fooconf-fi.pdf">Slides&lt;/a> for &lt;a href="https://www.fooconf.fi/">FooConf 2023&lt;/a>, November 2023&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
-&lt;img class="card-img-top" src="/docs/slides/test-coverage/fooconf_hu377048d969c934d9fea2afdbff7550a6_451501_925x925_fit_q75_catmullrom.jpeg" width="925" height="694">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/slides/test-coverage/fooconf_hu377048d969c934d9fea2afdbff7550a6_451501_925x925_fit_q75_catmullrom.jpeg" width="925" height="694">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Laura presenting at FooConf 2023. Photo by FooConf.
@@ -284,46 +284,46 @@ class: center padded-slide&lt;/p>
 &lt;/figcaption>
 &lt;/figure>
 &lt;h2 id="golab-2023-florence">GoLab 2023, Florence&lt;/h2>
-&lt;p>&lt;a href="/pdf/golab-2023.pdf">Slides&lt;/a> for &lt;a href="https://golab.io/">GoLab 2023&lt;/a>, November 2023&lt;/p>
+&lt;p>&lt;a href="https://findy-network.github.io/pdf/golab-2023.pdf">Slides&lt;/a> for &lt;a href="https://golab.io/">GoLab 2023&lt;/a>, November 2023&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
-&lt;img class="card-img-top" src="/docs/slides/test-coverage/golab_hue8809023e63696ff023dae6b529de093_131787_925x925_fit_q75_catmullrom.jpeg" width="925" height="616">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/slides/test-coverage/golab_hue8809023e63696ff023dae6b529de093_131787_925x925_fit_q75_catmullrom.jpeg" width="925" height="616">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Laura presenting at GoLab 2023. Photo by GoLab.
 &lt;/em>
 &lt;/p>
 &lt;/figcaption>
-&lt;/figure></description></item><item><title>Docs: CDK-based Continous Deployment for OSS</title><link>/docs/slides/aws-meetup/</link><pubDate>Tue, 07 Mar 2023 00:00:00 +0000</pubDate><guid>/docs/slides/aws-meetup/</guid><description>
-&lt;p>&lt;a href="/pdf/aws-meetup.pdf">Slides&lt;/a> for &lt;a href="https://www.meetup.com/aws-user-group-tampere/events/289346840/">Tampere AWS User Group Meetup&lt;/a>, March 2023&lt;/p>
+&lt;/figure></description></item><item><title>Docs: CDK-based Continous Deployment for OSS</title><link>https://findy-network.github.io/docs/slides/aws-meetup/</link><pubDate>Tue, 07 Mar 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/slides/aws-meetup/</guid><description>
+&lt;p>&lt;a href="https://findy-network.github.io/pdf/aws-meetup.pdf">Slides&lt;/a> for &lt;a href="https://www.meetup.com/aws-user-group-tampere/events/289346840/">Tampere AWS User Group Meetup&lt;/a>, March 2023&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
-&lt;img class="card-img-top" src="/docs/slides/aws-meetup/laura-aws-meetup_huf19d8db366f9ffbd0b15ba9563d963d8_223304_675x675_fit_q75_catmullrom.jpeg" width="675" height="506">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/slides/aws-meetup/laura-aws-meetup_huf19d8db366f9ffbd0b15ba9563d963d8_223304_675x675_fit_q75_catmullrom.jpeg" width="675" height="506">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Laura at AWS User Group Meetup (Photo by Harri Lakkala)&lt;/em>
 &lt;/p>
 &lt;/figcaption>
-&lt;/figure></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>/docs/slides/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>/docs/slides/introduction-to-ssi/</guid><description>
-&lt;p>&lt;a href="/pdf/Intro2SSI.pdf">Slides&lt;/a> for &lt;a href="https://sites.uwasa.fi/poweredbyblockchain/">Digital Identity Hack 2023 Kick-off&lt;/a>&lt;/p>
-&lt;p>&lt;a href="/docs/videos/introduction-to-ssi/">Presentation&lt;/a>&lt;/p>
+&lt;/figure></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>https://findy-network.github.io/docs/slides/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/slides/introduction-to-ssi/</guid><description>
+&lt;p>&lt;a href="https://findy-network.github.io/pdf/Intro2SSI.pdf">Slides&lt;/a> for &lt;a href="https://sites.uwasa.fi/poweredbyblockchain/">Digital Identity Hack 2023 Kick-off&lt;/a>&lt;/p>
+&lt;p>&lt;a href="https://findy-network.github.io/docs/videos/introduction-to-ssi/">Presentation&lt;/a>&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
-&lt;img class="card-img-top" src="/docs/slides/introduction-to-ssi/harri_hue0854f62c0200f8b9e71514cad06fad8_1488441_675x675_fit_q75_catmullrom.jpg" width="675" height="431">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/slides/introduction-to-ssi/harri_hue0854f62c0200f8b9e71514cad06fad8_1488441_675x675_fit_q75_catmullrom.jpg" width="675" height="431">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Harri Lainio introducing SSI&lt;/em>
 &lt;/p>
 &lt;/figcaption>
-&lt;/figure></description></item><item><title>Docs: Hyperledger Global Forum 2022</title><link>/docs/slides/hyperledger-forum-2022/</link><pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate><guid>/docs/slides/hyperledger-forum-2022/</guid><description>
-&lt;p>&lt;a href="/pdf/findy-ssi-agency.pdf">Slides&lt;/a> for &lt;a href="https://www.hyperledger.org/event/hyperledger-global-forum-2022-dublin-ireland">Hyperledger Global Forum 2022&lt;/a> breakout session&lt;/p>
-&lt;p>&lt;a href="/docs/videos/hyperledger-forum/">Presentation&lt;/a>&lt;/p>
+&lt;/figure></description></item><item><title>Docs: Hyperledger Global Forum 2022</title><link>https://findy-network.github.io/docs/slides/hyperledger-forum-2022/</link><pubDate>Tue, 13 Sep 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/slides/hyperledger-forum-2022/</guid><description>
+&lt;p>&lt;a href="https://findy-network.github.io/pdf/findy-ssi-agency.pdf">Slides&lt;/a> for &lt;a href="https://www.hyperledger.org/event/hyperledger-global-forum-2022-dublin-ireland">Hyperledger Global Forum 2022&lt;/a> breakout session&lt;/p>
+&lt;p>&lt;a href="https://findy-network.github.io/docs/videos/hyperledger-forum/">Presentation&lt;/a>&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
-&lt;img class="card-img-top" src="/docs/slides/hyperledger-forum-2022/harri_hu2cab6ca73704e1ee3bd023cf0ed509ec_598479_675x675_fit_catmullrom_3.png" width="675" height="353">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/slides/hyperledger-forum-2022/harri_hu2cab6ca73704e1ee3bd023cf0ed509ec_598479_675x675_fit_catmullrom_3.png" width="675" height="353">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;/p>
 &lt;/figcaption>
 &lt;/figure>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
-&lt;img class="card-img-top" src="/docs/slides/hyperledger-forum-2022/laura_hu2cab6ca73704e1ee3bd023cf0ed509ec_613243_675x675_fit_catmullrom_3.png" width="675" height="353">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/slides/hyperledger-forum-2022/laura_hu2cab6ca73704e1ee3bd023cf0ed509ec_613243_675x675_fit_catmullrom_3.png" width="675" height="353">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;/p>

@@ -1,6 +1,6 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Overview</title><link>/docs/overview/</link><description>Recent content in Overview on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 20 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/docs/overview/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Findy Agency Architecture</title><link>/docs/overview/architecture/</link><pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/overview/architecture/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Overview</title><link>https://findy-network.github.io/docs/overview/</link><description>Recent content in Overview on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 20 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/docs/overview/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Findy Agency Architecture</title><link>https://findy-network.github.io/docs/overview/architecture/</link><pubDate>Fri, 20 Aug 2021 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/overview/architecture/</guid><description>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 685px">
-&lt;img class="card-img-top" src="/docs/overview/architecture/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_675x675_fit_catmullrom_3.png" width="675" height="589">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/overview/architecture/arch-overview_hud3b603a9121f1582ad6844475842d5cd_90814_675x675_fit_catmullrom_3.png" width="675" height="589">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Overview of Findy Agency. See more detailed description in &lt;a href="https://github.com/findy-network/findy-agent#agency-architecture">findy-agent documentation&lt;/a>.&lt;/em>
@@ -15,7 +15,7 @@
 &lt;/ul>
 &lt;p>&lt;a href="https://github.com/findy-network/findy-wallet-pwa">Reference web wallet&lt;/a> implementation is a React app that utilizes standard WebAuthn protocol and browser capabilities to authenticate to backend. Web wallet uses GraphQL to fetch and update agency data.&lt;/p>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 391px">
-&lt;img class="card-img-top" src="/docs/overview/architecture/wallet-screenshot_hu6176385a109af25480dcf9343df0e1eb_63896_675x675_fit_catmullrom_3.png" width="381" height="675">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/overview/architecture/wallet-screenshot_hu6176385a109af25480dcf9343df0e1eb_63896_675x675_fit_catmullrom_3.png" width="381" height="675">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Wallet login screen.&lt;/em>

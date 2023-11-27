@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Getting Started</title><link>/docs/getting-started/</link><description>Recent content in Getting Started on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 10 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/docs/getting-started/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: First Steps with Findy Agency</title><link>/docs/getting-started/setup-agency/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/getting-started/setup-agency/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Getting Started</title><link>https://findy-network.github.io/docs/getting-started/</link><description>Recent content in Getting Started on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 10 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/docs/getting-started/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: First Steps with Findy Agency</title><link>https://findy-network.github.io/docs/getting-started/setup-agency/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/getting-started/setup-agency/</guid><description>
 &lt;h2 id="full-agency-setup">Full Agency Setup&lt;/h2>
 &lt;p>Agency services can be setup easily locally using Docker.
 Check further instructions &lt;a href="https://github.com/findy-network/findy-wallet-pwa/tree/dev/tools/env#agency-setup-for-local-development">here&lt;/a>.
@@ -9,7 +9,7 @@ with other agents.&lt;/p>
 &lt;p>Once you have the services running on your computer,&lt;/p>
 &lt;ul>
 &lt;li>try to run &lt;a href="https://github.com/findy-network/findy-agency-demo#findy-agency-demo">the Alice-Faber-Acme demo&lt;/a>&lt;/li>
-&lt;li>start to &lt;a href="/docs/getting-started/service-agent/">build a service agent of your own&lt;/a>.&lt;/li>
+&lt;li>start to &lt;a href="https://findy-network.github.io/docs/getting-started/service-agent/">build a service agent of your own&lt;/a>.&lt;/li>
 &lt;li>or you can play around with the credentials using the tools: CLI tool &lt;a href="#cli">findy-agent-cli&lt;/a> or
 UI tool &lt;a href="#ui-tool">findy-issuer-tool&lt;/a>&lt;/li>
 &lt;/ul>
@@ -82,7 +82,7 @@ UI tool &lt;a href="#ui-tool">findy-issuer-tool&lt;/a>&lt;/li>
 &lt;ul>
 &lt;li>before UI-tool usage, you need to have a working Findy Agency installation&lt;/li>
 &lt;li>findy-issuer-tool works also as a sample implementation for a Findy Agency service agent implemented with JavaScript.&lt;/li>
-&lt;/ul></description></item><item><title>Docs: Service Agents</title><link>/docs/getting-started/service-agent/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>/docs/getting-started/service-agent/</guid><description>
+&lt;/ul></description></item><item><title>Docs: Service Agents</title><link>https://findy-network.github.io/docs/getting-started/service-agent/</link><pubDate>Tue, 10 Aug 2021 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/getting-started/service-agent/</guid><description>
 &lt;p>Service agents i.e. organization agents utilize Findy Agency through its gRPC API.
 The agent creation and authentication is handled through the headless authenticator, &lt;em>acator&lt;/em>,
 that implements the FIDO2 protocol. Once authenticated, all agent functionality is available
@@ -106,7 +106,7 @@ to implement an agent of your own:&lt;/p>
 &lt;/ul>
 &lt;h2 id="sample-flow-connecting-to-another-agent">Sample flow: connecting to another agent&lt;/h2>
 &lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 591px">
-&lt;img class="card-img-top" src="/docs/getting-started/service-agent/service-agent_hua21be9aae7ff35f4d15c00a03487f315_97837_675x675_fit_catmullrom_3.png" width="581" height="675">
+&lt;img class="card-img-top" src="https://findy-network.github.io/docs/getting-started/service-agent/service-agent_hua21be9aae7ff35f4d15c00a03487f315_97837_675x675_fit_catmullrom_3.png" width="581" height="675">
 &lt;figcaption class="card-body px-0 pt-2 pb-0">
 &lt;p class="card-text">
 &lt;em>Service Agent onboarding and connecting to another agent by creating a connection invitation.&lt;/em>
