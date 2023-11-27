@@ -1,4 +1,4 @@
-baseURL = "/"
+baseURL = "https://findy-network.github.io/"
 title = "Findy Agency"
 
 enableRobotsTXT = true
