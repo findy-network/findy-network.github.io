@@ -2,7 +2,7 @@
 date: 2023-11-16
 title: "Test Coverage Beyond Unit Testing"
 linkTitle: "Coverage for E2E Tests"
-description: "Automated testing is like having an extra member in your team, a knight against regression. Test coverage measurements and automatic test coverage monitoring help the team keep the knight shiny, i.e., automated test sets in good shape. Traditionally, we have measured the coverage for unit tests, but thorough CI pipelines also include other types of testing. Go has recently introduced new tooling that allows us to measure the test coverage for application tests and thus improve our capabilities for keeping our automated tests in shape automatically."
+description: "Automated testing is like having an extra member in your team, a shining knight against regression. Test coverage measurements and automatic test coverage monitoring help the team keep the knight shiny, i.e., automated test sets in good shape. Traditionally, we have measured the coverage for unit tests, but thorough CI pipelines also include other types of testing. Go has recently introduced new tooling that allows us to measure the test coverage for application tests and thus improve our capabilities for keeping our automated tests in shape automatically."
 author: Laura Vuorenoja
 resources:
 - src: "**.{png,jpg}"
@@ -10,10 +10,11 @@ resources:
 ---
 
 
-Automated testing is your superpower against regression. It prevents you from breaking existing
+Automated testing is your superpower against [regression](https://en.wikipedia.org/wiki/Software_regression).
+It prevents you from breaking existing
 functionality when introducing new code changes. The most important aspect of automated testing
 is **automation**. The testing should happen automatically in the continuous integration (CI) pipeline
-whenever developers create pull requests. If the tests are not passing, the team doesn't merge
+whenever developers do code changes. If the tests are not passing, the team shouldn't merge
 the changes to the main branch. I often regard the automated test set as
 an extra team member – the team's tireless knight against regression.
 
@@ -34,8 +35,8 @@ in the end product. Therefore, we should also have testing that verifies the fun
 with the proper external dependencies.
 
 {{< imgproc application Fit "925x925" >}}
-<em>Findy Agency application tests are run in GitHub Actions workflows and they utilize
-docker-compose to orchestrate the agency services.</em>
+<em>Findy Agency application tests are run in GitHub Actions workflows,
+utilizing docker-compose to orchestrate the agency services.</em>
 {{< /imgproc >}}
 
 Application (integration/e2e) tests execute the software without unit testing tooling
@@ -136,6 +137,8 @@ repository CI configuration.
 {{< youtube EwCFRVkqHic >}}
 *Watch my "Boosting Test Coverage for Microservices" talk on GopherCon UK on YouTube.*
 
-**Note!** The coverage data is lost, if the process does not exit "normally". Therefore, the service needs to
-have graceful shutdown in place, and the Docker container needs to pass the `SIGTERM` signal to
-the server process for this approach to work.
+**Note!** The coverage data is lost if the process is forced to be terminated and it doesn't handle
+the termination signal gracefully. Ungraceful termination prevents the added instrumentation code
+from writing the coverage file. Therefore, the service needs to
+have graceful shutdown in place. Also, the Docker container runtime needs to pass
+the `SIGTERM` signal to the server process for this approach to work.
