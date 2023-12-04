@@ -1,4 +1,138 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>https://findy-network.github.io/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 22 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: How To Write Modifiable &amp; Readable Go Code</title><link>https://findy-network.github.io/blog/2023/10/22/how-to-write-modifiable-readable-go-code/</link><pubDate>Sun, 22 Oct 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2023/10/22/how-to-write-modifiable-readable-go-code/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>https://findy-network.github.io/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 16 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Test Coverage Beyond Unit Testing</title><link>https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/</link><pubDate>Thu, 16 Nov 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/</guid><description>
+&lt;p>Automated testing is your superpower against &lt;a href="https://en.wikipedia.org/wiki/Software_regression">regression&lt;/a>.
+It prevents you from breaking existing
+functionality when introducing new code changes. The most important aspect of automated testing
+is &lt;strong>automation&lt;/strong>. The testing should happen automatically in the continuous integration (CI) pipeline
+whenever developers do code changes. If the tests are not passing, the team shouldn&amp;rsquo;t merge
+the changes to the main branch. I often regard the automated test set as
+an extra team member – the team&amp;rsquo;s tireless knight against regression.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/cover-knight_hu43378c79be2c98339b1f64f1c1dc1193_958813_925x925_fit_catmullrom_3.png" width="925" height="520">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Automated test set - the team's knight against regression&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;h2 id="complementing-unit-tests">Complementing Unit Tests&lt;/h2>
+&lt;p>The automated test set usually consists of many types of testing. Unit tests are
+the bread and butter of any project&amp;rsquo;s quality assurance process. But quite often,
+we need something more to complement the unit tests.&lt;/p>
+&lt;p>We usually write simulation code for external functionality to keep the unit tests relevant,
+modular, and fast to execute. However, wasting the team&amp;rsquo;s resources on creating
+the simulation code doesn&amp;rsquo;t always make sense. Furthermore, we don&amp;rsquo;t include simulation code
+in the end product. Therefore, we should also have testing that verifies the functionality
+with the proper external dependencies.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/application-tests_hu8e30c00aa0d117d2d4764565470d4365_109885_925x925_fit_catmullrom_3.png" width="925" height="335">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Findy Agency application tests are run in GitHub Actions workflows,
+utilizing docker-compose to orchestrate the agency services.&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>Application (integration/e2e) tests execute the software without unit testing tooling
+in the software&amp;rsquo;s &amp;ldquo;real&amp;rdquo; running environment and with as many actual external dependencies
+as possible. Those tests validate the functionality from the end user&amp;rsquo;s point of view.
+They complement unit tests, especially when verifying interoperability, asynchronous
+functionality, and other software features that are difficult or impossible to test with unit testing.&lt;/p>
+&lt;h2 id="keeping-the-knight-in-shape">Keeping the Knight in Shape&lt;/h2>
+&lt;p>Test coverage measurement is the process that can gather data on which code lines the test executes.
+Typically, this tooling is available for unit tests. Although coverage measurement and
+result data visualization can be handy in a local development cycle, I see the most value
+when the team integrates the coverage measurement with the CI pipeline and automated monitoring
+tooling that utilizes the coverage data.&lt;/p>
+&lt;p>The automated monitoring tool is an external service that stores the coverage data from
+the test runs over time. When the team creates new pull requests, unit tests measure
+the coverage data, and the pipeline sends the data to the monitor. It can then automatically
+alert the team if the test coverage is about to decrease with the new changes.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/monitor_hub2348bafb99ceadc4fcbe1cf05b3249f_581568_925x925_fit_catmullrom_3.png" width="925" height="461">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>&lt;a href="https://about.codecov.io/" target="_blank">Codecov.io&lt;/a> is an example of
+a SaaS-service that can be used as an automatic test coverage monitor.&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>Thus, the automated coverage monitoring keeps the team&amp;rsquo;s knight in good shape. Developers
+cannot add new code without adding new tests to the knight&amp;rsquo;s toolbox. Or at least
+the decision to decrease the coverage needs to be made knowingly. Forgetting to add
+tests is easy, but it gets trickier when someone nags you about it (automatically).&lt;/p>
+&lt;p>However, as stated above, we are used to measuring the coverage only for unit test runs.
+But as we also test without the unit test tooling, i.e., application tests, we would like
+to gather and utilize the data similarly for those test runs.&lt;/p>
+&lt;h2 id="coverage-for-application-tests">Coverage for Application Tests&lt;/h2>
+&lt;p>&lt;a href="https://go.dev/blog/integration-test-coverage">Go 1.20 introduced a new feature flag&lt;/a>
+for the &lt;code>go build&lt;/code> command, &lt;code>-cover&lt;/code>.
+The new flag enables the developer to build an instrumented version of the software binary.
+When running the instrumented version, it produces coverage data for the run,
+as with the unit tests.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># build with –cover flag&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>go build –cover -o ./program
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># define folder for result files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">export&lt;/span> &lt;span style="color:#000">GOCOVERDIR&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>”./coverage”
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># run binary (and the application tests)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./program
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8f5902;font-style:italic"># convert and analyze result files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>go tool covdata textfmt –i&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#000">$GOCOVERDIR&lt;/span> –o coverage.txt
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Using the new feature means we can include the test coverage of the application test runs in the automated monitoring scope. We put this new feature to use in the Findy Agency project.&lt;/p>
+&lt;h2 id="instrumenting-the-container-binary">Instrumenting the Container Binary&lt;/h2>
+&lt;p>Measuring the test coverage for application tests meant we needed to refactor our application testing
+pipeline so that CI could gather the data and send it to the analysis tool.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/steps_hu2268f6181c3050030bd2fc971e9b0029_119649_925x925_fit_catmullrom_3.png" width="925" height="234">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Acceptance application test set for Findy Agency microservice are run using
+&lt;a href="https://github.com/findy-network/e2e-test-action" target="_blank">a dedicated GitHub Action&lt;/a>.
+The action is capable of building and running the container with instrumented binary and reporting the
+coverage data back to the parent job.&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;ul>
+&lt;li>We use &lt;a href="https://github.com/findy-network/e2e-test-action">a shared GitHub action&lt;/a> to execute
+the same application acceptance test set for all
+our microservices. The action handles setting up the agency environment and running the test set.&lt;/li>
+&lt;li>Service Docker images used in the application tests must have the instrumented binary.
+We modified &lt;a href="https://github.com/findy-network/findy-agent-vault/blob/master/Dockerfile">the Docker image&lt;/a>
+build phase to include the new &lt;code>-cover&lt;/code> flag.&lt;/li>
+&lt;li>We define the &lt;code>GO_COVERDIR&lt;/code> environment variable in the service image,
+and the environment definition maps that container path to a folder in the local environment.&lt;/li>
+&lt;li>Once the agency is running, GitHub Action executes the tests. After test execution,
+&lt;a href="https://github.com/findy-network/findy-agent-vault/blob/cda27be1aaacdf1e73f8c879408134ce1f2fa076/.github/workflows/test.yml#L30">CI copies the result files&lt;/a>,
+converts and sends them to the analysis tool as with unit tests.&lt;/li>
+&lt;/ul>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 635px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/dockerfile_hu216f917a74fdb96b6b60aede5ac7aa36_516947_625x625_fit_catmullrom_3.png" width="625" height="460">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Changes required to service Dockerfile.&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;h2 id="increased-coverage">Increased Coverage&lt;/h2>
+&lt;p>The change has the expected effect: coverage increased in our repositories where we introduced
+this change. The coverage counts now in previously unmonitored code blocks, such as code in the &lt;code>main&lt;/code>
+function that was missing unit tests. The change improves our understanding of our testing scope and
+helps us to keep our automated test set in better shape.&lt;/p>
+&lt;p>You can inspect the approach, for example, in the &lt;a href="https://github.com/findy-network/findy-agent-vault/tree/master#findy-agent-vault">findy-agent-vault&lt;/a>
+repository CI configuration.&lt;/p>
+&lt;p>
+&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+&lt;iframe src="https://www.youtube.com/embed/EwCFRVkqHic" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
+&lt;/div>
+&lt;em>Watch my &amp;ldquo;Boosting Test Coverage for Microservices&amp;rdquo; talk on GopherCon UK on YouTube.&lt;/em>&lt;/p>
+&lt;p>&lt;strong>Note!&lt;/strong> The coverage data is lost if the process is forced to be terminated and it doesn&amp;rsquo;t handle
+the termination signal gracefully. Ungraceful termination prevents the added instrumentation code
+from writing the coverage file. Therefore, the service needs to
+have graceful shutdown in place. Also, the Docker container runtime needs to pass
+the &lt;code>SIGTERM&lt;/code> signal to the server process for this approach to work.&lt;/p></description></item><item><title>Blog: How To Write Modifiable &amp; Readable Go Code</title><link>https://findy-network.github.io/blog/2023/10/22/how-to-write-modifiable-readable-go-code/</link><pubDate>Sun, 22 Oct 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2023/10/22/how-to-write-modifiable-readable-go-code/</guid><description>
 &lt;p>Since jumping on the OSS (Open Source Software) wagon, I have been learning new
 things about software development and getting more evidence to do certain things
 in a specific way.&lt;/p>
