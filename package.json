@@ -22,6 +22,6 @@
     "autoprefixer": "^10.4.16",
     "js-green-licenses": "^4.0.0",
     "postcss": "^8.4.32",
-    "postcss-cli": "^10.1.0"
+    "postcss-cli": "^11.0.0"
   }
 }
