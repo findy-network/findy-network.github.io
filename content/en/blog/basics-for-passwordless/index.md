@@ -2,7 +2,7 @@
 date: 2024-01-05
 title: "Path to Passwordless"
 linkTitle: "Path to Passwordless"
-description: "Passwordless user authentication is the new black. After building decades of password-based authentication flows, web application developers must familiarize themselves with this new technology. Luckily, there is already a variety of proprietary and open-source tooling one can choose from."
+description: "Passwordless user authentication is the new black. If your web application still uses password-based authentication, it is worthwhile to familiarize yourself with this new technology. Luckily, one can already choose a variety of proprietary and open-source tooling for experimenting hands-on and even implementing production-ready solutions."
 author: Laura Vuorenoja
 resources:
   - src: "**.{png,jpg}"
@@ -27,7 +27,7 @@ The operating system or browser handles needed user interaction and shows standa
 {{< imgproc cover Fit "825x825" >}}
 <em>The team implements passwordless support by integrating credential handling into
 the client application and the backend authentication service. Client applications
-can use the platform WebAuthn capabilities through the native APIs or browser JavaScript implementation.
+can use the platform capabilities through the native APIs or browser JavaScript implementation.
 The backend service must support at least credential registration and credential-based user authentication.
 </em>
 {{< /imgproc >}}
@@ -36,6 +36,7 @@ Furthermore, we need to have a backend service in place that is capable of stori
 these credentials so that the authentication can take place correctly. The service must support
 [the W3C WebAuthn standard](https://www.w3.org/TR/webauthn/) so that the backend
 API responses are compatible with the client-side authenticator logic.
+The backend service is called quite often as a FIDO2 server.
 
 ## To Buy or To Build?
 
@@ -43,7 +44,7 @@ Choosing one of many authentication service providers may be the most straightfo
 passwordless journey. A service provider typically gives you access to a backend as
 a SaaS or a product you host yourself. The backend has the above capabilities to store and verify
 your users' public keys. In addition to backend functionality, the service providers offer
-client libraries that enable you to add matching authenticator support to your application,
+custom client libraries that enable you to add matching authenticator support to your application,
 whether a web or a native application.
 
 {{< imgproc platform Fit "825x825" >}}
@@ -55,8 +56,10 @@ already exist that ease the development of your backend service's functionality 
 public key handling. [Browser support for WebAuthn capabilities](https://caniuse.com/webauthn) is
 rather good, and the integration to the web application is straightforward
 once the backend is in place. One can utilize dedicated
-client libraries for native applications (for example, [iOS](https://developer.apple.com/documentation/authenticationservices/public-private_key_authentication)
-and [Android](https://developer.android.com/training/sign-in/passkeys)).
+client libraries for native applications (for example,
+[iOS](https://developer.apple.com/documentation/authenticationservices/public-private_key_authentication),
+[Android](https://developer.android.com/training/sign-in/passkeys)), and
+[Windows](https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthn-apis).
 
 ## Example of Getting Hands Dirty
 
@@ -72,9 +75,16 @@ It utilizes [`go-webauthn`](https://github.com/go-webauthn/webauthn) library.
 Both of the core features need two API endpoints.
 On the client side, we use
 the [navigator credentials JavaScript API](https://w3c.github.io/webappsec-credential-management/#framework-credential-management)
-in a React application. The following sequence graphs demonstrate in more detail how the logic flows:
+in a React application.
 
-**Registration**
+The following sequence graphs demonstrate how the logic flows in more detail
+and describe the needed functionality at a high level.
+
+### User Registration
+
+The first core feature is user registration. The user creates a new public-private key pair.
+The authenticator saves the private key to its secure storage,
+and the application sends the public key to the service backend.
 
 ```mermaid
 sequenceDiagram
@@ -89,7 +99,14 @@ sequenceDiagram
     Server-->>Client: Registration OK!
 ```
 
-**Authentication**
+***
+
+### User Authentication
+
+Another core feature is user authentication.
+The user creates a signature utilizing the authenticator-provided private key.
+The service backend verifies the signature using the stored public key and
+provides access if the signature is valid.
 
 ```mermaid
 sequenceDiagram
@@ -104,10 +121,13 @@ sequenceDiagram
     Server-->>Client: Return access token.
 ```
 
+***
+
 For more information on how and which data is handled, see, for example, [the WebAuthn guide](https://webauthn.guide/#webauthn-api).
 You can also find our [client application source codes](https://github.com/findy-network/findy-wallet-pwa/blob/master/src/components/WebauthnLogin.tsx)
 and [the authentication service implementation](https://github.com/findy-network/findy-agent-auth/blob/master/main.go)
-on GitHub.
+on GitHub. You can also read more about how our project has utilized FIDO2 from
+[this blog post](https://findy-network.github.io/blog/2021/11/09/anchoring-chains-of-trust/).
 
 As the example above shows, implementing a passwordless is not impossible.
 However, as with any new technology, it takes time and dedication from the team
