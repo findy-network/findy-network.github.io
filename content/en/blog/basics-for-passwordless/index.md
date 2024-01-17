@@ -58,8 +58,8 @@ rather good, and the integration to the web application is straightforward
 once the backend is in place. One can utilize dedicated
 client libraries for native applications (for example,
 [iOS](https://developer.apple.com/documentation/authenticationservices/public-private_key_authentication),
-[Android](https://developer.android.com/training/sign-in/passkeys)), and
-[Windows](https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthn-apis).
+[Android](https://developer.android.com/training/sign-in/passkeys), and
+[Windows](https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthn-apis)).
 
 ## Example of Getting Hands Dirty
 
