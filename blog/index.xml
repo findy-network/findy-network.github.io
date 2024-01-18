@@ -1,4 +1,131 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>https://findy-network.github.io/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 16 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Test Coverage Beyond Unit Testing</title><link>https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/</link><pubDate>Thu, 16 Nov 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency Blog</title><link>https://findy-network.github.io/blog/</link><description>Recent content in Findy Agency Blog on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 05 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Path to Passwordless</title><link>https://findy-network.github.io/blog/2024/01/05/path-to-passwordless/</link><pubDate>Fri, 05 Jan 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/01/05/path-to-passwordless/</guid><description>
+&lt;p>Passkeys and security keys have gained more and more popularity lately, and no wonder – they provide
+much more security and usability than passwords. These authentication methods utilize strong and
+phishing-resistant public key credentials that the keys or authenticators, as we call them,
+can create automatically. However, implementing passwordless support in your web application,
+or even replacing passwords altogether, might initially seem overwhelming.&lt;/p>
+&lt;h2 id="fido2-and-webauthn-standards-ease-the-job">FIDO2 and WebAuthn Standards Ease the Job&lt;/h2>
+&lt;p>Integrating the authenticators into your web application happens through common standards
+created by &lt;a href="https://fidoalliance.org/">the FIDO alliance&lt;/a>. It is good news for us
+application developers: we don&amp;rsquo;t have to care about the dirty details of each
+authenticator implementation. Our job is to take into use the platform or browser APIs
+that enable the creation and use of the authenticator-managed credential.
+The operating system or browser handles needed user interaction and shows standard dialogs when appropriate.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 622px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/01/05/path-to-passwordless/cover-arch_huc60a32fd3466bb65aee560f11f71a257_45255_825x825_fit_catmullrom_3.png" width="612" height="418">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>The team implements passwordless support by integrating credential handling into
+the client application and the backend authentication service. Client applications
+can use the platform capabilities through the native APIs or browser JavaScript implementation.
+The backend service must support at least credential registration and credential-based user authentication.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>Furthermore, we need to have a backend service in place that is capable of storing and verifying
+these credentials so that the authentication can take place correctly. The service must support
+&lt;a href="https://www.w3.org/TR/webauthn/">the W3C WebAuthn standard&lt;/a> so that the backend
+API responses are compatible with the client-side authenticator logic.
+The backend service is called quite often as a FIDO2 server.&lt;/p>
+&lt;h2 id="to-buy-or-to-build">To Buy or To Build?&lt;/h2>
+&lt;p>Choosing one of many authentication service providers may be the most straightforward path on your
+passwordless journey. A service provider typically gives you access to a backend as
+a SaaS or a product you host yourself. The backend has the above capabilities to store and verify
+your users&amp;rsquo; public keys. In addition to backend functionality, the service providers offer
+custom client libraries that enable you to add matching authenticator support to your application,
+whether a web or a native application.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 405px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/01/05/path-to-passwordless/platform-dialog_hu0c3f7faa465c027d5ddfa34597d3bf66_161179_825x825_fit_catmullrom_3.png" width="395" height="825">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Platform and browser handle the user interaction dialogs when using authenticators.&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>Another option is to implement the WebAuthn support yourself. Some excellent &lt;a href="https://github.com/herrjemand/awesome-webauthn">open-source libraries&lt;/a>
+already exist that ease the development of your backend service&amp;rsquo;s functionality for
+public key handling. &lt;a href="https://caniuse.com/webauthn">Browser support for WebAuthn capabilities&lt;/a> is
+rather good, and the integration to the web application is straightforward
+once the backend is in place. One can utilize dedicated
+client libraries for native applications (for example,
+&lt;a href="https://developer.apple.com/documentation/authenticationservices/public-private_key_authentication">iOS&lt;/a>,
+&lt;a href="https://developer.android.com/training/sign-in/passkeys">Android&lt;/a>, and
+&lt;a href="https://learn.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/webauthn-apis">Windows&lt;/a>).&lt;/p>
+&lt;h2 id="example-of-getting-hands-dirty">Example of Getting Hands Dirty&lt;/h2>
+&lt;p>In our OSS decentralized identity agency project, we implemented WebAuthn logic ourselves.
+We created the authentication functionality in our backend server and web application.
+The core functionality consists of two features: registering a new user and authenticating
+an existing user (and returning an access token after a successful authentication). Of course,
+an end-product would have more features, e.g., for adding and removing authenticators
+but starting with the core features is the simplest.&lt;/p>
+&lt;p>We wrote the authentication server in Go.
+It utilizes &lt;a href="https://github.com/go-webauthn/webauthn">&lt;code>go-webauthn&lt;/code>&lt;/a> library.
+Both of the core features need two API endpoints.
+On the client side, we use
+the &lt;a href="https://w3c.github.io/webappsec-credential-management/#framework-credential-management">navigator credentials JavaScript API&lt;/a>
+in a React application.&lt;/p>
+&lt;p>The following sequence graphs demonstrate how the logic flows in more detail
+and describe the needed functionality at a high level.&lt;/p>
+&lt;h3 id="user-registration">User Registration&lt;/h3>
+&lt;p>The first core feature is user registration. The user creates a new public-private key pair.
+The authenticator saves the private key to its secure storage,
+and the application sends the public key to the service backend.&lt;/p>
+&lt;div class="mermaid">sequenceDiagram
+autonumber
+participant Client
+participant Server
+Client->>Server: Request for credential creation options.&lt;br/>/attestation/options
+Server-->>Client: Return credential creation options.
+Note left of Client: Create credential with received options.&lt;br/>navigator.credentials.create
+Client->>Server: Send client data and public key to server.&lt;br/>/attestation/result
+Note right of Server: Validate data. &lt;br/> Store the public key and the credential id, &lt;/br> and attach to user.
+Server-->>Client: Registration OK!
+&lt;/div>
+&lt;hr>
+&lt;h3 id="user-authentication">User Authentication&lt;/h3>
+&lt;p>Another core feature is user authentication.
+The user creates a signature utilizing the authenticator-provided private key.
+The service backend verifies the signature using the stored public key and
+provides access if the signature is valid.&lt;/p>
+&lt;div class="mermaid">sequenceDiagram
+autonumber
+participant Client
+participant Server
+Client->>Server: Request for credential request options.&lt;br/>/assertion/options
+Server-->>Client: Return credential request options.
+Note left of Client: Get credential with received options. &lt;br/> Create signature with the private key.&lt;br/>navigator.credentials.get
+Client->>Server: Send assertion to server.&lt;br/>/assertion/result
+Note right of Server: Validate data and verify signature.
+Server-->>Client: Return access token.
+&lt;/div>
+&lt;hr>
+&lt;p>For more information on how and which data is handled, see, for example, &lt;a href="https://webauthn.guide/#webauthn-api">the WebAuthn guide&lt;/a>.
+You can also find our &lt;a href="https://github.com/findy-network/findy-wallet-pwa/blob/master/src/components/WebauthnLogin.tsx">client application source codes&lt;/a>
+and &lt;a href="https://github.com/findy-network/findy-agent-auth/blob/master/main.go">the authentication service implementation&lt;/a>
+on GitHub. You can also read more about how our project has utilized FIDO2 from
+&lt;a href="https://findy-network.github.io/blog/2021/11/09/anchoring-chains-of-trust/">this blog post&lt;/a>.&lt;/p>
+&lt;p>As the example above shows, implementing a passwordless is not impossible.
+However, as with any new technology, it takes time and dedication from the team
+to familiarize themselves with the new logic and concepts. In addition,
+as there are strict security requirements, testing the authentication flows
+in a local development environment might be challenging at times, as the client and server
+need to belong to the same domain. The local testing environment is something that the team
+should resolve and enable together already early in the project so that it will not become a bottleneck.&lt;/p>
+&lt;h2 id="not-all-things-are-standardized">Not All Things Are Standardized&lt;/h2>
+&lt;p>One might still find using an external authentication service provider a safer bet. Especially when
+there is a need to support a variety of native devices, it may be tempting to pay someone to deal
+with the device-specific problems. However, in this case, there is one essential thing to notice.&lt;/p>
+&lt;p>Usually, the service provider solutions are proprietary. It means that the interaction between
+the client application and the backend API happens in a manner defined by the service provider.
+Even though the WebAuthn requests and responses are standardized, the payload wrapper structures
+and API endpoint paths depend on the implementation.
+There exists &lt;a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-server-v2.0-rd-20180702.html#transport-binding-profile">a FIDO recommendation&lt;/a>
+on how the server API should look like, but it is a mere recommendation and
+not all service providers follow this guidance. Therefore, you cannot mix and match client
+and server implementations but will likely end up in a vendor lock when choosing a proprietary solution.&lt;/p>
+&lt;p>&lt;em>The path to passwordless is a journey that all web application developers will eventually travel.
+Will your team take the steps sooner rather than later?&lt;/em>&lt;/p></description></item><item><title>Blog: Test Coverage Beyond Unit Testing</title><link>https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/</link><pubDate>Thu, 16 Nov 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2023/11/16/test-coverage-beyond-unit-testing/</guid><description>
 &lt;p>Automated testing is your superpower against &lt;a href="https://en.wikipedia.org/wiki/Software_regression">regression&lt;/a>.
 It prevents you from breaking existing
 functionality when introducing new code changes. The most important aspect of automated testing
