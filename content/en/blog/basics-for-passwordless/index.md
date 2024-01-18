@@ -95,7 +95,7 @@ sequenceDiagram
     Server-->>Client: Return credential creation options.
     Note left of Client: Create credential with received options.<br/>navigator.credentials.create
     Client->>Server: Send client data and public key to server.<br/>/attestation/result
-    Note right of Server: Validate data. <br/> Store the public key and the credential id, </br> and attach to user.
+    Note right of Server: Validate data. <br/> Store the public key and the credential id, <br/> and attach to user.
     Server-->>Client: Registration OK!
 ```
 
