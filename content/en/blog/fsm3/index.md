@@ -16,10 +16,10 @@ resources:
   title: "Image #:counter"
 ---
 
-This is a development story (or hands-on workshop) of how we can use a FSM
-chatbot to implement SSI Services to allow any SSI/DID owner be a issuer.
-Let's start from the end result and see how the state machine looks like. As you
-can see below it's simple and elegant, and most importantly easy to reason.
+This post is a development story (or hands-on workshop) of how we can use an FSM
+chatbot to implement SSI Services to allow any SSI/DID owner to be an issuer.
+Let’s start with the result and see what the state machine looks like. As you
+can see below, it’s simple, elegant, and, most importantly, easy to reason.
 
 ```plantuml @startuml
 title main issuing service machine
