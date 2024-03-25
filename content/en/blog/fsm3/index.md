@@ -3,6 +3,12 @@ date: 2024-02-06
 title: "Implement a Chatbot"
 linkTitle: "Implement a Chatbot"
 description: "
+Our SSI/DID agency solution is fully symmetric, which means that our agents can
+be in any role simultaneously: `issuer`, `holder`, and `verifier`. However, the
+base-technology (`indylib`) haven't been built for symmetry. Luckily we have our
+own protocol engine and the tools around it allow us to build SSI services as
+chatbots. We have implemented our own state machine engine to develop and run
+these chatbot machines.
 "
 author: Harri Lainio
 resources:
@@ -10,16 +16,56 @@ resources:
   title: "Image #:counter"
 ---
 
-Our SSI/DID agency solution is fully symmetric, which means that our agents can
-be in any role simultaneously a issuer, a holder, and a verifier. However, the
-base-technolgy we are using haven't been built for that. Luckily we have our
-own protocol engine and the tools around it allow us build SSI services as a
-chatbot easily. We have implemented our own state machine engine for that.
+This is a development story (or hands-on workshop) of how we can use a FSM
+chatbot to implement SSI Services to allow any SSI/DID owner be a issuer.
+Let's start from the end result and see how the state machine looks like. As you
+can see below it's simple and elegant, and most importantly easy to reason.
 
-This is a story of how we can use a FSM chatbot to implement SSI Services to allow
-'ordinary' ssi/did owners be a issuers. 
+```plantuml @startuml
+title main issuing service machine
+[*] --> WAIT_SESSION_ID
+state "                                             WAIT_FINAL                                             " as WAIT_FINAL
+WAIT_FINAL --> WAIT_SESSION_ID: **basic_message{ ""}**\n{basic_message{ "------------"}} ==>\n
 
-### What Problem Does We Solve?
+state "                                     WAIT_ISSUING_STATUS_AS_RCVR                                    " as WAIT_ISSUING_STATUS_AS_RCVR
+WAIT_ISSUING_STATUS_AS_RCVR --> WAIT_FINAL: **issue_cred{STATUS ""}**\n{basic_message{%s "Thank you! Y"}} ==>\n
+
+state "                                     WAIT_RCVR_TO_JOIN_AS_ISSUER                                    " as WAIT_RCVR_TO_JOIN_AS_ISSUER
+WAIT_RCVR_TO_JOIN_AS_ISSUER --> WAIT_FINAL: **backend{== "rcvr_arriwed"}**\n{backend{%s "{{.ATTR1}}"}} ==>\n{basic_message{ "role Issuer "}} ==>\n
+
+state "                                         WAIT_ROLE_SELECTION                                        " as WAIT_ROLE_SELECTION
+WAIT_ROLE_SELECTION --> WAIT_CLIENT_DATA_AS_ISSUER: **basic_message{== "issuer"}**\n{basic_message{ "ACK, next gi"}} ==>\n{transient{ "internal_mes"}} ==>\n
+WAIT_ROLE_SELECTION --> TR_RECEIVER: **basic_message{== "rcvr"}**\n{basic_message{ "ACK, todo rm"}} ==>\n{transient{ "internal_mes"}} ==>\n
+WAIT_ROLE_SELECTION --> WAIT_ROLE_SELECTION: **basic_message{ ""}**\n{basic_message{ "NACK issuer "}} ==>\n
+
+state "                                           WAIT_SESSION_ID                                          " as WAIT_SESSION_ID
+WAIT_SESSION_ID --> WAIT_SESSION_ID: **basic_message{== "help"}**\n{basic_message{ "------------"}} ==>\n
+WAIT_SESSION_ID --> WAIT_ROLE_SELECTION: **basic_message{:= ""}**\n{basic_message{%s "ACK Your ses"}} ==>\n{basic_message{ "select your "}} ==>\n
+
+state "                                             TR_RECEIVER                                            " as TR_RECEIVER
+TR_RECEIVER --> WAIT_DATA_AS_RECEIVER: **transient{ ""}**\n{basic_message{ "ACK, rcvr"}} ==>\n{backend{ "receiver_arr"}} ==>\n
+
+state "                                     WAIT_CLIENT_DATA_AS_ISSUER                                     " as WAIT_CLIENT_DATA_AS_ISSUER
+WAIT_CLIENT_DATA_AS_ISSUER --> WAIT_RCVR_TO_JOIN_AS_ISSUER: **basic_message{:= "ATTR1"}**\n{basic_message{%s "ACK Your <at"}} ==>\n
+
+state "                                        WAIT_DATA_AS_RECEIVER                                       " as WAIT_DATA_AS_RECEIVER
+WAIT_DATA_AS_RECEIVER --> WAIT_ISSUING_STATUS_AS_RCVR: **backend{:= "ATTR1"}**\n{basic_message{%s "Issue <attr1"}} ==>\n{issue_cred{%s "[{"name":"em"}} ==>\n
+@enduml
+```
+
+As you can see from the diagram there are two main paths. One for the `issuer` role
+and one for the `rcvr` role. But the most interesting thing is that how simple the
+machine is. As said, it's very easy to reason and understand. And that's the one of powers
+these machines. The second one comes from the computational model of FSMs in
+general, we could [proof that they're correct](https://www.academia.edu/3671180/FORMAL_VERIFICATION_OF_FINITE_STATE_MACHINES).
+
+> Note that since our original FSM engine release we have extended our model
+> with *transient state transitions or
+> [pseudostates](https://www.site.uottawa.ca/~tcl/gradtheses/mnojoumian/ThesisFiles/FinalSpec/UML/15.3.8.html)*,
+> but our UML renderer doesn't highlight them yet. We'll publish an other blog
+> post with new features of our FSM engine later.
+
+## What Problem Do We Solve?
 
 The Hyperledger Indy-based SSI system is implemented with a CL signature scheme
 for ZKPs. That system needs the concept of *Credential Definition* stored in its
@@ -41,7 +87,7 @@ There are other problems, but the rest are based on the same core problem.
 We'll solve problem number 2 by using a notary-type service. We started with one
 service and implemented a reference chatbot to issue credentials on behalf of a
 logical issuer, aka seller. We also have implemented our version of a *public*
-DID. With these tools, we have solved the problem quite elegantly.
+DID. With these two, we have solved the problem quite elegantly.
 
 #### Isn't This Centralization?
 
@@ -50,16 +96,20 @@ trust registries for other or similar problems in the SSI field. In a certain
 way, this model adds self-sovereignty because now everyone can issue, and
 everyone can build these issuing services for their use cases.
 
-### More Reading
+## More Reading
 
 Before we continue, here's a list of
 documents and places that are helpful when playing with these:
 
-1. [Getting Started](https://findy-network.github.io/blog/2023/01/30/getting-started-with-ssi-service-agent-development/)
+1. [Getting Started With SSI Service Agent Development](https://findy-network.github.io/blog/2023/01/30/getting-started-with-ssi-service-agent-development/)
 1. [Writing SSI Apps](https://findy-network.github.io/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/)
-1. [FSM documentation part I](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/)
-1. [FSM documentation part II](https://findy-network.github.io/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/)
-1. [The workshop material for CLI tool](https://github.com/findy-network/agency-workshop/tree/master/track1-cli#task-0-setup-environment)
+1. [FSM Documentation Part I](https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/)
+1. [FSM Documentation Part II](https://findy-network.github.io/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/)
+1. [The Workshop Material For Our CLI Tool](https://github.com/findy-network/agency-workshop/tree/master/track1-cli#task-0-setup-environment)
+
+> Note that the blog post is written from self-learning material point of view.
+> Preferably, you should read and execute the commands it guides you to do
+> simultaneously.
 
 ## Prerequisites
 
@@ -85,7 +135,7 @@ communicating with your agency.
    source ./scripts/sa-compl.sh
    ```
 
-> Document assumes that CLI tool is named to `cli`.
+> Document for now on assumes that CLI tool is named to `cli`.
 
 ### Very Important
 
@@ -100,7 +150,8 @@ cli agent mode-cmd -r
 
 The result should be AUTO_ACCEPT. Note that allocation scripts do this automatically.
 
-> Chatbots should work even when auto-accept isn't ON.
+> Chatbots work even when auto-accept isn't ON. They can written to make
+> decisions to decline or acknowledge presented proofs, for example.
 
 # Setup Agents And Wallets
 
@@ -112,13 +163,14 @@ name it a tool root for the rest of the documentation. For example:
 export MY_ROOT=`pwd`
 ```
 
-Follow the workshop documentation on how to allocate new agents with their wallets.
+Follow the workshop documentation on how to allocate new agents with their
+wallets.
 
-Allocate the following agents:
+Allocate the following agents (actual commands and the script calls follow):
 1. `issuing` will be the issuing service
 1. `seller`, will be a seller, aka logical issuer
 1. `buyer` will be a buyer.
-1. `verifier` will be a verifier. (Usage is out scoped from this document.)
+1. `verifier` will be a verifier for the VC. (Usage is out scoped from this document.)
 
 Here's an example of how you could
 1. allocate the agents,
@@ -126,8 +178,8 @@ Here's an example of how you could
 1. create schema and credential definition (done in `issuing`),
 1. create DIDComm connections between `issuing`, `seller`, and `buyer` *where
    the last is done in this phase just for testing the environment*. During the
-   implementation to the app invitation or command to connect with <SessionID>
-   is sent in its own step during the service use.
+   service integration (e.g. marketplace app) to the app invitation or command
+   to connect with <SessionID> is sent in its own step during the service use.
 
 ```shell
 cd "$MY_ROOT"
@@ -148,58 +200,60 @@ Optionally store *a public DID* of the *Issuing Service Chatbot*:
 export PUB_DID=$(./pub-did print)
 ```
 
-> **Note! Leave this terminal open and do not enter new commands to it yet.**
+> Note! Leave this terminal open and do not enter new commands to it yet.
 
-> **Note! `source ./new-cred-def` initializes `FCLI_CRED_DEF_ID` environment
+> Note! `source ./new-cred-def` initializes `FCLI_CRED_DEF_ID` environment
 > variable. The `issuing-service-f-fsm.yaml` file references to this variable,
 > i.e. it's mandatory, *or* you could hard-code the *credential definition
-> value* to your `issuing-service-f-fsm.yaml`.**
+> value* to your `issuing-service-f-fsm.yaml`.
 
 ## Use The Issuing Service
 
-1. open 2 separated terminals (see the workshop material on how to init envs) to
-   work as `seller`, leave them to be.
-1. open 2 separated terminals (see the workshop material on how to init envs) to
-   work as `buyer`, leave them to be.
+1. open 2 separated terminals `A` and `B` (see the workshop material on how to init
+   envs) to work as a `seller`, leave them to be.
+1. open 2 separated terminals `A` and `B` (see the workshop material on how to init
+   envs) to work as a `buyer`, leave them to be.
 1. go back to the previous `issuing` terminal and start the chatbot:
    ```shell
    cli bot start --service-fsm issuing-service-b-fsm.yaml issuing-service-f-fsm.yaml -v=1
    ```
-1. go back to `seller` terminal A and enter `cli bot read`. This is a read-only
+1. go back to the `seller` terminal `A` and enter a command: `cli bot read`.
+   This is a read-only terminal window for the chatbot's responses.
+1. go back to the `seller` terminal `B` and enter `cli bot chat`. This is a
+   write-only terminal window to send chat messages.
+    1. (optional: enter 'help' to get used to what's available)
+    1. enter your session ID, select something easy like 'SID_1'
+    1. enter the text 'issuer' that's our current `role`
+    1. enter your attributes data value for credential, select something easy to
+       remember during verfication
+1. go back to the `buyer` terminal `A` and enter `cli bot read`. This is a read-only
    terminal window for the chatbot's responses.
-1. go back to `seller` terminal B and enter `cli bot chat`. This is a write-only
+1. go back to the `buyer` terminal `B` and enter `cli bot chat`. This is a write-only
    terminal window to send chat messages.
-    1. (optional: enter 'help' to get used to)
-    1. enter `sessionID`, select something easy
-    1. enter `role`, == 'issuer'
-    1. enter `attr_data`, select something easy
-1. go back to `buyer` terminal A and enter `cli bot read`. This is a read-only
-   terminal window for the chatbot's responses.
-1. go back to `buyer` terminal B and enter `cli bot chat`. This is a write-only
-   terminal window to send chat messages.
-    1. (optional: enter 'help' to get used to)
-    1. enter `sessionID`, same as with the `seller`!
-    1. enter `role`, == 'rcvr'
-1. see `Buyer`'s A terminal (`cli bot read` cmd running); the results should be
-   that the credential is issued.
-1. go to terminal B and enter something to move FSM instances to the start state.
-1. It's optional; you could rerun it with the same players.
+    1. (optional: enter 'help' to get some reminders)
+    1. enter your previous session ID, it was something easy like 'SID_1'
+    1. enter the text 'rcvr', it's your `role` now
+1. see the `Buyer`'s `A` terminal (`cli bot read` command running); the results should be
+   that the credential is issued for the `Buyer`.
+1. go to both `B` terminals and enter some text to move FSM instances to the `start-again` state.
+1. it's *optional*; you could rerun it with the same players.
 
 > Tip, when you started the *Issuing Service Chatbot* with `-v=1` you could
 > monitor it's state transitions in real-time.
 
-## Sequence Diagram
+## The Sequence Diagram
 
-Notes about current implementation:
+Notes about the current implementation:
 - only one attribute value schema is implemented. Start with that and add
-  cases where more attributes can be entered later.
-- every message sends a `basic_message` reply, which usually starts with `ACK`. See
+  cases where more attributes can be entered later. (Homework)
+- every message sends a `basic_message` reply, which usually starts with `ACK` string. See
   the `YAML` file for more information. The reply messages aren't drawn to the
   sequence diagram below to keep it as simple as possible.
 - you can render state machines to UML:
   ```shell
   open `cli bot uml issuing-service-f-fsm.yaml` # give correct FSM file
   ```
+  We have UML rendered state machine diagram in the beginning of this post.
 
 ```mermaid
 sequenceDiagram
@@ -207,17 +261,18 @@ sequenceDiagram
 
     participant Seller
 
-    box Issuing Service
+    %% -- box won't work on hugo, or when this machine is running it --
+    %% box Issuing Service
     participant IssuerFSM
     participant BackendFSM
     participant RcvrFSM
-    end
+    %% end
 
     participant Buyer
 
     Seller -) IssuerFSM: 'session_id' (GUID)
-    Seller -) IssuerFSM: issuer [= role]
-    loop Schema's attributes
+    Seller -) IssuerFSM: issuer = role
+    loop Schemas attributes
     Seller -) IssuerFSM: 'attribute_value'
     end
 
@@ -226,11 +281,11 @@ sequenceDiagram
     end
 
     Buyer -) RcvrFSM: 'session_id'
-    Buyer -) RcvrFSM: rcvr [= role]
+    Buyer -) RcvrFSM: rcvr = role
 
     RcvrFSM -) BackendFSM: receiver_arriwed
     BackendFSM -) IssuerFSM: rcvr_arriwed
-    loop Schema's attributes
+    loop Schemas attributes
     IssuerFSM -) BackendFSM: 'attribute_value'
     BackendFSM -) RcvrFSM: 'attribute_value'
     end
@@ -293,6 +348,8 @@ sequenceDiagram
 
 ## Conclusion
 
-How you have been blown away how easy it's to implement these FSM based
-chatbots. this is only one example of the potential of the FSM language. We are
-excited to see what you end up building with it.
+You have been blown away by how easy it is to implement these FSM-based
+chatbots, haven’t you? The Issuing Service is only one example of the potential
+of the FSM chatbots. We are excited to see what else you end up building. When
+doing so, please send your questions, comments, and feedback to our team. Let’s
+make this better—together.
