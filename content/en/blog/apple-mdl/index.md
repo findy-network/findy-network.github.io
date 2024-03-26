@@ -10,15 +10,27 @@ resources:
   title: "Image #:counter"
 ---
 
-As a tech nerd these last couple of years have been most frustrated. The
-similar situation was when I couldn't do my taxes with government's digital
-service as normal citizens could. I was part-time freelancer. They have
-fixed that since then. But now, as a normal Finn, I cannot use may mobile devices to
-authenticate myself in face2face situations. WTF, I want my color TV!
+How to heck we have ended up this mesh. We should be the number one in the
+world. that was a promise. we had even a press release of it. but no. here we
+are without the mobile driver's license or digital ID. 
+
+You might ask who is we. findland of course. tech nerds of the world. at lest we
+think so.
+
+# background ends
+
+As a tech nerd, these last couple of years have been most frustrating. A similar
+situation was when I couldn’t do my taxes with the government’s digital service
+when normal citizens could. I was a part-time freelancer—no candy for me.
+
+They have fixed that since then. But now, as a regular Finn, I cannot use my
+mobile devices to authenticate myself in face-to-face situations. WTF, I want my
+color TV!
+
 
 # Real Beginning is here
 
-It's been somewhat funny that we don't have a Mobile Drivers license working in
+It's been somewhat funny that we don't have a Mobile Drivers license in
 Finland. In the Nordics we are usually quite good with the things related to
 digital and mobile services. For example, we have had somewhat famous bank IDs
 from early 90's.
@@ -28,104 +40,120 @@ position at summer 2018, when government funded mobile driver's license beta app
 The project was started at 2017 but got [cancelled at
 2020 (in Finnish)](https://www.traficom.fi/fi/ajankohtaista/autoilija-sovelluksen-kehittaminen-keskeytetaan-traficom-keskittyy-nykyisten).
 
-## Self-Sovereign vs Pragmatism
+## SSI Idealism vs Pragmatism
 
-As you probably already know, our innovation team has studied SSI long time. So
-long that we start to understand different paths you can take to solve the value
-promise of the SSI.
+As you probably already know, our innovation team has studied SSI for a long time.
+We have started to understand different strategies you can follow to implement
+digital ID and services around it.
 
-Christopher Allen one of the major influencer in the field of SSI divided the
-Self-Sovereign Identity to [two major
+Christopher Allen, one of the influencers in the field of SSI, divided the
+Self-Sovereign Identity into [two primary
 tracks](https://youtu.be/MGYOWqCMLKg?si=X4oOBLRBc_IFowFn&t=1997):
 
-1. LESS Identity (Term originally coined by Tim Bouma)
-2. Trustless Identity (or more properly *Trust Minimized* Identity)
+1. [LESS (Legally-Enabled Self-Sovereign) Identity](https://trbouma.medium.com/less-identity-65f65d87f56b)
+2. Trustless Identity, or more precisely *Trust Minimized* Identity
 
-These two aren't totally mutually exclusive, but they give us the platform to
-state our goals. Which one we prefer a government or the individual?
+These two aren't mutually exclusive but give us a platform to state our goals.
+Which one do we prefer, a government or an individual?
 
-| LESS Identity | Trust Minimized Identity |
-|---------------|--------------------------|
-| - Minimum Disclosure | - Anonymity |
-| - Full Control | - Web of Trust |
-| - Necessary Proofs | - Censorship Resistance |
-| - Legally-Enabled | - Defend Human Rights vs Powerful Actors (nation states, corps, etc.) |
+|   LESS Identity        |   Trust Minimized Identity |
+|------------------------|----------------------------|
+|   Minimum Disclosure   |   Anonymity |
+|   Full Control         |   Web of Trust |
+|   Necessary Proofs     |   Censorship Resistance |
+|   Legally-Enabled      |   Defend Human Rights vs Powerful Actors (nation states, corps, etc.) |
+
+> The above table is from [the Allen's
+> talk](https://youtu.be/MGYOWqCMLKg?si=X4oOBLRBc_IFowFn&t=1997) in YouTube.
 
 I *personally always* prefer Human Rights over Legally-Enabled.
 
-From researcher's point of view it seems that LESS Identity track is the faster
-because it's easier to find business cases. But it is not only a bad thing. These
-business driven use cases will pave the way to even more progress in a form of
-censorship resistance, anonymity, etc.
+From a researcher's point of view, the LESS Identity track seems faster because
+it's easier to find business cases. But this is not only a bad thing. These
+*business-driven* use cases will pave the way to even more progress in censorship
+resistance, anonymity, etc. It's natural that, for example, the mobile driver's
+license will start as a LESS Identity practice. So, let's follow that for a
+moment, shall we?
 
-## Example of Good UX
+### Example of Good UX
 
-The Apple Pay is worlds largest mobile payment platform outside China. In the
-Western Hemisphere Apple Pay has shown the way. It's been especially interesting
-to follow what has happened in the Nordics which already had mobile payment
-platforms and which had worlds most digitalized private banking systems when
-Apple Pay arrived. 
+Apple Pay is the world's largest mobile payment platform outside China. It's
+been exciting to follow what happened in the Nordics, which already had mobile
+payment platforms and the world's most digitalized private banking systems when
+Apple Pay arrived.
 
-Why Apple Pay has been so successful? Like so many other features in Apple's
-ecosystem, they took the necessary final technological and technical steps that
-the friction in the payments were minimal for both payer and the seller.
+Why has Apple Pay been so successful? Like many other features in Apple's
+ecosystem, they took the necessary final technical steps to remove all the
+friction from setting up the payment trail. Significantly, the seller doesn't
+need additional steps or agreements to support Apple Pay in the brick-and-mortar
+business. That's the way we all should think of technology.
 
-## Use Case -driven approach
+### Use Case -driven approach
 
-approach was used in many designing aspects of DIDs, DIDComm,
-    etc.  The ISO
-    mDL <TODO> is total opposite. Every single piece of idealism has thrown
-    away. Every single designing decision is hammered down to solve core use
-    cases related to mobile drivers license. And no new technologies has invented.
-    Just put together features that we need.
+The origins of SSI has been somewhat idealistic in some areas at least little
+bit. The [ISO mDL](https://www.iso.org/standard/69084.html) is total opposite.
+Every single piece of idealism has thrown away. Every designing decision is
+hammered down to solve core use cases related to use of mobile driver's license.
+And no new technologies has invented. Just put together features that we need.
 
-I had to admit that it's been refreshing after ivory stores of SSI ;-) For the
-record, there are still excellent work going on e.g. block chain commons.
-
-## Mobile Driver's license
-
-The ISO standard.. 
+I had to admit that it's been refreshing to see that angle in practice after
+ivory stores of SSI ;-) For the record, there are still excellent work going on
+in SSI area in general.
 
 ## Differences Since SSI
 
-mDL has almost similar trust triangle as good old SSI-version.
+mDL has almost similar trust triangle as good old
+[SSI-version.](https://findy-network.github.io/blog/2021/09/08/travelogue/trust-triangle_hua2e42792a9d20037c5f572b0412e67c1_57626_925x925_fit_catmullrom_3.png)
 
-<OLD SSI Trust Triangle>
+{{< imgproc ISO-interfaces.png Resize "1200x" >}}
+<em>mDL Interfaces And Roles</em>
+{{< /imgproc >}}
+
 
 But when you start too look more carefully you'll notice some differences like
-the used names for similar parties. Verifier is <TODO> Holder is the User. Only
-one that is the same is the Issuer role.
+the different names for similar parties. Verifier is `mDL Reader`. Holder is `mDL Holder` or simply `mDL`.
+Issuer is `Issuing Authority`.
 
-Also connections between parties are drawn differently. Where SSI definetily
-doesn't draw communication relation between a verifier and an issuer, mDL
-explains that their communication is totally OK, but not mandatory.
+Also connections between parties are different. Where SSI definitely
+doesn't allow direct communication between a verifier and an issuer, mDL
+explains that their communication is totally OK, but not mandatory. Only thing
+that matters is that the mDL holder and mDL Reader can do what they need to do
+to execute the current use case. For example:
+
+> *For offline retrieval, there is no requirement for any device involved in the
+> transaction to be connected*
 
 We should ask when that kind of communication is need? Well, first and the most
 obvious one is revocation needs. If the use case demands that the mobile
-document (TODO: term) is still valid, a verifier can contact the issuer and ask.
-Sounds pretty pragmatic, doesn't it?
+document
+([mDOC](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)) is
+still valid, a verifier can contact the issuer and ask. Sounds pretty pragmatic,
+doesn't it?
 
 
 # Concepts
 
 ## Interfaces
 
-| DID/SSI Concept | ISO 18013-5 Interface Party |
+| ISO 18013-5 Interface Party | DID/SSI Concept |
 | --------------- | --------------------------- |
 | Issuing Authority Infrastructure | Issuer |
 | mDL Reader | verifier |
 | mDL | Holder |
 
-<TODO mDL interface image>
-
 mDL ISO Document:
-> *For offline retrieval, there is no requirement for any device involved in the
-> transaction to be connected*
-
 ## Identity
 ## Identity Provider
 ## Authenticate
 ## Identification
+
+## Mobile Driver's license
+
+{{< imgproc ISO-retrieval.png Resize "1200x" >}}
+<em>Agency DID Core Concepts</em>
+{{< /imgproc >}}
+
+The ISO standard.. 
 
 LA Wallet, had other way, they don't store any data to the mobile device.
 Everything is fetched from the mainframe server of coverment.
