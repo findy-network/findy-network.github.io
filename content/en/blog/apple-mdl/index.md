@@ -3,6 +3,12 @@ date: 2024-02-06
 title: "I want mDL!"
 linkTitle: "I want mDL!"
 description: "
+As a tech nerd, these last couple of years have been most frustrating. A similar
+situation was when I couldn’t do my taxes with the government’s digital service
+when normal citizens could. I was a part-time freelancer—no candy for me.
+They have fixed that since then. But now, as a regular Finn, I cannot use my
+mobile devices to authenticate myself in face-to-face situations. What the duck,
+I want my color TV!
 "
 author: Harri Lainio
 resources:
@@ -10,35 +16,20 @@ resources:
   title: "Image #:counter"
 ---
 
-How to heck we have ended up this mesh. We should be the number one in the
-world. that was a promise. we had even a press release of it. but no. here we
-are without the mobile driver's license or digital ID. 
-
-You might ask who is we. findland of course. tech nerds of the world. at lest we
-think so.
-
-# background ends
-
-As a tech nerd, these last couple of years have been most frustrating. A similar
-situation was when I couldn’t do my taxes with the government’s digital service
-when normal citizens could. I was a part-time freelancer—no candy for me.
-
-They have fixed that since then. But now, as a regular Finn, I cannot use my
-mobile devices to authenticate myself in face-to-face situations. WTF, I want my
-color TV!
-
-
-# Real Beginning is here
-
-It's been somewhat funny that we don't have a Mobile Drivers license in
+It's been somewhat funny that we don't have a mobile driver's license in
 Finland. In the Nordics we are usually quite good with the things related to
 digital and mobile services. For example, we have had somewhat famous bank IDs
 from early 90's.
 
-FTR, Iceland has had a mobile driver's license since 2020. Surprise surprise, Finland was on the pole
-position at summer 2018, when government funded mobile driver's license beta app was in the use with 40.000 users.
-The project was started at 2017 but got [cancelled at
-2020 (in Finnish)](https://www.traficom.fi/fi/ajankohtaista/autoilija-sovelluksen-kehittaminen-keskeytetaan-traficom-keskittyy-nykyisten).
+For the record, Iceland has had a mobile driver's license since 2020. Surprise
+surprise, Finland was on the pole position at summer 2018, when government
+funded mobile driver's license beta app was in the use with 40.000 users. The
+project was started at 2017 but got [cancelled at 2020 (in
+Finnish)](https://www.traficom.fi/fi/ajankohtaista/autoilija-sovelluksen-kehittaminen-keskeytetaan-traficom-keskittyy-nykyisten).
+
+How to heck have we ended up this mesh? We should be the number one in the
+world! Did we try to swallow too big bite once when the country level SSI
+studies started?
 
 ## SSI Idealism vs Pragmatism
 
@@ -109,31 +100,13 @@ mDL has almost similar trust triangle as good old
 <em>mDL Interfaces And Roles</em>
 {{< /imgproc >}}
 
-
 But when you start too look more carefully you'll notice some differences like
-the different names for similar parties. Verifier is `mDL Reader`. Holder is `mDL Holder` or simply `mDL`.
-Issuer is `Issuing Authority`.
+the names for similar parties. SSI Verifier is `mDL Reader`. Holder is
+`mDL Holder` or simply `mDL`. Issuer is `Issuing Authority`.
 
-Also connections between parties are different. Where SSI definitely
-doesn't allow direct communication between a verifier and an issuer, mDL
-explains that their communication is totally OK, but not mandatory. Only thing
-that matters is that the mDL holder and mDL Reader can do what they need to do
-to execute the current use case. For example:
+### Concepts
 
-> *For offline retrieval, there is no requirement for any device involved in the
-> transaction to be connected*
-
-We should ask when that kind of communication is need? Well, first and the most
-obvious one is revocation needs. If the use case demands that the mobile
-document
-([mDOC](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)) is
-still valid, a verifier can contact the issuer and ask. Sounds pretty pragmatic,
-doesn't it?
-
-
-# Concepts
-
-## Interfaces
+ISO calls these roles as interfaces.
 
 | ISO 18013-5 Interface Party | DID/SSI Concept |
 | --------------- | --------------------------- |
@@ -141,19 +114,71 @@ doesn't it?
 | mDL Reader | verifier |
 | mDL | Holder |
 
-mDL ISO Document:
-## Identity
-## Identity Provider
-## Authenticate
-## Identification
+### Connections
+
+Also connections between parties are different. Where SSI definitely
+doesn't allow direct communication between a verifier and an issuer, mDL
+explains that their communication is totally OK, but not mandatory. Only thing
+that matters is that the mDL Holder and mDL Reader can do what they need to do
+to execute the current use case. For example:
+
+> *For offline retrieval, there is no requirement for any device involved in the
+> transaction to be connected*
+
+'Connected' means, connected to the internet. So, one of the scenarios
+is to support offline use cases, which makes sense if you think about cases
+where law officer needs to check ID. That must be possible even when the
+internet connection is severed.
+
+### Revocations
+
+We should also ask when that kind of communication is need? Well, first and the
+most obvious one is revocation needs. If the use case demands that the mobile
+document
+([mDOC](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)) is
+still valid, a verifier can contact the issuer and ask. Sounds pretty pragmatic,
+doesn't it?
+
+### One Schema
+
+Maybe the most specific difference of mDL to SSI is that the schema is locked.
+It's based on
+([mDOC](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en))
+standard. This might first feel a handicap but more you think this the better
+way this is to start implement use cases to this specific are.
 
 ## Mobile Driver's license
+
+mDL standard has also similarities to SSI like selective disclosure, but like it
+and those other features are designed in only one thing in mind and it's
+pragmatism. No Fancy Pancy features or saving-the-world idealism, just pure
+functionality.
+
+The ISO standard defines mDL standard which is based on mDOC. The following
+diagram descripes its most important architectural elements.
 
 {{< imgproc ISO-retrieval.png Resize "1200x" >}}
 <em>Agency DID Core Concepts</em>
 {{< /imgproc >}}
 
-The ISO standard.. 
+The diagram present both logical and physical parts of the mDL architecture. At
+the bottom are supported data transport technologies: NFC, Bluetooth, WiFi, etc.
+Transported data is CBOR coded that guarantees best possible performance. CBOR
+is binary coded data format optimized for limited resources and band-widths. 
+
+### Selective Disclosure
+
+mDL's selective disclosure is analogic to SD-JWT's mechanism, i.e., disclosures
+digestives are used when the Issuer signs the credential document. This allows
+very simple and elegant SD implementation which is also efficient.
+
+### No need for ZKP
+
+mDL doesn't have ZKP but it has solved similar use case requirements with the
+attestations. For example, the mDL issuer can include attestations about mDL
+Holder's age. The format is `older_than_NN`. When mDL Reader sends the request
+it can query `older_than_55` and the response will include all the attestations
+that are equal or greater than 55 years old.
 
 LA Wallet, had other way, they don't store any data to the mobile device.
 Everything is fetched from the mainframe server of coverment.
@@ -197,34 +222,13 @@ doing that. Server call home. Serverless doesn't like that. We have seen in USA,
       more in UE, person hold wallet stored idepended store. W3C structures,
       etc.
 
-As a young lad I remember that I need or just wanted
-something, but didn't have funds to achieve the thing. 
-
-
-
-. It was a pilot that got
-40.000 user at the peek, but was cancelled by the government at TODO. It would be
-interesting to know how much money they had spent to it. there had added to
-quite extensive features. Laughing turns to crying if your are Apple Pay heavy
-user and you start to forget your non-digital wallet to home and you should
-authenticate your self at some service desk.
-
-## How about DIDs and SSI?
-
-Since jumping on the SSI (Self-Sovereign Identity) wagon, I have been wondering
-some of the approaches:
-
-- like DIDs, why [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)?,
-- why DIDComm has a late detection of MITM? [TOFU](https://en.wikipedia.org/wiki/Trust_on_first_use) is very long story and we will
-  probably write separate post about this later.
-- why not use hybrid cryptography but only asymmetric,
-- or why prefer JSON instead of let's say CBOR, or other binary formats.
+## Conclusion
 
 Quite many the aspects has felt so anti-pragmatic and overly complicated that you
 started to wonder what have been the designing philosophy? I have also written
 and [publish those findings](TODO) [in several posts](TODO). My current
-conclusion is the old wisdom, don't *build platform but solve a specific use that
-should be easy to solve with the platform first.*
+conclusion is the old wisdom, *don't build platform right away but solve a few use cases
+first and build the platform if it's still needed.*
 
 allen sayd that everything seem to transform from decentralized to centralized
 in time. He spokes PKI CAs, block chain mining, ...
