@@ -1,7 +1,7 @@
 ---
 date: 2024-02-06
-title: "Implement a Chatbot"
-linkTitle: "Implement a Chatbot"
+title: "Issuing Service"
+linkTitle: "Issuing Service"
 description: "
 Our SSI/DID agency solution is fully symmetric, which means that our agents can
 be in any role simultaneously: `issuer`, `holder`, and `verifier`. However, the
