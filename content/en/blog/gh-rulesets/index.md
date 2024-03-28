@@ -158,5 +158,53 @@ In the created application settings, go to the `Install App` section.
 
 ### Create Rulesets
 
+The next step is to create the rulesets. The rulesets will work on behalf of
+the branch protection settings, so **if you have any existing branch protections configured,
+remove those first**. Doing so will prevent any overlapping configurations that may mess up the functionality.
+
+#### Goal of the Rulesets
+
+I crafted the following approach according to the original idea presented in [the GitHub blog](https://github.blog/2023-07-24-github-repository-rules-are-now-generally-available/#bypass-with-ease-or-how-i-learned-to-stop-worrying-and-love-the-bot).
+The goal is to protect the main branch so that:
+
+1. Developers can make changes only via pull requests that have passed the status check "test."
+1. The releaser bot can push tags and update versions in the GitHub Actions workflow directly
+   to the main branch without creating pull requests.
+
+You may modify the settings according to your needs. For instance, you may require additional
+status checks or require a review of the PR before one can merge it into the main branch.
+
+#### Configuration
+
+First, we will create a rule for all users. We do not allow anyone to delete refs or force push changes.
+Go to the repository settings and select `Rulesets`:
+
+1. Create a `New ruleset` by tapping the `New branch ruleset`.
+2. Give the `Main: all` name for the ruleset.
+3. Set `Enforcement status` as `Active`.
+   {{< imgproc main-all Fit "825x825" >}}{{< /imgproc >}}
+4. Leave `Bypass list` empty.
+5. Add a new target branch. `Include default branch` (assuming the repository default branch is main).
+   {{< imgproc targets Fit "825x825" >}}{{< /imgproc >}}
+6. In `Rules` section, tick `Restrict deletions` and `Block force push`.
+  {{< imgproc rules Fit "825x825" >}}{{< /imgproc >}}
+7. Push the `Create` button.
+
+Then, we will create another ruleset that requires PRs
+and status checks for any user other than the releaser bot.
+
+1. Create a `New ruleset` by tapping the `New branch ruleset`.
+1. Give the `Main: require PR except for releaser` name for the ruleset.
+1. Set `Enforcement` status as `Active`.
+1. Add your releaser application to the `Bypass list`.
+   {{< imgproc main-require-pr Fit "825x825" >}}{{< /imgproc >}}
+2. Add a new target branch. `Include default branch` (assuming the repository default branch is main).
+3. Tick `Require a pull request before merging.`
+   {{< imgproc pr-require Fit "825x825" >}}{{< /imgproc >}}
+4. Tick `Require status checks to pass` and `Require branches to be up to date before merging.`
+   Add `test` as a required status check.
+   {{< imgproc require-status-checks Fit "825x825" >}}{{< /imgproc >}}
+5. Push the `Create` button.
+
 ### Use Bot GitHub Actions Workflow
 
