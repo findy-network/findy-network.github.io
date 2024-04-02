@@ -3,11 +3,11 @@ date: 2024-03-06
 title: "I want mDL!"
 linkTitle: "I want mDL!"
 description: "
-As a tech nerd, these last couple of years have been most frustrating. A similar
+As a tech nerd, these last few years have been most frustrating. A similar
 situation was when I couldn’t do my taxes with the government’s digital service.
 I was a part-time freelancer. They have fixed that since then. But now, as a
 regular Finn, I cannot use my mobile devices to authenticate myself in
-face-to-face situations. I want my color TV!
+face-to-face situations—I want my color TV!
 "
 author: Harri Lainio
 resources:
@@ -15,19 +15,18 @@ resources:
   title: "Image #:counter"
 ---
 
-It's been somewhat funny that we don't have a mobile driver's license in
-Finland. In the Nordics we are usually quite good with the things related to
-digital and mobile services. For example, we have had somewhat famous bank IDs
-from early 90's.
+It’s funny that we don’t have a mobile driver’s license in Finland. In the
+Nordics, we are usually quite good with digital and mobile services. For
+example, we have had somewhat famous bank IDs from the early 90s.
 
-For the record, Iceland has had a mobile driver's license since 2020. Surprise
-surprise, Finland was on the pole position at summer 2018. The government
-funded mobile driver's license app (beta) was in the use with 40.000 users. The
-project was started at 2017 but got [cancelled at 2020 (link in
-Finnish)](https://www.traficom.fi/fi/ajankohtaista/autoilija-sovelluksen-kehittaminen-keskeytetaan-traficom-keskittyy-nykyisten).
+For the record, Iceland has had a mobile driver’s license since 2020. Surprise,
+Finland, was in the pole position in the summer of 2018. The government-funded
+mobile driver’s license app (beta) was used with 40.000 users. The project
+started in 2017 but was [canceled in
+2020 (link in Finnish).](https://www.traficom.fi/fi/ajankohtaista/autoilija-sovelluksen-kehittaminen-keskeytetaan-traficom-keskittyy-nykyisten)
 
-How to heck have we ended up this mess? We should be the number one in the
-world! Did we try to swallow too big bite once when the country level SSI
+How the heck have we ended up in this mess? We should be the number one in the
+world! Did we try to swallow too big a bite once when the country-level SSI
 studies started?
 
 ## SSI Study
@@ -71,8 +70,8 @@ So, let's follow that for a moment, shall we?
 Most internet protocols have started quite high level of decentralization as
 their goal/vision through the [history of computer
 science](https://en.wikipedia.org/wiki/History_of_the_World_Wide_Web). There are
-many benefits to set decentralization as goal no single point of failure, easier
-to scale horizontally, etc.
+many benefits to set decentralization as requirement: no single point of
+failure, easier to scale horizontally, etc.
 
 After innovation of blockchain decentralization has come a hype word, and most
 of us doesn't really understand what it means to have fully decentralized
