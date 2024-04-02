@@ -1,6 +1,6 @@
 {
   "name": "findy-network.github.io",
-  "version": "0.1.60",
+  "version": "0.1.62",
   "description": "Findy Agency documentation",
   "main": "none.js",
   "scripts": {
@@ -19,9 +19,9 @@
   },
   "homepage": "https://github.com/findy-network/findy-network.github.io#readme",
   "devDependencies": {
-    "autoprefixer": "^10.4.17",
+    "autoprefixer": "^10.4.19",
     "js-green-licenses": "^4.0.0",
-    "postcss": "^8.4.34",
+    "postcss": "^8.4.38",
     "postcss-cli": "^11.0.0"
   }
 }
