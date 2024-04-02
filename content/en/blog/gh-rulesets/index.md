@@ -76,6 +76,13 @@ intended to solve my problem.
 However, a few examples were available, and the rulesets configuration was not intuitive.
 Therefore, I have documented the steps below if you wish to use a similar approach in your project.
 
+The instructions below are three-phased:
+
+1. [Creating a GitHub application for the release process operations](#github-application)
+2. [Configuring rulesets that protect the main branch but still allow releasing](#create-rulesets)
+3. [Using the newly created GitHub application in the GitHub Actions workflow](#use-bot-in-github-actions-workflow)
+
+
 ## Configuring GitHub Rulesets for Releasing
 
 ### GitHub Application
@@ -167,7 +174,7 @@ remove those first**. Doing so will prevent any overlapping configurations that 
 I crafted the following approach according to the original idea presented in [the GitHub blog](https://github.blog/2023-07-24-github-repository-rules-are-now-generally-available/#bypass-with-ease-or-how-i-learned-to-stop-worrying-and-love-the-bot).
 The goal is to protect the main branch so that:
 
-1. Developers can make changes only via pull requests that have passed the status check "test."
+1. Developers can make changes only via pull requests that have passed the status check `test`.
 1. The releaser bot can push tags and update versions in the GitHub Actions workflow directly
    to the main branch without creating pull requests.
 
@@ -186,7 +193,7 @@ Go to the repository settings and select `Rulesets`:
 4. Leave `Bypass list` empty.
 5. Add a new target branch. `Include default branch` (assuming the repository default branch is main).
    {{< imgproc targets Fit "825x825" >}}{{< /imgproc >}}
-6. In `Rules` section, tick `Restrict deletions` and `Block force push`.
+6. In `Rules` section, tick `Restrict deletions` and `Block force pushes`.
   {{< imgproc rules Fit "825x825" >}}{{< /imgproc >}}
 7. Push the `Create` button.
 
@@ -198,13 +205,62 @@ and status checks for any user other than the releaser bot.
 1. Set `Enforcement` status as `Active`.
 1. Add your releaser application to the `Bypass list`.
    {{< imgproc main-require-pr Fit "825x825" >}}{{< /imgproc >}}
-2. Add a new target branch. `Include default branch` (assuming the repository default branch is main).
-3. Tick `Require a pull request before merging.`
+1. Add a new target branch. `Include default branch` (assuming the repository default branch is main).
+1. Tick `Require a pull request before merging.`
    {{< imgproc pr-require Fit "825x825" >}}{{< /imgproc >}}
-4. Tick `Require status checks to pass` and `Require branches to be up to date before merging.`
+1. Tick `Require status checks to pass` and `Require branches to be up to date before merging.`
    Add `test` as a required status check.
    {{< imgproc require-status-checks Fit "825x825" >}}{{< /imgproc >}}
-5. Push the `Create` button.
+1. Push the `Create` button.
 
-### Use Bot GitHub Actions Workflow
+### Use Bot in GitHub Actions Workflow
 
+The final step is configuring the release process to use our newly created GitHub application.
+
+#### Add Secrets for Release Workflow
+
+To create a token for the releaser bot in the GitHub Actions workflow,
+we must have two secret variables available.
+
+Go to repository `Settings` / `Secrets and variables` / `Actions`. Create two new secrets:
+
+* `RELEASER_APP_ID`: Copy and paste your GitHub application ID (app ID) from
+  the [GitHub application settings page](#2-download-private-key).
+* `RELEASER_APP_KEY`: Copy and paste the contents of the private key file downloaded earlier.
+
+{{< imgproc secrets Fit "825x825" >}}{{< /imgproc >}}
+
+#### Generate Token with the GitHub Application
+
+In the release workflow, generate a token with the GitHub Application.
+For this, you can use a special action, [`actions/create-github-app-token`](https://github.com/actions/create-github-app-token),
+that utilizes the secrets defined in the previous step.
+
+You can use the generated token for the repository cloning step. One can access the token using
+the outputs of the token generation step. Since the repository gets cloned with the bot token,
+the bot user will perform subsequent git actions.
+
+{{< imgproc workflow Fit "825x825" >}}{{< /imgproc >}}
+
+You can find the sample workflow in [GitHub](https://github.com/lauravuo/gh-ruleset-test/blob/main/.github/workflows/release.yml).
+
+So, the release script can now push directly to the main branch as we use the releaser bot token and
+have configured a bypass rule for the bot user in the rulesets. At the same time, other users cannot
+push to the main branch but must create a PR for their changes.
+
+### Summary
+
+That's it! The above steps show how to automate project release workflow in GitHub Actions
+with a dedicated bot user while still having repository branch protections to shield from
+accidental changes and unvetted code. I hope the instructions are of use to you. I'm always happy
+to have comments and ideas for improvement; you can contact me on [LinkedIn](https://www.linkedin.com/in/lauravuorenoja/)!
+
+<div style="display: flex">
+<span>
+<img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width="100"/>
+<div>Laura</div>
+<div><a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer"><i class="fab fa-github ml-2 "></i></a>
+<a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer"><i class="fab fa-linkedin ml-2 "></i></a>
+<a href="https://fosstodon.org/@lauravuo" target="_blank" rel="noopener noreferer"><i class="fab fa-mastodon ml-2 "></i></a>
+<a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer"><i class="fab fa-twitter ml-2 "></i></a></div>
+</span></div><br><br>
