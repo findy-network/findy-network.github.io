@@ -32,11 +32,10 @@ Until now, I have used GitHub's branch protection feature to enable these additi
 With this settings page, you can easily protect one or multiple branches
 by configuring the abovementioned options.
 
-{{< imgproc cover Fit "825x825" >}}
+{{< imgproc branch Fit "825x825" >}}
 <em>One can configure branch protection rules in the repository settings.
 </em>
 {{< /imgproc >}}
-
 
 ## Branch Protection Prevents Releasing
 
@@ -55,47 +54,44 @@ the release bot cannot do its duties as it cannot push to the protected branch.
 Error states: `Protected branch update failed for refs/heads/<branch_name>,
 X of X required status checks are expected.`
 
-Therefore, I've had to implement workaround pull requests that slow down
-and make the process unreliable. In some cases, I have had to use a user token
-with administrative permissions to make the releases,
-which I wanted to avoid as it has evident problems in the security model.
+Therefore, to overcome this problem, I have configured the bot to use pull requests.
+These workaround pull requests have slowed the process and made it unreliable.
+In some cases, I have been using a user token with administrative permissions to make the releases,
+which I want to avoid as it has evident problems in the security model.
 
 ## Rulesets to the Rescue
 
 Finally, this week, I reserved some time to investigate
-whether it is possible to overcome these limitations.
+whether it is possible to avoid these limitations.
 I had two targets: first, I wanted to protect the main branch from accidental pushes
 so developers could make changes only via pull requests vetted by the CI checks.
 Second, I wanted the release bot to be able to bypass these rules and
 push the tags and version changes to the main branch without issues.
 
 I googled for an answer for a fair amount of time. It soon became apparent
-that many others were struggling with these same problems, but also that
-GitHub had released [a new feature called rulesets](https://github.blog/2023-07-24-github-repository-rules-are-now-generally-available/),
-intended to solve my problem.
-However, a few examples were available, and the rulesets configuration was not intuitive.
+that many others were struggling with the same problem, but also that GitHub
+had released [a new feature called rulesets](https://github.blog/2023-07-24-github-repository-rules-are-now-generally-available/),
+intended to solve the problem.
+However, a few examples were available, and the configuration of the rulesets was not intuitive.
 Therefore, I have documented the steps below if you wish to use a similar approach in your project.
 
 The instructions below are three-phased:
 
 1. [Creating a GitHub application for the release process operations](#github-application)
-2. [Configuring rulesets that protect the main branch but still allow releasing](#create-rulesets)
+2. [Configuring rulesets that protect the main branch but still allow releasing](#rulesets)
 3. [Using the newly created GitHub application in the GitHub Actions workflow](#use-bot-in-github-actions-workflow)
 
-
-## Configuring GitHub Rulesets for Releasing
-
-### GitHub Application
+## GitHub Application
 
 The first step is to [create a GitHub application](https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps)
 that handles the git operations in the CI release process for you.
 
-#### Why to Use an Application?
+### Why to Use an Application?
 
 There are multiple reasons why I chose to make a dedicated GitHub application instead of
 using a personal access token or built-in GitHub Actions token directly:
 
-* **The App installed in an organization is not attached to the user's role**
+* **The App** installed in an organization **is not attached to the user's role**
   or resource access as opposed to the personal access tokens.
 * **App does not reserve a seat from the organization.**
   Creating an actual new GitHub user would reserve a seat.
@@ -109,15 +105,13 @@ using a personal access token or built-in GitHub Actions token directly:
   If using a built-in GitHub Actions token, new workflows would not be triggered,
   as workflows are not allowed to trigger other workflows.
 
-#### Steps for Application Creation
-
 One can use GitHub Applications for multiple and more powerful purposes,
 but the releaser bot only needs minimal configuration as its only duty
 is to do the releasing-related chores.
 
-#### 1. Create Application
+### 1. Register Application
 
-Start the new application creation via user profile `Developer settings` or
+Start the application registration via user profile `Developer settings` or
 [this link](https://github.com/settings/apps/new).
 
 {{< imgproc register Fit "825x825" >}}
@@ -138,7 +132,7 @@ the following settings need to be defined:
 * Push `Create GitHub App`.
   {{< imgproc create Fit "825x825" >}}{{< /imgproc >}}
 
-#### 2. Download Private Key
+### 2. Download Private Key
 
 {{< imgproc priv-key Fit "825x825" >}}{{< /imgproc >}}
 
@@ -150,8 +144,7 @@ Navigate to the private keys section and push the `Generate a private key` butto
 **The private key file will download to your computer.
 Store it in a secure place; you will need it later.**
 
-
-#### 3. Install the Application
+### 3. Install the Application
 
 Before using the application in your repository's workflow:
 
@@ -163,25 +156,27 @@ In the created application settings, go to the `Install App` section.
   {{< imgproc install-app2 Fit "825x825" >}}{{< /imgproc >}}
 1. Push the `Install` button.
 
-### Create Rulesets
+## Remove Existing Branch Protections
 
-The next step is to create the rulesets. The rulesets will work on behalf of
-the branch protection settings, so **if you have any existing branch protections configured,
-remove those first**. Doing so will prevent any overlapping configurations that may mess up the functionality.
+The rulesets feature will work on behalf of
+the branch protection settings. To avoid having overlapping configurations,
+remove first any existing branch protections.
 
-#### Goal of the Rulesets
+## Rulesets
+
+The next step is to create the rulesets.
 
 I crafted the following approach according to the original idea presented in [the GitHub blog](https://github.blog/2023-07-24-github-repository-rules-are-now-generally-available/#bypass-with-ease-or-how-i-learned-to-stop-worrying-and-love-the-bot).
 The goal is to protect the main branch so that:
 
 1. Developers can make changes only via pull requests that have passed the status check `test`.
-1. The releaser bot can push tags and update versions in the GitHub Actions workflow directly
+2. The releaser bot can push tags and update versions in the GitHub Actions workflow directly
    to the main branch without creating pull requests.
 
 You may modify the settings according to your needs. For instance, you may require additional
 status checks or require a review of the PR before one can merge it into the main branch.
 
-#### Configuration
+### Configuration
 
 First, we will create a rule for all users. We do not allow anyone to delete refs or force push changes.
 Go to the repository settings and select `Rulesets`:
@@ -189,7 +184,7 @@ Go to the repository settings and select `Rulesets`:
 1. Create a `New ruleset` by tapping the `New branch ruleset`.
 2. Give the `Main: all` name for the ruleset.
 3. Set `Enforcement status` as `Active`.
-   {{< imgproc main-all Fit "825x825" >}}{{< /imgproc >}}
+   {{< imgproc cover Fit "825x825" >}}{{< /imgproc >}}
 4. Leave `Bypass list` empty.
 5. Add a new target branch. `Include default branch` (assuming the repository default branch is main).
    {{< imgproc targets Fit "825x825" >}}{{< /imgproc >}}
@@ -213,11 +208,11 @@ and status checks for any user other than the releaser bot.
    {{< imgproc require-status-checks Fit "825x825" >}}{{< /imgproc >}}
 1. Push the `Create` button.
 
-### Use Bot in GitHub Actions Workflow
+## Use Bot in GitHub Actions Workflow
 
 The final step is configuring the release process to use our newly created GitHub application.
 
-#### Add Secrets for Release Workflow
+### Add Secrets for Release Workflow
 
 To create a token for the releaser bot in the GitHub Actions workflow,
 we must have two secret variables available.
@@ -230,7 +225,7 @@ Go to repository `Settings` / `Secrets and variables` / `Actions`. Create two ne
 
 {{< imgproc secrets Fit "825x825" >}}{{< /imgproc >}}
 
-#### Generate Token with the GitHub Application
+### Generate Token with the GitHub Application
 
 In the release workflow, generate a token with the GitHub Application.
 For this, you can use a special action, [`actions/create-github-app-token`](https://github.com/actions/create-github-app-token),
@@ -248,7 +243,7 @@ So, the release script can now push directly to the main branch as we use the re
 have configured a bypass rule for the bot user in the rulesets. At the same time, other users cannot
 push to the main branch but must create a PR for their changes.
 
-### Summary
+## Summary
 
 That's it! The above steps show how to automate project release workflow in GitHub Actions
 with a dedicated bot user while still having repository branch protections to shield from
