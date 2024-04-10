@@ -1,4 +1,265 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>https://findy-network.github.io/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 05 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Path to Passwordless</title><link>https://findy-network.github.io/blog/2024/01/05/path-to-passwordless/</link><pubDate>Fri, 05 Jan 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/01/05/path-to-passwordless/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>https://findy-network.github.io/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Managing GitHub Branch Protections</title><link>https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/</link><pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/</guid><description>
+&lt;p>GitHub has recently improved its automatic pull request handling and branch protection features.
+I have found these features handy, and nowadays, I enable them regardless of the project type to
+help me automate the project workflows and protect the code from accidental changes and regression bugs.&lt;/p>
+&lt;p>The features I find most useful are&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Require a pull request before merging&lt;/strong>:
+This setting enforces a model where the developers cannot accidentally
+push changes to the project&amp;rsquo;s main branches.&lt;/li>
+&lt;li>&lt;strong>&lt;a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches#require-status-checks-before-merging">Require status checks to pass before merging&lt;/a>&lt;/strong>:
+This branch protection setting allows one to configure which status checks
+(e.g., unit tests, linting, etc.) must pass before merging the pull request.&lt;/li>
+&lt;li>&lt;strong>&lt;a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request">Allow auto-merge&lt;/a>&lt;/strong>:
+This setting allows me to automate the merging of the PR once all
+the CI has run all the needed checks. I do not need to wait for
+the CI to complete the jobs. Instead, I can continue working on other things.
+In addition, I use this feature to merge, for example, dependency updates automatically.
+&lt;em>Note: auto-merging works naturally only when the branch protection checks are in place.&lt;/em>&lt;/li>
+&lt;/ul>
+&lt;p>Until now, I have used GitHub&amp;rsquo;s branch protection feature to enable these additional shields.
+With this settings page, you can easily protect one or multiple branches
+by configuring the abovementioned options.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/branch-protection_hu4ee9ed352abdacd015670eb3310f7e0a_133417_825x825_fit_catmullrom_3.png" width="825" height="448">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>One can configure branch protection rules in the repository settings.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;h2 id="branch-protection-prevents-releasing">Branch Protection Prevents Releasing&lt;/h2>
+&lt;p>However, when enforcing the branch protection, it applies to all users.
+That also includes the bot user I am using in many projects to release:
+&lt;strong>creating a release tag&lt;/strong>, &lt;strong>updating version numbers&lt;/strong>, and &lt;strong>committing these changes
+to the main branch&lt;/strong>.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 733px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/push-failed_hubc8d76ee3b027a7d7cf699ab818bd856_57968_825x825_fit_catmullrom_3.png" width="723" height="203">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Releaser bot is unable to push version update when branch protection is enabled.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>Suddenly, when the branch protection is enabled,
+the release bot cannot do its duties as it cannot push to the protected branch.
+Error states: &lt;code>Protected branch update failed for refs/heads/&amp;lt;branch_name&amp;gt;, X of X required status checks are expected.&lt;/code>&lt;/p>
+&lt;p>Therefore, to overcome this problem, I have configured the bot to use pull requests.
+These workaround pull requests have slowed the process and made it unreliable.
+In some cases, I have been using a user token with administrative permissions to make the releases,
+which I want to avoid as it has evident problems in the security model.&lt;/p>
+&lt;h2 id="rulesets-to-the-rescue">Rulesets to the Rescue&lt;/h2>
+&lt;p>Finally, this week, I reserved some time to investigate
+whether it is possible to avoid these limitations.
+I had two targets: first, I wanted to protect the main branch from accidental pushes
+so developers could make changes only via pull requests vetted by the CI checks.
+Second, I wanted the release bot to be able to bypass these rules and
+push the tags and version changes to the main branch without issues.&lt;/p>
+&lt;p>I googled for an answer for a fair amount of time. It soon became apparent
+that many others were struggling with the same problem, but also that GitHub
+had released &lt;a href="https://github.blog/2023-07-24-github-repository-rules-are-now-generally-available/">a new feature called rulesets&lt;/a>,
+intended to solve the problem.
+However, a few examples were available, and the configuration of the rulesets was not intuitive.
+Therefore, I have documented the steps below if you wish to use a similar approach in your project.&lt;/p>
+&lt;p>The instructions below are three-phased:&lt;/p>
+&lt;ol>
+&lt;li>&lt;a href="#github-application">Creating a GitHub application for the release process operations&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#rulesets">Configuring rulesets that protect the main branch but still allow releasing&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#use-bot-in-github-actions-workflow">Using the newly created GitHub application in the GitHub Actions workflow&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;h2 id="github-application">GitHub Application&lt;/h2>
+&lt;p>The first step is to &lt;a href="https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps">create a GitHub application&lt;/a>
+that handles the git operations in the CI release process for you.&lt;/p>
+&lt;h3 id="why-to-use-an-application">Why to Use an Application?&lt;/h3>
+&lt;p>There are multiple reasons why I chose to make a dedicated GitHub application instead of
+using a personal access token or built-in GitHub Actions token directly:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>The App&lt;/strong> installed in an organization &lt;strong>is not attached to the user&amp;rsquo;s role&lt;/strong>
+or resource access as opposed to the personal access tokens.&lt;/li>
+&lt;li>&lt;strong>App does not reserve a seat from the organization.&lt;/strong>
+Creating an actual new GitHub user would reserve a seat.&lt;/li>
+&lt;li>One can &lt;strong>grant an application special permissions&lt;/strong> in rulesets.
+We want to treat all other (human) users similarly
+and only grant the bot user special access.
+This approach is impossible when using personal access tokens or built-in tokens.&lt;/li>
+&lt;li>We want to &lt;strong>activate other actions from pushes done by the releaser&lt;/strong>. For instance,
+if we create a tag with the releaser bot, we want the new tag to trigger
+several other actions, e.g., the building and packaging the project binary.
+If using a built-in GitHub Actions token, new workflows would not be triggered,
+as workflows are not allowed to trigger other workflows.&lt;/li>
+&lt;/ul>
+&lt;p>One can use GitHub Applications for multiple and more powerful purposes,
+but the releaser bot only needs minimal configuration as its only duty
+is to do the releasing-related chores.&lt;/p>
+&lt;h3 id="1-register-application">1. Register Application&lt;/h3>
+&lt;p>Start the application registration via user profile &lt;code>Developer settings&lt;/code> or
+&lt;a href="https://github.com/settings/apps/new">this link&lt;/a>.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/register-new-app_huffbcabf72d8652cc02d59e237746c8be_117578_825x825_fit_catmullrom_3.png" width="825" height="523">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Registering new GitHub application.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>When creating the new application for the releasing functionality,
+the following settings need to be defined:&lt;/p>
+&lt;ul>
+&lt;li>Application name: e.g. &lt;code>releaser-bot&lt;/code>&lt;/li>
+&lt;li>Homepage URL: e.g. the repository URL&lt;/li>
+&lt;li>Untick &lt;code>Webhook/Active&lt;/code>, as we don&amp;rsquo;t need webhook notifications.&lt;/li>
+&lt;li>Choose permissions: &lt;code>Permissions&lt;/code>/&lt;code>Repository&lt;/code>/&lt;code>Contents&lt;/code>/&lt;code>Read and write&lt;/code>.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/permissions_hu77ba11ce983ab70b41bbe7ffe1a10647_113580_825x825_fit_catmullrom_3.png" width="825" height="328">
+&lt;/figure>
+&lt;/li>
+&lt;li>Choose selection: &lt;code>Where can this GitHub App be installed?&lt;/code>
+&lt;strong>Note: If you want to use the application in an organization&amp;rsquo;s repositories, make it public.&lt;/strong>&lt;/li>
+&lt;li>Push &lt;code>Create GitHub App&lt;/code>.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/create_huff43daf64bf32883e59e045b7aacfcb6_76576_825x825_fit_catmullrom_3.png" width="825" height="247">
+&lt;/figure>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="2-download-private-key">2. Download Private Key&lt;/h3>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/priv-key_huef06acee7986fb8a66f3c44e525e33af_191805_825x825_fit_catmullrom_3.png" width="825" height="393">
+&lt;/figure>
+&lt;p>After creating the app, you will receive a note saying,
+&lt;code>Registration successful. You must generate a private key to install your GitHub App.&lt;/code>
+Navigate to the private keys section and push the &lt;code>Generate a private key&lt;/code> button.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/priv-key2_hu3d97fb7e994d07a5cd9e3459a6406529_68519_825x825_fit_catmullrom_3.png" width="825" height="298">
+&lt;/figure>
+&lt;/p>
+&lt;p>&lt;strong>The private key file will download to your computer.
+Store it in a secure place; you will need it later.&lt;/strong>&lt;/p>
+&lt;h3 id="3-install-the-application">3. Install the Application&lt;/h3>
+&lt;p>Before using the application in your repository&amp;rsquo;s workflow:&lt;/p>
+&lt;ol>
+&lt;li>Install the app in the target repository.
+In the created application settings, go to the &lt;code>Install App&lt;/code> section.&lt;/li>
+&lt;li>Select the user or organization for which you want to install the application.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/install-app_hu603f25e73f664cca4ca63b42af6e1f68_109153_825x825_fit_catmullrom_3.png" width="825" height="207">
+&lt;/figure>
+&lt;/li>
+&lt;li>Select if you wish to use the application in a single repository or all account repositories.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 623px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/install-app2_hu6854b59c4da76ffdfc979909578a987f_204287_825x825_fit_catmullrom_3.png" width="613" height="825">
+&lt;/figure>
+&lt;/li>
+&lt;li>Push the &lt;code>Install&lt;/code> button.&lt;/li>
+&lt;/ol>
+&lt;h2 id="remove-existing-branch-protections">Remove Existing Branch Protections&lt;/h2>
+&lt;p>The rulesets feature will work on behalf of
+the branch protection settings. To avoid having overlapping configurations,
+remove first any existing branch protections.&lt;/p>
+&lt;h2 id="rulesets">Rulesets&lt;/h2>
+&lt;p>The next step is to create the rulesets.&lt;/p>
+&lt;p>I crafted the following approach according to the original idea presented in &lt;a href="https://github.blog/2023-07-24-github-repository-rules-are-now-generally-available/#bypass-with-ease-or-how-i-learned-to-stop-worrying-and-love-the-bot">the GitHub blog&lt;/a>.
+The goal is to protect the main branch so that:&lt;/p>
+&lt;ol>
+&lt;li>Developers can make changes only via pull requests that have passed the status check &lt;code>test&lt;/code>.&lt;/li>
+&lt;li>The releaser bot can push tags and update versions in the GitHub Actions workflow directly
+to the main branch without creating pull requests.&lt;/li>
+&lt;/ol>
+&lt;p>You may modify the settings according to your needs. For instance, you may require additional
+status checks or require a review of the PR before one can merge it into the main branch.&lt;/p>
+&lt;h3 id="configuration">Configuration&lt;/h3>
+&lt;p>First, we will create a rule for all users. We do not allow anyone to delete refs or force push changes.
+Go to the repository settings and select &lt;code>Rulesets&lt;/code>:&lt;/p>
+&lt;ol>
+&lt;li>Create a &lt;code>New ruleset&lt;/code> by tapping the &lt;code>New branch ruleset&lt;/code>.&lt;/li>
+&lt;li>Give the &lt;code>Main: all&lt;/code> name for the ruleset.&lt;/li>
+&lt;li>Set &lt;code>Enforcement status&lt;/code> as &lt;code>Active&lt;/code>.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/cover-main-all_hu8bd54ffc9485ddee115330e340165732_80217_825x825_fit_catmullrom_3.png" width="825" height="329">
+&lt;/figure>
+&lt;/li>
+&lt;li>Leave &lt;code>Bypass list&lt;/code> empty.&lt;/li>
+&lt;li>Add a new target branch. &lt;code>Include default branch&lt;/code> (assuming the repository default branch is main).
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/targets_hu8e5a175ba9364e4ea9af6fc25a8aee43_50145_825x825_fit_catmullrom_3.png" width="825" height="318">
+&lt;/figure>
+&lt;/li>
+&lt;li>In &lt;code>Rules&lt;/code> section, tick &lt;code>Restrict deletions&lt;/code> and &lt;code>Block force pushes&lt;/code>.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 789px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/rules1_hu136f58b7d93df6c09e576d0aa26ab63d_120333_825x825_fit_catmullrom_3.png" width="779" height="825">
+&lt;/figure>
+&lt;/li>
+&lt;li>Push the &lt;code>Create&lt;/code> button.&lt;/li>
+&lt;/ol>
+&lt;p>Then, we will create another ruleset that requires PRs
+and status checks for any user other than the releaser bot.&lt;/p>
+&lt;ol>
+&lt;li>Create a &lt;code>New ruleset&lt;/code> by tapping the &lt;code>New branch ruleset&lt;/code>.&lt;/li>
+&lt;li>Give the &lt;code>Main: require PR except for releaser&lt;/code> name for the ruleset.&lt;/li>
+&lt;li>Set &lt;code>Enforcement&lt;/code> status as &lt;code>Active&lt;/code>.&lt;/li>
+&lt;li>Add your releaser application to the &lt;code>Bypass list&lt;/code>.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 814px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/main-require-pr_hu2059934167386587d85a509d865f6732_52519_825x825_fit_catmullrom_3.png" width="804" height="393">
+&lt;/figure>
+&lt;/li>
+&lt;li>Add a new target branch. &lt;code>Include default branch&lt;/code> (assuming the repository default branch is main).&lt;/li>
+&lt;li>Tick &lt;code>Require a pull request before merging.&lt;/code>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/pr-require_hu9286d329c3fd4e7370f228821670074c_82906_825x825_fit_catmullrom_3.png" width="825" height="407">
+&lt;/figure>
+&lt;/li>
+&lt;li>Tick &lt;code>Require status checks to pass&lt;/code> and &lt;code>Require branches to be up to date before merging.&lt;/code>
+Add &lt;code>test&lt;/code> as a required status check.
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 806px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/require-status-checks_hud944c53c872688cbdaa203c32ee20583_54522_825x825_fit_catmullrom_3.png" width="796" height="337">
+&lt;/figure>
+&lt;/li>
+&lt;li>Push the &lt;code>Create&lt;/code> button.&lt;/li>
+&lt;/ol>
+&lt;h2 id="use-bot-in-github-actions-workflow">Use Bot in GitHub Actions Workflow&lt;/h2>
+&lt;p>The final step is configuring the release process to use our newly created GitHub application.&lt;/p>
+&lt;h3 id="add-secrets-for-release-workflow">Add Secrets for Release Workflow&lt;/h3>
+&lt;p>To create a token for the releaser bot in the GitHub Actions workflow,
+we must have two secret variables available.&lt;/p>
+&lt;p>Go to repository &lt;code>Settings&lt;/code> / &lt;code>Secrets and variables&lt;/code> / &lt;code>Actions&lt;/code>. Create two new secrets:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>RELEASER_APP_ID&lt;/code>: Copy and paste your GitHub application ID (app ID) from
+the &lt;a href="#2-download-private-key">GitHub application settings page&lt;/a>.&lt;/li>
+&lt;li>&lt;code>RELEASER_APP_KEY&lt;/code>: Copy and paste the contents of the private key file downloaded earlier.&lt;/li>
+&lt;/ul>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/secrets_hufa601c1709078600e70533dfd1c17f62_43876_825x825_fit_catmullrom_3.png" width="825" height="181">
+&lt;/figure>
+&lt;h3 id="generate-token-with-the-github-application">Generate Token with the GitHub Application&lt;/h3>
+&lt;p>In the release workflow, generate a token with the GitHub Application.
+For this, you can use a special action, &lt;a href="https://github.com/actions/create-github-app-token">&lt;code>actions/create-github-app-token&lt;/code>&lt;/a>,
+that utilizes the secrets defined in the previous step.&lt;/p>
+&lt;p>You can use the generated token for the repository cloning step. One can access the token using
+the outputs of the token generation step. Since the repository gets cloned with the bot token,
+the bot user will perform subsequent git actions.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/workflow_huf9355079c980a05a5ac2b26815d76787_73180_825x825_fit_catmullrom_3.png" width="825" height="421">
+&lt;/figure>
+&lt;p>You can find the sample workflow in &lt;a href="https://github.com/lauravuo/gh-ruleset-test/blob/main/.github/workflows/release.yml">GitHub&lt;/a>.&lt;/p>
+&lt;p>So, the release script can now push directly to the main branch as we use the releaser bot token and
+have configured a bypass rule for the bot user in the rulesets. At the same time, other users cannot
+push to the main branch but must create a PR for their changes.&lt;/p>
+&lt;h2 id="summary">Summary&lt;/h2>
+&lt;p>That&amp;rsquo;s it! The above steps show how to automate project release workflow in GitHub Actions
+with a dedicated bot user while still having repository branch protections to shield from
+accidental changes and unvetted code. I hope the instructions are of use to you. I&amp;rsquo;m always happy
+to have comments and ideas for improvement; you can contact me on &lt;a href="https://www.linkedin.com/in/lauravuorenoja/">LinkedIn&lt;/a>!&lt;/p>
+&lt;div style="display: flex">
+&lt;span>
+&lt;img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width="100"/>
+&lt;div>Laura&lt;/div>
+&lt;div>&lt;a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://fosstodon.org/@lauravuo" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-mastodon ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;/div>&lt;br>&lt;br></description></item><item><title>Blog: Path to Passwordless</title><link>https://findy-network.github.io/blog/2024/01/05/path-to-passwordless/</link><pubDate>Fri, 05 Jan 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/01/05/path-to-passwordless/</guid><description>
 &lt;p>Passkeys and security keys have gained more and more popularity lately, and no wonder – they provide
 much more security and usability than passwords. These authentication methods utilize strong and
 phishing-resistant public key credentials that the keys or authenticators, as we call them,
