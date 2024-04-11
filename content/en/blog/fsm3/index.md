@@ -1,7 +1,7 @@
 ---
-date: 2024-02-06
-title: "Issuing Service"
-linkTitle: "Issuing Service"
+date: 2024-04-11
+title: "Issuing Chatbot"
+linkTitle: "Issuing Chatbot"
 description: "
 Our SSI/DID agency solution is fully symmetric, which means that our agents can
 be in any role simultaneously: `issuer`, `holder`, and `verifier`. However, the
@@ -21,37 +21,9 @@ chatbot to implement SSI Services to allow any SSI/DID owner to be an issuer.
 Let’s start with the result and see what the state machine looks like. As you
 can see below, it’s simple, elegant, and, most importantly, easy to reason.
 
-```plantuml @startuml
-title main issuing service machine
-[*] --> WAIT_SESSION_ID
-state " WAIT_FINAL " as WAIT_FINAL
-WAIT_FINAL --> WAIT_SESSION_ID: **basic_message{ ""}**\n{basic_message{ "------------"}} ==>\n
-
-state " WAIT_ISSUING_STATUS_AS_RCVR " as WAIT_ISSUING_STATUS_AS_RCVR
-WAIT_ISSUING_STATUS_AS_RCVR --> WAIT_FINAL: **issue_cred{STATUS ""}**\n{basic_message{%s "Thank you! Y"}} ==>\n
-
-state " WAIT_RCVR_TO_JOIN_AS_ISSUER " as WAIT_RCVR_TO_JOIN_AS_ISSUER
-WAIT_RCVR_TO_JOIN_AS_ISSUER --> WAIT_FINAL: **backend{== "rcvr_arriwed"}**\n{backend{%s "{{.ATTR1}}"}} ==>\n{basic_message{ "role Issuer "}} ==>\n
-
-state " WAIT_ROLE_SELECTION " as WAIT_ROLE_SELECTION
-WAIT_ROLE_SELECTION --> WAIT_CLIENT_DATA_AS_ISSUER: **basic_message{== "issuer"}**\n{basic_message{ "ACK, next gi"}} ==>\n{transient{ "internal_mes"}} ==>\n
-WAIT_ROLE_SELECTION --> TR_RECEIVER: **basic_message{== "rcvr"}**\n{basic_message{ "ACK, todo rm"}} ==>\n{transient{ "internal_mes"}} ==>\n
-WAIT_ROLE_SELECTION --> WAIT_ROLE_SELECTION: **basic_message{ ""}**\n{basic_message{ "NACK issuer "}} ==>\n
-
-state " WAIT_SESSION_ID " as WAIT_SESSION_ID
-WAIT_SESSION_ID --> WAIT_SESSION_ID: **basic_message{== "help"}**\n{basic_message{ "------------"}} ==>\n
-WAIT_SESSION_ID --> WAIT_ROLE_SELECTION: **basic_message{:= ""}**\n{basic_message{%s "ACK Your ses"}} ==>\n{basic_message{ "select your "}} ==>\n
-
-state " TR_RECEIVER " as TR_RECEIVER
-TR_RECEIVER --> WAIT_DATA_AS_RECEIVER: **transient{ ""}**\n{basic_message{ "ACK, rcvr"}} ==>\n{backend{ "receiver_arr"}} ==>\n
-
-state " WAIT_CLIENT_DATA_AS_ISSUER " as WAIT_CLIENT_DATA_AS_ISSUER
-WAIT_CLIENT_DATA_AS_ISSUER --> WAIT_RCVR_TO_JOIN_AS_ISSUER: **basic_message{:= "ATTR1"}**\n{basic_message{%s "ACK Your <at"}} ==>\n
-
-state " WAIT_DATA_AS_RECEIVER " as WAIT_DATA_AS_RECEIVER
-WAIT_DATA_AS_RECEIVER --> WAIT_ISSUING_STATUS_AS_RCVR: **backend{:= "ATTR1"}**\n{basic_message{%s "Issue <attr1"}} ==>\n{issue_cred{%s "[{"name":"em"}} ==>\n
-@enduml
-```
+<img src="/blog/2024/04/11/issuing-chatbot/fsm.svg" width="1900"/>
+*Issuing Service Chatbot*
+<br/><br/>
 
 As you can see from the diagram there are two main paths. One for the `issuer` role
 and one for the `rcvr` role. But the most interesting thing is that how simple the
@@ -67,12 +39,12 @@ general, we could [proof that they're correct](https://www.academia.edu/3671180/
 
 ## What Problem Do We Solve?
 
-The Hyperledger Indy-based SSI system is implemented with a CL signature scheme
-for ZKPs. That system needs the concept of *Credential Definition* stored in its
-creator's wallet. The Credential Definition has an ID, which is quite similar to
-DID in the Indy-based AnonCreds system. The CredDefID is public. Everyone who
-knows it can request proof based on it or request to present a proof based on
-it. 
+The [Hyperledger Indy-based](https://hyperledger-indy.readthedocs.io/en/latest/)
+SSI system is implemented with a CL signature scheme for ZKPs. That system needs
+the concept of *Credential Definition* stored in its creator's wallet. The
+Credential Definition has an ID, which is quite similar to DID in the Indy-based
+AnonCreds system. The CredDefID is public. Everyone who knows it can request
+proof based on it or request to present a proof based on it. 
 
 But the CredDefID brings us some problems:
 1. How do we find a correct CredDefID when it's needed?
@@ -89,7 +61,7 @@ service and implemented a reference chatbot to issue credentials on behalf of a
 logical issuer, aka seller. We also have implemented our version of a *public*
 DID. With these two, we have solved the problem quite elegantly.
 
-#### Isn't This Centralization?
+### Isn't This Centralization?
 
 In some ways, yes, but the result isn't more centralized than the suggested
 trust registries for other or similar problems in the SSI field. In a certain
@@ -153,7 +125,7 @@ The result should be AUTO_ACCEPT. Note that allocation scripts do this automatic
 > Chatbots work even when auto-accept isn't ON. They can written to make
 > decisions to decline or acknowledge presented proofs, for example.
 
-# Setup Agents And Wallets
+## Setup Agents And Wallets
 
 It would be best to have at least three wallets and their agents up and running.
 Inside the `findy-agent-cli` repo, you have `scrpits/fullstack` directory. Let's
@@ -315,7 +287,7 @@ sequenceDiagram
 1. Actual *Seller* role or app implementation for the role generates a sessionID 
    (GUID) and sends it to *Issuing Service Chatbot* as a `basic_message`.
 1. The *Seller* role is a logical issuer, so it sends the `issuer` string as a
-   `basic_message` to the *Issuer FMS* instance.
+   `basic_message` to the *Issuer FSM* instance.
 1. The *Seller* role sends a <attr_val> (case specific in your schema) as a
    `basic_message`.
 1. The *Seller* role sends the same sessionID directly to the *buyer* role. The
@@ -344,7 +316,7 @@ sequenceDiagram
 1. **Optional**: see the previous step. The *Backend* FSM works as a forwarder
    for all of the cases where the issuing and the receiving FSM instances need
    to communicate with each other through the chatbot service. 
-1. Finally the *RcvrFMS* executes **credential issuing protocol**.
+1. Finally the *RcvrFSM* executes **credential issuing protocol**.
 
 ## Conclusion
 
