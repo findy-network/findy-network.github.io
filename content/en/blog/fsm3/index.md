@@ -325,3 +325,13 @@ chatbots, haven’t you? The Issuing Service is only one example of the potentia
 of the FSM chatbots. We are excited to see what else you end up building. When
 doing so, please send your questions, comments, and feedback to our team. Let’s
 make this better—together.
+
+<br>
+<div style="display: flex">
+<span>
+<img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
+<div>Harri</div>
+<div><a href="https://github.com/lainio/" target="_blank" rel="noopener noreferer"><i class="fab fa-github ml-2 "></i></a>
+<a href="https://www.linkedin.com/in/harrilainio/" target="_blank" rel="noopener noreferer"><i class="fab fa-linkedin ml-2 "></i></a>
+<a href="https://twitter.com/harrilainio" target="_blank" rel="noopener noreferer"><i class="fab fa-twitter ml-2 "></i></a></div>
+</span></div>
