@@ -24,31 +24,31 @@ can see below, it’s simple, elegant, and, most importantly, easy to reason.
 ```plantuml @startuml
 title main issuing service machine
 [*] --> WAIT_SESSION_ID
-state "                                             WAIT_FINAL                                             " as WAIT_FINAL
+state " WAIT_FINAL " as WAIT_FINAL
 WAIT_FINAL --> WAIT_SESSION_ID: **basic_message{ ""}**\n{basic_message{ "------------"}} ==>\n
 
-state "                                     WAIT_ISSUING_STATUS_AS_RCVR                                    " as WAIT_ISSUING_STATUS_AS_RCVR
+state " WAIT_ISSUING_STATUS_AS_RCVR " as WAIT_ISSUING_STATUS_AS_RCVR
 WAIT_ISSUING_STATUS_AS_RCVR --> WAIT_FINAL: **issue_cred{STATUS ""}**\n{basic_message{%s "Thank you! Y"}} ==>\n
 
-state "                                     WAIT_RCVR_TO_JOIN_AS_ISSUER                                    " as WAIT_RCVR_TO_JOIN_AS_ISSUER
+state " WAIT_RCVR_TO_JOIN_AS_ISSUER " as WAIT_RCVR_TO_JOIN_AS_ISSUER
 WAIT_RCVR_TO_JOIN_AS_ISSUER --> WAIT_FINAL: **backend{== "rcvr_arriwed"}**\n{backend{%s "{{.ATTR1}}"}} ==>\n{basic_message{ "role Issuer "}} ==>\n
 
-state "                                         WAIT_ROLE_SELECTION                                        " as WAIT_ROLE_SELECTION
+state " WAIT_ROLE_SELECTION " as WAIT_ROLE_SELECTION
 WAIT_ROLE_SELECTION --> WAIT_CLIENT_DATA_AS_ISSUER: **basic_message{== "issuer"}**\n{basic_message{ "ACK, next gi"}} ==>\n{transient{ "internal_mes"}} ==>\n
 WAIT_ROLE_SELECTION --> TR_RECEIVER: **basic_message{== "rcvr"}**\n{basic_message{ "ACK, todo rm"}} ==>\n{transient{ "internal_mes"}} ==>\n
 WAIT_ROLE_SELECTION --> WAIT_ROLE_SELECTION: **basic_message{ ""}**\n{basic_message{ "NACK issuer "}} ==>\n
 
-state "                                           WAIT_SESSION_ID                                          " as WAIT_SESSION_ID
+state " WAIT_SESSION_ID " as WAIT_SESSION_ID
 WAIT_SESSION_ID --> WAIT_SESSION_ID: **basic_message{== "help"}**\n{basic_message{ "------------"}} ==>\n
 WAIT_SESSION_ID --> WAIT_ROLE_SELECTION: **basic_message{:= ""}**\n{basic_message{%s "ACK Your ses"}} ==>\n{basic_message{ "select your "}} ==>\n
 
-state "                                             TR_RECEIVER                                            " as TR_RECEIVER
+state " TR_RECEIVER " as TR_RECEIVER
 TR_RECEIVER --> WAIT_DATA_AS_RECEIVER: **transient{ ""}**\n{basic_message{ "ACK, rcvr"}} ==>\n{backend{ "receiver_arr"}} ==>\n
 
-state "                                     WAIT_CLIENT_DATA_AS_ISSUER                                     " as WAIT_CLIENT_DATA_AS_ISSUER
+state " WAIT_CLIENT_DATA_AS_ISSUER " as WAIT_CLIENT_DATA_AS_ISSUER
 WAIT_CLIENT_DATA_AS_ISSUER --> WAIT_RCVR_TO_JOIN_AS_ISSUER: **basic_message{:= "ATTR1"}**\n{basic_message{%s "ACK Your <at"}} ==>\n
 
-state "                                        WAIT_DATA_AS_RECEIVER                                       " as WAIT_DATA_AS_RECEIVER
+state " WAIT_DATA_AS_RECEIVER " as WAIT_DATA_AS_RECEIVER
 WAIT_DATA_AS_RECEIVER --> WAIT_ISSUING_STATUS_AS_RCVR: **backend{:= "ATTR1"}**\n{basic_message{%s "Issue <attr1"}} ==>\n{issue_cred{%s "[{"name":"em"}} ==>\n
 @enduml
 ```
