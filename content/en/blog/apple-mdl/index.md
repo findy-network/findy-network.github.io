@@ -1,5 +1,5 @@
 ---
-date: 2024-03-06
+date: 2024-04-06
 title: "I want mDL!"
 linkTitle: "I want mDL!"
 description: "
@@ -125,13 +125,13 @@ I had to admit that it's been refreshing to see that angle in practice after
 ivory towers of SSI ;-) For the record, there is still excellent work going on
 in the SSI area in general.
 
-## Differences Since SSI
+## Differences Between mDL And SSI
 
 mDL has almost a similar trust triangle as good old
 [SSI-version.](https://findy-network.github.io/blog/2021/09/08/travelogue/trust-triangle_hua2e42792a9d20037c5f572b0412e67c1_57626_925x925_fit_catmullrom_3.png)
 
 {{< imgproc ISO-interfaces.png Resize "1200x" >}}
-<em>mDL Interfaces And Roles</em>
+<em>mDL Interfaces And Roles — ISO ISO_18013-5</em>
 {{< /imgproc >}}
 
 But when you start to look more carefully, you'll notice some differences, like
@@ -207,7 +207,7 @@ The ISO standard defines the mDL standard, which is based on mDOC. The following
 diagram describes its most important architectural elements.
 
 {{< imgproc ISO-retrieval.png Resize "1200x" >}}
-<em>Agency DID Core Concepts</em>
+<em>mDL ISO Architecture — ISO ISO_18013-5</em>
 {{< /imgproc >}}
 
 The diagram presents both logical and physical parts of the mDL architecture. At
@@ -239,20 +239,31 @@ When mDL Reader sends the request, it can, for example, query the presence of th
 attestation `age_over_55`, and the response will include all the attestations
 that are equal to or greater than 55 years old. For example, if mDL doesn't have
 `age_over_55` but it has `age_over_58` and `age_over_65`, it will send
-`agen_over_58`.
+`age_over_58`.
 
 ## Conclusion
 
 mDL specification is excellent and ready for broad adoption. I hope we can build
 something over it ASAP. Unfortunately, the road I selected for PoCs and demos
-wasn't possible because Apple's ID Wallet requires that your device is
-registered in the US. There are ways to try it on an emulator, but it seemed
-like it needed to be more interesting. If you are asking why Apple and why not
-something else, the answer is that I'm looking at this on the operation system
-(OS) wallet track.
+wasn't possible because Apple’s ID Wallet requires that your device is
+registered in the US. There are ways to try it on an emulator, but it lacks too
+many core features to be interesting enough. Suppose you are asking why Apple
+and why not something else; the answer is that I’m looking at this on the
+operation system (OS) wallet track. Apple also has exciting features like [Tap
+to ID](https://www.nfcw.com/technology/apple-tap-to-present-id-api/).
 
 The next step will be to study what we can learn from mDOC/mDL from the DID
 point of view. Is there some common ground between how mDL sees the world and
 how DIDComm and generic SSI sees the world—hopefully, the same world.
 
 Until next time, see you!
+
+<br>
+<div style="display: flex">
+<span>
+<img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
+<div>Harri</div>
+<div><a href="https://github.com/lainio/" target="_blank" rel="noopener noreferer"><i class="fab fa-github ml-2 "></i></a>
+<a href="https://www.linkedin.com/in/harrilainio/" target="_blank" rel="noopener noreferer"><i class="fab fa-linkedin ml-2 "></i></a>
+<a href="https://twitter.com/harrilainio" target="_blank" rel="noopener noreferer"><i class="fab fa-twitter ml-2 "></i></a></div>
+</span></div>
