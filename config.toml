@@ -16,7 +16,7 @@ defaultContentLanguageInSubdir = false
 # Useful when translating.
 enableMissingTranslationPlaceholders = true
 
-disableKinds = ["taxonomy", "taxonomyTerm"]
+disableKinds = ["taxonomy"]
 
 # Highlighting config
 pygmentsCodeFences = true
@@ -54,7 +54,7 @@ anchor = "smart"
 [languages]
 [languages.en]
 title = "Findy Agency"
-description = "Findy Agency documentation"
+#description = "Findy Agency documentation"
 languageName ="English"
 # Weight used for sorting.
 weight = 1
