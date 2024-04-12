@@ -22,6 +22,7 @@ Let’s start with the result and see what the state machine looks like. As you
 can see below, it’s simple, elegant, and, most importantly, easy to reason.
 
 <img src="/blog/2024/04/11/issuing-chatbot/fsm.svg" width="1900"/>
+
 *Issuing Service Chatbot*
 <br/><br/>
 
