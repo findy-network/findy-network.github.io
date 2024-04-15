@@ -1,4 +1,529 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>https://findy-network.github.io/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Managing GitHub Branch Protections</title><link>https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/</link><pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>https://findy-network.github.io/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 11 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: Issuing Chatbot</title><link>https://findy-network.github.io/blog/2024/04/11/issuing-chatbot/</link><pubDate>Thu, 11 Apr 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/04/11/issuing-chatbot/</guid><description>
+&lt;p>This post is a development story (or hands-on workshop) of how we can use an FSM
+chatbot to implement SSI Services to allow any SSI/DID owner to be an issuer.
+Let’s start with the result and see what the state machine looks like. As you
+can see below, it’s simple, elegant, and, most importantly, easy to reason.&lt;/p>
+&lt;img src="https://findy-network.github.io/blog/2024/04/11/issuing-chatbot/fsm.svg" width="1900"/>
+&lt;p>&lt;em>Issuing Service Chatbot&lt;/em>
+&lt;br/>&lt;br/>&lt;/p>
+&lt;p>As you can see from the diagram there are two main paths. One for the &lt;code>issuer&lt;/code> role
+and one for the &lt;code>rcvr&lt;/code> role. But the most interesting thing is that how simple the
+machine is. As said, it&amp;rsquo;s very easy to reason and understand. And that&amp;rsquo;s the one of powers
+these machines. The second one comes from the computational model of FSMs in
+general, we could &lt;a href="https://www.academia.edu/3671180/FORMAL_VERIFICATION_OF_FINITE_STATE_MACHINES">proof that they&amp;rsquo;re correct&lt;/a>.&lt;/p>
+&lt;blockquote>
+&lt;p>Note that since our original FSM engine release we have extended our model
+with &lt;em>transient state transitions or
+&lt;a href="https://www.site.uottawa.ca/~tcl/gradtheses/mnojoumian/ThesisFiles/FinalSpec/UML/15.3.8.html">pseudostates&lt;/a>&lt;/em>,
+but our UML renderer doesn&amp;rsquo;t highlight them yet. We&amp;rsquo;ll publish an other blog
+post with new features of our FSM engine later.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="what-problem-do-we-solve">What Problem Do We Solve?&lt;/h2>
+&lt;p>The &lt;a href="https://hyperledger-indy.readthedocs.io/en/latest/">Hyperledger Indy-based&lt;/a>
+SSI system is implemented with a CL signature scheme for ZKPs. That system needs
+the concept of &lt;em>Credential Definition&lt;/em> stored in its creator&amp;rsquo;s wallet. The
+Credential Definition has an ID, which is quite similar to DID in the Indy-based
+AnonCreds system. The CredDefID is public. Everyone who knows it can request
+proof based on it or request to present a proof based on it.&lt;/p>
+&lt;p>But the CredDefID brings us some problems:&lt;/p>
+&lt;ol>
+&lt;li>How do we find a correct CredDefID when it&amp;rsquo;s needed?&lt;/li>
+&lt;li>How about fully symmetric cases when everyone can simultaneously be an
+issuer, a holder, and a verifier? Everyone can issue credentials and receive
+proof of them in these use cases. For example, we have a use case where a
+seller (anybody in a marketplace) wants to issue a receipt for the
+transaction.&lt;/li>
+&lt;/ol>
+&lt;p>There are other problems, but the rest are based on the same core problem.&lt;/p>
+&lt;p>We&amp;rsquo;ll solve problem number 2 by using a notary-type service. We started with one
+service and implemented a reference chatbot to issue credentials on behalf of a
+logical issuer, aka seller. We also have implemented our version of a &lt;em>public&lt;/em>
+DID. With these two, we have solved the problem quite elegantly.&lt;/p>
+&lt;h3 id="isnt-this-centralization">Isn&amp;rsquo;t This Centralization?&lt;/h3>
+&lt;p>In some ways, yes, but the result isn&amp;rsquo;t more centralized than the suggested
+trust registries for other or similar problems in the SSI field. In a certain
+way, this model adds self-sovereignty because now everyone can issue, and
+everyone can build these issuing services for their use cases.&lt;/p>
+&lt;h2 id="more-reading">More Reading&lt;/h2>
+&lt;p>Before we continue, here&amp;rsquo;s a list of
+documents and places that are helpful when playing with these:&lt;/p>
+&lt;ol>
+&lt;li>&lt;a href="https://findy-network.github.io/blog/2023/01/30/getting-started-with-ssi-service-agent-development/">Getting Started With SSI Service Agent Development&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://findy-network.github.io/blog/2023/02/06/how-to-equip-your-app-with-vc-superpowers/">Writing SSI Apps&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://findy-network.github.io/blog/2023/03/13/no-code-ssi-chatbots-fsm-part-i/">FSM Documentation Part I&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://findy-network.github.io/blog/2023/06/22/beautiful-state-machines-fsm-part-ii/">FSM Documentation Part II&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/findy-network/agency-workshop/tree/master/track1-cli#task-0-setup-environment">The Workshop Material For Our CLI Tool&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>Note that the blog post is written from self-learning material point of view.
+Preferably, you should read and execute the commands it guides you to do
+simultaneously.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="prerequisites">Prerequisites&lt;/h2>
+&lt;p>Note, for now, we assume that the reader uses the local setup of the agency.
+It makes it easier to follow the core agent&amp;rsquo;s real-time logs.&lt;/p>
+&lt;p>Even though you have probably cloned the repo. But if not, please do it now:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>git clone https://github.com/findy-network/findy-agent-cli
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Follow the material in the repo&amp;rsquo;s readme files or the workshop material
+mentioned at the beginning to get your &lt;code>findy-agent-cli&lt;/code> CLI tool working, i.e.,
+communicating with your agency.&lt;/p>
+&lt;h3 id="helpers">Helpers&lt;/h3>
+&lt;ol>
+&lt;li>Go to repo&amp;rsquo;s root:&lt;/li>
+&lt;li>Shorter name and autocompletion:
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">alias&lt;/span> &lt;span style="color:#000">cli&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>findy-agent-cli
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">source&lt;/span> ./scripts/sa-compl.sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>Document for now on assumes that CLI tool is named to &lt;code>cli&lt;/code>.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="very-important">Very Important&lt;/h3>
+&lt;p>If you create new wallets directly with the CLI tool, make sure that auto-accept
+mode is ON for the agent. The check it &lt;strong>after&lt;/strong> the &lt;code>cli agent ping&lt;/code> works:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>cli agent mode-cmd -r
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Tip, if you have problems with CLI commands check your &lt;code>FCLI_&lt;/code> prefixed envs.&lt;/p>
+&lt;/blockquote>
+&lt;p>The result should be AUTO_ACCEPT. Note that allocation scripts do this automatically.&lt;/p>
+&lt;blockquote>
+&lt;p>Chatbots work even when auto-accept isn&amp;rsquo;t ON. They can written to make
+decisions to decline or acknowledge presented proofs, for example.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="setup-agents-and-wallets">Setup Agents And Wallets&lt;/h2>
+&lt;p>It would be best to have at least three wallets and their agents up and running.
+Inside the &lt;code>findy-agent-cli&lt;/code> repo, you have &lt;code>scrpits/fullstack&lt;/code> directory. Let&amp;rsquo;s
+name it a tool root for the rest of the documentation. For example:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">export&lt;/span> &lt;span style="color:#000">MY_ROOT&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#4e9a06">`&lt;/span>&lt;span style="color:#204a87">pwd&lt;/span>&lt;span style="color:#4e9a06">`&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Follow the workshop documentation on how to allocate new agents with their
+wallets.&lt;/p>
+&lt;p>Allocate the following agents (actual commands and the script calls follow):&lt;/p>
+&lt;ol>
+&lt;li>&lt;code>issuing&lt;/code> will be the issuing service&lt;/li>
+&lt;li>&lt;code>seller&lt;/code>, will be a seller, aka logical issuer&lt;/li>
+&lt;li>&lt;code>buyer&lt;/code> will be a buyer.&lt;/li>
+&lt;li>&lt;code>verifier&lt;/code> will be a verifier for the VC. (Usage is out scoped from this document.)&lt;/li>
+&lt;/ol>
+&lt;p>Here&amp;rsquo;s an example of how you could&lt;/p>
+&lt;ol>
+&lt;li>allocate the agents,&lt;/li>
+&lt;li>have access to FSM files by making links,&lt;/li>
+&lt;li>create schema and credential definition (done in &lt;code>issuing&lt;/code>),&lt;/li>
+&lt;li>create DIDComm connections between &lt;code>issuing&lt;/code>, &lt;code>seller&lt;/code>, and &lt;code>buyer&lt;/code> &lt;em>where
+the last is done in this phase just for testing the environment&lt;/em>. During the
+service integration (e.g. marketplace app) to the app invitation or command
+to connect with &lt;SessionID> is sent in its own step during the service use.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">cd&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;&lt;/span>&lt;span style="color:#000">$MY_ROOT&lt;/span>&lt;span style="color:#4e9a06">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>make-play-agent.sh issuing seller buyer verifier
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">cd&lt;/span> play/issuing
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ln -s ../../fsm/issuing-service-f-fsm.yaml
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ln -s ../../fsm/issuing-service-b-fsm.yaml
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>open &lt;span style="color:#4e9a06">`&lt;/span>cli bot uml issuing-service-f-fsm.yaml&lt;span style="color:#4e9a06">`&lt;/span> &lt;span style="color:#8f5902;font-style:italic"># UML rendering&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">source&lt;/span> ./new-schema
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">source&lt;/span> ./new-cred-def
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./invitation &lt;span style="color:#000;font-weight:bold">|&lt;/span> ../seller/connect
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./invitation &lt;span style="color:#000;font-weight:bold">|&lt;/span> ../buyer/connect
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Optionally store &lt;em>a public DID&lt;/em> of the &lt;em>Issuing Service Chatbot&lt;/em>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">export&lt;/span> &lt;span style="color:#000">PUB_DID&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#204a87;font-weight:bold">$(&lt;/span>./pub-did print&lt;span style="color:#204a87;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;blockquote>
+&lt;p>Note! Leave this terminal open and do not enter new commands to it yet.&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>Note! &lt;code>source ./new-cred-def&lt;/code> initializes &lt;code>FCLI_CRED_DEF_ID&lt;/code> environment
+variable. The &lt;code>issuing-service-f-fsm.yaml&lt;/code> file references to this variable,
+i.e. it&amp;rsquo;s mandatory, &lt;em>or&lt;/em> you could hard-code the &lt;em>credential definition
+value&lt;/em> to your &lt;code>issuing-service-f-fsm.yaml&lt;/code>.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="use-the-issuing-service">Use The Issuing Service&lt;/h2>
+&lt;ol>
+&lt;li>open 2 separated terminals &lt;code>A&lt;/code> and &lt;code>B&lt;/code> (see the workshop material on how to init
+envs) to work as a &lt;code>seller&lt;/code>, leave them to be.&lt;/li>
+&lt;li>open 2 separated terminals &lt;code>A&lt;/code> and &lt;code>B&lt;/code> (see the workshop material on how to init
+envs) to work as a &lt;code>buyer&lt;/code>, leave them to be.&lt;/li>
+&lt;li>go back to the previous &lt;code>issuing&lt;/code> terminal and start the chatbot:
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>cli bot start --service-fsm issuing-service-b-fsm.yaml issuing-service-f-fsm.yaml -v&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#0000cf;font-weight:bold">1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>go back to the &lt;code>seller&lt;/code> terminal &lt;code>A&lt;/code> and enter a command: &lt;code>cli bot read&lt;/code>.
+This is a read-only terminal window for the chatbot&amp;rsquo;s responses.&lt;/li>
+&lt;li>go back to the &lt;code>seller&lt;/code> terminal &lt;code>B&lt;/code> and enter &lt;code>cli bot chat&lt;/code>. This is a
+write-only terminal window to send chat messages.
+&lt;ol>
+&lt;li>(optional: enter &amp;lsquo;help&amp;rsquo; to get used to what&amp;rsquo;s available)&lt;/li>
+&lt;li>enter your session ID, select something easy like &amp;lsquo;SID_1&amp;rsquo;&lt;/li>
+&lt;li>enter the text &amp;lsquo;issuer&amp;rsquo; that&amp;rsquo;s our current &lt;code>role&lt;/code>&lt;/li>
+&lt;li>enter your attributes data value for credential, select something easy to
+remember during verfication&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>go back to the &lt;code>buyer&lt;/code> terminal &lt;code>A&lt;/code> and enter &lt;code>cli bot read&lt;/code>. This is a read-only
+terminal window for the chatbot&amp;rsquo;s responses.&lt;/li>
+&lt;li>go back to the &lt;code>buyer&lt;/code> terminal &lt;code>B&lt;/code> and enter &lt;code>cli bot chat&lt;/code>. This is a write-only
+terminal window to send chat messages.
+&lt;ol>
+&lt;li>(optional: enter &amp;lsquo;help&amp;rsquo; to get some reminders)&lt;/li>
+&lt;li>enter your previous session ID, it was something easy like &amp;lsquo;SID_1&amp;rsquo;&lt;/li>
+&lt;li>enter the text &amp;lsquo;rcvr&amp;rsquo;, it&amp;rsquo;s your &lt;code>role&lt;/code> now&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>see the &lt;code>Buyer&lt;/code>&amp;rsquo;s &lt;code>A&lt;/code> terminal (&lt;code>cli bot read&lt;/code> command running); the results should be
+that the credential is issued for the &lt;code>Buyer&lt;/code>.&lt;/li>
+&lt;li>go to both &lt;code>B&lt;/code> terminals and enter some text to move FSM instances to the &lt;code>start-again&lt;/code> state.&lt;/li>
+&lt;li>it&amp;rsquo;s &lt;em>optional&lt;/em>; you could rerun it with the same players.&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>Tip, when you started the &lt;em>Issuing Service Chatbot&lt;/em> with &lt;code>-v=1&lt;/code> you could
+monitor it&amp;rsquo;s state transitions in real-time.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="the-sequence-diagram">The Sequence Diagram&lt;/h2>
+&lt;p>Notes about the current implementation:&lt;/p>
+&lt;ul>
+&lt;li>only one attribute value schema is implemented. Start with that and add
+cases where more attributes can be entered later. (Homework)&lt;/li>
+&lt;li>every message sends a &lt;code>basic_message&lt;/code> reply, which usually starts with &lt;code>ACK&lt;/code> string. See
+the &lt;code>YAML&lt;/code> file for more information. The reply messages aren&amp;rsquo;t drawn to the
+sequence diagram below to keep it as simple as possible.&lt;/li>
+&lt;li>you can render state machines to UML:
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>open &lt;span style="color:#4e9a06">`&lt;/span>cli bot uml issuing-service-f-fsm.yaml&lt;span style="color:#4e9a06">`&lt;/span> &lt;span style="color:#8f5902;font-style:italic"># give correct FSM file&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>We have UML rendered state machine diagram in the beginning of this post.&lt;/li>
+&lt;/ul>
+&lt;div class="mermaid">sequenceDiagram
+autonumber
+participant Seller
+%% -- box won't work on hugo, or when this machine is running it --
+%% box Issuing Service
+participant IssuerFSM
+participant BackendFSM
+participant RcvrFSM
+%% end
+participant Buyer
+Seller -) IssuerFSM: 'session_id' (GUID)
+Seller -) IssuerFSM: issuer = role
+loop Schemas attributes
+Seller -) IssuerFSM: 'attribute_value'
+end
+alt Send thru existing connection
+Seller -) Buyer: 'session_id' (same as above, design how app knows that this is a command)
+end
+Buyer -) RcvrFSM: 'session_id'
+Buyer -) RcvrFSM: rcvr = role
+RcvrFSM -) BackendFSM: receiver_arriwed
+BackendFSM -) IssuerFSM: rcvr_arriwed
+loop Schemas attributes
+IssuerFSM -) BackendFSM: 'attribute_value'
+BackendFSM -) RcvrFSM: 'attribute_value'
+end
+IssuerFSM -) BackendFSM: attributes done (not implemented, one attrib)
+BackendFSM -) RcvrFSM: attributes done (not implemented, one attrib)
+RcvrFSM -) Buyer: CREDENTIAL ISSUING PROTOCOL
+&lt;/div>
+&lt;h4 id="pre-steps-not-in-the-diagram">Pre-steps (not in the diagram)&lt;/h4>
+&lt;ol>
+&lt;li>We can generate a public DID for the &lt;em>Issuing Service Chatbot&lt;/em>.
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">cd&lt;/span> play/issuing &lt;span style="color:#8f5902;font-style:italic"># or where your bot is&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87">export&lt;/span> &lt;span style="color:#000">PUB_DID&lt;/span>&lt;span style="color:#ce5c00;font-weight:bold">=&lt;/span>&lt;span style="color:#204a87;font-weight:bold">$(&lt;/span>./pub-did print&lt;span style="color:#204a87;font-weight:bold">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>Save this &lt;code>PUB_DID&lt;/code> to your app&amp;rsquo;s configuration. It&amp;rsquo;s where &lt;em>Issuing Service
+Chatbot&lt;/em> can be found when needed. Note, &lt;code>PUB_DID&lt;/code> is a URL which returns a
+new invitation on every load. You can treat is as a URL template:
+&lt;pre tabindex="0">&lt;code>http://localhost:8080/dyn?did=8NCqkhnNjeTwMmK68DHDPx&amp;amp;label=&amp;lt;you_ad_number&amp;gt;
+&lt;/code>&lt;/pre>You can enter your case specific data like ad number to the &lt;code>label&lt;/code> arg.&lt;/li>
+&lt;/ol>
+&lt;h4 id="steps">Steps&lt;/h4>
+&lt;ol>
+&lt;li>Actual &lt;em>Seller&lt;/em> role or app implementation for the role generates a sessionID
+(GUID) and sends it to &lt;em>Issuing Service Chatbot&lt;/em> as a &lt;code>basic_message&lt;/code>.&lt;/li>
+&lt;li>The &lt;em>Seller&lt;/em> role is a logical issuer, so it sends the &lt;code>issuer&lt;/code> string as a
+&lt;code>basic_message&lt;/code> to the &lt;em>Issuer FSM&lt;/em> instance.&lt;/li>
+&lt;li>The &lt;em>Seller&lt;/em> role sends a &amp;lt;attr_val&amp;gt; (case specific in your schema) as a
+&lt;code>basic_message&lt;/code>.&lt;/li>
+&lt;li>The &lt;em>Seller&lt;/em> role sends the same sessionID directly to the &lt;em>buyer&lt;/em> role. The
+communication channel can be their existing DIDComm connection or something
+else, but the &lt;em>buyer&lt;/em> needs to know how to react to that line if it&amp;rsquo;s a
+&lt;code>basic_message&lt;/code>.&lt;/li>
+&lt;li>The &lt;em>Buyer&lt;/em> role or app implementation for the role sends the received
+&lt;code>sessionID&lt;/code> to the chatbot, i.e., joins the same session.&lt;/li>
+&lt;li>The &lt;em>Buyer&lt;/em> role sends the &lt;code>rcvr&lt;/code> word to the chatbot to make explicit role
+selection. (We could leave this out in some version of FSM implementation
+and rely only on the order of the messages, but this allows us to understand
+better and keep things open for future extensions.)&lt;/li>
+&lt;li>The &lt;em>Rcvr FSM&lt;/em> instance has now got the actual credential holder
+(Buyer/Receiver) and it sends a &lt;code>receiver_arriwed&lt;/code> string to the Backend FSM.&lt;/li>
+&lt;li>The &lt;em>Backend FSM&lt;/em> sends a &lt;code>rcvr_arriwed&lt;/code> to the &lt;em>Issuer FSM&lt;/em> as a
+&lt;code>basic_message&lt;/code>.&lt;/li>
+&lt;li>Now the &lt;em>Issuer FSM&lt;/em> loops thru all previously received (from &lt;em>Seller&lt;/em>)
+attribute values and sends them to the &lt;em>Backend FSM&lt;/em>.&lt;/li>
+&lt;li>The &lt;em>Backend FSM&lt;/em> sends the attribute values to the &lt;em>Rcvr FSM&lt;/em> as a
+&lt;code>basic_messages&lt;/code>&lt;/li>
+&lt;li>&lt;strong>Optional for the future&lt;/strong>: if there would be more attributes than one, this
+would be the place to send the information that all attributes are sent to
+the Backend FSM. Another way to implement these state machines would be to add
+information to both &lt;em>Issuing&lt;/em> and &lt;em>Receiving FSMs&lt;/em> how many attributes there
+are, and receiving states would be declared to rely on that knowledge.&lt;/li>
+&lt;li>&lt;strong>Optional&lt;/strong>: see the previous step. The &lt;em>Backend&lt;/em> FSM works as a forwarder
+for all of the cases where the issuing and the receiving FSM instances need
+to communicate with each other through the chatbot service.&lt;/li>
+&lt;li>Finally the &lt;em>RcvrFSM&lt;/em> executes &lt;strong>credential issuing protocol&lt;/strong>.&lt;/li>
+&lt;/ol>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>You have been blown away by how easy it is to implement these FSM-based
+chatbots, haven’t you? The Issuing Service is only one example of the potential
+of the FSM chatbots. We are excited to see what else you end up building. When
+doing so, please send your questions, comments, and feedback to our team. Let’s
+make this better—together.&lt;/p>
+&lt;br>
+&lt;div style="display: flex">
+&lt;span>
+&lt;img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
+&lt;div>Harri&lt;/div>
+&lt;div>&lt;a href="https://github.com/lainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/harrilainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/harrilainio" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;/div></description></item><item><title>Blog: I want mDL!</title><link>https://findy-network.github.io/blog/2024/04/06/i-want-mdl/</link><pubDate>Sat, 06 Apr 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/04/06/i-want-mdl/</guid><description>
+&lt;p>It&amp;rsquo;s funny that we don&amp;rsquo;t have a mobile driver&amp;rsquo;s license in Finland. In the
+Nordics, we are usually good with digital and mobile services. For example, we
+have had somewhat famous bank IDs from the early 90s.&lt;/p>
+&lt;p>For the record, Iceland has had a mobile driver&amp;rsquo;s license since 2020. Surprise,
+Finland was in the pole position in the summer of 2018. The government-funded
+mobile driver&amp;rsquo;s license app (beta) was used with 40.000 users. The project
+started in 2017 but was &lt;a href="https://www.traficom.fi/fi/ajankohtaista/autoilija-sovelluksen-kehittaminen-keskeytetaan-traficom-keskittyy-nykyisten">canceled in 2020 (link in
+Finnish).&lt;/a>&lt;/p>
+&lt;p>How the heck have we ended up in this mess? We should be the number one in the
+world! Did we try to swallow too big a bite once when the country-level SSI
+studies started?&lt;/p>
+&lt;h2 id="ssi-study">SSI Study&lt;/h2>
+&lt;p>As you probably already know, our innovation team has studied SSI for a long
+time. We have started to understand different strategies you can follow to
+implement digital identity and services around it.&lt;/p>
+&lt;h3 id="trust-foundation">Trust-foundation&lt;/h3>
+&lt;p>Christopher Allen, one of the influencers in the field of SSI, divided the
+Self-Sovereign identity into &lt;a href="https://youtu.be/MGYOWqCMLKg?si=X4oOBLRBc_IFowFn&amp;amp;t=1997">two primary
+tracks&lt;/a>:&lt;/p>
+&lt;ol>
+&lt;li>&lt;a href="https://trbouma.medium.com/less-identity-65f65d87f56b">LESS (Legally-Enabled Self-Sovereign) Identity&lt;/a>&lt;/li>
+&lt;li>Trustless Identity, or more precisely &lt;em>Trust Minimized&lt;/em> Identity&lt;/li>
+&lt;/ol>
+&lt;p>These two aren&amp;rsquo;t mutually exclusive but give us a platform to state our goals.
+Which one do we prefer, a government or an individual?&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>LESS Identity&lt;/th>
+&lt;th>Trust Minimized Identity&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Minimum Disclosure&lt;/td>
+&lt;td>Anonymity&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Full Control&lt;/td>
+&lt;td>Web of Trust&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Necessary Proofs&lt;/td>
+&lt;td>Censorship Resistance&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Legally-Enabled&lt;/td>
+&lt;td>Defend Human Rights vs Powerful Actors (nation-states, corps, etc.)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;blockquote>
+&lt;p>The above table is from &lt;a href="https://youtu.be/MGYOWqCMLKg?si=X4oOBLRBc_IFowFn&amp;amp;t=1997">the Allen&amp;rsquo;s
+talk&lt;/a> in YouTube.&lt;/p>
+&lt;/blockquote>
+&lt;p>I &lt;em>personally&lt;/em> prefer Human Rights over Legally-Enabled.&lt;/p>
+&lt;p>However, from a researcher&amp;rsquo;s point of view, the LESS Identity track seems faster
+because it&amp;rsquo;s easier to find business cases. These &lt;em>business-driven&lt;/em> use cases
+will pave the way to even more progress in censorship resistance, anonymity,
+etc. The mobile driver&amp;rsquo;s license is a perfect example of a LESS Identity
+practice. Let&amp;rsquo;s follow that for a moment, shall we?&lt;/p>
+&lt;h3 id="level-of-decentralization">Level Of Decentralization&lt;/h3>
+&lt;p>Most internet protocols have started quite a high level of decentralization as
+their goal/vision through the &lt;a href="https://en.wikipedia.org/wiki/History_of_the_World_Wide_Web">history of computer
+science&lt;/a>. There are
+many benefits to setting decentralization as a requirement: no single point of
+failure, easier to scale horizontally, etc.&lt;/p>
+&lt;p>Since blockchain, &lt;em>decentralization&lt;/em> has become a hype word, and most of us need
+help understanding what it means to have fully decentralized systems. One easily
+forgotten is trust, and we will only achieve absolute decentralization once we
+have a proper model for Self-Certification.&lt;/p>
+&lt;h3 id="idealism-vs-pragmatism">Idealism vs Pragmatism&lt;/h3>
+&lt;p>I see a paradox here. How about you? Why does anyone try to build maximally
+decentralized systems if their identities must be legally binding? Or why do we
+put a lot of effort into figuring out consensus protocols for systems that don&amp;rsquo;t
+need them?&lt;/p>
+&lt;p>Our legal system has solved all of these problems already. So, let&amp;rsquo;s stick on
+that be pragmatic only, shall we?&lt;/p>
+&lt;h2 id="pragmatism">Pragmatism&lt;/h2>
+&lt;p>My current conclusion is the old wisdom: &lt;em>don&amp;rsquo;t build a platform immediately,
+but solve a few use cases first and build the platform if needed.&lt;/em>&lt;/p>
+&lt;p>Second might be &lt;em>don&amp;rsquo;t solve imaginary problems.&lt;/em> Look for &lt;em>monetizable pain&lt;/em>
+first and solve that with as small steps as possible.&lt;/p>
+&lt;p>Let&amp;rsquo;s see what that all means from SSI vs. mDL.&lt;/p>
+&lt;h3 id="example-of-good-ux">Example of Good UX&lt;/h3>
+&lt;p>Apple Pay is the &lt;a href="https://www.businessofapps.com/data/mobile-payments-app-market/">world&amp;rsquo;s largest mobile payment platform outside
+China&lt;/a>. It&amp;rsquo;s
+been exciting to follow what happened in the Nordics, which already had several
+mobile payment platforms and the world&amp;rsquo;s most digitalized private banking
+systems when Apple Pay arrived.&lt;/p>
+&lt;p>Why has Apple Pay been so successful? Like many other features in Apple&amp;rsquo;s
+ecosystem, they took the necessary final technical steps to remove all the
+friction from setting up the payment trail. Significantly, the seller doesn&amp;rsquo;t
+need additional steps or agreements to support Apple Pay in the brick-and-mortar
+business. (That&amp;rsquo;s how it works in Finland.) That&amp;rsquo;s the way we all should think
+of technology.&lt;/p>
+&lt;h3 id="use-case--driven-approach">Use Case -driven approach&lt;/h3>
+&lt;p>The origins of SSI have been idealistic in some areas. The &lt;a href="https://www.iso.org/standard/69084.html">ISO
+mDL&lt;/a> is the total opposite. Every
+single piece of idealism has been thrown away. Every design decision is hammered
+down to solve core use cases related to the use of mobile driver&amp;rsquo;s licenses. And
+no new technologies have been invented. Just put together features that we need.&lt;/p>
+&lt;p>I had to admit that it&amp;rsquo;s been refreshing to see that angle in practice after
+ivory towers of SSI ;-) For the record, there is still excellent work going on
+in the SSI area in general.&lt;/p>
+&lt;h2 id="differences-between-mdl-and-ssi">Differences Between mDL And SSI&lt;/h2>
+&lt;p>mDL has almost a similar trust triangle as good old
+&lt;a href="https://findy-network.github.io/blog/2021/09/08/travelogue/trust-triangle_hua2e42792a9d20037c5f572b0412e67c1_57626_925x925_fit_catmullrom_3.png">SSI-version.&lt;/a>&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1210px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/06/i-want-mdl/ISO-interfaces_hu2935336f46634a12ee45fbc06c4db2ce_602263_1200x0_resize_catmullrom_3.png" width="1200" height="606">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>mDL Interfaces And Roles — ISO ISO_18013-5&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>But when you start to look more carefully, you&amp;rsquo;ll notice some differences, like
+the names of similar parties.&lt;/p>
+&lt;h3 id="concepts">Concepts&lt;/h3>
+&lt;p>ISO calls these roles as interfaces.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>ISO 18013-5 Interface Party&lt;/th>
+&lt;th>DID/SSI Concept&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Issuing Authority Infrastructure&lt;/td>
+&lt;td>Issuer&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>mDL Reader&lt;/td>
+&lt;td>verifier&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>mDL&lt;/td>
+&lt;td>Holder&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="connections">Connections&lt;/h3>
+&lt;p>Also, connections between parties are different. Where SSI doesn&amp;rsquo;t allow direct
+communication between a verifier and an issuer, mDL explains that their
+communication is OK but optional. The only thing that matters is that the mDL
+Holder and mDL Reader can do what they need to execute the current use case. For
+example:&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;em>For offline retrieval, there is no requirement for any device involved in the
+transaction to be connected&lt;/em>&lt;/p>
+&lt;/blockquote>
+&lt;p>&amp;lsquo;Connected&amp;rsquo; means connected to the internet. One of the scenarios is to support
+offline use cases, which makes sense if you think about instances where law
+enforcement officer needs to check the ID. That must be possible even when the
+internet connection is severed.&lt;/p>
+&lt;p>We continue with transport technologies at &lt;a href="#mobile-drivers-license">Mobile Driver&amp;rsquo;s
+License&lt;/a>.&lt;/p>
+&lt;h3 id="revocations">Revocations&lt;/h3>
+&lt;p>We should also ask when that &lt;em>call-home&lt;/em> is needed. The first and most obvious
+one is the validity checks. If the use case demands that the relying party
+checks that the mobile document
+(&lt;a href="https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en">mDOC&lt;/a>) is
+still valid on every use, a verifier can contact the issuer (Issuing Authority)
+and ask. All of this sounds pragmatic.&lt;/p>
+&lt;p>&lt;em>Call-home seems perfectly aligned with Finnish bank regulation and
+legislation,&lt;/em> &lt;strong>as far as I know&lt;/strong>. For example, the party who executes, let&amp;rsquo;s
+say, a transaction according to power-of-attorney (PoA) is the party who&amp;rsquo;s
+responsible for checking that a PoA is valid and not revoked. &lt;em>The
+responsibility to transfer revocation information&lt;/em> is &lt;em>not&lt;/em> the one who has
+given the PoA. It&amp;rsquo;s enough that the information is available for the party who
+relies on the PoA. It&amp;rsquo;s the relying party&amp;rsquo;s responsibility to access that
+information case-by-case.&lt;/p>
+&lt;p>It makes much sense and makes building revocation easier when you think about
+that. In summary, some call-home is the only way to make revocation requirements
+work. Note that the &lt;em>home&lt;/em> isn&amp;rsquo;t necessarily the issuer, but it definitely &lt;em>can
+be seen as the Issuing Authority&amp;rsquo;s Infrastructure.&lt;/em>&lt;/p>
+&lt;h3 id="one-schema">One schema&lt;/h3>
+&lt;p>The most specific difference between mDL and SSI is that the schema is locked.
+It&amp;rsquo;s based on
+(&lt;a href="https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en">mDOC&lt;/a>)
+standard. That might first feel like a handicap, but the more you think about
+this, the better way it is to start implementing use cases in this area.&lt;/p>
+&lt;h2 id="mobile-drivers-license">Mobile Driver&amp;rsquo;s License&lt;/h2>
+&lt;p>mDL standard also has similarities to SSI, such as &lt;em>selective disclosure&lt;/em>. But
+it and other features are designed with only one thing in mind: &lt;em>pragmatism&lt;/em>. No
+Fancy Pancy features or saving-the-world idealism, just pure functionality.&lt;/p>
+&lt;p>The ISO standard defines the mDL standard, which is based on mDOC. The following
+diagram describes its most important architectural elements.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1210px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/06/i-want-mdl/ISO-retrieval_hu02c89ce614e405fe1da920fbdd54880d_870566_1200x0_resize_catmullrom_3.png" width="1200" height="841">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>mDL ISO Architecture — ISO ISO_18013-5&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The diagram presents both logical and physical parts of the mDL architecture. At
+the bottom are supported data transport technologies: NFC/Bluetooth, Wi-Fi Aware
+(optional), etc. Transported data is CBOR coded, which guarantees the best
+possible performance. CBOR is a binary-coded data format optimized for limited
+resources and bandwidth.&lt;/p>
+&lt;h3 id="selective-disclosure">Selective Disclosure&lt;/h3>
+&lt;p>mDL&amp;rsquo;s selective disclosure is analog to
+&lt;a href="https://www.ietf.org/archive/id/draft-fett-oauth-selective-disclosure-jwt-02.html">SD-JWT&amp;rsquo;s&lt;/a>
+mechanism, i.e., only disclosures&amp;rsquo; digests are used when the issuer signs the
+credential document. That allows simple and easy-to-understand implementation,
+which is also efficient. At first glance, it only supports property-value pairs,
+but I don&amp;rsquo;t see why it couldn&amp;rsquo;t allow the use of hierarchical data structures as
+well. However, because the digest list is a one-dimensional array, it would
+prevent selection from inside a hierarchy.&lt;/p>
+&lt;h3 id="no-need-for-zkp">No Need For ZKP&lt;/h3>
+&lt;p>mDL doesn&amp;rsquo;t have &lt;a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof">ZKP&lt;/a> but
+has solved similar use case requirements with the &lt;em>attestations&lt;/em>. For example,
+the mDL issuer will include a set of age-over attestations into the mDL. The
+format of each attestation identifier is &lt;code>age_over_NN&lt;/code>, where &lt;code>NN&lt;/code> is from 00 to
+99.&lt;/p>
+&lt;p>When mDL Reader sends the request, it can, for example, query the presence of the
+attestation &lt;code>age_over_55&lt;/code>, and the response will include all the attestations
+that are equal to or greater than 55 years old. For example, if mDL doesn&amp;rsquo;t have
+&lt;code>age_over_55&lt;/code> but it has &lt;code>age_over_58&lt;/code> and &lt;code>age_over_65&lt;/code>, it will send
+&lt;code>age_over_58&lt;/code>.&lt;/p>
+&lt;h2 id="conclusion">Conclusion&lt;/h2>
+&lt;p>mDL specification is excellent and ready for broad adoption. I hope we can build
+something over it ASAP. Unfortunately, the road I selected for PoCs and demos
+wasn&amp;rsquo;t possible because Apple’s ID Wallet requires that your device is
+registered in the US. There are ways to try it on an emulator, but it lacks too
+many core features to be interesting enough. Suppose you are asking why Apple
+and why not something else; the answer is that I’m looking at this on the
+operation system (OS) wallet track. Apple also has exciting features like &lt;a href="https://www.nfcw.com/technology/apple-tap-to-present-id-api/">Tap
+to ID&lt;/a>.&lt;/p>
+&lt;p>The next step will be to study what we can learn from mDOC/mDL from the DID
+point of view. Is there some common ground between how mDL sees the world and
+how DIDComm and generic SSI sees the world—hopefully, the same world.&lt;/p>
+&lt;p>Until next time, see you!&lt;/p>
+&lt;br>
+&lt;div style="display: flex">
+&lt;span>
+&lt;img src="https://avatars.githubusercontent.com/u/11439212?v=4" width="100">
+&lt;div>Harri&lt;/div>
+&lt;div>&lt;a href="https://github.com/lainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/harrilainio/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/harrilainio" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;/div></description></item><item><title>Blog: Managing GitHub Branch Protections</title><link>https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/</link><pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/03/27/managing-github-branch-protections/</guid><description>
 &lt;p>GitHub has recently improved its automatic pull request handling and branch protection features.
 I have found these features handy, and nowadays, I enable them regardless of the project type to
 help me automate the project workflows and protect the code from accidental changes and regression bugs.&lt;/p>
