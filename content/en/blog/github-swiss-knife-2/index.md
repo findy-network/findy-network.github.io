@@ -2,7 +2,7 @@
 date: 2024-04-23
 title: "The Swiss Army Knife for the Agency Project, Part 2: Release Management with GitHub"
 linkTitle: "Release Management with GitHub"
-description: "This article will examine how we handle releasing and artifact delivery with GitHub tools in our open-source project. When designing our project's release process, we have kept it lightweight but efficient enough. One important goal has been ensuring that developers get a stable version, i.e., a working version of the code, whenever they clone the repository. Furthermore, we want to offer a ready-built deliverable whenever possible so that trying out our software stack is easy."
+description: "Multiple aspects need to be considered when releasing and distributing software. In this article, we will examine how we handle releasing and artifact delivery with GitHub tools in our open-source project."
 author: Laura Vuorenoja
 resources:
   - src: "**.{png,jpg}"
@@ -41,7 +41,7 @@ Therefore, this routine ensures that the `master` branch always has a working ve
 
 Our release bot is [a custom GitHub action](https://github.com/findy-network/releaser-action).
 Each repository that follows the branching model described
-above uses the bot for the release routine. The bot's primary duty is to check if the `dev` branch
+above uses the bot for tagging the release. The bot's primary duty is to check if the `dev` branch
 has code changes missing from the `master` branch. If the bot finds changes, it will create a version
 tag for the new release and update the working version of the `dev` branch.
 
@@ -61,14 +61,25 @@ When step 5 is ready, i.e., the bot has created a new tag, another workflow will
 This workflow will handle building the project deliverables for the tagged release.
 After a successful release routine, the CI merges the tag to `master`.
 
+{{< imgproc releaser Fit "1025x1025" >}}
+<em>Changes are updated nightly from dev to master.
+</em>
+{{< /imgproc >}}
+
 ## Package Distribution
 
 Each time a release is tagged, the CI builds the release deliverables for distribution.
 As our stack contains various-style projects built in various languages, the release artifacts
 depend on the project type and programming language used.
 
+{{< imgproc packages Fit "925x925" >}}
+<em>One can navigate to linked packages from the repository front page.
+</em>
+{{< /imgproc >}}
+
 The CI stores all of the artifacts in GitHub in one way or another. Docker images and library
-binaries utilize different features of GitHub Packages, a GitHub offering for delivering packages
+binaries utilize different features of [GitHub Packages](https://github.com/features/packages),
+a GitHub offering for delivering packages
 to the open-source community. The Packages UI is integrated directly with the repository UI,
 so finding and using the packages is intuitive for the user.
 
@@ -81,7 +92,7 @@ the GitHub container registry.
 
 The GitHub Actions workflow handles the image building. We build two variants of the images.
 In addition to amd64, we make an arm64 version to support Apple-silicon-based Mac environments.
-You can read more about utilizing GitHub Actions to create images for multiple platforms [here](http://localhost:1313/blog/2021/09/20/the-arm-adventure-on-docker/).
+You can read more about utilizing GitHub Actions to create images for multiple platforms [here](/blog/2021/09/20/the-arm-adventure-on-docker/).
 
 The community can access the publicly stored images without authentication.
 The package namespace is `https://ghcr.io`, meaning one can refer to an image with the path
@@ -91,7 +102,10 @@ Publishing and using images from the Docker registry is straightforward.
 ### Libraries
 
 We also have utility libraries that provide the common functionalities needed to build
-clients for our backend services. These include helpers for Go, Node.js, and Kotlin.
+clients for our backend services. These include helpers for
+[Go](https://github.com/findy-network/findy-common-go),
+[Node.js](https://github.com/findy-network/findy-common-ts),
+and [Kotlin](https://github.com/findy-network/findy-common-kt).
 
 In the Go ecosystem, sharing modules is easy. The Go build system must find the dependency code
 in a publicly accessible Git repository. Thus, the build compiles the code on the fly;
@@ -99,11 +113,48 @@ one does not need to distribute or download binaries. Module versions are resolv
 from the git tags found in the repository.
 
 The story is different for Node.js and Kotlin/Java libraries.
-GitHub offers registries for NPM, Maven, and Gradle, and one can easily integrate the library's
+GitHub offers registries for
+[npm](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry),
+[Maven](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry),
+and [Gradle](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry),
+and one can easily integrate the library's
 publishing to these registries into the project release process. However, accessing the libraries
 is more complicated. Even if the package is public, the user must authenticate to GitHub
 to download the package. This need adds more complexity for the library user, and therefore,
 it might not become a popular option in the open-source communities.
+
+*Sample for publishing Node.js package to GitHub npm registry via GitHub action:*
+
+```yaml
+name: release
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  publish-github:
+    # runner machine
+    runs-on: ubuntu-latest
+    # API permissions for the job
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      # checkout the repository code
+      - uses: actions/checkout@v4
+      # setup node environment
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: 'findy-network'
+      # install dependencies, build distributables and publish
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ### Executables And Other Artifacts
 
@@ -122,7 +173,8 @@ the correct version for the platform in question.
 </em>
 {{< /imgproc >}}
 
-One can also attach other files to releases. We define our backend gRPC API with an IDL file.
+One can also attach other files to releases. We define our backend gRPC API with
+[an IDL file](https://github.com/findy-network/findy-agent-api/tree/master/idl/v1).
 Whenever the API changes, we release a new version of the IDL using a GitHub release.
 We can then automate other logic (gRPC utility helpers) to download the IDL for a specific release
 and easily keep track of the changes.

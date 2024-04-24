@@ -23,7 +23,8 @@ In this article series, I summarize our team's different experiments regarding G
 As GitHub's functionality is easily extensible through its API and abilities
 for building custom GitHub actions, I also explain how we have built custom solutions for some needs.
 
-This first part overviews GitHub Actions as a continuous integration platform. The second part
+This first part overviews GitHub Actions as a continuous integration platform.
+[The second part](/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/)
 concentrates on release management and software distribution. Finally, in the last post, we introduce
 other useful integrations and features we used during our journey.
 
@@ -223,4 +224,6 @@ about how a GitHub application can be helpful when automating release versioning
 ## Next Up: Release Management
 
 This article gave an overview of how Findy Agency uses GitHub Actions as a continuous
-integration platform. The next one will be about release management. Stay tuned.
+integration platform. The next one will be about
+[release management](/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/).
+Stay tuned.
