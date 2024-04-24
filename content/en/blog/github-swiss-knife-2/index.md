@@ -182,5 +182,6 @@ and easily keep track of the changes.
 ## Summary
 
 This post summarized how our open-source project uses different GitHub features for versioning,
-release management, and artifact distribution. In our last article, we will review various
+release management, and artifact distribution. In our [last article](/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/),
+we will review various
 other GitHub tools we have utilized.

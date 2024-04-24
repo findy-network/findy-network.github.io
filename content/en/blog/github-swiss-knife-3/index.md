@@ -1,8 +1,8 @@
 ---
 date: 2024-04-24
-title: "The Swiss Army Knife for the Agency Project, Part 3: Other Tools"
+title: "The Swiss Army Knife for the Agency Project, Part 3: Other GitHub Tools"
 linkTitle: "Other GitHub Tools"
-description: ""
+description: "This article concludes the series by providing an overview of how our open-source project utilizes GitHub as a software development platform. In this last part, we will examine documentation and communication tools, as well as some utilities that help the development process."
 author: Laura Vuorenoja
 resources:
   - src: "**.{png,jpg}"
@@ -107,3 +107,13 @@ This article completes our three-part saga of using GitHub in our agency project
 I hope you have learned something from what you have read so far.
 I am always happy to discuss our approach and hear if you have ideas and experiences on
 how your team handles things!
+
+<div style="display: flex">
+<span>
+<img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width="100"/>
+<div>Laura</div>
+<div><a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer"><i class="fab fa-github ml-2 "></i></a>
+<a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer"><i class="fab fa-linkedin ml-2 "></i></a>
+<a href="https://fosstodon.org/@lauravuo" target="_blank" rel="noopener noreferer"><i class="fab fa-mastodon ml-2 "></i></a>
+<a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer"><i class="fab fa-twitter ml-2 "></i></a></div>
+</span></div><br><br>

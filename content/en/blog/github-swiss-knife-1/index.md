@@ -25,8 +25,9 @@ for building custom GitHub actions, I also explain how we have built custom solu
 
 This first part overviews GitHub Actions as a continuous integration platform.
 [The second part](/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/)
-concentrates on release management and software distribution. Finally, in the last post, we introduce
-other useful integrations and features we used during our journey.
+concentrates on release management and software distribution. Finally, in
+[the last post](/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/),
+we introduce other useful integrations and features we used during our journey.
 
 ## CI Vets the Pull Requests
 
@@ -218,7 +219,7 @@ Each integration needs a GitHub application that gives the third-party tool acce
 to your organization's resources. The organization must review the required permissions
 and install the application before GitHub allows the integration to work. One can also build
 GitHub applications for custom purposes.
-[Read more](http://localhost:1313/blog/2024/03/27/managing-github-branch-protections/)
+[Read more](/blog/2024/03/27/managing-github-branch-protections/)
 about how a GitHub application can be helpful when automating release versioning.
 
 ## Next Up: Release Management
