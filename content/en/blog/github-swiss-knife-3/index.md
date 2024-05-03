@@ -2,22 +2,22 @@
 date: 2024-04-24
 title: "The Swiss Army Knife for the Agency Project, Part 3: Other GitHub Tools"
 linkTitle: "Other GitHub Tools"
-description: "This post concludes the article series that provides an overview of how our open-source project utilizes the GitHub platform for software development. In this last part, we will examine other useful features such as GitHub Pages, Dependabot and automatic PR labeling."
+description: "This post concludes the article series that overviews how our open-source project utilizes the GitHub platform for software development. This last part will examine other valuable features such as GitHub Pages, Dependabot, and automatic PR labeling."
 author: Laura Vuorenoja
 resources:
   - src: "**.{png,jpg}"
     title: "Image #:counter"
 ---
 
-This post concludes the article series that provides an overview of how our open-source project
-utilizes the GitHub platform for software development. In this last part, we will examine documentation
-and communication tools, as well as some utilities that help the development process.
+This post concludes the article series that overviews how our open-source project utilizes
+the GitHub platform for software development. In this last part, we will examine documentation,
+communication tools, and some utilities that help the development process.
 
 ## GitHub Pages
 
 Already in the early days, when we started to experiment with SSI technology,
 there arose a need to publish different experiment outcomes and findings to the rest of the community.
-However, we were missing a platform to collect these different reports and articles.
+However, we were missing a platform to collect these various reports and articles.
 
 Finally, when [we decided to open-source our agency code](/blog/2021/08/11/announcing-findy-agency/),
 we also established a documentation site and blog. [This site](https://findy-network.github.io/)
@@ -81,6 +81,8 @@ Dependabot PRs that passed the CI. In this approach, a theoretical risk exists t
 is injected from the supply chain through the version updates without us noticing it. However,
 we were willing to take the risk as we estimated that sparing a small team's resources
 would be more important than shielding the experimental code from theoretical attacks.
+
+> You should estimate the risk/effort ratio when automating crucial tasks.
 
 *CI enables the automatic merging of Dependabot PRs on pull request creation*:
 
@@ -178,7 +180,10 @@ to the codespace that one may need when doing the workshop exercises:*
 It offers the GitHub web application functionality via the command line. The tool is especially useful
 for those who suffer from context switching
 from terminal to browser and vice versa or who prefer to work from a terminal altogether.
-In addition, the CLI tool can be used to automate certain routines, specifically in CI.
+
+In addition, the CLI tool can automate certain routines, both in CI and local environments.
+We use the Makefile to record often-used commands to support developers' memory.
+The CLI is also a great fit for playing out with the GitHub API.
 
 {{< imgproc cli Fit "825x825" >}}
 <em>Example of listing PRs with the GitHub CLI tool.
