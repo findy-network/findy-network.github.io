@@ -4,6 +4,7 @@ title: "The Swiss Army Knife for the Agency Project, Part 3: Other GitHub Tools"
 linkTitle: "Other GitHub Tools"
 description: "This post concludes the article series that provides an overview of how our open-source project utilizes the GitHub platform for software development. In this last part, we will examine other useful features such as GitHub Pages, Dependabot and automatic PR labeling."
 author: Laura Vuorenoja
+draft: true
 resources:
   - src: "**.{png,jpg}"
     title: "Image #:counter"

@@ -4,6 +4,7 @@ title: "The Swiss Army Knife for the Agency Project, Part 2: Release Management 
 linkTitle: "Release Management with GitHub"
 description: "Multiple aspects need to be considered when releasing and distributing software. In this article, we will examine how we handle releasing and artifact delivery with GitHub tools in our open-source project."
 author: Laura Vuorenoja
+draft: true
 resources:
   - src: "**.{png,jpg}"
     title: "Image #:counter"
