@@ -1,4 +1,354 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>https://findy-network.github.io/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 22 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: The Swiss Army Knife for the Agency Project, Part 1: GitHub Actions</title><link>https://findy-network.github.io/blog/2024/04/22/the-swiss-army-knife-for-the-agency-project-part-1-github-actions/</link><pubDate>Mon, 22 Apr 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/04/22/the-swiss-army-knife-for-the-agency-project-part-1-github-actions/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Findy Agency</title><link>https://findy-network.github.io/</link><description>Recent content on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 24 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog: The Swiss Army Knife for the Agency Project, Part 3: Other GitHub Tools</title><link>https://findy-network.github.io/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/</link><pubDate>Wed, 24 Apr 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/</guid><description>
+&lt;p>This post concludes the article series that overviews how our open-source project utilizes
+the GitHub platform for software development. In this last part, we will examine documentation,
+communication tools, and some utilities that help the development process.&lt;/p>
+&lt;h2 id="github-pages">GitHub Pages&lt;/h2>
+&lt;p>Already in the early days, when we started to experiment with SSI technology,
+there arose a need to publish different experiment outcomes and findings to the rest of the community.
+However, we were missing a platform to collect these various reports and articles.&lt;/p>
+&lt;p>Finally, when &lt;a href="https://findy-network.github.io/blog/2021/08/11/announcing-findy-agency/">we decided to open-source our agency code&lt;/a>,
+we also established a documentation site and blog. &lt;a href="https://findy-network.github.io/">This site&lt;/a>
+has been valuable to us since then. It has worked as
+a low-threshold publication platform, where we have collected our various opinions,
+experimentation findings, and even technical guides. It has been a way of distributing information
+and an excellent source for discussion. It is easy to refer to articles that even date back some
+years when all of the posts are collected on the same site.&lt;/p>
+&lt;p>We use &lt;a href="https://gohugo.io/">the Hugo framework&lt;/a> for building the site, specifically
+&lt;a href="https://www.docsy.dev/">the Docsy theme&lt;/a>,
+which is especially suitable for software project documentation. The Hugo framework uses
+a low-code approach, where most of the content can be edited as Markdown files.
+However, when needed, modifications can also be made to the HTML pages quite easily.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/cover_hu98717283b2e5a8265aa4a52355851add_2886597_825x825_fit_catmullrom_3.png" width="825" height="480">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>The project site serves as a platform for documentation and blogs.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>We publish the site via &lt;a href="https://pages.github.com/">GitHub Pages&lt;/a>,
+a static website hosting solution that
+GitHub offers for each repository. When the Pages feature is enabled, GitHub serves
+the content of the pages from a dedicated branch.
+&lt;a href="https://github.com/findy-network/findy-network.github.io/blob/f72bcd9cdec4882eae541320f5dce48499965d4f/.github/workflows/on-release.yml#L7">A GitHub action handles the deployment&lt;/a>,
+i.e., builds the website and pushes the site files to this dedicated branch. The site URL
+combines organization and repository names. An exception is the &lt;code>&amp;lt;organisation-name&amp;gt; .github.io&lt;/code>-named
+repositories that one can find in the similarly formatted URL, e.g., our
+&lt;a href="https://github.com/findy-network/findy-network.github.io">&lt;code>findy-network/findy-network.github.io&lt;/code>&lt;/a>
+repository is served in URL &lt;a href="https://findy-network.github.io">https://findy-network.github.io&lt;/a>.&lt;/p>
+&lt;h2 id="dependabot">Dependabot&lt;/h2>
+&lt;p>&lt;a href="https://docs.github.com/en/code-security/dependabot">Dependabot&lt;/a> is a GitHub-offered service
+that helps developers with the security and
+version updates of repository dependencies. When Dependabot finds a vulnerable dependency
+that can be replaced with a more secure version, it creates a pull request that implements
+this change. A similar approach exists with dependency version updates:
+When a new version is released, Dependabot creates a PR with the dependency update to the new version.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/dependabot_hua7a07a918a74ca04474e2691e77d6026_207471_825x825_fit_catmullrom_3.png" width="825" height="482">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Dependabot analyzes the project dependencies based on the dependency graph.
+It creates PRs for security and version updates automatically.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The pull requests that the Dependabot creates are like any other PR.
+The CI runs tests on Dependabot PRs similar to those, as with the changes developers have made.
+One can review and merge the PR similarly.&lt;/p>
+&lt;p>Using Dependabot requires a comprehensive enough automated test set. The one who merges
+the PR needs to confirm that the change will not cause regression. Manual testing is required
+if the CI is missing the automated tests for the changes. If one needs manual testing, the benefit
+of using the bot for automated PR creation is lost, and it might even be more laborious to update
+the dependencies one by one.&lt;/p>
+&lt;p>In our project, we used the principle of testing all the crucial functionality with
+each change automatically. Therefore, it was safe for us to merge the Dependabot PRs without
+manual intervention. We even took one step further. We enabled automatic merging for those
+Dependabot PRs that passed the CI. In this approach, a theoretical risk exists that malicious code
+is injected from the supply chain through the version updates without us noticing it. However,
+we were willing to take the risk as we estimated that sparing a small team&amp;rsquo;s resources
+would be more important than shielding the experimental code from theoretical attacks.&lt;/p>
+&lt;blockquote>
+&lt;p>You should estimate the risk/effort ratio when automating crucial tasks.&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;em>CI enables the automatic merging of Dependabot PRs on pull request creation&lt;/em>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#4e9a06">&amp;#34;pr-target&amp;#34;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">on&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">pull_request_target&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># automerge successful dependabot PRs&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">dependabot&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># action permissions&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">permissions&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">pull-requests&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">write&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">contents&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">write&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># runner machine&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">runs-on&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">ubuntu-latest&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># check that the PR is from dependabot&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">if&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">${{ github.event.pull_request.user.login == &amp;#39;dependabot[bot]&amp;#39; }}&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">steps&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">Dependabot metadata&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">id&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">dependabot-metadata&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">uses&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">dependabot/fetch-metadata@v2&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">Enable auto-merge for Dependabot PRs&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># check that target branch is dev&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">if&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">${{steps.dependabot-metadata.outputs.target-branch == &amp;#39;dev&amp;#39;}}&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># enable PR auto-merge with GitHub CLI&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># PR will be automatically merged if all checks pass&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">run&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">gh pr merge --auto --merge &amp;#34;$PR_URL&amp;#34;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">env&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">PR_URL&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">${{github.event.pull_request.html_url}}&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">GH_TOKEN&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">${{secrets.GITHUB_TOKEN}}&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="notifications-and-labeling">Notifications And Labeling&lt;/h2>
+&lt;p>There are chat application integrations (for example &lt;a href="https://github.com/integrations/microsoft-teams">Teams&lt;/a>,
+&lt;a href="https://slack.github.com/">Slack&lt;/a>)
+one can use to send automatic notifications from GitHub. We have used this feature to get notified
+when PRs are created and merged to keep
+the whole team up-to-date on what changes are introduced. In addition, we always get
+a notification when someone raises an issue in our repositories. It has allowed us
+to react quickly to community questions and needs.&lt;/p>
+&lt;p>There have also been some problems regarding the notifications. The Dependabot integration
+creates a lot of pull requests for several repositories, and sometimes,
+the information flood is too much. Therefore, we have custom labeling functionality
+that helps us automatically label PRs based on the files the changes affect.
+The automatic labeling is implemented with &lt;a href="https://github.com/actions/labeler">GitHub Action&lt;/a>,
+which is triggered on PR creation.
+We can filter only the PR notifications needed for our chat integration using these labels.&lt;/p>
+&lt;p>Automatic labeling can be tremendously helpful, especially with large repositories
+with many subprojects. Labels can also be used as a filter basis for GitHub Actions.
+For instance, one can configure a specific test for changes that affect only a particular folder.
+This approach can speed up the CI runtimes and save resources.&lt;/p>
+&lt;h2 id="codespaces-and-cli-tool">Codespaces And CLI Tool&lt;/h2>
+&lt;p>&lt;a href="https://github.com/features/codespaces">GitHub Codespaces&lt;/a> was a less-used feature for our project.
+Still, &lt;a href="https://github.com/findy-network/agency-workshop-codespace">we found it helpful&lt;/a>,
+especially when we organized workshops to help developers get started with agency application development.&lt;/p>
+&lt;p>Codespaces offers a cloud-based development environment that works as
+&lt;a href="https://code.visualstudio.com/docs/devcontainers/containers">VS Code dev containers&lt;/a>.
+A repository can have a configuration for the environment, and the codespace is created and
+launched based on that configuration. Once the codespace is up and running, the developers have
+a ready development environment with all the needed bells and whistles. It removes a lot of
+the setup hassle we usually encounter when using different operating systems and tools for development.&lt;/p>
+&lt;p>&lt;em>Example of &lt;a href="https://github.com/findy-network/agency-workshop-codespace/blob/master/.devcontainer/devcontainer.json">a codespace configuration&lt;/a>
+for our workshop participants. All the needed tools are preinstalled
+to the codespace that one may need when doing the workshop exercises:&lt;/em>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-json" data-lang="json">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;name&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;Findy Agency workshop environment&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;image&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;ghcr.io/findy-network/agency-workshop-codespace:0.1.0&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;workspaceFolder&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;/home/vscode/workshop&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;features&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;ghcr.io/devcontainers-contrib/features/direnv-asdf:2&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;customizations&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;vscode&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;extensions&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#000;font-weight:bold">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;golang.go&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#4e9a06">&amp;#34;mathiasfrohlich.Kotlin&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#000;font-weight:bold">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#204a87;font-weight:bold">&amp;#34;postCreateCommand&amp;#34;&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span> &lt;span style="color:#4e9a06">&amp;#34;asdf direnv setup --shell bash --version latest&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#000;font-weight:bold">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;a href="https://cli.github.com/">The GitHub CLI&lt;/a> tool was another helpful tool we found during the agency project.
+It offers the GitHub web application functionality via the command line. The tool is especially useful
+for those who suffer from context switching
+from terminal to browser and vice versa or who prefer to work from a terminal altogether.&lt;/p>
+&lt;p>In addition, the CLI tool can automate certain routines, both in CI and local environments.
+We use the Makefile to record often-used commands to support developers&amp;rsquo; memory.
+The CLI is also a great fit for playing out with the GitHub API.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 835px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/cli_hu005775c65b28935d8140646d33d27767_80826_825x825_fit_catmullrom_3.png" width="825" height="197">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Example of listing PRs with the GitHub CLI tool.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;h2 id="thanks-for-reading">Thanks for Reading&lt;/h2>
+&lt;p>This article completes our three-part saga of using GitHub in our agency project.
+I hope you have learned something from what you have read so far.
+I am always happy to discuss our approach and hear if you have ideas and experiences on
+how your team handles things!&lt;/p>
+&lt;div style="display: flex">
+&lt;span>
+&lt;img src="https://avatars.githubusercontent.com/u/29113682?v=4%22" width="100"/>
+&lt;div>Laura&lt;/div>
+&lt;div>&lt;a href="https://github.com/lauravuo/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-github ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://www.linkedin.com/in/lauravuorenoja/" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-linkedin ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://fosstodon.org/@lauravuo" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-mastodon ml-2 ">&lt;/i>&lt;/a>
+&lt;a href="https://twitter.com/vuorenoja" target="_blank" rel="noopener noreferer">&lt;i class="fab fa-twitter ml-2 ">&lt;/i>&lt;/a>&lt;/div>
+&lt;/span>&lt;/div>&lt;br>&lt;br></description></item><item><title>Blog: The Swiss Army Knife for the Agency Project, Part 2: Release Management with GitHub</title><link>https://findy-network.github.io/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/</link><pubDate>Tue, 23 Apr 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/</guid><description>
+&lt;p>This article will examine how we handle releasing and artifact delivery with GitHub tools
+in our open-source project. When designing our project&amp;rsquo;s release process, we have kept it
+lightweight but efficient enough. One important goal has been ensuring that developers
+get a stable version, i.e., a working version of the code, whenever they clone the repository.
+Furthermore, we want to offer a ready-built deliverable whenever possible so that trying out
+our software stack is easy.&lt;/p>
+&lt;h2 id="branching-model">Branching Model&lt;/h2>
+&lt;p>In our development model, we have three different kinds of branches:&lt;/p>
+&lt;ul>
+&lt;li>Feature branches, a.k.a. pull request branch: each change is first pushed to a feature branch,
+tested, and possibly reviewed before merging it to the &lt;code>dev&lt;/code> branch.&lt;/li>
+&lt;li>&lt;code>dev&lt;/code>: the baseline for all changes. One merges pull requests first with this branch.
+If tests for &lt;code>dev&lt;/code> succeed, one can merge the changes into the &lt;code>master&lt;/code> branch.
+The &lt;code>dev&lt;/code> branch test set can be more extensive than the one run for the pull request (feature) branch.&lt;/li>
+&lt;li>&lt;code>master&lt;/code>: the project&amp;rsquo;s main branch that contains the latest working version of the software.
+Changes to this branch trigger automatic deployments to our cloud environment.&lt;/li>
+&lt;/ul>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/cover_hu21510bda70b80c84db9e94b9a127ce08_73861_925x925_fit_catmullrom_3.png" width="925" height="321">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Branching model has three branches: feature branches, dev, and master.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The primary reason for using this branching style is to enable us to run extensive automated testing
+for changes introduced by one or multiple pull requests before merging them with the &lt;code>master&lt;/code> branch.
+Therefore, this routine ensures that the &lt;code>master&lt;/code> branch always has a working version.
+This popular branching model has other perks as well. You can read more about them
+&lt;a href="https://nvie.com/posts/a-successful-git-branching-model/">here&lt;/a>, for example.&lt;/p>
+&lt;h2 id="time-for-a-release">Time for a Release&lt;/h2>
+&lt;p>Our release bot is &lt;a href="https://github.com/findy-network/releaser-action">a custom GitHub action&lt;/a>.
+Each repository that follows the branching model described
+above uses the bot for tagging the release. The bot&amp;rsquo;s primary duty is to check if the &lt;code>dev&lt;/code> branch
+has code changes missing from the &lt;code>master&lt;/code> branch. If the bot finds changes, it will create a version
+tag for the new release and update the working version of the &lt;code>dev&lt;/code> branch.&lt;/p>
+&lt;p>The bot works night shifts and utilizes
+&lt;a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule">a GitHub scheduled event&lt;/a>
+as an alarm clock.
+For each repository it is configured for, it runs the same steps:&lt;/p>
+&lt;ol>
+&lt;li>Check if there are changes between the &lt;code>dev&lt;/code> and &lt;code>master&lt;/code> branches&lt;/li>
+&lt;li>Check if the required workflows (tests) have succeeded for the &lt;code>dev&lt;/code> branch&lt;/li>
+&lt;li>Parse the current working version from the &lt;code>VERSION&lt;/code> file&lt;/li>
+&lt;li>Check out the &lt;code>dev&lt;/code> branch and tag the &lt;code>dev&lt;/code> branch &lt;code>HEAD&lt;/code> with the current version&lt;/li>
+&lt;li>Push tag to remote&lt;/li>
+&lt;li>Increase the working version and commit it to the &lt;code>dev&lt;/code>-branch.&lt;/li>
+&lt;/ol>
+&lt;p>When step 5 is ready, i.e., the bot has created a new tag, another workflow will start.
+This workflow will handle building the project deliverables for the tagged release.
+After a successful release routine, the CI merges the tag to &lt;code>master&lt;/code>.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 1035px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/releaser.drawio_hu7ffb0b94a3d4473ff8d43ec34c8c036e_228273_1025x1025_fit_catmullrom_3.png" width="1025" height="637">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>Changes are updated nightly from dev to master.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;h2 id="package-distribution">Package Distribution&lt;/h2>
+&lt;p>Each time a release is tagged, the CI builds the release deliverables for distribution.
+As our stack contains various-style projects built in various languages, the release artifacts
+depend on the project type and programming language used.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/packages_hu9dcba73d437d1a7928562f8601bb4e89_209090_925x925_fit_catmullrom_3.png" width="925" height="347">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>One can navigate to linked packages from the repository front page.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>The CI stores all of the artifacts in GitHub in one way or another. Docker images and library
+binaries utilize different features of &lt;a href="https://github.com/features/packages">GitHub Packages&lt;/a>,
+a GitHub offering for delivering packages
+to the open-source community. The Packages UI is integrated directly with the repository UI,
+so finding and using the packages is intuitive for the user.&lt;/p>
+&lt;h3 id="docker-containers-for-backend-services">Docker Containers for Backend Services&lt;/h3>
+&lt;p>Our agency software has a microservice architecture, meaning multiple servers handle the backend
+functionality. To simplify cloud deployment and service orchestration in
+a local development environment, we build Docker images for each service release and store them in
+the GitHub container registry.&lt;/p>
+&lt;p>The GitHub Actions workflow handles the image building. We build two variants of the images.
+In addition to amd64, we make an arm64 version to support mainly environments running on
+Apple-silicon-based Macs.
+You can read more about utilizing GitHub Actions to create images for multiple platforms &lt;a href="https://findy-network.github.io/blog/2021/09/20/the-arm-adventure-on-docker/">here&lt;/a>.&lt;/p>
+&lt;p>The community can access the publicly stored images without authentication.
+The package namespace is &lt;code>https://ghcr.io&lt;/code>, meaning one can refer to an image with the path
+&lt;code>ghcr.io/NAMESPACE/IMAGE_NAME:TAG&lt;/code>, e.g., &lt;code>ghcr.io/findy-network/findy-agent:latest&lt;/code>.
+Publishing and using images from the Docker registry is straightforward.&lt;/p>
+&lt;h3 id="libraries">Libraries&lt;/h3>
+&lt;p>We also have utility libraries that provide the common functionalities needed to build
+clients for our backend services. These include helpers for
+&lt;a href="https://github.com/findy-network/findy-common-go">Go&lt;/a>,
+&lt;a href="https://github.com/findy-network/findy-common-ts">Node.js&lt;/a>,
+and &lt;a href="https://github.com/findy-network/findy-common-kt">Kotlin&lt;/a>.&lt;/p>
+&lt;p>In the Go ecosystem, sharing modules is easy. The Go build system must find the dependency code
+in a publicly accessible Git repository. Thus, the build compiles the code on the fly;
+one does not need to distribute or download binaries. Module versions are resolved directly
+from the git tags found in the repository.&lt;/p>
+&lt;p>The story is different for Node.js and Kotlin/Java libraries.
+GitHub offers registries for
+&lt;a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry">npm&lt;/a>,
+&lt;a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry">Maven&lt;/a>,
+and &lt;a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry">Gradle&lt;/a>,
+and one can easily integrate the library&amp;rsquo;s
+publishing to these registries into the project release process. However, accessing the libraries
+is more complicated. Even if the package is public, the user must authenticate to GitHub to download
+the package. This requirement adds more complexity for the library user than mainstream options,
+such as the default npm registry. I would avoid distributing public libraries via this feature.&lt;/p>
+&lt;p>&lt;em>Sample for publishing Node.js package to GitHub npm registry via GitHub action:&lt;/em>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#204a87;font-weight:bold">name&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">release&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">on&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">push&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">tags&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#4e9a06">&amp;#39;*&amp;#39;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline">&lt;/span>&lt;span style="color:#204a87;font-weight:bold">jobs&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">publish-github&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># runner machine&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">runs-on&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">ubuntu-latest&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># API permissions for the job&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">permissions&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">contents&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">read&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">packages&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">write&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">steps&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># checkout the repository code&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">uses&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">actions/checkout@v4&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># setup node environment&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">uses&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">actions/setup-node@v4&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">with&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">node-version&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#4e9a06">&amp;#39;18.x&amp;#39;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">registry-url&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#4e9a06">&amp;#39;https://npm.pkg.github.com&amp;#39;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">scope&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#4e9a06">&amp;#39;findy-network&amp;#39;&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#8f5902;font-style:italic"># install dependencies, build distributables and publish&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">run&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">npm ci&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">run&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">npm run build&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>- &lt;span style="color:#204a87;font-weight:bold">run&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">npm publish&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">env&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#204a87;font-weight:bold">NODE_AUTH_TOKEN&lt;/span>&lt;span style="color:#000;font-weight:bold">:&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline"> &lt;/span>&lt;span style="color:#000">${{ secrets.GITHUB_TOKEN }}&lt;/span>&lt;span style="color:#f8f8f8;text-decoration:underline">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="executables-and-other-artifacts">Executables And Other Artifacts&lt;/h3>
+&lt;p>For other artifacts, we utilize
+&lt;a href="https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases">the GitHub releases feature&lt;/a>.
+For instance, we use the &lt;a href="https://goreleaser.com/">&lt;code>goreleaser&lt;/code>&lt;/a>
+helper tool for our &lt;a href="https://github.com/findy-network/findy-agent-cli">CLI&lt;/a>,
+which handles the cross-compilation of the executable for several platforms.
+It then attaches the binary files to &lt;a href="https://github.com/findy-network/findy-agent-cli/releases">the release&lt;/a>,
+from where each user can download them.
+We even have an automatically generated installation script that downloads the correct
+version for the platform in question.&lt;/p>
+&lt;figure class="card rounded p-2 td-post-card mb-4 mt-4" style="max-width: 935px">
+&lt;img class="card-img-top" src="https://findy-network.github.io/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/release_hu0d3af91ba730b326f06e754ff6aa6ef9_171362_925x925_fit_catmullrom_3.png" width="925" height="641">
+&lt;figcaption class="card-body px-0 pt-2 pb-0">
+&lt;p class="card-text">
+&lt;em>CLI release has binaries for multiple platforms.
+&lt;/em>
+&lt;/p>
+&lt;/figcaption>
+&lt;/figure>
+&lt;p>One can also attach other files to releases. We define our backend gRPC API with
+&lt;a href="https://github.com/findy-network/findy-agent-api/tree/master/idl/v1">an IDL file&lt;/a>.
+Whenever the API changes, we release a new version of the IDL using a GitHub release.
+We can then automate other logic (gRPC utility helpers) to download the IDL for a specific release
+and easily keep track of the changes.&lt;/p>
+&lt;h2 id="summary">Summary&lt;/h2>
+&lt;p>This post summarized how our open-source project uses different GitHub features for versioning,
+release management, and artifact distribution. In our &lt;a href="https://findy-network.github.io/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/">last article&lt;/a>,
+we will review various
+other GitHub tools we have utilized.&lt;/p></description></item><item><title>Blog: The Swiss Army Knife for the Agency Project, Part 1: GitHub Actions</title><link>https://findy-network.github.io/blog/2024/04/22/the-swiss-army-knife-for-the-agency-project-part-1-github-actions/</link><pubDate>Mon, 22 Apr 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/04/22/the-swiss-army-knife-for-the-agency-project-part-1-github-actions/</guid><description>
 &lt;p>Our research project has been utilizing GitHub tools for several years.
 Most of &lt;a href="(https://github.com/features/)">the features&lt;/a> are free for publicly hosted open-source projects.
 We have used these tools with an experimental spirit, gathering experience from
