@@ -2,19 +2,15 @@
 date: 2024-04-22
 title: "The Swiss Army Knife for the Agency Project, Part 1: GitHub Actions"
 linkTitle: "GitHub Actions"
-description: "Our research project has been using GitHub tools now for years. In addition to code hosting, GitHub offers vast capabilities for continuous integration, dependency management, release management, artifact distribution, project organization, and community communications. In this article series, I summarize our team's different experiments regarding GitHub features."
+description: "Our research project has been using GitHub tools now for years. In addition to code hosting, GitHub offers vast capabilities for continuous integration, dependency updates, release management, artifact distribution, project organization, and community communications. In this article series, I summarize our team's different experiments regarding GitHub features."
 author: Laura Vuorenoja
 resources:
   - src: "**.{png,jpg}"
     title: "Image #:counter"
 ---
 
-Our research project has been using GitHub tools now for years. In addition to code hosting,
-GitHub offers [vast capabilities](https://github.com/features/)
-for continuous integration, dependency management,
-release management, artifact distribution, project organization, and community communications.
-These tools are free for publicly hosted open-source projects.
-
+Our research project has been utilizing GitHub tools for several years.
+Most of [the features]((https://github.com/features/)) are free for publicly hosted open-source projects.
 We have used these tools with an experimental spirit, gathering experience from
 the different features. Although our project does not aim directly at production,
 we take a production-like approach to many things we do.
@@ -23,9 +19,12 @@ In this article series, I summarize our team's different experiments regarding G
 As GitHub's functionality is easily extensible through its API and abilities
 for building custom GitHub actions, I also explain how we have built custom solutions for some needs.
 
-This first part overviews GitHub Actions as a continuous integration platform.
-[The second part](/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/)
-concentrates on release management and software distribution. Finally, in
+The series consists of three articles:
+
+1. [This first part](#ci-vets-the-pull-requests) overviews GitHub Actions as a continuous integration platform.
+1. [The second part](/blog/2024/04/23/the-swiss-army-knife-for-the-agency-project-part-2-release-management-with-github/)
+concentrates on release management and software distribution.
+1. Finally, in
 [the last post](/blog/2024/04/24/the-swiss-army-knife-for-the-agency-project-part-3-other-github-tools/),
 we introduce other useful integrations and features we used during our journey.
 
@@ -38,7 +37,15 @@ which get stored along with repository code in a dedicated subfolder (`.github/w
 The GitHub-hosted platform automatically picks up and executes these workflows
 when defined trigger events happen.
 
-*Snippet below shows an example of a GitHub Actions workflow configuration:*
+{{< imgproc wf-summary Fit "925x925" >}}
+<em>
+A workflow can contain multiple jobs.
+Each workflow job consists of different steps.
+The logs from the steps can be browsed in the Actions UI.
+</em>
+{{< /imgproc >}}
+
+*Snippet below shows how the "test" job is configured:*
 
 ```yaml
 name: test
@@ -169,14 +176,20 @@ the licenses. We can efficiently combine and utilize functionality crafted by ot
 
 ## Runners Orchestrating E2E-tests
 
+{{< imgproc wf-run Fit "1025x1025" >}}
+<em>GitHub Actions workflow view run shows the jobs and their hierarchy.
+The artifacts and logs are available for each job also in this view.
+</em>
+{{< /imgproc >}}
+
 In addition to linting, scanning, and unit tests, we typically run at least one e2e-styled test
 in parallel. In e2e tests, we simulate the actual end-user environment where the software
 will be run and execute tests with bash scripts or test frameworks that allow us
 to run tests through the browser.
 
-{{< imgproc wf-run Fit "1025x1025" >}}
-<em>GitHub Actions workflow view run shows the jobs and their hierarchy.
-The artifacts and logs are available for each job also in this view.
+{{< imgproc complex-wf Fit "925x925" >}}
+<em>Workflows can contain multiple jobs that run in parallel or sequentially.
+In this example, we have utilized the matrix strategy to run the same job with different parameters.
 </em>
 {{< /imgproc >}}
 
