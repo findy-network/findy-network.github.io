@@ -4,7 +4,6 @@ title: "The Swiss Army Knife for the Agency Project, Part 2: Release Management 
 linkTitle: "Release Management with GitHub"
 description: "Multiple aspects need to be considered when releasing and distributing software. In this article, we will examine how we handle releasing and artifact delivery with GitHub tools in our open-source project."
 author: Laura Vuorenoja
-draft: true
 resources:
   - src: "**.{png,jpg}"
     title: "Image #:counter"
@@ -37,6 +36,8 @@ In our development model, we have three different kinds of branches:
 The primary reason for using this branching style is to enable us to run extensive automated testing
 for changes introduced by one or multiple pull requests before merging them with the `master` branch.
 Therefore, this routine ensures that the `master` branch always has a working version.
+This popular branching model has other perks as well. You can read more about them
+[here](https://nvie.com/posts/a-successful-git-branching-model/), for example.
 
 ## Time for a Release
 
@@ -92,7 +93,8 @@ a local development environment, we build Docker images for each service release
 the GitHub container registry.
 
 The GitHub Actions workflow handles the image building. We build two variants of the images.
-In addition to amd64, we make an arm64 version to support Apple-silicon-based Mac environments.
+In addition to amd64, we make an arm64 version to support mainly environments running on
+Apple-silicon-based Macs.
 You can read more about utilizing GitHub Actions to create images for multiple platforms [here](/blog/2021/09/20/the-arm-adventure-on-docker/).
 
 The community can access the publicly stored images without authentication.
@@ -120,9 +122,9 @@ GitHub offers registries for
 and [Gradle](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry),
 and one can easily integrate the library's
 publishing to these registries into the project release process. However, accessing the libraries
-is more complicated. Even if the package is public, the user must authenticate to GitHub
-to download the package. This need adds more complexity for the library user, and therefore,
-it might not become a popular option in the open-source communities.
+is more complicated. Even if the package is public, the user must authenticate to GitHub to download
+the package. This requirement adds more complexity for the library user than mainstream options,
+such as the default npm registry. I would avoid distributing public libraries via this feature.
 
 *Sample for publishing Node.js package to GitHub npm registry via GitHub action:*
 
@@ -166,8 +168,8 @@ helper tool for our [CLI](https://github.com/findy-network/findy-agent-cli),
 which handles the cross-compilation of the executable for several platforms.
 It then attaches the binary files to [the release](https://github.com/findy-network/findy-agent-cli/releases),
 from where each user can download them.
-We even have an automatically generated installation script that helps the user download
-the correct version for the platform in question.
+We even have an automatically generated installation script that downloads the correct
+version for the platform in question.
 
 {{< imgproc release Fit "925x925" >}}
 <em>CLI release has binaries for multiple platforms.
