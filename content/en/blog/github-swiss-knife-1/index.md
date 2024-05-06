@@ -10,7 +10,7 @@ resources:
 ---
 
 Our research project has been utilizing GitHub tools for several years.
-Most of [the features]((https://github.com/features/)) are free for publicly hosted open-source projects.
+Most of [the features](https://github.com/features/) are free for publicly hosted open-source projects.
 We have used these tools with an experimental spirit, gathering experience from
 the different features. Although our project does not aim directly at production,
 we take a production-like approach to many things we do.
