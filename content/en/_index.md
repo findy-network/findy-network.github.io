@@ -11,7 +11,7 @@ title: Findy Agency
 </a>
 <p class="lead mt-5">Findy Agency is an open-source project for a decentralized identity agency.
 OP Lab developed it from 2019 to 2024. The project is no longer actively maintained,
-but the codes are still available.
+but <a href="https://github.com/findy-network">the codes</a> are still available.
 The team occasionally writes updates on <a href="/blog">the project blog</a> on related topics
 and software development in general.
 </p>
