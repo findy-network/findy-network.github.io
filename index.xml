@@ -350,7 +350,7 @@ release management, and artifact distribution. In our &lt;a href="https://findy-
 we will review various
 other GitHub tools we have utilized.&lt;/p></description></item><item><title>Blog: The Swiss Army Knife for the Agency Project, Part 1: GitHub Actions</title><link>https://findy-network.github.io/blog/2024/04/22/the-swiss-army-knife-for-the-agency-project-part-1-github-actions/</link><pubDate>Mon, 22 Apr 2024 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/blog/2024/04/22/the-swiss-army-knife-for-the-agency-project-part-1-github-actions/</guid><description>
 &lt;p>Our research project has been utilizing GitHub tools for several years.
-Most of &lt;a href="(https://github.com/features/)">the features&lt;/a> are free for publicly hosted open-source projects.
+Most of &lt;a href="https://github.com/features/">the features&lt;/a> are free for publicly hosted open-source projects.
 We have used these tools with an experimental spirit, gathering experience from
 the different features. Although our project does not aim directly at production,
 we take a production-like approach to many things we do.&lt;/p>
