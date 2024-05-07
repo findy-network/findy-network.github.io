@@ -2,18 +2,22 @@
 title: Findy Agency
 ---
 
-{{< blocks/cover title="Findy Agency" image_anchor="top" height="full" >}}
+{{< blocks/cover title="Findy Agency" image_anchor="top" height="full" width="half" >}}
 <a class="btn btn-lg btn-primary me-3 mb-4" href="/blog/">
   Blog <i class="fas fa-arrow-alt-circle-right ms-2"></i>
 </a>
 <a class="btn btn-lg btn-secondary me-3 mb-4" href="https://github.com/findy-network">
   Archive <i class="fab fa-github ms-2 "></i>
 </a>
-<p class="lead mt-5">Findy Agency is an open-source project for a decentralized identity agency.
-OP Lab developed it from 2019 to 2024. The project is no longer actively maintained,
+<p class="lead mt-5">Findy Agency is an open-source project for a decentralized identity agency.<br/>
+OP Lab developed it from 2019 to 2024. The project is no longer maintained,
 but <a href="https://github.com/findy-network">the codes</a> are still available.
-The team occasionally writes updates on <a href="/blog">the project blog</a> on related topics
-and software development in general.
+
+The team updates <a href="/blog">the project blog</a> regularly, covering relevant topics such as cryptography,
+digital identities, and software development in general.
+
+The project will be pivoted during 2024. The work will continue with new goals and a new mission.<br/>
+Follow <a href="/blog">the blog</a> for updates.
 </p>
 {{< blocks/link-down color="info" >}}
 {{< /blocks/cover >}}
