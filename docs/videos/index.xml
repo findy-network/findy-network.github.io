@@ -1,61 +1,6 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Findy Agency – Videos</title><link>https://findy-network.github.io/docs/videos/</link><description>Recent content in Videos on Findy Agency</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 08 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/docs/videos/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: GopherCon UK 2023</title><link>https://findy-network.github.io/docs/videos/gophercon-uk/</link><pubDate>Wed, 13 Sep 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/gophercon-uk/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/EwCFRVkqHic" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div></description></item><item><title>Docs: CDK-based Continuous Deployment for OSS</title><link>https://findy-network.github.io/docs/videos/aws-community-day/</link><pubDate>Mon, 08 May 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/aws-community-day/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/Dj_Z5ReqCwc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div></description></item><item><title>Docs: Introduction to Self-Sovereign Identity</title><link>https://findy-network.github.io/docs/videos/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/introduction-to-ssi/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/utNq_IsH_Y4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div></description></item><item><title>Docs: Hyperledger Global Forum 2022 Presentation</title><link>https://findy-network.github.io/docs/videos/hyperledger-forum/</link><pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/hyperledger-forum/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/dlWWMeiSUfE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div></description></item><item><title>Docs: Findy Agency Presentation</title><link>https://findy-network.github.io/docs/videos/presentation/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/presentation/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/kzmCbX-z7NA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div></description></item><item><title>Docs: Demo: Alice-Faber-Acme</title><link>https://findy-network.github.io/docs/videos/faber-acme-demo/</link><pubDate>Wed, 24 Aug 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/faber-acme-demo/</guid><description>
-&lt;p>See description and instructions &lt;a href="https://github.com/findy-network/findy-agency-demo#findy-agency-demo">here&lt;/a>&lt;/p>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/rA2l0eW86Bs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div></description></item><item><title>Docs: Demo: Findy Bots</title><link>https://findy-network.github.io/docs/videos/findy-bots/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/findy-bots/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/gVr8KwISMS4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div></description></item><item><title>Docs: Interoperability Testing Demo</title><link>https://findy-network.github.io/docs/videos/interoperability/</link><pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/interoperability/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/W1H7ppS2Y6M" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div>
-&lt;br>
-&lt;ul>
-&lt;li>
-&lt;p>&lt;strong>Test 1: Findy Agency based issuer/verifier with Lissi Wallet&lt;/strong>&lt;/p>
-&lt;p>A Findy Agency utilizing &lt;a href="https://github.com/findy-network/findy-issuer-tool">issuer tool&lt;/a> invites &lt;a href="https://lissi.id">Lissi Wallet&lt;/a> to form a pairwise connection. Issuer tool sends and verifies a credential with Lissi Wallet.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;strong>Test 2: Findy Agency Web Wallet with Trinsic Wallet&lt;/strong>&lt;/p>
-&lt;p>Findy Agency Web Wallet user forms a pairwise connection with &lt;a href="https://trinsic.id/trinsic-wallet/">Trinsic Wallet&lt;/a> user. Wallet applications send Aries basic messages to each other.&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;strong>Test 3: ACA-Py based issuer/verifier with Findy Agency Web Wallet&lt;/strong>&lt;/p>
-&lt;p>&lt;a href="https://github.com/hyperledger/aries-agent-test-harness">Aries Test Harness&lt;/a> runs &lt;a href="https://github.com/hyperledger/aries-cloudagent-python">ACA-Py&lt;/a>-based agents that issue and verify credentials with Findy Agency Web Wallet.&lt;/p>
-&lt;/li>
-&lt;/ul></description></item><item><title>Docs: SSI-Empowered Identity Provider</title><link>https://findy-network.github.io/docs/videos/oidc-provider/</link><pubDate>Thu, 14 Apr 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/oidc-provider/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/V5FWX0g3HVk" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div>
-&lt;br>
-&lt;p>Open ID Connect (OIDC) is a popular identity protocol for authenticating users and providing identity
-data for access control. It allows web services to externalize the authentication of end-users by
-securely signing users in using a third-party identity provider. Findy Agency team has experimented
-with integrating SSI (self-sovereign identity) agent capabilities to a sample OIDC provider,
-thus enabling verified data usage in the login flow. The proof-of-concept shows that this approach
-would allow numerous web applications to switch to SSI-based login with minimal changes.&lt;/p>
-&lt;p>&lt;a href="https://findy-network.github.io/blog/2022/04/07/ssi-empowered-identity-provider/">Read more&lt;/a>&lt;/p></description></item><item><title>Docs: FTN Issuer Demo</title><link>https://findy-network.github.io/docs/videos/ftn-service/</link><pubDate>Mon, 02 May 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/ftn-service/</guid><description>
-&lt;div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-&lt;iframe src="https://www.youtube.com/embed/7b4tKnSndxk" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video">&lt;/iframe>
-&lt;/div>
-&lt;br>
-&lt;p>A shortcut for SSI adoption
-is to use existing APIs when issuing credentials and build so-called self-service issuers.
-In this demo, we showcase how to implement a service for issuing credentials
-for Finnish Trust Network data.&lt;/p>
-&lt;p>&lt;a href="https://findy-network.github.io/blog/2022/04/27/trust-in-your-wallet/">Read more&lt;/a>&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Videos on Findy Agency</title><link>https://findy-network.github.io/docs/videos/</link><description>Recent content in Videos on Findy Agency</description><generator>Hugo</generator><language>en</language><lastBuildDate>Wed, 13 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://findy-network.github.io/docs/videos/index.xml" rel="self" type="application/rss+xml"/><item><title>GopherCon UK 2023</title><link>https://findy-network.github.io/docs/videos/gophercon-uk/</link><pubDate>Wed, 13 Sep 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/gophercon-uk/</guid><description/></item><item><title>CDK-based Continuous Deployment for OSS</title><link>https://findy-network.github.io/docs/videos/aws-community-day/</link><pubDate>Mon, 08 May 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/aws-community-day/</guid><description/></item><item><title>Introduction to Self-Sovereign Identity</title><link>https://findy-network.github.io/docs/videos/introduction-to-ssi/</link><pubDate>Mon, 20 Feb 2023 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/introduction-to-ssi/</guid><description/></item><item><title>Hyperledger Global Forum 2022 Presentation</title><link>https://findy-network.github.io/docs/videos/hyperledger-forum/</link><pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/hyperledger-forum/</guid><description/></item><item><title>Findy Agency Presentation</title><link>https://findy-network.github.io/docs/videos/presentation/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/presentation/</guid><description/></item><item><title>Demo: Alice-Faber-Acme</title><link>https://findy-network.github.io/docs/videos/faber-acme-demo/</link><pubDate>Wed, 24 Aug 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/faber-acme-demo/</guid><description>See description and instructions here</description></item><item><title>Demo: Findy Bots</title><link>https://findy-network.github.io/docs/videos/findy-bots/</link><pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/findy-bots/</guid><description/></item><item><title>Interoperability Testing Demo</title><link>https://findy-network.github.io/docs/videos/interoperability/</link><pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/interoperability/</guid><description>Test 1: Findy Agency based issuer/verifier with Lissi Wallet
+A Findy Agency utilizing issuer tool invites Lissi Wallet to form a pairwise connection. Issuer tool sends and verifies a credential with Lissi Wallet.
+Test 2: Findy Agency Web Wallet with Trinsic Wallet
+Findy Agency Web Wallet user forms a pairwise connection with Trinsic Wallet user. Wallet applications send Aries basic messages to each other.
+Test 3: ACA-Py based issuer/verifier with Findy Agency Web Wallet</description></item><item><title>SSI-Empowered Identity Provider</title><link>https://findy-network.github.io/docs/videos/oidc-provider/</link><pubDate>Thu, 14 Apr 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/oidc-provider/</guid><description>Open ID Connect (OIDC) is a popular identity protocol for authenticating users and providing identity data for access control. It allows web services to externalize the authentication of end-users by securely signing users in using a third-party identity provider. Findy Agency team has experimented with integrating SSI (self-sovereign identity) agent capabilities to a sample OIDC provider, thus enabling verified data usage in the login flow. The proof-of-concept shows that this approach would allow numerous web applications to switch to SSI-based login with minimal changes.</description></item><item><title>FTN Issuer Demo</title><link>https://findy-network.github.io/docs/videos/ftn-service/</link><pubDate>Mon, 02 May 2022 00:00:00 +0000</pubDate><guid>https://findy-network.github.io/docs/videos/ftn-service/</guid><description>A shortcut for SSI adoption is to use existing APIs when issuing credentials and build so-called self-service issuers. In this demo, we showcase how to implement a service for issuing credentials for Finnish Trust Network data.
+Read more</description></item></channel></rss>
