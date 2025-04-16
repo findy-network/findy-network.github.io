@@ -82,6 +82,10 @@ chains**. It enables **privacy, sovereignty, and interoperability**—but also
 requires new tooling to reason about trust, detect fraud, and handle revocation
 and rotation.
 
+{{< imgproc cover.png Resize "600x" >}}
+<em>Root of Trust Models — Foundation for Sovereignty</em>
+{{< /imgproc >}}
+
 ## Key Learnings from Real-World SSI Projects with Hyperledger Indy
 
 These aren’t just technical findings — they’re observations about what truly
@@ -124,7 +128,8 @@ of their own? What if they could maintain ongoing relationships with services,
 carry trust context across channels, and even operate across devices or over
 time?
 
-**Symmetric, peer-to-peer communication models** like DIDComm make this
+**Symmetric, peer-to-peer communication models** like
+[DIDComm](https://identity.foundation/didcomm-messaging/spec/) make this
 possible. Instead of logging in and starting over, agents can resume where they
 left off — with **long-lived, secure relationships** that don't require
 sign-ups, onboarding flows, or federated logins. Trust becomes transitive,
@@ -168,7 +173,6 @@ and growing. These actors often lack screens, keys, or user interfaces,
 requiring lightweight agents and trust protocols that work in constrained
 environmentsr
 
----
 ### Revocation, Rotation, and Recovery Remain Fragile
 
 Credential revocation, key rotation, and identity recovery are still brittle
@@ -192,7 +196,6 @@ fragility.
 <em>Key Hierarchies — Key Certification Chaining</em>
 {{< /imgproc >}}
 
-
 A self-sovereign identity system that cannot manage keys in a nuanced and
 layered way cannot scale. Identity needs to be **resilient, renewable, and
 gracefully degradable**—not brittle or tightly coupled to a single cryptographic
@@ -213,9 +216,10 @@ increasingly clear: the need for a decentralized trust model isn't just
 philosophical — it's practical, and soon, existential. 
 
 Emerging technologies are rapidly moving toward autonomous, agent-based systems.
-From AI-powered identity agents to cross-domain agent-to-agent (A2A) protocols,
-the direction is set: machines will act on our behalf, negotiate access, and
-manage digital presence — sometimes entirely without human involvement.
+From AI-powered identity agents to cross-domain agent-to-agent
+([A2A](https://github.com/google/A2A)) protocols, the direction is set: machines
+will act on our behalf, negotiate access, and manage digital presence —
+sometimes entirely without human involvement.
 
 But this vision only works if those agents can operate within a **trust model
 that doesn't require central control, universal agreement, or global
