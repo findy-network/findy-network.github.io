@@ -1,12 +1,12 @@
 ---
 date: 2025-04-15
-title: "Reflexions of SSI"
-linkTitle: "Reflexions of SSI"
+title: "Rethinking SSI"
+linkTitle: "Rethinking SSI"
 description: "
-Most of us is familiar of the concept fast and slow thinking. I assume that not
-so many of us are have noticed other side of the same coin where our intuition
-works during very long time periods. This post is summary of the thoughts that
-surfaced after more than a year after we actively studied SSI technologies.
+Most of us are familiar with the concept of fast and slow thinking. But fewer
+may have noticed the other side of that same coin — how our intuition evolves
+over long periods of reflection. This post is a summary of thoughts that
+surfaced more than a year after we actively explored SSI technologies.
 "
 author: Harri Lainio
 resources:
@@ -14,212 +14,186 @@ resources:
   title: "Image #:counter"
 ---
 
-As you already know, our innovation team studied SSI for a long
-time. We have started to understand different strategies you can follow to
-implement digital identity and services around it.
+Since blockchain, *decentralization* has become a buzzword—and many of us still
+struggle to define what it really means to build fully decentralized systems.
+One key aspect often overlooked is **trust**. *We cannot claim to have achieved
+decentralized infrastructure unless we also decentralize the trust model
+itself.* That means going beyond central authorities and even beyond algorithmic
+“trustless” assumptions, toward **Self-Certification** as a foundational
+principle.
 
-Since blockchain, *decentralization* has become a hype word, and most of us need
+In the SSI space, three roots of trust have emerged:
 
-## Trust Based on Self-Certification
+1. **Administrative trust**, as seen in traditional PKI (e.g., certificate
+   authorities).
+2. **Algorithmic trust**, exemplified by blockchain-based systems—sometimes
+   called “trustless,” though they still rely on pre-established consensus rules
+   and protocols.
+3. **Self-certifying trust**, where entities define and prove trust
+   relationships without requiring centralized or consensus-based validation.
 
+This last model—**self-certifying trust**—is both the most ambitious and the
+most necessary if we are to realize the full potential of self-sovereign
+identity. From our experience, SSI will never become truly decentralized or
+user-controlled until we solve the challenge of enabling *self-certifying roots
+of trust* at scale.
 
-help understanding what it means to have fully decentralized systems. One easily
-
-## Trust Based on Self-Certification
-
-
-forgotten is trust, and *we will only achieve absolute decentralized trust-model
-once we have a proper model for Self-Certification.*
-
-The interesting question is should we try to solve identity related use cases
-with algorithmic zero-trust or decentralized trust-model based on
-self-certification?
+This raises an important question: Should we approach identity-related use cases
+through an **algorithmic zero-trust** lens, or should we aim for a
+**decentralized trust model based on self-certification**?
 
 ## Algorithmic Zero-Trust
 
+Algorithmic zero-trust is a model where **no actor is implicitly trusted**, and
+all entities must continuously prove their authenticity and permissions through
+cryptographic or logical assertions. It’s common in enterprise security: access
+control decisions are made by policy engines based on signals like device
+health, IP reputation, or session risk.
+
+In identity systems, zero-trust often implies **constant re-verification**,
+reliance on **centralized attestations**, and heavy use of **encryption and
+secure channels**. While secure and auditable, these systems are inherently
+**closed and non-portable**—they rely on **predefined relationships** and
+**central policy evaluators**, making them incompatible with open,
+permissionless ecosystems.
+
+Zero-trust is effective when **scope is limited**, infrastructure is known, and
+risk can be algorithmically modeled. But it doesn’t support user-controlled
+identity, transitive trust, or cross-domain delegation—key goals in
+decentralized ecosystems.
+
 ## Trust Based on Self-Certification
 
+Self-certification flips the model. Instead of requiring a central verifier to
+approve every interaction, **entities prove their claims through cryptographic
+self-assertions** (e.g., signed DIDs, verifiable credentials, blinded
+signatures). Trust is not assumed—it’s **earned or negotiated** through
+transitive relationships and context-based reasoning.
 
+In this model, identity becomes a fabric woven from **peer-based attestations**,
+**localized trust decisions**, and **voluntary disclosure**. Trust is not
+enforced by algorithms alone, but **emerges from networks of autonomous
+actors**—each defining their own trust domain.
 
-### Idealism vs Pragmatism
+This is the essence of the **decentralized trust model**: issuers, holders, and
+verifiers operate without centralized approval or universal agreement. Instead,
+trust arises through **social proofs, credential provenance, and endorsement
+chains**. It enables **privacy, sovereignty, and interoperability**—but also
+requires new tooling to reason about trust, detect fraud, and handle revocation
+and rotation.
 
-I see a paradox here. How about you? Why does anyone try to build maximally
-decentralized systems if their identities must be legally binding? Or why do we
-put a lot of effort into figuring out consensus protocols for systems that don't
-need them?
+## Key Learnings from Real-World SSI Projects with Hyperledger Indy
 
-Our legal system has solved all of these problems already. So, let's stick on
-that be pragmatic only, shall we?
+These aren’t just technical findings — they’re observations about what truly
+matters when designing decentralized identity systems.
 
-## Pragmatism
+### Decentralized Trust Is Hard to Scale
 
-My current conclusion is the old wisdom: *don't build a platform immediately,
-but solve a few use cases first and build the platform if needed.*
+While Indy supports decentralized identifiers and verifiable credentials,
+scaling trust without introducing central authorities remains a major challenge.
+Transitive trust models — the foundation of any decentralized Web of Trust —
+lack global context and require custom trust policies per verifier. Bridging
+isolated trust domains without creating new chokepoints is still an open issue.
 
-Second might be *don't solve imaginary problems.* Look for *monetizable pain*
-first and solve that with as small steps as possible.
+### Persistent, Symmetric Communication Is Essential
 
-Let's see what that all means from SSI vs. mDL.
+DID-based communication (e.g., via DIDComm) works best when agents can maintain
+long-lived, symmetric channels. Interruptions or short-lived agents complicate
+authentication, negotiation, and credential exchange, especially in mobile and
+IoT environments.
 
-### Example of Good UX
+### Privacy Requires Active Design
 
-Apple Pay is the [world's largest mobile payment platform outside
-China](https://www.businessofapps.com/data/mobile-payments-app-market/). It's
-been exciting to follow what happened in the Nordics, which already had several
-mobile payment platforms and the world's most digitalized private banking
-systems when Apple Pay arrived.
+Surveillance resistance and correlation avoidance aren't free. Features like
+**DID rotation**, **pairwise identifiers**, and **signature blinding** are
+essential to prevent unwanted linkage between interactions. Most deployments
+still struggle with implementing these practices consistently.
 
-Why has Apple Pay been so successful? Like many other features in Apple's
-ecosystem, they took the necessary final technical steps to remove all the
-friction from setting up the payment trail. Significantly, the seller doesn't
-need additional steps or agreements to support Apple Pay in the brick-and-mortar
-business. (That's how it works in Finland.) That's the way we all should think
-of technology.
+### Real Adoption Happens on the Web
 
-### Use Case -driven approach
+Despite the ideal of sovereign identity wallets, most user adoption we observed
+(>95%) occurred via **web-based identity wallets** or embedded browser
+experiences (e.g., Trinsic). Native mobile or hardware wallets still face
+barriers to usability and integration.
 
-The origins of SSI have been idealistic in some areas. The [ISO
-mDL](https://www.iso.org/standard/69084.html) is the total opposite. Every
-single piece of idealism has been thrown away. Every design decision is hammered
-down to solve core use cases related to the use of mobile driver's licenses. And
-no new technologies have been invented. Just put together features that we need.
+### Identity Is More Than Credentials
 
-I had to admit that it's been refreshing to see that angle in practice after
-ivory towers of SSI ;-) For the record, there is still excellent work going on
-in the SSI area in general.
+In advanced use cases, identity extends beyond static credentials. We observed a
+growing need to bind biometric authenticators, behavioral data, credit scores,
+and reputational signals into a user’s **Identity Domain**. This domain becomes
+the source of trust for both human-facing and machine-mediated interactions.
 
-## Differences Between mDL And SSI
-
-mDL has almost a similar trust triangle as good old
-[SSI-version.](https://findy-network.github.io/blog/2021/09/08/travelogue/trust-triangle_hua2e42792a9d20037c5f572b0412e67c1_57626_925x925_fit_catmullrom_3.png)
-
-{{< imgproc ISO-interfaces.png Resize "1200x" >}}
-<em>mDL Interfaces And Roles — ISO ISO_18013-5</em>
+{{< imgproc identity-domain.png Resize "1200x" >}}
+<em>Identity Domain — Spanning Layer and Hub</em>
 {{< /imgproc >}}
 
-But when you start to look more carefully, you'll notice some differences, like
-the names of similar parties.
+### IoT and Edge Cases Are Not Edge Cases
 
-### Concepts
+IoT use cases — such as identity for machines, devices, or wearables — are real
+and growing. These actors often lack screens, keys, or user interfaces,
+requiring lightweight agents and trust protocols that work in constrained
+environments.
 
-ISO calls these roles as interfaces.
+---
+### Revocation, Rotation, and Recovery Remain Fragile
 
-| ISO 18013-5 Interface Party | DID/SSI Concept |
-| --------------- | --------------------------- |
-| Issuing Authority Infrastructure | Issuer |
-| mDL Reader | verifier |
-| mDL | Holder |
+Credential revocation, key rotation, and identity recovery are still brittle
+processes in most SSI systems. While the "SSI rule book" offers theoretical
+guidelines for these mechanisms, many are not grounded in operational realities
+or user behavior. 
 
-### Connections
+One key insight from our work is that **treating key rotation as a holistic
+identity-level event is a mistake**. Lessons from past decentralized
+systems—such as the **PGP Web of Trust** and **Tor’s onion routing model**—show
+that **key hierarchies, delegation, and compartmentalized key usage** are
+essential to managing trust and limiting key exposure over time.
 
-Also, connections between parties are different. Where SSI doesn't allow direct
-communication between a verifier and an issuer, mDL explains that their
-communication is OK but optional. The only thing that matters is that the mDL
-Holder and mDL Reader can do what they need to execute the current use case. For
-example:
+Instead of relying on a single root key for an identity (and rotating it
+whenever anything changes), we should design systems where **operational keys
+are short-lived, purpose-bound, and easily replaceable**, with **certification
+chaining** providing continuity of identity without creating a single point of
+fragility.
 
-> *For offline retrieval, there is no requirement for any device involved in the
-> transaction to be connected*
+A self-sovereign identity system that cannot manage keys in a nuanced and
+layered way cannot scale. Identity needs to be **resilient, renewable, and
+gracefully degradable**—not brittle or tightly coupled to a single cryptographic
+anchor.
 
-'Connected' means connected to the internet. One of the scenarios is to support
-offline use cases, which makes sense if you think about instances where law
-enforcement officer needs to check the ID. That must be possible even when the
-internet connection is severed.
+### From Identity Agents to Autonomous Cyber Twins
 
-We continue with transport technologies at [Mobile Driver's
-License](#mobile-drivers-license).
+As identities become programmable, identity agents are evolving into **cyber
+agents** — AI-driven entities that can manage trust relationships, negotiate
+disclosures, and even represent the user autonomously. These cyber twins could
+become persistent actors in decentralized ecosystems, handling everything from
+KYC to pseudonymous reputation management.
 
-### Revocations
+## Looking Ahead
 
-We should also ask when that *call-home* is needed. The first and most obvious
-one is the validity checks. If the use case demands that the relying party
-checks that the mobile document
-([mDOC](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en)) is
-still valid on every use, a verifier can contact the issuer (Issuing Authority)
-and ask. All of this sounds pragmatic.
+As the identity landscape continues to evolve, one thing is becoming
+increasingly clear: the need for a decentralized trust model isn't just
+philosophical — it's practical, and soon, existential. 
 
-*Call-home seems perfectly aligned with Finnish bank regulation and
-legislation,* **as far as I know**. For example, the party who executes, let's
-say, a transaction according to power-of-attorney (PoA) is the party who's
-responsible for checking that a PoA is valid and not revoked. *The
-responsibility to transfer revocation information* is *not* the one who has
-given the PoA. It's enough that the information is available for the party who
-relies on the PoA. It's the relying party's responsibility to access that
-information case-by-case.
+Emerging technologies are rapidly moving toward autonomous, agent-based systems.
+From AI-powered identity agents to cross-domain agent-to-agent (A2A) protocols,
+the direction is set: machines will act on our behalf, negotiate access, and
+manage digital presence — sometimes entirely without human involvement.
 
-It makes much sense and makes building revocation easier when you think about
-that. In summary, some call-home is the only way to make revocation requirements
-work. Note that the *home* isn't necessarily the issuer, but it definitely *can
-be seen as the Issuing Authority's Infrastructure.*
+But this vision only works if those agents can operate within a **trust model
+that doesn't require central control, universal agreement, or global
+consensus**. That means trust must be **self-certifying**, transitive, and
+portable — grounded in cryptographic proofs and contextual relationships, not
+gatekeepers.
 
-### One schema
+The biggest opportunity — and risk — lies here. If we solve the problem of
+self-certifying roots of trust, we unlock the next generation of agent-driven
+ecosystems: **Cyber Twins** that are privacy-preserving, pseudonymous,
+interoperable, and free to negotiate identity on behalf of their creators.
 
-The most specific difference between mDL and SSI is that the schema is locked.
-It's based on
-([mDOC](https://www.iso.org/obp/ui/en/#iso:std:iso-iec:18013:-5:ed-1:v1:en))
-standard. That might first feel like a handicap, but the more you think about
-this, the better way it is to start implementing use cases in this area.
+If we don’t, we’ll end up with a future where intelligent agents operate inside
+walled gardens, under opaque policies, bound by central authorities. That’s not
+self-sovereign identity — it’s algorithmic feudalism.
 
-## Mobile Driver's License
-
-mDL standard also has similarities to SSI, such as *selective disclosure*. But
-it and other features are designed with only one thing in mind: *pragmatism*. No
-Fancy Pancy features or saving-the-world idealism, just pure functionality.
-
-The ISO standard defines the mDL standard, which is based on mDOC. The following
-diagram describes its most important architectural elements.
-
-{{< imgproc ISO-retrieval.png Resize "1200x" >}}
-<em>mDL ISO Architecture — ISO ISO_18013-5</em>
-{{< /imgproc >}}
-
-The diagram presents both logical and physical parts of the mDL architecture. At
-the bottom are supported data transport technologies: NFC/Bluetooth, Wi-Fi Aware
-(optional), etc. Transported data is CBOR coded, which guarantees the best
-possible performance. CBOR is a binary-coded data format optimized for limited
-resources and bandwidth. 
-
-### Selective Disclosure
-
-mDL's selective disclosure is analog to
-[SD-JWT's](https://www.ietf.org/archive/id/draft-fett-oauth-selective-disclosure-jwt-02.html)
-mechanism, i.e., only disclosures' digests are used when the issuer signs the
-credential document. That allows simple and easy-to-understand implementation,
-which is also efficient. At first glance, it only supports property-value pairs,
-but I don't see why it couldn't allow the use of hierarchical data structures as
-well. However, because the digest list is a one-dimensional array, it would
-prevent selection from inside a hierarchy.
-
-### No Need For ZKP
-
-mDL doesn't have [ZKP](https://en.wikipedia.org/wiki/Zero-knowledge_proof) but
-has solved similar use case requirements with the *attestations*. For example,
-the mDL issuer will include a set of age-over attestations into the mDL. The
-format of each attestation identifier is `age_over_NN`, where `NN` is from 00 to
-99. 
-
-When mDL Reader sends the request, it can, for example, query the presence of the
-attestation `age_over_55`, and the response will include all the attestations
-that are equal to or greater than 55 years old. For example, if mDL doesn't have
-`age_over_55` but it has `age_over_58` and `age_over_65`, it will send
-`age_over_58`.
-
-## Conclusion
-
-mDL specification is excellent and ready for broad adoption. I hope we can build
-something over it ASAP. Unfortunately, the road I selected for PoCs and demos
-wasn't possible because Apple’s ID Wallet requires that your device is
-registered in the US. There are ways to try it on an emulator, but it lacks too
-many core features to be interesting enough. Suppose you are asking why Apple
-and why not something else; the answer is that I’m looking at this on the
-operation system (OS) wallet track. Apple also has exciting features like [Tap
-to ID](https://www.nfcw.com/technology/apple-tap-to-present-id-api/).
-
-The next step will be to study what we can learn from mDOC/mDL from the DID
-point of view. Is there some common ground between how mDL sees the world and
-how DIDComm and generic SSI sees the world—hopefully, the same world.
-
-Until next time, see you!
+The box is opening. Let’s make sure what comes out is free.
 
 <br>
 <div style="display: flex">
