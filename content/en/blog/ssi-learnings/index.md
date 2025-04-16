@@ -95,12 +95,46 @@ Transitive trust models — the foundation of any decentralized Web of Trust —
 lack global context and require custom trust policies per verifier. Bridging
 isolated trust domains without creating new chokepoints is still an open issue.
 
-### Persistent, Symmetric Communication Is Essential
+### Why Symmetric Communication Matters
 
-DID-based communication (e.g., via DIDComm) works best when agents can maintain
-long-lived, symmetric channels. Interruptions or short-lived agents complicate
-authentication, negotiation, and credential exchange, especially in mobile and
-IoT environments.
+>
+> **💡 From Sessions to Relationships** 
+>
+> Traditional web services treat identity as a temporary session.  
+> SSI flips the model: identity becomes **persistent**, **portable**, and **relational**.
+>
+> Instead of logging in, users bring their agent.  
+> Instead of onboarding, services recognize credentials.  
+> No accounts. No passwords. Just trust — established cryptographically,  
+> remembered across time and channels.
+
+The Internet was built on the client/server model — efficient, scalable, and
+simple. But it also created a core asymmetry: servers are persistent and
+authoritative; clients are ephemeral and disposable. This model has made it
+nearly impossible for users to maintain continuity across interactions without
+depending on centralized platforms.
+
+Each time a client connects, it must authenticate itself from scratch.
+Persistent identity lives server-side, and the user is just a temporary session.
+This has contributed directly to the rise of **centralized identity silos** and
+the dominance of platform-centric Web2 services.
+
+What if clients — or more accurately, **identity agents** — had persistent state
+of their own? What if they could maintain ongoing relationships with services,
+carry trust context across channels, and even operate across devices or over
+time?
+
+**Symmetric, peer-to-peer communication models** like DIDComm make this
+possible. Instead of logging in and starting over, agents can resume where they
+left off — with **long-lived, secure relationships** that don't require
+sign-ups, onboarding flows, or federated logins. Trust becomes transitive,
+contextual, and user-controlled.
+
+This model reimagines the client not as a throwaway session but as a
+**sovereign, persistent identity**. And it enables a future where servers don’t
+need to authenticate every visitor — they can simply recognize known agents,
+verify their credentials, and interact accordingly. No password, no registration
+— just relationship-based trust.
 
 ### Privacy Requires Active Design
 
@@ -132,7 +166,7 @@ the source of trust for both human-facing and machine-mediated interactions.
 IoT use cases — such as identity for machines, devices, or wearables — are real
 and growing. These actors often lack screens, keys, or user interfaces,
 requiring lightweight agents and trust protocols that work in constrained
-environments.
+environmentsr
 
 ---
 ### Revocation, Rotation, and Recovery Remain Fragile
@@ -153,6 +187,11 @@ whenever anything changes), we should design systems where **operational keys
 are short-lived, purpose-bound, and easily replaceable**, with **certification
 chaining** providing continuity of identity without creating a single point of
 fragility.
+
+{{< imgproc key-layers.png Resize "400x" >}}
+<em>Key Hierarchies — Key Certification Chaining</em>
+{{< /imgproc >}}
+
 
 A self-sovereign identity system that cannot manage keys in a nuanced and
 layered way cannot scale. Identity needs to be **resilient, renewable, and
