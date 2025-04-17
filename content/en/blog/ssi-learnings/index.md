@@ -3,10 +3,11 @@ date: 2025-04-15
 title: "Rethinking SSI"
 linkTitle: "Rethinking SSI"
 description: "
-Most of us are familiar with the concept of fast and slow thinking. But fewer
-may have noticed the other side of that same coin — how our intuition evolves
-over long periods of reflection. This post is a summary of thoughts that
-surfaced more than a year after we actively explored SSI technologies.
+Most of us are familiar with the concept of [fast and slow
+thinking](https://en.wikipedia.org/wiki/Thinking,_Fast_and_Slow). But fewer may
+have noticed the other side of that same coin — how our intuition evolves over
+long periods of reflection. This post is a summary of thoughts that surfaced
+more than a year after we actively explored SSI technologies.
 "
 author: Harri Lainio
 resources:
@@ -32,6 +33,10 @@ In the SSI space, three roots of trust have emerged:
 3. **Self-certifying trust**, where entities define and prove trust
    relationships without requiring centralized or consensus-based validation.
 
+{{< imgproc trust-layers.png Resize "600x" >}}
+<em>Root of Trust Models — Foundations for Security & Sovereignty</em>
+{{< /imgproc >}}
+
 This last model—**self-certifying trust**—is both the most ambitious and the
 most necessary if we are to realize the full potential of self-sovereign
 identity. From our experience, SSI will never become truly decentralized or
@@ -41,6 +46,19 @@ of trust* at scale.
 This raises an important question: Should we approach identity-related use cases
 through an **algorithmic zero-trust** lens, or should we aim for a
 **decentralized trust model based on self-certification**?
+
+Or should we simply **build identity around PKI**, as seen in current
+government-led approaches like the **mobile Driver’s License (ISO mDL)** or the
+**EUDI Wallet**? These systems rely on administrative trust models — and while
+they may not be decentralized, they offer well-understood security, strong
+governance, and user familiarity.
+
+What seems increasingly clear is that **these approaches are not mutually
+exclusive**. To build inclusive, resilient, and user-friendly identity systems,
+we may need to **combine the reliability of PKI, the resilience of algorithmic
+trust, and the sovereignty of self-certification**. The future of identity
+likely lies in how well we can bridge and blend these trust models — not in
+picking one over the others.
 
 ## Algorithmic Zero-Trust
 
@@ -82,10 +100,6 @@ chains**. It enables **privacy, sovereignty, and interoperability**—but also
 requires new tooling to reason about trust, detect fraud, and handle revocation
 and rotation.
 
-{{< imgproc cover.png Resize "600x" >}}
-<em>Root of Trust Models — Foundation for Sovereignty</em>
-{{< /imgproc >}}
-
 ## Key Learnings from Real-World SSI Projects with Hyperledger Indy
 
 These aren’t just technical findings — they’re observations about what truly
@@ -121,7 +135,8 @@ depending on centralized platforms.
 Each time a client connects, it must authenticate itself from scratch.
 Persistent identity lives server-side, and the user is just a temporary session.
 This has contributed directly to the rise of **centralized identity silos** and
-the dominance of platform-centric Web2 services.
+the dominance of platform-centric [Web2](https://en.wikipedia.org/wiki/Web_2.0)
+services.
 
 What if clients — or more accurately, **identity agents** — had persistent state
 of their own? What if they could maintain ongoing relationships with services,
@@ -171,7 +186,7 @@ the source of trust for both human-facing and machine-mediated interactions.
 IoT use cases — such as identity for machines, devices, or wearables — are real
 and growing. These actors often lack screens, keys, or user interfaces,
 requiring lightweight agents and trust protocols that work in constrained
-environmentsr
+environments.
 
 ### Revocation, Rotation, and Recovery Remain Fragile
 
