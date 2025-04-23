@@ -37,45 +37,47 @@ In the SSI space, three roots of trust have emerged:
 <em>Root of Trust Models — Foundations for Security & Sovereignty</em>
 {{< /imgproc >}}
 
-This last model—**self-certifying trust**—is both the most ambitious and the
+This last model—self-certifying trust—is both the most ambitious and the
 most necessary if we are to realize the full potential of self-sovereign
 identity. From our experience, SSI will never become truly decentralized or
 user-controlled until we solve the challenge of enabling *self-certifying roots
 of trust* at scale.
 
 This raises an important question: Should we approach identity-related use cases
-through an **algorithmic zero-trust** lens, or should we aim for a
-**decentralized trust model based on self-certification**?
+through an algorithmic zero-trust lens, or should we aim for a
+decentralized trust model based on self-certification?
 
-Or should we simply **build identity around PKI**, as seen in current
-government-led approaches like the **mobile Driver’s License (ISO mDL)** or the
-**EUDI Wallet**? These systems rely on administrative trust models — and while
-they may not be decentralized, they offer well-understood security, strong
-governance, and user familiarity.
+Or should we simply build identity around PKI, as seen in current government-led
+approaches like the mobile Driver’s License ([ISO
+mDL](https://www.iso.org/standard/69084.html)) or the [EUDI
+Wallet](https://ec.europa.eu/digital-building-blocks/sites/display/EUDIGITALIDENTITYWALLET/What+is+the+Wallet)?
+These systems rely on administrative trust models — and while they may not be
+decentralized, they offer well-understood security, strong governance, and user
+familiarity.
 
-What seems increasingly clear is that **these approaches are not mutually
-exclusive**. To build inclusive, resilient, and user-friendly identity systems,
-we may need to **combine the reliability of PKI, the resilience of algorithmic
-trust, and the sovereignty of self-certification**. The future of identity
+What seems increasingly clear is that these approaches are not mutually
+exclusive. To build inclusive, resilient, and user-friendly identity systems,
+we may need to combine the reliability of PKI, the resilience of algorithmic
+trust, and the sovereignty of self-certification. The future of identity
 likely lies in how well we can bridge and blend these trust models — not in
 picking one over the others.
 
 ## Algorithmic Zero-Trust
 
-Algorithmic zero-trust is a model where **no actor is implicitly trusted**, and
+Algorithmic zero-trust is a model where no actor is implicitly trusted, and
 all entities must continuously prove their authenticity and permissions through
 cryptographic or logical assertions. It’s common in enterprise security: access
 control decisions are made by policy engines based on signals like device
 health, IP reputation, or session risk.
 
-In identity systems, zero-trust often implies **constant re-verification**,
-reliance on **centralized attestations**, and heavy use of **encryption and
-secure channels**. While secure and auditable, these systems are inherently
-**closed and non-portable**—they rely on **predefined relationships** and
-**central policy evaluators**, making them incompatible with open,
+In identity systems, zero-trust often implies constant re-verification,
+reliance on centralized attestations, and heavy use of encryption and
+secure channels. While secure and auditable, these systems are inherently
+closed and non-portable—they rely on predefined relationships and
+central policy evaluators, making them incompatible with open,
 permissionless ecosystems.
 
-Zero-trust is effective when **scope is limited**, infrastructure is known, and
+Zero-trust is effective when scope is limited, infrastructure is known, and
 risk can be algorithmically modeled. But it doesn’t support user-controlled
 identity, transitive trust, or cross-domain delegation—key goals in
 decentralized ecosystems.
@@ -83,20 +85,20 @@ decentralized ecosystems.
 ## Trust Based on Self-Certification
 
 Self-certification flips the model. Instead of requiring a central verifier to
-approve every interaction, **entities prove their claims through cryptographic
-self-assertions** (e.g., signed DIDs, verifiable credentials, blinded
+approve every interaction, entities prove their claims through cryptographic
+self-assertions (e.g., signed DIDs, verifiable credentials, blinded
 signatures). Trust is not assumed—it’s **earned or negotiated** through
 transitive relationships and context-based reasoning.
 
-In this model, identity becomes a fabric woven from **peer-based attestations**,
-**localized trust decisions**, and **voluntary disclosure**. Trust is not
+In this model, identity becomes a fabric woven from peer-based attestations,
+localized trust decisions, and voluntary disclosure. Trust is not
 enforced by algorithms alone, but **emerges from networks of autonomous
 actors**—each defining their own trust domain.
 
-This is the essence of the **decentralized trust model**: issuers, holders, and
+This is the essence of the *decentralized trust model*: issuers, holders, and
 verifiers operate without centralized approval or universal agreement. Instead,
-trust arises through **social proofs, credential provenance, and endorsement
-chains**. It enables **privacy, sovereignty, and interoperability**—but also
+trust arises through social proofs, credential provenance, and endorsement
+chains. It enables privacy, sovereignty, and interoperability—but also
 requires new tooling to reason about trust, detect fraud, and handle revocation
 and rotation.
 
@@ -134,19 +136,19 @@ depending on centralized platforms.
 
 Each time a client connects, it must authenticate itself from scratch.
 Persistent identity lives server-side, and the user is just a temporary session.
-This has contributed directly to the rise of **centralized identity silos** and
+This has contributed directly to the rise of *centralized identity silos* and
 the dominance of platform-centric [Web2](https://en.wikipedia.org/wiki/Web_2.0)
 services.
 
-What if clients — or more accurately, **identity agents** — had persistent state
+What if clients — or more accurately, identity agents — had persistent state
 of their own? What if they could maintain ongoing relationships with services,
 carry trust context across channels, and even operate across devices or over
 time?
 
-**Symmetric, peer-to-peer communication models** like
+Symmetric, peer-to-peer communication models like
 [DIDComm](https://identity.foundation/didcomm-messaging/spec/) make this
 possible. Instead of logging in and starting over, agents can resume where they
-left off — with **long-lived, secure relationships** that don't require
+left off — with *long-lived, secure relationships* that don't require
 sign-ups, onboarding flows, or federated logins. Trust becomes transitive,
 contextual, and user-controlled.
 
@@ -159,7 +161,7 @@ verify their credentials, and interact accordingly. No password, no registration
 ### Privacy Requires Active Design
 
 Surveillance resistance and correlation avoidance aren't free. Features like
-**DID rotation**, **pairwise identifiers**, and **signature blinding** are
+DID rotation, pairwise identifiers, and signature blinding are
 essential to prevent unwanted linkage between interactions. Most deployments
 still struggle with implementing these practices consistently.
 
@@ -197,14 +199,14 @@ or user behavior.
 
 One key insight from our work is that **treating key rotation as a holistic
 identity-level event is a mistake**. Lessons from past decentralized
-systems—such as the **PGP Web of Trust** and **Tor’s onion routing model**—show
-that **key hierarchies, delegation, and compartmentalized key usage** are
+systems—such as the PGP Web of Trust and Tor’s onion routing model—show
+that *key hierarchies, delegation, and compartmentalized key usage* are
 essential to managing trust and limiting key exposure over time.
 
 Instead of relying on a single root key for an identity (and rotating it
-whenever anything changes), we should design systems where **operational keys
-are short-lived, purpose-bound, and easily replaceable**, with **certification
-chaining** providing continuity of identity without creating a single point of
+whenever anything changes), we should design systems where operational keys
+are short-lived, purpose-bound, and easily replaceable, with certification
+chaining providing continuity of identity without creating a single point of
 fragility.
 
 {{< imgproc key-layers.png Resize "400x" >}}
@@ -244,7 +246,7 @@ gatekeepers.
 
 The biggest opportunity — and risk — lies here. If we solve the problem of
 self-certifying roots of trust, we unlock the next generation of agent-driven
-ecosystems: **Cyber Twins** that are privacy-preserving, pseudonymous,
+ecosystems: *Cyber Twins* that are privacy-preserving, pseudonymous,
 interoperable, and free to negotiate identity on behalf of their creators.
 
 If we don’t, we’ll end up with a future where intelligent agents operate inside
