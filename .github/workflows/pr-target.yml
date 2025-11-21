@@ -15,7 +15,7 @@ jobs:
       - id: label-the-PR
         uses: actions/labeler@v6
       # Add comment to trigger notification
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         if: contains(steps.label-the-PR.outputs.all-labels, 'dev')
       - name: Add comment to PR
         if: contains(steps.label-the-PR.outputs.all-labels, 'dev')
