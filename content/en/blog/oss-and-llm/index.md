@@ -57,7 +57,7 @@ No reputational damage. No accountability. Often no identity continuity.
 
 That asymmetry did not exist before.
 
-<img src="/blog/2025/12/22/autonomous-genai-compromises-oss/cover.png" width="1900"/>
+<img src="/blog/2025/12/22/autonomous-llms-compromise-open-source-trust/cover.png" width="1900"/>
 
 *Contribution Paths*
 <br/><br/>
