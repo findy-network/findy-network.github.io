@@ -13,7 +13,7 @@ jobs:
     if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
     steps:
       - id: label-the-PR
-        uses: actions/labeler@v6
+        uses: actions/labeler@v7
       # Add comment to trigger notification
       - uses: actions/checkout@v7
         if: contains(steps.label-the-PR.outputs.all-labels, 'dev')
